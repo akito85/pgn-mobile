@@ -1,0 +1,18 @@
+[
+    {
+        "merged": "C:\\Project\\pgn-mobile\\build\\url_launcher\\intermediates\\res\\merged\\release\\drawable\\notification_bg_low.xml",
+        "source": "C:\\Users\\annis\\.gradle\\caches\\transforms-1\\files-1.1\\core-1.1.0.aar\\da140902790073e249226e22a6175460\\res\\drawable\\notification_bg_low.xml"
+    },
+    {
+        "merged": "C:\\Project\\pgn-mobile\\build\\url_launcher\\intermediates\\res\\merged\\release\\drawable\\notification_bg.xml",
+        "source": "C:\\Users\\annis\\.gradle\\caches\\transforms-1\\files-1.1\\core-1.1.0.aar\\da140902790073e249226e22a6175460\\res\\drawable\\notification_bg.xml"
+    },
+    {
+        "merged": "C:\\Project\\pgn-mobile\\build\\url_launcher\\intermediates\\res\\merged\\release\\drawable\\notification_icon_background.xml",
+        "source": "C:\\Users\\annis\\.gradle\\caches\\transforms-1\\files-1.1\\core-1.1.0.aar\\da140902790073e249226e22a6175460\\res\\drawable\\notification_icon_background.xml"
+    },
+    {
+        "merged": "C:\\Project\\pgn-mobile\\build\\url_launcher\\intermediates\\res\\merged\\release\\drawable\\notification_tile_bg.xml",
+        "source": "C:\\Users\\annis\\.gradle\\caches\\transforms-1\\files-1.1\\core-1.1.0.aar\\da140902790073e249226e22a6175460\\res\\drawable\\notification_tile_bg.xml"
+    }
+]

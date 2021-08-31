@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "990148614051",
+    "firebase_url": "https://pgn-pgn-mobile.firebaseio.com",
+    "project_id": "pgn-pgn-mobile",
+    "storage_bucket": "pgn-pgn-mobile.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:990148614051:android:de9d842e3481abb4356c16",
+        "android_client_info": {
+          "package_name": "id.co.pgn.pgn_mobile"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "990148614051-m8due8q4suvr7g4tpbl452m946efi6pg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBKv8j9j-sofykyDxd5iMI0Den9eZTHX-A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "990148614051-m8due8q4suvr7g4tpbl452m946efi6pg.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "990148614051-28ietplpgl3bufa1dc2pdceoilspioos.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.pgnMobile"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
