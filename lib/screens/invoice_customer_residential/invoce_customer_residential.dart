@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:date_format/date_format.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:pgn_mobile/models/url_cons.dart';
 import 'package:pgn_mobile/screens/invoice_customer_residential/widgets/payment_method.dart';
 import 'package:provider/provider.dart';
@@ -485,8 +486,8 @@ class BillDetailState extends State<InvoiceCustResidential>
                     ),
                     Expanded(
                       child: Container(
-                        margin:
-                            EdgeInsets.only(left: 5.0, top: 10.0, bottom: 20),
+                        margin: EdgeInsets.only(
+                            left: 5.0, top: 10.0, bottom: 20, right: 10),
                         child: Text(
                           data.custInvoiceName ?? "-",
                           style: TextStyle(
@@ -921,8 +922,10 @@ class BillDetailState extends State<InvoiceCustResidential>
 
   Future<CustomerInvoiceResidential> getCustomerInvoice(
       BuildContext context, String custID) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String accessToken = prefs.getString('access_token');
+    // SharedPreferences prefs = await SharedPreferences.getInstance();
+    // String accessToken = prefs.getString('access_token');
+    final storageCache = FlutterSecureStorage();
+    String accessToken = await storageCache.read(key: 'access_token');
     var responseCustomerInvoice = await http
         .get('${UrlCons.mainProdUrl}customers/me/invoices', headers: {
       'Content-Type': 'application/json',

@@ -52,19 +52,35 @@ class Notifications extends StatelessWidget {
                                   ))),
                           isScrollable: true,
                           tabs: <Widget>[
-                            Tab(
-                              text: Translations.of(context)
-                                  .text('title_bar_customer_abnormal_detail'),
-                            ),
-                            Tab(
-                                text: Translations.of(context).text(
-                                    'title_bar_customer_guarantee_detail')),
-                            Tab(
-                                text: Translations.of(context).text(
-                                    'title_bar_customer_contract_detail')),
-                            Tab(
+                            Padding(
+                              padding:
+                                  const EdgeInsets.only(left: 10, right: 10),
+                              child: Tab(
                                 text: Translations.of(context)
-                                    .text('title_bar_customer_invoice_detail')),
+                                    .text('title_bar_customer_abnormal_detail'),
+                              ),
+                            ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.only(left: 10, right: 10),
+                              child: Tab(
+                                  text: Translations.of(context).text(
+                                      'title_bar_customer_guarantee_detail')),
+                            ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.only(left: 10, right: 10),
+                              child: Tab(
+                                  text: Translations.of(context).text(
+                                      'title_bar_customer_contract_detail')),
+                            ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.only(left: 10, right: 10),
+                              child: Tab(
+                                  text: Translations.of(context).text(
+                                      'title_bar_customer_invoice_detail')),
+                            ),
                           ],
                         ),
                       )

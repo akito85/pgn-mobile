@@ -51,22 +51,31 @@ class CustomerState extends State<CustomerDetail> {
                   ),
                   tabs: <Widget>[
                     Tab(
-                        child: Text(
-                      Translations.of(context)
-                          .text('title_bar_customer_detail'),
-                      style: TextStyle(fontSize: 15),
+                        child: Padding(
+                      padding: const EdgeInsets.only(left: 10, right: 10),
+                      child: Text(
+                        Translations.of(context)
+                            .text('title_bar_customer_detail'),
+                        style: TextStyle(fontSize: 15),
+                      ),
                     )),
                     Tab(
-                        child: Text(
-                      Translations.of(context)
-                          .text('f_customer_contracts_title'),
-                      style: TextStyle(fontSize: 15),
+                        child: Padding(
+                      padding: const EdgeInsets.only(left: 10, right: 10),
+                      child: Text(
+                        Translations.of(context)
+                            .text('f_customer_contracts_title'),
+                        style: TextStyle(fontSize: 15),
+                      ),
                     )),
                     Tab(
-                        child: Text(
-                      Translations.of(context)
-                          .text('f_customer_guarantees_title'),
-                      style: TextStyle(fontSize: 15),
+                        child: Padding(
+                      padding: const EdgeInsets.only(left: 10, right: 10),
+                      child: Text(
+                        Translations.of(context)
+                            .text('f_customer_guarantees_title'),
+                        style: TextStyle(fontSize: 15),
+                      ),
                     )),
                   ],
                 ),

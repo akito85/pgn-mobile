@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
 import 'package:expandable/expandable.dart';
 import 'package:pgn_mobile/models/url_cons.dart';
@@ -598,9 +599,12 @@ class Card1 extends StatelessWidget {
 }
 
 Future<GetContract> getCustomerContract(BuildContext context, String id) async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  String accessToken = prefs.getString('access_token');
-  String lang = prefs.getString('lang');
+  // SharedPreferences prefs = await SharedPreferences.getInstance();
+  // String accessToken = prefs.getString('access_token');
+  // String lang = prefs.getString('lang');
+  final storageCache = FlutterSecureStorage();
+  String accessToken = await storageCache.read(key: 'access_token');
+  String lang = await storageCache.read(key: 'lang');
   var responseContractCust =
       await http.get('${UrlCons.mainProdUrl}customers/$id/contracts', headers: {
     'Content-Type': 'application/json',

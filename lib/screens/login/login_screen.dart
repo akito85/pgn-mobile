@@ -1,4 +1,6 @@
+import 'package:encrypted_shared_preferences/encrypted_shared_preferences.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:pgn_mobile/models/auth_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:pgn_mobile/models/url_cons.dart';
@@ -32,6 +34,8 @@ class LoginScreenState extends State<LoginScreen> {
   bool _obscurePass = true;
   bool visible = false;
   bool btnVisible = true;
+  String numbPhone = '';
+
   final iv = encrypt.IV.fromUtf8('ujfjL9XWfH0ZoAzi');
   final encrypter = encrypt.Encrypter(encrypt.AES(
       encrypt.Key.fromUtf8('zNsW4kAl4t4PTrtC'),
@@ -39,10 +43,11 @@ class LoginScreenState extends State<LoginScreen> {
   final _firebaseMessaging = FirebaseMessaging();
   String fcmToken;
   SpecificLocalizationDelegate _localeOverrideDelegate;
-
+  final storageCache = new FlutterSecureStorage();
   @override
   void initState() {
     super.initState();
+    deviceID();
     _localeOverrideDelegate = new SpecificLocalizationDelegate(null);
     applic.onLocaleChanged = onLocaleChange;
   }
@@ -56,6 +61,9 @@ class LoginScreenState extends State<LoginScreen> {
   Future<String> _getFCMTokenDailyUsage(
       String userGroupID, String areaID) async {
     String fcmTokens;
+    //on for testing firebase
+    // _firebaseMessaging.subscribeToTopic('tester_popup');
+    ///////////////////////////////////////////
     _firebaseMessaging.subscribeToTopic('daily_usage');
     _firebaseMessaging.subscribeToTopic('daily_payment');
     _firebaseMessaging.subscribeToTopic('monthly_invoice');
@@ -301,11 +309,13 @@ class LoginScreenState extends State<LoginScreen> {
 
   Future<AuthSales> fetchPost(
       BuildContext context, String password, String username) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String deviceID = prefs.getString('devices_id');
+    String deviceId = await storageCache.read(key: 'devices_id');
+
+    print('DEVICE ID NYA DARI: $deviceId');
     var responseTokenBarrer =
         await http.post('${UrlCons.mainProdUrl}authentication', headers: {
-      'X-Pgn-Device-Id': deviceID
+      'X-Pgn-Device-Id': deviceId
+      // 'X-Pgn-Device-Id': "jnskdoandsoando"
     }, body: {
       'client_id': '0dUIDb81bBUsGDfDsYYHQ9wBujfjL9XWfH0ZoAzi',
       'client_secret': '0DTuUFYRPtWUFN2UbzSvzqZMzNsW4kAl4t4PTrtC',
@@ -313,6 +323,7 @@ class LoginScreenState extends State<LoginScreen> {
       'username': username,
       'password': password
     });
+    print('BODY LOGIN : $responseTokenBarrer');
     if (responseTokenBarrer.statusCode == 401) {
       setState(() {
         visible = false;
@@ -329,22 +340,65 @@ class LoginScreenState extends State<LoginScreen> {
       AuthSales _auth =
           AuthSales.fromJson(json.decode(responseTokenBarrer.body));
       SharedPreferences prefs = await SharedPreferences.getInstance();
+      setState(() {
+        numbPhone = _auth.user.userMobilePhone;
+        print('NUMBER PHONE $numbPhone');
+        print('NUMBER PHONE AUTH ${_auth.verificationStatus.requestCode}');
+      });
+      await storageCache.write(key: 'user_name_login', value: username);
+      await storageCache.write(key: 'pass_login', value: password);
+      await storageCache.write(
+          key: 'next_action', value: _auth.verificationStatus.nextAction);
+      await storageCache.write(
+          key: 'next_otp_type_id',
+          value: _auth.verificationStatus.nextOtpTypeId);
+      await storageCache.write(
+          key: 'request_code', value: _auth.verificationStatus.requestCode);
       if (_auth.user.userType == 2 && _auth.user.userGroupId == "11") {
         print('1. MASUK KE SINI ${_auth.customer.custName}');
-        prefs.setString('access_token', _auth.accessToken);
-        prefs.setString('lang', ui.window.locale.languageCode);
-        prefs.setString('token_type', _auth.tokenType);
-        prefs.setString('next_action', _auth.verificationStatus.nextAction);
-        prefs.setString(
-            'next_otp_type_id', _auth.verificationStatus.nextOtpTypeId);
-        prefs.setString('request_code', _auth.verificationStatus.requestCode);
-        prefs.setString('customer_id', _auth.customer.custId);
-        prefs.setString('user_name_cust', _auth.customer.custName);
-        prefs.setString('user_id', _auth.user.userID);
-        prefs.setString('user_email', _auth.user.userEmail);
-        prefs.setString('user_type', _auth.user.userType.toString());
-        prefs.setString('usergroup_id', _auth.user.userGroupId);
-        prefs.setString('customer_groupId', _auth.customer.groupId.toString());
+        // prefs.setString('access_token', _auth.accessToken);
+        // prefs.setString('lang', ui.window.locale.languageCode);
+        // prefs.setString('token_type', _auth.tokenType);
+        await storageCache.write(key: 'access_token', value: _auth.accessToken);
+        await storageCache.write(
+            key: 'lang', value: ui.window.locale.languageCode);
+        await storageCache.write(key: 'token_type', value: _auth.tokenType);
+        await storageCache.write(
+            key: 'user_mobile_otp', value: _auth.user.userMobilePhone);
+        // prefs.setString('next_action', _auth.verificationStatus.nextAction);
+        // prefs.setString(
+        //     'next_otp_type_id', _auth.verificationStatus.nextOtpTypeId);
+        // prefs.setString('request_code', _auth.verificationStatus.requestCode);
+        await storageCache.write(
+            key: 'next_action', value: _auth.verificationStatus.nextAction);
+        await storageCache.write(
+            key: 'next_otp_type_id',
+            value: _auth.verificationStatus.nextOtpTypeId);
+        await storageCache.write(
+            key: 'request_code', value: _auth.verificationStatus.requestCode);
+        // prefs.setString('customer_id', _auth.customer.custId);
+        // prefs.setString('user_name_cust', _auth.customer.custName);
+        // prefs.setString('user_id', _auth.user.userID);
+
+        await storageCache.write(
+            key: 'customer_id', value: _auth.customer.custId);
+        await storageCache.write(
+            key: 'user_name_cust', value: _auth.customer.custName);
+        await storageCache.write(key: 'user_id', value: _auth.user.userID);
+
+        // prefs.setString('user_email', _auth.user.userEmail);
+        // prefs.setString('user_type', _auth.user.userType.toString());
+        // prefs.setString('usergroup_id', _auth.user.userGroupId);
+        // prefs.setString('customer_groupId', _auth.customer.groupId.toString());
+
+        await storageCache.write(
+            key: 'user_email', value: _auth.user.userEmail);
+        await storageCache.write(
+            key: 'user_type', value: _auth.user.userType.toString());
+        await storageCache.write(
+            key: 'usergroup_id', value: _auth.user.userGroupId);
+        await storageCache.write(
+            key: 'customer_groupId', value: _auth.customer.groupId.toString());
 
         setState(() {
           Provider.of<UserCred>(context).userCred(
@@ -400,9 +454,24 @@ class LoginScreenState extends State<LoginScreen> {
             _auth.user.userGroupId == "3") {
           if (_auth.user.userType == 2 && _auth.customerId != null) {
             print('2. MASUK KE SINI ${_auth.customer.custName}');
-            prefs.setString('user_name_cust', _auth.customer.custName);
-            prefs.setString(
-                'customerGroupId', _auth.customer.groupId.toString());
+            await storageCache.write(
+                key: 'user_name_cust', value: _auth.customer.custName);
+            await storageCache.write(
+                key: 'customerGroupId',
+                value: _auth.customer.groupId.toString());
+            await storageCache.write(
+                key: 'user_mobile_otp', value: _auth.user.userMobilePhone);
+            await storageCache.write(
+                key: 'next_action', value: _auth.verificationStatus.nextAction);
+            await storageCache.write(
+                key: 'next_otp_type_id',
+                value: _auth.verificationStatus.nextOtpTypeId);
+            await storageCache.write(
+                key: 'request_code',
+                value: _auth.verificationStatus.requestCode);
+            // prefs.setString('user_name_cust', _auth.customer.custName);
+            // prefs.setString(
+            // 'customerGroupId', _auth.customer.groupId.toString());
             SchedulerBinding.instance.addPostFrameCallback((_) async {
               fcmToken = await _getFCMTokenDailyUsage(
                   _auth.user.userGroupId, _auth.customer.custAreaId ?? "0");
@@ -427,29 +496,57 @@ class LoginScreenState extends State<LoginScreen> {
                   body: body);
             });
           } else if (_auth.user.userType == 2 && _auth.customerId == null) {
-            prefs.setString('user_name_cust', _auth.user.userName);
+            await storageCache.write(
+                key: 'user_name_cust', value: _auth.user.userName);
+            await storageCache.write(
+                key: 'user_mobile_otp', value: _auth.user.userMobilePhone);
+            await storageCache.write(
+                key: 'customer_groupId',
+                value: _auth.customer.groupId.toString());
+            // prefs.setString('user_name_cust', _auth.user.userName);
           } else if (_auth.user.userType == 1) {
-            prefs.setString('user_name_cust', _auth.user.userName);
+            await storageCache.write(
+                key: 'user_name_cust', value: _auth.user.userName);
+            await storageCache.write(
+                key: 'user_mobile_otp', value: _auth.user.userMobilePhone);
+            // prefs.setString('user_name_cust', _auth.user.userName);
           }
         } else {
           SchedulerBinding.instance.addPostFrameCallback((_) async {
             fcmToken = await _getFCMToken();
           });
         }
-
-        prefs.setString('access_token', _auth.accessToken);
-        prefs.setString('lang', ui.window.locale.languageCode);
-        prefs.setString('token_type', _auth.tokenType);
-        prefs.setString('next_action', _auth.verificationStatus.nextAction);
-        prefs.setString(
-            'next_otp_type_id', _auth.verificationStatus.nextOtpTypeId);
-        prefs.setString('request_code', _auth.verificationStatus.requestCode);
-
-        prefs.setString('user_id', _auth.user.userID);
-        prefs.setString('user_email', _auth.user.userEmail);
-        prefs.setString('user_type', _auth.user.userType.toString());
-        prefs.setString('usergroup_id', _auth.user.userGroupId);
-        // prefs.setString('customer_groupId', _auth.customer.groupId.toString());
+        await storageCache.write(key: 'access_token', value: _auth.accessToken);
+        await storageCache.write(
+            key: 'lang', value: ui.window.locale.languageCode);
+        await storageCache.write(key: 'token_type', value: _auth.tokenType);
+        await storageCache.write(
+            key: 'user_mobile_otp', value: _auth.user.userMobilePhone);
+        // prefs.setString('access_token', _auth.accessToken);
+        // prefs.setString('lang', ui.window.locale.languageCode);
+        // prefs.setString('token_type', _auth.tokenType);
+        // prefs.setString('next_action', _auth.verificationStatus.nextAction);
+        // prefs.setString(
+        //     'next_otp_type_id', _auth.verificationStatus.nextOtpTypeId);
+        // prefs.setString('request_code', _auth.verificationStatus.requestCode);
+        await storageCache.write(
+            key: 'next_action', value: _auth.verificationStatus.nextAction);
+        await storageCache.write(
+            key: 'next_otp_type_id',
+            value: _auth.verificationStatus.nextOtpTypeId);
+        await storageCache.write(
+            key: 'request_code', value: _auth.verificationStatus.requestCode);
+        // prefs.setString('user_id', _auth.user.userID);
+        // prefs.setString('user_email', _auth.user.userEmail);
+        // prefs.setString('user_type', _auth.user.userType.toString());
+        // prefs.setString('usergroup_id', _auth.user.userGroupId);
+        await storageCache.write(key: 'user_id', value: _auth.user.userID);
+        await storageCache.write(
+            key: 'user_email', value: _auth.user.userEmail);
+        await storageCache.write(
+            key: 'user_type', value: _auth.user.userType.toString());
+        await storageCache.write(
+            key: 'usergroup_id', value: _auth.user.userGroupId);
         setState(() {
           if (_auth.user.userType == 2 && _auth.customerId == null) {
             print('MASUK 1');
@@ -468,8 +565,10 @@ class LoginScreenState extends State<LoginScreen> {
             );
           } else if (_auth.user.userType == 2) {
             print('MASUK 2');
-            prefs.setString(
-                'customer_groupId', _auth.customer.groupId.toString());
+
+            // prefs.setString(
+            //     'customer_groupId', _auth.customer.groupId.toString());
+
             Provider.of<UserCred>(context).userCred(
                 accessToken: _auth.accessToken,
                 tokenType: _auth.tokenType,
@@ -502,20 +601,47 @@ class LoginScreenState extends State<LoginScreen> {
         });
       } else {
         print('3. MASUK KE SINI ${_auth.customer.custName}');
-        prefs.setString('access_token', _auth.accessToken);
-        prefs.setString('lang', ui.window.locale.languageCode);
-        prefs.setString('token_type', _auth.tokenType);
-        prefs.setString('next_action', _auth.verificationStatus.nextAction);
-        prefs.setString(
-            'next_otp_type_id', _auth.verificationStatus.nextOtpTypeId);
-        prefs.setString('request_code', _auth.verificationStatus.requestCode);
+        await storageCache.write(key: 'user_id', value: _auth.user.userID);
+        // prefs.setString('access_token', _auth.accessToken);
+        // prefs.setString('lang', ui.window.locale.languageCode);
+        // prefs.setString('token_type', _auth.tokenType);
+        await storageCache.write(
+            key: 'user_mobile_otp', value: _auth.user.userMobilePhone);
+        await storageCache.write(key: 'access_token', value: _auth.accessToken);
+        await storageCache.write(
+            key: 'lang', value: ui.window.locale.languageCode);
+        await storageCache.write(key: 'token_type', value: _auth.tokenType);
+        // prefs.setString('next_action', _auth.verificationStatus.nextAction);
+        // prefs.setString(
+        //     'next_otp_type_id', _auth.verificationStatus.nextOtpTypeId);
+        // prefs.setString('request_code', _auth.verificationStatus.requestCode);
+        await storageCache.write(
+            key: 'next_action', value: _auth.verificationStatus.nextAction);
+        await storageCache.write(
+            key: 'next_otp_type_id',
+            value: _auth.verificationStatus.nextOtpTypeId);
+        await storageCache.write(
+            key: 'request_code', value: _auth.verificationStatus.requestCode);
+        // prefs.setString('user_name_cust', _auth.user.userName);
+        // prefs.setString('user_id', _auth.user.userID);
+        // prefs.setString('user_email_cust', _auth.user.userEmail);
 
-        prefs.setString('user_name_cust', _auth.user.userName);
-        prefs.setString('user_id', _auth.user.userID);
-        prefs.setString('user_email_cust', _auth.user.userEmail);
-        prefs.setString('user_type', _auth.user.userType.toString());
-        prefs.setString('usergroup_id', _auth.user.userGroupId);
-        prefs.setString('customerGroupId', _auth.customer.groupId.toString());
+        await storageCache.write(
+            key: 'user_name_cust', value: _auth.user.userName);
+        await storageCache.write(key: 'user_id', value: _auth.user.userID);
+        await storageCache.write(
+            key: 'user_email_cust', value: _auth.user.userEmail);
+
+        // prefs.setString('user_type', _auth.user.userType.toString());
+        // prefs.setString('usergroup_id', _auth.user.userGroupId);
+        // prefs.setString('customerGroupId', _auth.customer.groupId.toString());
+
+        await storageCache.write(
+            key: 'user_type', value: _auth.user.userType.toString());
+        await storageCache.write(
+            key: 'usergroup_id', value: _auth.user.userGroupId);
+        await storageCache.write(
+            key: 'customerGroupId', value: _auth.customer.groupId.toString());
         setState(() {
           Provider.of<UserCred>(context).userCred(
               accessToken: _auth.accessToken,
@@ -537,7 +663,23 @@ class LoginScreenState extends State<LoginScreen> {
           visible = false;
           btnVisible = true;
         });
-        Navigator.pushReplacementNamed(context, '/otp');
+
+        String accessToken = await storageCache.read(key: 'access_token');
+        // prefs.getString('access_token');
+
+        print('Accesss TOKENss : $accessToken');
+        print('PHONE NUMBs : ${_auth.verificationStatus.message}');
+        if (_auth.verificationStatus.message ==
+            'Anda pernah login melalui device ini') {
+          Navigator.pop(context);
+          Navigator.pushReplacementNamed(context, '/dashboard');
+        } else {
+          Navigator.pushReplacementNamed(
+            context,
+            '/otp',
+            arguments: numbPhone,
+          );
+        }
       } else {}
       return AuthSales.fromJson(json.decode(responseTokenBarrer.body));
     }
@@ -596,8 +738,12 @@ class LoginScreenState extends State<LoginScreen> {
   }
 
   Future<customer.Customer> getCustomerProfile(BuildContext context) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String accessToken = prefs.getString('access_token');
+    // SharedPreferences prefs = await SharedPreferences.getInstance();
+    // EncryptedSharedPreferences encryptedSharedPreferences =
+    //     EncryptedSharedPreferences(prefs: prefs);
+    String accessToken = await storageCache.read(key: 'access_token');
+    ;
+    print('Access TOKEN GetCustLogin : $accessToken');
     var responseCustomer = await http.get('${UrlCons.mainProdUrl}customers/me',
         headers: {
           'Content-Type': 'application/json',
@@ -605,9 +751,10 @@ class LoginScreenState extends State<LoginScreen> {
         });
     customer.Customer _customer =
         customer.Customer.fromJson(json.decode(responseCustomer.body));
-    SharedPreferences pref = await SharedPreferences.getInstance();
-    pref.setString('customer_id', _customer.data.custId);
-    pref.setString('customer_name', _customer.data.name);
+    await storageCache.write(key: 'customer_id', value: _customer.data.custId);
+    await storageCache.write(key: 'customer_name', value: _customer.data.name);
+    // encryptedSharedPreferences.setString('customer_id', _customer.data.custId);
+    // encryptedSharedPreferences.setString('customer_name', _customer.data.name);
 
     // harus di on kan
     Provider.of<UserCred>(context).userCred(
@@ -619,22 +766,29 @@ class LoginScreenState extends State<LoginScreen> {
 }
 
 Future<List<String>> deviceID() async {
-  DeviceInfoPlugin deviceInfo;
-  AndroidDeviceInfo androidInfo;
-  IosDeviceInfo iosInfo;
   String identifier;
-  SharedPreferences prefs = await SharedPreferences.getInstance();
+  String deviceName;
+  String deviceVersion;
   final DeviceInfoPlugin deviceInfoPlugin = new DeviceInfoPlugin();
-
+  final storageCache = new FlutterSecureStorage();
   if (Platform.isAndroid) {
-    deviceInfo = DeviceInfoPlugin();
-    androidInfo = await deviceInfo.androidInfo;
-    identifier = androidInfo.toString();
-    prefs.setString('devices_id', identifier);
+    var build = await deviceInfoPlugin.androidInfo;
+    deviceName = build.model;
+    deviceVersion = build.version.toString();
+    identifier = build.androidId;
+    print('IDNY : $identifier');
+    await storageCache.write(key: 'devices_name', value: deviceName);
+    await storageCache.write(key: 'devices_version', value: deviceVersion);
+    await storageCache.write(key: 'devices_id', value: identifier);
   } else if (Platform.isIOS) {
-    iosInfo = await deviceInfo.iosInfo;
-    identifier = iosInfo.toString();
-    prefs.setString('devices_id', identifier);
+    var data = await deviceInfoPlugin.iosInfo;
+    deviceName = data.name;
+    deviceVersion = data.systemVersion;
+    identifier = data.identifierForVendor;
+    await storageCache.write(key: 'devices_name', value: deviceName);
+    await storageCache.write(key: 'devices_version', value: deviceVersion);
+    await storageCache.write(key: 'devices_id', value: identifier);
   }
+  print('INI ID DEVICENYA : $identifier');
   return [identifier];
 }

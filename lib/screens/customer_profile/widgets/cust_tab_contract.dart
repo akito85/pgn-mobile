@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:pgn_mobile/models/cust_profile_model.dart';
 import 'package:expandable/expandable.dart';
 import 'package:pgn_mobile/models/url_cons.dart';
@@ -88,12 +89,13 @@ class ContractDetailState extends State<ContractDetailSales> {
                 child: Image.asset('assets/penggunaan_gas.png'),
               ),
               SizedBox(height: 20),
-              Container(
+              Center(
                 child: Text(
                   snapshot.data.message,
+                  textAlign: TextAlign.center,
                   style: TextStyle(fontSize: 18),
                 ),
-              )
+              ),
             ],
           );
         return ListView.builder(
@@ -571,8 +573,10 @@ class Card1 extends StatelessWidget {
 }
 
 Future<GetContract> getCustomerContract(BuildContext context) async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  String accessToken = prefs.getString('access_token');
+  // SharedPreferences prefs = await SharedPreferences.getInstance();
+  // String accessToken = prefs.getString('access_token');
+  final storageCache = FlutterSecureStorage();
+  String accessToken = await storageCache.read(key: 'access_token');
   var responseContractCust = await http
       .get('${UrlCons.mainProdUrl}customers/me/contracts', headers: {
     'Content-Type': 'application/json',

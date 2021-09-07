@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:intl/intl.dart';
 import 'package:pgn_mobile/models/url_cons.dart';
@@ -36,8 +37,8 @@ class DashDetailState extends State<DashboardDetail>
     print('prevMonth1: ${currentDate.month - 1}');
     int currentYear = DateTime.now().year;
     int currentMonth = DateTime.now().month - 1;
-    int month2 = currentMonth - 2;
-    int month3 = currentMonth - 3;
+    int month2 = currentMonth - 1;
+    int month3 = currentMonth - 2;
     String y = "10";
     String sNull = "0";
     String month3S, month2S, currentMonthS;
@@ -79,7 +80,7 @@ class DashDetailState extends State<DashboardDetail>
       if (currentMonth < 10) {
         currentMonthS = '0$currentMonth$y';
       } else {
-        currentMonthS = currentMonth.toString();
+        currentMonthS = '$currentMonth$y';
       }
       if (month2 < 10) {
         month2S = '$currentYear$sNull$month2';
@@ -105,6 +106,13 @@ class DashDetailState extends State<DashboardDetail>
         DateFormat("yyyMM").format(DateTime.parse(dateformatCurrent2));
     String formatDate3 =
         DateFormat("yyyMM").format(DateTime.parse(dateformatCurrent3));
+
+    // print(' DATE FORMAT TITLE CURRENT : $dateformatCurrent');
+    // print(' DATE FORMAT TITLE 2 : $dateformatCurrent2');
+    // print(' DATE FORMAT TITLE paling kiri : $dateformatCurrent3');
+    // print(' DATE FORMAT API CURRENT : $formatDate');
+    // print(' DATE FORMAT API 2 : $formatDate2');
+    // print(' DATE FORMAT API paling kiri : $formatDate3');
 
     return Scaffold(
       appBar: AppBar(
@@ -270,9 +278,11 @@ class DashDetailState extends State<DashboardDetail>
 
 Future<UsdArea> fetchGetChar(
     BuildContext context, String title, String cur) async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
+  // SharedPreferences prefs = await SharedPreferences.getInstance();
 
-  String accessToken = prefs.getString('access_token');
+  // String accessToken = prefs.getString('access_token');
+  final storageCache = FlutterSecureStorage();
+  String accessToken = await storageCache.read(key: 'access_token');
   var responseCharArea = await http.get(
       '${UrlCons.mainProdUrl}summary/omset-area?period=$title$cur',
       headers: {

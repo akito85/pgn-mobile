@@ -6,6 +6,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart' as painting;
 import 'package:charts_flutter/flutter.dart' as charts;
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:pgn_mobile/models/dashboard_chart_invoice_residential.dart';
 import 'package:pgn_mobile/models/url_cons.dart';
@@ -64,6 +65,7 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
   String userType;
   String groupID;
   String customerID;
+  final storageCache = new FlutterSecureStorage();
   List<SummaryModel> datanyaIdr(List<DataChartIdr> data) {
     final mockedData = List<SummaryModel>();
     data.forEach((itemData) {
@@ -276,14 +278,29 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
   }
 
   void getTitleCust() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+    // SharedPreferences prefs = await SharedPreferences.getInstance();
+    //  final storageCache = new FlutterSecureStorage();
+    String titleMngs = await storageCache.read(key: 'user_name_cust') ?? "";
+    String titleCusts = await storageCache.read(key: 'user_name_cust') ?? "";
+    String custIDs = await storageCache.read(key: 'user_id') ?? "";
+    String userTypes = await storageCache.read(key: 'user_type') ?? "";
+    String groupIDs = await storageCache.read(key: 'usergroup_id') ?? "";
+    String customerIDs = await storageCache.read(key: 'customer_id') ?? "";
+    print('USRER TYPE GET AUTH : ${await storageCache.read(key: 'user_type')}');
     setState(() {
-      titleMng = prefs.getString('user_name_cust') ?? "";
-      titleCust = prefs.getString('user_name_cust') ?? "";
-      custID = prefs.getString('user_id') ?? "";
-      userType = prefs.getString('user_type') ?? "";
-      groupID = prefs.getString('usergroup_id') ?? "";
-      customerID = prefs.getString('customer_id') ?? "";
+      titleMng = titleMngs;
+      titleCust = titleCusts;
+      custID = custIDs;
+      userType = userTypes;
+      groupID = groupIDs;
+      customerID = customerIDs;
+      print('USRER TYPE GET AUTH : $userType');
+      // titleMng = prefs.getString('user_name_cust') ?? "";
+      // titleCust = prefs.getString('user_name_cust') ?? "";
+      // custID = prefs.getString('user_id') ?? "";
+      // userType = prefs.getString('user_type') ?? "";
+      // groupID = prefs.getString('usergroup_id') ?? "";
+      // customerID = prefs.getString('customer_id') ?? "";
     });
   }
 
@@ -296,6 +313,7 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     // getTitleCust();
+    print('USRER TYPE : $userType');
     String currentTime = DateFormat('kkmm').format(currentDate);
     if (int.parse(currentTime) <= 1100) {
       greetings =
@@ -507,7 +525,12 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
                       SizedBox(height: 2),
                       Icon(Icons.dashboard),
                       SizedBox(height: 5),
-                      Text('Dashboard', style: painting.TextStyle(fontSize: 11))
+                      Text(
+                        'Dashboard',
+                        style: painting.TextStyle(fontSize: 11),
+                        overflow: TextOverflow.ellipsis,
+                        softWrap: true,
+                      )
                     ],
                   ),
                 ),
@@ -615,7 +638,12 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
                       SizedBox(height: 2),
                       Icon(Icons.dashboard),
                       SizedBox(height: 5),
-                      Text('Dashboard', style: painting.TextStyle(fontSize: 11))
+                      Text(
+                        'Dashboard',
+                        style: painting.TextStyle(fontSize: 11),
+                        overflow: TextOverflow.ellipsis,
+                        softWrap: true,
+                      )
                     ],
                   ),
                 ),
@@ -2305,9 +2333,9 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
   }
 
   Future<ChartIdr> getChartIdr(BuildContext context) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String accessToken = prefs.getString('access_token');
-    String lang = prefs.getString('lang');
+    // SharedPreferences prefs = await SharedPreferences.getInstance();
+    String accessToken = await storageCache.read(key: 'access_token');
+    String lang = await storageCache.read(key: 'lang');
     var responseGetDataChartIdr = await http
         .get('${UrlCons.mainProdUrl}summary/omset-monthly?idr=20', headers: {
       'Content-Type': 'application/json',
@@ -2326,9 +2354,11 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
   }
 
   Future<ChartUsd> getChartUsd(BuildContext context) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String accessToken = prefs.getString('access_token');
-    String lang = prefs.getString('lang');
+    // SharedPreferences prefs = await SharedPreferences.getInstance();
+    // String accessToken = prefs.getString('access_token');
+    // String lang = prefs.getString('lang');
+    String accessToken = await storageCache.read(key: 'access_token');
+    String lang = await storageCache.read(key: 'lang');
     var responseGetDataChartIdr = await http
         .get('${UrlCons.mainProdUrl}summary/omset-monthly?currency', headers: {
       'Content-Type': 'application/json',
@@ -2348,9 +2378,11 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
   }
 
   Future<ChartDaily> getDailyChart(BuildContext context) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String accessToken = prefs.getString('access_token');
-    String lang = prefs.getString('lang');
+    // SharedPreferences prefs = await SharedPreferences.getInstance();
+    // String accessToken = prefs.getString('access_token');
+    // String lang = prefs.getString('lang');
+    String accessToken = await storageCache.read(key: 'access_token');
+    String lang = await storageCache.read(key: 'lang');
     var responseGetDataChartDaily =
         await http.get(UrlCons.getGasUsageDailyChartCust, headers: {
       'Content-Type': 'application/json',
@@ -2370,9 +2402,11 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
 
   Future<ChartInvoiceResidential> geInvoiceChartResidential(
       BuildContext context) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String accessToken = prefs.getString('access_token');
-    String lang = prefs.getString('lang');
+    // SharedPreferences prefs = await SharedPreferences.getInstance();
+    // String accessToken = prefs.getString('access_token');
+    // String lang = prefs.getString('lang');
+    String accessToken = await storageCache.read(key: 'access_token');
+    String lang = await storageCache.read(key: 'lang');
     var responseGetChartResidential = await http
         .get("${UrlCons.getInvoiceResidentialChart}$customerID", headers: {
       'Content-Type': 'application/json',
@@ -2393,9 +2427,11 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
   }
 
   Future<ChartMonthly> getMonthlyChart(BuildContext context) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String accessToken = prefs.getString('access_token');
-    String lang = prefs.getString('lang');
+    // SharedPreferences prefs = await SharedPreferences.getInstance();
+    // String accessToken = prefs.getString('access_token');
+    // String lang = prefs.getString('lang');
+    String accessToken = await storageCache.read(key: 'access_token');
+    String lang = await storageCache.read(key: 'lang');
     var responseGetDataChartMonthly =
         await http.get(UrlCons.getGasUsageMonthlyChartCust, headers: {
       'Content-Type': 'application/json',
@@ -2415,9 +2451,11 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
   }
 
   Future<UsageSumChart> getSumChart(BuildContext context) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String accessToken = prefs.getString('access_token');
-    String lang = prefs.getString('lang');
+    // SharedPreferences prefs = await SharedPreferences.getInstance();
+    // String accessToken = prefs.getString('access_token');
+    // String lang = prefs.getString('lang');
+    String accessToken = await storageCache.read(key: 'access_token');
+    String lang = await storageCache.read(key: 'lang');
     var responseGetDataChartSum =
         await http.get(UrlCons.getGasUsageSumCust, headers: {
       'Content-Type': 'application/json',
@@ -2570,6 +2608,7 @@ class _SimpleLineChartState extends State<SimpleLineChart> {
   String valueText = "0.0";
   String titleText;
   Widget _timeSeriesChart;
+
   final formatCurrency =
       new NumberFormat.currency(locale: "en_US", symbol: " ", decimalDigits: 0);
   _SimpleLineChartState(this.seriesList, {this.animate = true});
@@ -2647,9 +2686,12 @@ class SummaryModel {
 }
 
 Future<CustomerInvoice> getCustomerInvoice(BuildContext context) async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  String accessToken = prefs.getString('access_token');
-  String lang = prefs.getString('lang');
+  // SharedPreferences prefs = await SharedPreferences.getInstance();
+  // String accessToken = prefs.getString('access_token');
+  // String lang = prefs.getString('lang');
+  final storageCache = FlutterSecureStorage();
+  String accessToken = await storageCache.read(key: 'access_token');
+  String lang = await storageCache.read(key: 'lang');
   var responseCustomerInvoice =
       await http.get(UrlCons.getCustInvoiceCust, headers: {
     'Content-Type': 'application/json',
@@ -2670,9 +2712,12 @@ Future<CustomerInvoice> getCustomerInvoice(BuildContext context) async {
 
 Future<CustomerInvoiceResidential> getCustomerInvoiceResidential(
     BuildContext context) async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  String accessToken = prefs.getString('access_token');
-  String lang = prefs.getString('lang');
+  // SharedPreferences prefs = await SharedPreferences.getInstance();
+  // String accessToken = prefs.getString('access_token');
+  // String lang = prefs.getString('lang');
+  final storageCache = FlutterSecureStorage();
+  String accessToken = await storageCache.read(key: 'access_token');
+  String lang = await storageCache.read(key: 'lang');
   var responseCustomerInvoice =
       await http.get(UrlCons.getCustInvoiceCust, headers: {
     'Content-Type': 'application/json',
@@ -2705,9 +2750,12 @@ Widget showCustInvoiceCustomerResidential(BuildContext context,
 }
 
 Future<Customer> getCustomerProfile(BuildContext context) async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  String accessToken = prefs.getString('access_token');
-  String lang = prefs.getString('lang');
+  // SharedPreferences prefs = await SharedPreferences.getInstance();
+  // String accessToken = prefs.getString('access_token');
+  // String lang = prefs.getString('lang');
+  final storageCache = FlutterSecureStorage();
+  String accessToken = await storageCache.read(key: 'access_token');
+  String lang = await storageCache.read(key: 'lang');
   var responseCustomer = await http.get(UrlCons.getCustProfileCust, headers: {
     'Content-Type': 'application/json',
     'Authorization': 'Bearer $accessToken',
@@ -2728,9 +2776,12 @@ Future<Customer> getCustomerProfile(BuildContext context) async {
 
 Future<CustomerProfileResidentialModel> getCustomerProfileResidential(
     BuildContext context) async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  String accessToken = prefs.getString('access_token');
-  String lang = prefs.getString('lang');
+  // SharedPreferences prefs = await SharedPreferences.getInstance();
+  // String accessToken = prefs.getString('access_token');
+  // String lang = prefs.getString('lang');
+  final storageCache = FlutterSecureStorage();
+  String accessToken = await storageCache.read(key: 'access_token');
+  String lang = await storageCache.read(key: 'lang');
   var responseCustomer = await http.get(
     UrlCons.getCustProfileCust,
     headers: {
@@ -2819,7 +2870,7 @@ Future<bool> accessTokenAlert(BuildContext context, String message) {
         Text(
           '$message' ?? '',
           style: painting.TextStyle(
-              color: painting.Color.fromRGBO(255, 255, 255, 0),
+              // color: painting.Color.fromRGBO(255, 255, 255, 0),
               fontSize: 17,
               fontWeight: FontWeight.w400),
           textAlign: TextAlign.center,
@@ -2831,7 +2882,7 @@ Future<bool> accessTokenAlert(BuildContext context, String message) {
       DialogButton(
         width: 130,
         onPressed: () async {
-          _signingOff(context);
+          _signingOff(context, message);
         },
         color: Colors.green,
         child: Text(
@@ -2844,13 +2895,22 @@ Future<bool> accessTokenAlert(BuildContext context, String message) {
   ).show();
 }
 
-void _signingOff(BuildContext context) async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  prefs.setString('user_id', "kosong");
-  prefs.setString('access_token', "kosong");
-  Navigator.pushNamedAndRemoveUntil(
-    context,
-    '/login',
-    (Route<dynamic> route) => false,
-  );
+void _signingOff(BuildContext context, String message) async {
+  final storageCache = FlutterSecureStorage();
+
+  // SharedPreferences prefs = await SharedPreferences.getInstance();
+  // prefs.setString('user_id', "kosong");
+  // prefs.setString('access_token', "kosong");
+  if (message == 'Device is registered successfully') {
+    Navigator.pop(context);
+    Navigator.pushReplacementNamed(context, '/dashboard');
+  } else {
+    await storageCache.write(key: 'user_id', value: 'kosong');
+    await storageCache.write(key: 'access_token', value: 'kosong');
+    Navigator.pushNamedAndRemoveUntil(
+      context,
+      '/login',
+      (Route<dynamic> route) => false,
+    );
+  }
 }

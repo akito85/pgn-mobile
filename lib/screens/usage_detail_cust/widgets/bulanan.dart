@@ -4,6 +4,7 @@ import 'package:charts_flutter/flutter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
 import 'package:pgn_mobile/models/url_cons.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -391,9 +392,12 @@ class LinearSales {
 
 Future<ChartUsageDetailMonthly> fetchGetCharMonth(
     BuildContext context, String custID) async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  String accessToken = prefs.getString('access_token');
-  String lang = prefs.getString('lang');
+  // SharedPreferences prefs = await SharedPreferences.getInstance();
+  // String accessToken = prefs.getString('access_token');
+  // String lang = prefs.getString('lang');
+  final storageCache = FlutterSecureStorage();
+  String accessToken = await storageCache.read(key: 'access_token');
+  String lang = await storageCache.read(key: 'lang');
   var responseUsageCharMonth = await http.get(
       '${UrlCons.mainProdUrl}customers/me/gas-usages/monthly-chart',
       headers: {

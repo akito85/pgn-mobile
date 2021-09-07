@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
@@ -254,8 +255,10 @@ class CreatePPState extends State<CreatePaymentPlan> {
 
   Future<PutPaymentPlan> putPaymentPlan(
       BuildContext context, String paymentPlanID) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String accessToken = prefs.getString('access_token');
+    // SharedPreferences prefs = await SharedPreferences.getInstance();
+    // String accessToken = prefs.getString('access_token');
+    final storageCache = FlutterSecureStorage();
+    String accessToken = await storageCache.read(key: 'access_token');
     print("ACCESS TOKEN: $accessToken");
 
     Map body = {
@@ -343,8 +346,10 @@ class CreatePPState extends State<CreatePaymentPlan> {
 }
 
 Future<NoVirtualAccount> getNoVirtualAccount() async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  String accessToken = prefs.getString('access_token');
+  // SharedPreferences prefs = await SharedPreferences.getInstance();
+  // String accessToken = prefs.getString('access_token');
+  final storageCache = FlutterSecureStorage();
+  String accessToken = await storageCache.read(key: 'access_token');
   var responseVirtualAccount = await http
       .get('${UrlCons.mainProdUrl}customers/me/virtual-accounts', headers: {
     'Content-Type': 'application/json',

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
 import 'package:pgn_mobile/models/cmm_model.dart';
 import 'package:pgn_mobile/models/cust_invoice_model.dart';
@@ -900,9 +901,13 @@ class CMMState extends State<CMM> with SingleTickerProviderStateMixin {
   Future<CMMModel> getCMMList(BuildContext context, String period) async {
     // int timestamp;
     DateFormat dateFormat = DateFormat("yyyy-MM-dd");
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String accessToken = prefs.getString('access_token');
-    currentLang = prefs.getString('lang');
+    // SharedPreferences prefs = await SharedPreferences.getInstance();
+    // String accessToken = prefs.getString('access_token');
+
+    // currentLang = prefs.getString('lang');
+    final storageCache = FlutterSecureStorage();
+    String accessToken = await storageCache.read(key: 'access_token');
+    currentLang = await storageCache.read(key: 'lang');
     print("ACCESS TOKEN: ${period.toUpperCase()}");
     var responseCMMList = await http.get(
         'https://devapi-mobile.pgn.co.id/v2/giore?P_PERIOD=${period.toUpperCase()}',
@@ -911,6 +916,8 @@ class CMMState extends State<CMM> with SingleTickerProviderStateMixin {
           'Authorization': 'Bearer $accessToken',
           // 'Authorization': 'Bearer 0Dz4C3O9flOerWWYUaFFFQXYbwKr9tlHc60k4MVa',
         });
+    print(
+        'ALAMAT CMM LIST :ttps://devapi-mobile.pgn.co.id/v2/giore?P_PERIOD=${period.toUpperCase()}');
     print('Data CMM LIST : ${responseCMMList.body}');
     CMMModel _cmmList = CMMModel.fromJson(json.decode(responseCMMList.body));
 

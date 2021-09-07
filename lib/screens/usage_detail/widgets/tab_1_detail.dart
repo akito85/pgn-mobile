@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/material.dart';
 import 'package:expandable/expandable.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
@@ -207,9 +208,12 @@ class FirstTabState extends State<FirstTab> {
   }
 
   Future<UsageDetails> fetchPost(BuildContext context, String keywoard) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String accessToken = prefs.getString('access_token');
-    String lang = prefs.getString('lang');
+    // SharedPreferences prefs = await SharedPreferences.getInstance();
+    // String accessToken = prefs.getString('access_token');
+    // String lang = prefs.getString('lang');
+    final storageCache = FlutterSecureStorage();
+    String accessToken = await storageCache.read(key: 'access_token');
+    String lang = await storageCache.read(key: 'lang');
 
     var responseGetUsageDetail = await http.get(
         'https://api-mobile.pgn.co.id/v2/report/gas-usage-list?q=$keywoard',
@@ -253,9 +257,12 @@ class FirstTabState extends State<FirstTab> {
 
   Future<UsageDetails> fetchPostNextPage(
       BuildContext context, String keywoard) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String accessToken = prefs.getString('access_token');
-    String lang = prefs.getString('lang');
+    // SharedPreferences prefs = await SharedPreferences.getInstance();
+    // String accessToken = prefs.getString('access_token');
+    // String lang = prefs.getString('lang');
+    final storageCache = FlutterSecureStorage();
+    String accessToken = await storageCache.read(key: 'access_token');
+    String lang = await storageCache.read(key: 'lang');
 
     var responseGetUsageDetail = await http.get(
         '${UrlCons.mainProdUrl}report/gas-usage-list?cursor=$nextPage',

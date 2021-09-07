@@ -4,6 +4,7 @@ import 'package:flutter/painting.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/painting.dart' as painting;
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:pgn_mobile/models/spbg_model.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:intl/intl.dart';
@@ -82,6 +83,7 @@ class HarianTabDetailState extends State<Harian> with TickerProviderStateMixin {
     ];
   }
 
+  dynamic storageCache = new FlutterSecureStorage();
   @override
   void initState() {
     _tabController = new TabController(length: 3, vsync: this, initialIndex: 2);
@@ -90,9 +92,13 @@ class HarianTabDetailState extends State<Harian> with TickerProviderStateMixin {
   }
 
   void getTitleCust() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+    // SharedPreferences prefs = await SharedPreferences.getInstance();
+    // setState(() {
+    //   groupID = prefs.getString('usergroup_id') ?? "";
+    // });
+    String titleCusts = await storageCache.read(key: 'usergroup_id') ?? "";
     setState(() {
-      groupID = prefs.getString('usergroup_id') ?? "";
+      groupID = titleCusts;
     });
   }
 
@@ -490,9 +496,12 @@ class LinearSalesDateTime {
 
 Future<ChartUsageDetail> fetchGetChar(
     BuildContext context, String title, String custID) async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  String lang = prefs.getString('lang');
-  String accessToken = prefs.getString('access_token');
+  // SharedPreferences prefs = await SharedPreferences.getInstance();
+  // String lang = prefs.getString('lang');
+  // String accessToken = prefs.getString('access_token');
+  final storageCache = FlutterSecureStorage();
+  String accessToken = await storageCache.read(key: 'access_token');
+  String lang = await storageCache.read(key: 'lang');
   var responseUsageChar = await http.get(
     '${UrlCons.mainProdUrl}customers/me/gas-usages/daily-chart/$title',
     headers: {

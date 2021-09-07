@@ -1,5 +1,6 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:pgn_mobile/screens/settings/widgets/change_password.dart';
 import 'package:pgn_mobile/services/app_localizations.dart';
 import 'package:pgn_mobile/services/applications.dart';
@@ -21,6 +22,7 @@ class SettingState extends State<Settings> {
   String currentLang;
   Color indLangSelected = Color(0xFF9B9B9B);
   Color enLangSelected = Color(0xFF9B9B9B);
+  final storageCache = FlutterSecureStorage();
   @override
   void initState() {
     super.initState();
@@ -38,8 +40,8 @@ class SettingState extends State<Settings> {
   }
 
   getLang() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    currentLang = prefs.getString('lang');
+    // SharedPreferences prefs = await SharedPreferences.getInstance();
+    currentLang = await storageCache.read(key: 'lang');
   }
 
   onLocaleChange(Locale locale) {
@@ -241,9 +243,12 @@ Future<String> _getFCMToken() async {
 }
 
 void changeLang(BuildContext context, String title, String lang) async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
+  // SharedPreferences prefs = await SharedPreferences.getInstance();
+    final storageCache = FlutterSecureStorage();
   String fcmToken = await _getFCMToken();
-  prefs.setString('lang', lang);
+
+  await storageCache.write(key: 'lang', value: lang);
+  // prefs.setString('lang', lang);
   var body = json.encode({
     'fcm_token': fcmToken,
     'language': title,
@@ -255,9 +260,14 @@ void changeLang(BuildContext context, String title, String lang) async {
 }
 
 void _signingOff(BuildContext context) async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  prefs.setString('user_id', "kosong");
-  prefs.setString('access_token', "kosong");
+  // SharedPreferences prefs = await SharedPreferences.getInstance();
+  // prefs.setString('user_id', "kosong");
+  // prefs.setString('access_token', "kosong");
+
+  final storageCache = FlutterSecureStorage();
+  await storageCache.write(key: 'user_id', value: 'kosong');
+  await storageCache.write(key: 'access_token', value: 'kosong');
+  // storageCache.deleteAll();
   Navigator.pushNamedAndRemoveUntil(
     context,
     '/login',

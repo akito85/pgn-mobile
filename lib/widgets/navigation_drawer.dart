@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:pgn_mobile/models/url_cons.dart';
 import 'package:pgn_mobile/services/app_localizations.dart';
 import 'package:http/http.dart' as http;
@@ -24,6 +25,7 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
   Color enLangSelected = Color(0xFF9B9B9B);
   String userTypes;
   String customerGroupId;
+  final storageCache = new FlutterSecureStorage();
   @override
   void initState() {
     super.initState();
@@ -286,17 +288,20 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
   }
 
   getUserType(BuildContext context) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+    // SharedPreferences prefs = await SharedPreferences.getInstance();
+    String useraUserTypes = await storageCache.read(key: 'user_type') ?? "";
+    String customerGroupds =
+        await storageCache.read(key: 'customer_groupId') ?? "";
     setState(() {
-      userTypes = prefs.getString('user_type');
-      customerGroupId = prefs.getString('customer_groupId');
+      userTypes = useraUserTypes;
+      customerGroupId = customerGroupds;
     });
   }
 
   goToCustomerUsadeDetail(BuildContext context) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String userType = prefs.getString('user_type');
-
+    // SharedPreferences prefs = await SharedPreferences.getInstance();
+    // String userType = prefs.getString('user_type');
+    String userType = await storageCache.read(key: 'user_type');
     if (userType != '2') {
       Navigator.pushNamed(context, '/customerBill');
     } else if (userType == '2') {
@@ -305,9 +310,10 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
   }
 
   goToCustomerInvoice(BuildContext context) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+    // SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    String userType = prefs.getString('user_type');
+    // String userType = prefs.getString('user_type');
+    String userType = await storageCache.read(key: 'user_type');
 
     if (userType != '2') {
       Navigator.pushNamed(context, '/customerBill');
@@ -317,8 +323,9 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
   }
 
   Future<CustomerInvoice> getCustomerInvoice(BuildContext context) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String accessToken = prefs.getString('access_token');
+    // SharedPreferences prefs = await SharedPreferences.getInstance();
+    // String accessToken = prefs.getString('access_token');
+    String accessToken = await storageCache.read(key: 'access_token');
     var responseCustomerInvoice = await http
         .get('${UrlCons.mainProdUrl}customers/me/invoices', headers: {
       'Content-Type': 'application/json',
@@ -335,10 +342,11 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
   }
 
   gotoCustomerProfile(BuildContext context) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    // String accessToken = prefs.getString('access_token');
+    // SharedPreferences prefs = await SharedPreferences.getInstance();
+    // // String accessToken = prefs.getString('access_token');
 
-    String userType = prefs.getString('user_type');
+    // String userType = prefs.getString('user_type');
+    String userType = await storageCache.read(key: 'user_type');
 
     if (userType != '2') {
       Navigator.pushNamed(context, '/customers');
@@ -348,8 +356,9 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
   }
 
   Future<Customer> getCustomerProfile(BuildContext context) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String accessToken = prefs.getString('access_token');
+    // SharedPreferences prefs = await SharedPreferences.getInstance();
+    // String accessToken = prefs.getString('access_token');
+    String accessToken = await storageCache.read(key: 'access_token');
     var responseCustomer = await http.get('${UrlCons.mainProdUrl}customers/me',
         headers: {
           'Content-Type': 'application/json',
@@ -367,9 +376,13 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
 }
 
 void _signingOff(BuildContext context) async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  prefs.setString('user_id', "kosong");
-  prefs.setString('access_token', "kosong");
+  // SharedPreferences prefs = await SharedPreferences.getInstance();
+  // prefs.setString('user_id', "kosong");
+  // prefs.setString('access_token', "kosong");
+
+  final storageCache = FlutterSecureStorage();
+  await storageCache.write(key: 'user_id', value: 'kosong');
+  await storageCache.write(key: 'access_token', value: 'kosong');
   Navigator.pushNamedAndRemoveUntil(
     context,
     '/login',

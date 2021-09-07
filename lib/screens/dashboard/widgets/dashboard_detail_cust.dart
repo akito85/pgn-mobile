@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:expandable/expandable.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:pgn_mobile/models/url_cons.dart';
 import 'package:pgn_mobile/services/app_localizations.dart';
 import 'package:http/http.dart' as http;
@@ -664,8 +665,11 @@ class Card1 extends StatelessWidget {
 }
 
 Future<HarianDetailCustDashboard> fetchPost(BuildContext context) async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  String accessToken = prefs.getString('access_token');
+  // SharedPreferences prefs = await SharedPreferences.getInstance();
+  // String accessToken = prefs.getString('access_token');
+  final storageCache = FlutterSecureStorage();
+  String accessToken = await storageCache.read(key: 'access_token');
+  String lang = await storageCache.read(key: 'lang');
   int currentYear = DateTime.now().year;
   int currentMonth = DateTime.now().month;
   String currentMonthS;
@@ -679,7 +683,7 @@ Future<HarianDetailCustDashboard> fetchPost(BuildContext context) async {
       '${currentYear.toString()}${currentMonthS.toString()}';
   String formatDate =
       DateFormat("yyyMM").format(DateTime.parse(dateformatCurrent));
-  String lang = prefs.getString('lang');
+  // String lang = prefs.getString('lang');
   var responseHourlyUsage = await http.get(
     '${UrlCons.mainProdUrl}customers/me/gas-usages/daily-list/$formatDate',
     headers: {

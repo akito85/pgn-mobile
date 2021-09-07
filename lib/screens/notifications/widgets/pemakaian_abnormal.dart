@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:pgn_mobile/models/url_cons.dart';
 import 'package:pgn_mobile/models/notification_model.dart';
 import 'package:http/http.dart' as http;
@@ -176,8 +177,10 @@ class PemAbnormalState extends State<PemakaianAbnormal> {
   }
 
   void fetchPostNextPage(BuildContext context) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String accessToken = prefs.getString('access_token');
+    // SharedPreferences prefs = await SharedPreferences.getInstance();
+    // String accessToken = prefs.getString('access_token');
+    final storageCache = FlutterSecureStorage();
+    String accessToken = await storageCache.read(key: 'access_token');
     GetNotificationList returnGetNotifUsages;
 
     var responseGetSpbg = await http.get(
@@ -198,8 +201,10 @@ class PemAbnormalState extends State<PemakaianAbnormal> {
   }
 
   Future<GetNotificationList> fetchPost(BuildContext context) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String accessToken = prefs.getString('access_token');
+    // SharedPreferences prefs = await SharedPreferences.getInstance();
+    // String accessToken = prefs.getString('access_token');
+    final storageCache = FlutterSecureStorage();
+    String accessToken = await storageCache.read(key: 'access_token');
     var responseGetSpbg = await http
         .get('${UrlCons.mainProdUrl}customers?issue=usage', headers: {
       'Content-Type': 'application/json',

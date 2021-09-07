@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:pgn_mobile/models/url_cons.dart';
 import 'package:pgn_mobile/screens/dashboard/dashboard.dart';
 
@@ -237,8 +238,10 @@ Widget _allertSucces(BuildContext context, String title) {
 
 Future<ChangePassword> changePassword(
     BuildContext context, String oldPassword, String validatePass) async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  String accessToken = prefs.getString('access_token');
+  // SharedPreferences prefs = await SharedPreferences.getInstance();
+  // String accessToken = prefs.getString('access_token');
+  final storageCache = FlutterSecureStorage();
+  String accessToken = await storageCache.read(key: 'access_token');
   var responseChangePass = await http.post(
       '${UrlCons.mainProdUrl}change-password',
       headers: {'Authorization': 'Bearer $accessToken'},

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pgn_mobile/screens/calculator/widgets/cal_boiler.dart';
 import 'package:pgn_mobile/screens/calculator/widgets/cal_conversi.dart';
 import 'package:pgn_mobile/screens/calculator/widgets/cal_listrik.dart';
+import 'package:pgn_mobile/services/app_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:pgn_mobile/services/language.dart';
 
@@ -67,9 +68,15 @@ class Calculator extends StatelessWidget {
                               color: Color(0xFF4578EF),
                             ),
                             tabs: <Widget>[
-                              Tab(text: _lang.konversi),
+                              Tab(
+                                text: Translations.of(context)
+                                    .text('f_calculator_conversion_tv_title'),
+                              ),
                               Tab(text: 'Boiler'),
-                              Tab(text: _lang.listrik)
+                              Tab(
+                                text: Translations.of(context)
+                                    .text('f_calculator_electricity_tv_title'),
+                              )
                             ],
                           ),
                         ),

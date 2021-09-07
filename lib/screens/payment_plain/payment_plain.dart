@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:expandable/expandable.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
@@ -439,9 +440,12 @@ class Card1 extends StatelessWidget {
 }
 
 Future<GetSpbg> fetchPost(BuildContext context) async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  String accessToken = prefs.getString('access_token');
-  String tokenType = prefs.getString('token_type');
+  // SharedPreferences prefs = await SharedPreferences.getInstance();
+  // String accessToken = prefs.getString('access_token');
+  // String tokenType = prefs.getString('token_type');
+  final storageCache = FlutterSecureStorage();
+  String accessToken = await storageCache.read(key: 'access_token');
+  // String tokenType = await storageCache.read(key: 'tokenType');
   var responseGetSpbg = await http.get(UrlCons.getSpbgArea, headers: {
     'Content-Type': 'application/json',
     'Authorization': 'Bearer $accessToken'

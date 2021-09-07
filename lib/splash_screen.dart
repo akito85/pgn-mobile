@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'dart:async';
 import 'package:pgn_mobile/screens/login/login.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -16,9 +17,10 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   void navigationPage() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String userID = prefs.getString('user_id');
-
+    // SharedPreferences prefs = await SharedPreferences.getInstance();
+    // String userID = prefs.getString('user_id');
+    final storageCache = FlutterSecureStorage();
+    String userID = await storageCache.read(key: 'user_id');
     if (userID == "kosong") {
       Navigator.push(
         context,

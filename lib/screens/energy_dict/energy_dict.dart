@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:pgn_mobile/models/url_cons.dart';
 import 'package:pgn_mobile/services/app_localizations.dart';
 
@@ -115,9 +116,12 @@ class EnergyDictState extends State<EnergyDict> {
 }
 
 Future<GetVocabularies> fetchPost(BuildContext context) async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  String accessToken = prefs.getString('access_token');
-  String lang = prefs.getString('lang');
+  // SharedPreferences prefs = await SharedPreferences.getInstance();
+  // String accessToken = prefs.getString('access_token');
+  // String lang = prefs.getString('lang');
+  final storageCache = FlutterSecureStorage();
+  String accessToken = await storageCache.read(key: 'access_token');
+  String lang = await storageCache.read(key: 'lang');
   var responseGetVocabularies =
       await http.get('${UrlCons.mainProdUrl}vocabularies', headers: {
     'Content-Type': 'application/json',

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart' as painting;
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:pgn_mobile/models/spbg_model.dart';
 import 'package:pgn_mobile/models/url_cons.dart';
 import 'package:pgn_mobile/screens/usage_detail/widgets/harian_detail_chart.dart';
@@ -495,9 +496,12 @@ class LinearSales {
 
 Future<ChartUsageDetail> fetchGetChar(
     BuildContext context, String title, String custID) async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  String accessToken = prefs.getString('access_token');
-  String lang = prefs.getString('lang');
+  // SharedPreferences prefs = await SharedPreferences.getInstance();
+  // String accessToken = prefs.getString('access_token');
+  // String lang = prefs.getString('lang');
+  final storageCache = FlutterSecureStorage();
+  String accessToken = await storageCache.read(key: 'access_token');
+  String lang = await storageCache.read(key: 'lang');
 
   var responseUsageChar = await http.get(
       '${UrlCons.mainProdUrl}customers/$custID/gas-usages/daily-chart/$title',

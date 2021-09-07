@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:pgn_mobile/models/notification_model.dart';
 import 'package:pgn_mobile/models/cust_invoice_model.dart';
 import 'package:pgn_mobile/models/url_cons.dart';
@@ -179,8 +180,10 @@ class TunggakanState extends State<Tunggakan> {
   }
 
   void fetchPostNextPage(BuildContext context) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String accessToken = prefs.getString('access_token');
+    // SharedPreferences prefs = await SharedPreferences.getInstance();
+    // String accessToken = prefs.getString('access_token');
+    final storageCache = FlutterSecureStorage();
+    String accessToken = await storageCache.read(key: 'access_token');
     var responseGetSpbg = await http.get(
         'https://api-mobile.pgn.co.id/v2/customers?issue=invoice&cursor=$nextPage',
         headers: {
@@ -208,8 +211,10 @@ class TunggakanState extends State<Tunggakan> {
 
 Future<CustomerInvoice> fetchPostBillDetail(
     BuildContext context, String id) async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  String accessToken = prefs.getString('access_token');
+  // SharedPreferences prefs = await SharedPreferences.getInstance();
+  // String accessToken = prefs.getString('access_token');
+    final storageCache = FlutterSecureStorage();
+  String accessToken = await storageCache.read(key: 'access_token');
   var responseCustInvoice = await http.get('${UrlCons.mainProdUrl}invoice/$id',
       headers: {
         'Content-Type': 'application/json',

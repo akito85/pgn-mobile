@@ -24,14 +24,18 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.2
   flutter_swiper : ^1.1.6
-  firebase_messaging: ^5.1.5
+  firebase_messaging: ^7.0.3
+  # firebase_messaging: ^5.1.5
   intl: ^0.17.0
   image_picker: ^0.6.7+22 # need to configure Info.plist for iOS
   carousel_pro: ^1.0.0
   charts_flutter: ^0.10.0
   device_info: ^0.4.0+2
   http: ^0.12.2
-  shared_preferences: 0.5.7+3
+  # shared_preferences: 0.5.7+3
+  shared_preferences: ^2.0.6
+  flutter_secure_storage: ^4.2.1
+  encrypted_shared_preferences: ^2.0.0
   google_maps_flutter: ^0.5.5
   font_awesome_flutter: ^8.12.0
   provider: ^5.0.0
@@ -45,9 +49,11 @@ dependencies:
   # pull_to_refresh: ^1.5.4
   expandable: ^4.1.4
   flutter_gifimage: ^1.0.0
-  flutter_launcher_icons: ^0.7.4
-  encrypt: ^3.3.1
+  flutter_launcher_icons: ^0.9.1
+  encrypt: ^5.0.0
   date_format: ^1.0.8
+  otp_text_field: ^1.1.1
+  fluttertoast: ^8.0.3
   flutter_localizations:
     sdk: flutter
   # flutter_cupertino_localizations: ^1.0.1

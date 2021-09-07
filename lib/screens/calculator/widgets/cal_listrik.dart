@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:pgn_mobile/services/app_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:pgn_mobile/services/calculators.dart';
 import 'package:pgn_mobile/screens/calculator/widgets/result.dart';
@@ -535,7 +536,8 @@ class CalListrictState extends State<CalListrict> {
                 child: MaterialButton(
                   minWidth: MediaQuery.of(context).size.width,
                   child: Text(
-                    'HITUNG',
+                    Translations.of(context)
+                        .text('ff_calculator_boiler_bt_submit'),
                     style: TextStyle(
                       color: Colors.white,
                     ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:pgn_mobile/models/url_cons.dart';
 import 'package:pgn_mobile/services/app_localizations.dart';
 import 'package:percent_indicator/percent_indicator.dart';
@@ -255,8 +256,10 @@ class SalesArea extends StatelessWidget {
 }
 
 Future<GetSalesArea> fetchPost(BuildContext context) async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  String accessToken = prefs.getString('access_token');
+  // SharedPreferences prefs = await SharedPreferences.getInstance();
+  // String accessToken = prefs.getString('access_token');
+  final storageCache = FlutterSecureStorage();
+  String accessToken = await storageCache.read(key: 'access_token');
   var responseGetSalesArea = await http
       .get('${UrlCons.mainProdUrl}summary/allcustomer-area', headers: {
     'Content-Type': 'application/json',

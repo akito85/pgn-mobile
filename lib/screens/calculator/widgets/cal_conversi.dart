@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:pgn_mobile/services/app_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:pgn_mobile/services/calculators.dart';
 import 'package:pgn_mobile/screens/calculator/widgets/result.dart';
@@ -389,7 +390,8 @@ class CalConversionState extends State<CalConversion> {
                   child: MaterialButton(
                     minWidth: MediaQuery.of(context).size.width,
                     child: Text(
-                      _lang.hitung,
+                      Translations.of(context)
+                          .text('ff_calculator_boiler_bt_submit'),
                       style: TextStyle(
                         color: Colors.white,
                       ),

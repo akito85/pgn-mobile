@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:pgn_mobile/models/url_cons.dart';
 import 'package:pgn_mobile/services/app_localizations.dart';
 import 'package:percent_indicator/percent_indicator.dart';
@@ -254,8 +255,10 @@ class SectorIndustry extends StatelessWidget {
 }
 
 Future<GetSectorIndustry> fetchPost(BuildContext context) async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  String accessToken = prefs.getString('access_token');
+  // SharedPreferences prefs = await SharedPreferences.getInstance();
+  // String accessToken = prefs.getString('access_token');
+  final storageCache = FlutterSecureStorage();
+  String accessToken = await storageCache.read(key: 'access_token');
   var responseGetSectorIndustry = await http
       .get('${UrlCons.prodRelyonUrl}summary/allcustomer', headers: {
     'Content-Type': 'application/json',

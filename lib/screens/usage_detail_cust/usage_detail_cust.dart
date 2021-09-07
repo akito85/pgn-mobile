@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:pgn_mobile/screens/usage_detail_cust/widgets/perjam.dart';
 import 'package:pgn_mobile/screens/usage_detail_cust/widgets/bulanan.dart';
 import 'package:pgn_mobile/screens/usage_detail_cust/widgets/harian.dart';
@@ -28,7 +29,7 @@ class UsageTabDetailState extends State<UsageDetailCust>
   final String title, idCust;
   UsageTabDetailState(this.title, this.idCust);
   String titleCust;
-
+  dynamic storageCache = new FlutterSecureStorage();
   @override
   void initState() {
     getTitleCust();
@@ -37,9 +38,10 @@ class UsageTabDetailState extends State<UsageDetailCust>
   }
 
   void getTitleCust() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+    // SharedPreferences prefs = await SharedPreferences.getInstance();
+    String titleCusts = await storageCache.read(key: 'user_name_cust') ?? "";
     setState(() {
-      titleCust = prefs.getString('user_name_cust') ?? "";
+      titleCust = titleCusts;
     });
   }
 

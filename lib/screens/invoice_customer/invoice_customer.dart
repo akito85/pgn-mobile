@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:pgn_mobile/models/url_cons.dart';
@@ -46,50 +47,48 @@ class BillDetailState extends State<InvoiceCust>
     int currentMonth = DateTime.now().month;
     int month2 = currentMonth - 1;
     int month3 = currentMonth - 2;
-    // String y = "10";
+    String y = "10";
     String sNull = "0";
     String month3S, month2S, currentMonthS;
 
     if (currentMonth == 2) {
       int currentYears = DateTime.now().year - 1;
       // int yearNow = DateTime.now().year;
-      String y1 = "01";
-      int y2 = 12;
+      String y1 = "12";
+      int y2 = 11;
 
       String cal2 = '$currentYear$y1';
       String cal1 = '$currentYears$y2';
-      currentMonthS = '02';
+      currentMonthS = '01';
       month2S = cal2;
       month3S = cal1;
     }
-    //  else if (currentMonth == 3) {
+    // else if (currentMonth == 3) {
     //   int currentYears = DateTime.now().year - 1;
-    //   int yearNow = DateTime.now().year;
-    //   String y1 = "02";
-    //   int y2 = 01;
+    //   String y1 = "01";
+    //   int y2 = 12;
 
     //   String cal2 = '$currentYear$y1';
     //   String cal1 = '$currentYears$y2';
-    //   currentMonthS = '03';
+    //   currentMonthS = '02';
     //   month2S = cal2;
     //   month3S = cal1;
     // }
     else if (currentMonth == 1) {
       int currentYears = DateTime.now().year - 1;
-      int yearNow = DateTime.now().year;
-      int y1 = 12;
-      int y2 = 11;
+      int y1 = 11;
+      int y2 = 10;
       String cal2 = '$currentYears$y1';
       String cal1 = '$currentYears$y2';
-      currentMonthS = '01';
+      currentMonthS = '12';
       month2S = cal2;
       month3S = cal1;
     } else {
       currentYear = DateTime.now().year;
       if (currentMonth < 10) {
-        currentMonthS = '0$currentMonth';
+        currentMonthS = '0$currentMonth$y';
       } else {
-        currentMonthS = currentMonth.toString();
+        currentMonthS = '${currentMonth.toString()}$y';
       }
       if (month2 < 10) {
         month2S = '$currentYear$sNull$month2';
@@ -104,7 +103,7 @@ class BillDetailState extends State<InvoiceCust>
       }
     }
     String dateformatCurrent =
-        '${currentYear.toString()}${currentMonthS.toString()}10';
+        '${currentYear.toString()}${currentMonthS.toString()}';
     String dateformatCurrent2 = '${month2S.toString()}10';
 
     String dateformatCurrent3 = '${month3S.toString()}10';
@@ -115,7 +114,12 @@ class BillDetailState extends State<InvoiceCust>
         DateFormat("yyyMM").format(DateTime.parse(dateformatCurrent2));
     String formatDate3 =
         DateFormat("yyyMM").format(DateTime.parse(dateformatCurrent3));
-
+    print(' DATE FORMAT TITLE CURRENT : $dateformatCurrent');
+    print(' DATE FORMAT TITLE 2 : $dateformatCurrent2');
+    print(' DATE FORMAT TITLE paling kiri : $dateformatCurrent3');
+    print(' DATE FORMAT API CURRENT : $formatDate');
+    print(' DATE FORMAT API 2 : $formatDate2');
+    print(' DATE FORMAT API paling kiri : $formatDate3');
     return Scaffold(
       // backgroundColor: Colors.black,
       body: Stack(
@@ -372,7 +376,7 @@ class BillDetailState extends State<InvoiceCust>
   }
 
   Widget _buildRow(DataCustInvoice data) {
-    print('ID STATUSNYA : ${data.paymentStatus.display}');
+    print('ID STATUSNYA : ${data.paymentStatus.id}');
     if (userid == "17" && data.paymentStatus.display == 'Unpaid' ||
         data.paymentStatus.display == 'Belum Bayar')
       return Container(
@@ -1138,7 +1142,8 @@ class BillDetailState extends State<InvoiceCust>
                               color: Colors.grey[600]),
                         ),
                       ),
-                      if (data.paymentStatus.id == "2")
+                      if (data.paymentStatus.id == "2" ||
+                          data.paymentStatus.id == "1")
                         Container(
                           width: 150,
                           height: 40,
@@ -2105,9 +2110,12 @@ class BillDetailState extends State<InvoiceCust>
 
 Future<CustomerInvoice> getCustomerInvoice(
     BuildContext context, String custID) async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  String accessToken = prefs.getString('access_token');
-  String lang = prefs.getString('lang');
+  // SharedPreferences prefs = await SharedPreferences.getInstance();
+  // String accessToken = prefs.getString('access_token');
+  // String lang = prefs.getString('lang');
+  final storageCache = FlutterSecureStorage();
+  String accessToken = await storageCache.read(key: 'access_token');
+  String lang = await storageCache.read(key: 'lang');
   var responseCustomerInvoice =
       await http.get('${UrlCons.mainProdUrl}customers/me/invoices', headers: {
     'Content-Type': 'application/json',

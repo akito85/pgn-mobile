@@ -4,6 +4,7 @@ import 'dart:typed_data';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:pgn_mobile/models/cmm_form_model.dart';
@@ -431,10 +432,14 @@ class CMMFormState extends State<CMMForm> {
 
   Future<CMMFormModel> postCMMForm(
       BuildContext context, String foto, String stand) async {
-    String customerID;
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    customerID = prefs.getString('customer_id');
-    String accessToken = prefs.getString('access_token');
+    // String customerID;
+    // SharedPreferences prefs = await SharedPreferences.getInstance();
+    // customerID = prefs.getString('customer_id');
+    // String accessToken = prefs.getString('access_token');
+
+    final storageCache = FlutterSecureStorage();
+    String accessToken = await storageCache.read(key: 'access_token');
+    String customerID = await storageCache.read(key: 'customer_id');
     print('INI STANDNYA $stand');
     // var body = json.encode({
     //   'customer_id': '005',

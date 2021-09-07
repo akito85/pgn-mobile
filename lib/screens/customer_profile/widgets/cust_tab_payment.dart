@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
 import 'package:pgn_mobile/models/cust_profile_model.dart';
 import 'package:expandable/expandable.dart';
@@ -144,9 +145,10 @@ class PaymentDetailState extends State<PaymentDetailSales> {
                 child: Image.asset('assets/penggunaan_gas.png'),
               ),
               SizedBox(height: 20),
-              Container(
+              Center(
                 child: Text(
                   snapshot.data.message,
+                  textAlign: TextAlign.center,
                   style: TextStyle(fontSize: 18),
                 ),
               )
@@ -640,8 +642,10 @@ class Card1 extends StatelessWidget {
 }
 
 Future<GetGuarantees> getCustomerGuarantees(BuildContext context) async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  String accessToken = prefs.getString('access_token');
+  // SharedPreferences prefs = await SharedPreferences.getInstance();
+  // String accessToken = prefs.getString('access_token');
+  final storageCache = FlutterSecureStorage();
+  String accessToken = await storageCache.read(key: 'access_token');
   var responseGuaranteesCust = await http
       .get('${UrlCons.mainProdUrl}customers/me/guarantees', headers: {
     'Content-Type': 'application/json',

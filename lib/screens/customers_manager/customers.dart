@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'package:pgn_mobile/models/cust_list_model.dart';
 import 'package:pgn_mobile/models/url_cons.dart';
@@ -242,9 +243,12 @@ class CustomerState extends State<Customers> {
 
   Future<CustListModel> fetchPost(
       BuildContext context, String searchKey) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String accessToken = prefs.getString('access_token');
-    String lang = prefs.getString('lang');
+    // SharedPreferences prefs = await SharedPreferences.getInstance();
+    // String accessToken = prefs.getString('access_token');
+    // String lang = prefs.getString('lang');
+    final storageCache = FlutterSecureStorage();
+    String accessToken = await storageCache.read(key: 'access_token');
+    String lang = await storageCache.read(key: 'lang');
     var responseGetCustList = await http
         .get('${UrlCons.mainProdUrl}customers?q=$searchKey', headers: {
       'Content-Type': 'application/json',
@@ -277,9 +281,12 @@ class CustomerState extends State<Customers> {
 
   Future<CustListModel> fetchPostNextPage(
       BuildContext context, String searchKey) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String accessToken = prefs.getString('access_token');
-    String lang = prefs.getString('lang');
+    // SharedPreferences prefs = await SharedPreferences.getInstance();
+    // String accessToken = prefs.getString('access_token');
+    // String lang = prefs.getString('lang');
+    final storageCache = FlutterSecureStorage();
+    String accessToken = await storageCache.read(key: 'access_token');
+    String lang = await storageCache.read(key: 'lang');
     var responseGetCustList = await http
         .get('${UrlCons.mainProdUrl}customers?cursor=$nextPage', headers: {
       'Content-Type': 'application/json',

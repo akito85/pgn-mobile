@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:expandable/expandable.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:pgn_mobile/models/url_cons.dart';
 import 'dart:async';
@@ -184,7 +185,7 @@ class Card1 extends StatelessWidget {
                         Row(
                           children: <Widget>[
                             Container(
-                              width: 125,
+                              width: 140,
                               margin: EdgeInsets.only(left: 20.0, top: 15),
                               child: Text(
                                 'GHV',
@@ -394,7 +395,7 @@ class Card1 extends StatelessWidget {
                         Row(
                           children: <Widget>[
                             Container(
-                              width: 125,
+                              width: 140,
                               margin: EdgeInsets.only(left: 20.0, top: 15),
                               child: Text(
                                 'GHV',
@@ -749,9 +750,12 @@ class Card1 extends StatelessWidget {
 
 Future<HarianDetailCustDashboard> fetchPost(
     BuildContext context, String title) async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  String accessToken = prefs.getString('access_token');
-  String lang = prefs.getString('lang');
+  // SharedPreferences prefs = await SharedPreferences.getInstance();
+  // String accessToken = prefs.getString('access_token');
+  // String lang = prefs.getString('lang');
+  final storageCache = FlutterSecureStorage();
+  String accessToken = await storageCache.read(key: 'access_token');
+  String lang = await storageCache.read(key: 'lang');
   var responseHourlyUsage = await http.get(
     '${UrlCons.mainProdUrl}customers/me/gas-usages/daily-list/$title',
     headers: {

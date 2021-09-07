@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:pgn_mobile/models/daily_usage_detail_chart.dart';
 import 'package:expandable/expandable.dart';
 import 'package:http/http.dart' as http;
@@ -65,6 +66,7 @@ class HarianDetailChartState extends State<HarianDetailChart> {
           if (snapshot.data.message != null)
             return Column(
               mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 Container(
                   alignment: Alignment.center,
@@ -74,6 +76,7 @@ class HarianDetailChartState extends State<HarianDetailChart> {
                 Container(
                   child: Text(
                     snapshot.data.message,
+                    textAlign: TextAlign.center,
                     style: TextStyle(fontSize: 18),
                   ),
                 )
@@ -773,9 +776,12 @@ class Card1 extends StatelessWidget {
 
 Future<DailyUsageDetailChart> fetchPost(
     BuildContext context, String idCust, String period) async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  String accessToken = prefs.getString('access_token');
-  String lang = prefs.getString('lang');
+  // SharedPreferences prefs = await SharedPreferences.getInstance();
+  // String accessToken = prefs.getString('access_token');
+  // String lang = prefs.getString('lang');
+  final storageCache = FlutterSecureStorage();
+  String accessToken = await storageCache.read(key: 'access_token');
+  String lang = await storageCache.read(key: 'lang');
   var responseHourlyUsage = await http.get(
       '${UrlCons.mainProdUrl}customers/$idCust/gas-usages/daily-list/$period',
       headers: {

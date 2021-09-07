@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:pgn_mobile/models/cust_list_model.dart';
 import 'package:expandable/expandable.dart';
 import 'package:pgn_mobile/models/url_cons.dart';
@@ -223,7 +224,7 @@ class Card1 extends StatelessWidget {
                             Container(
                               alignment: Alignment.topLeft,
                               width: 140,
-                              margin: EdgeInsets.only(left: 20.0),
+                              margin: EdgeInsets.only(left: 20.0, top: 15),
                               child: Text(
                                 Translations.of(context)
                                     .text('row_equipment_tv_name'),
@@ -234,7 +235,7 @@ class Card1 extends StatelessWidget {
                               ),
                             ),
                             Container(
-                              margin: EdgeInsets.only(left: 0.0),
+                              margin: EdgeInsets.only(left: 0.0, top: 15),
                               child: Text(
                                 ':',
                                 style: TextStyle(
@@ -553,8 +554,8 @@ class Card1 extends StatelessWidget {
 
 Future<GetEquipCust> getCustomerGuarantees(
     BuildContext context, String id) async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  String accessToken = prefs.getString('access_token');
+  final storageCache = FlutterSecureStorage();
+  String accessToken = await storageCache.read(key: 'access_token');
   var responseGuaranteesCust = await http
       .get('${UrlCons.mainProdUrl}customers/$id/equipments', headers: {
     'Content-Type': 'application/json',

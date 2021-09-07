@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:pgn_mobile/models/url_cons.dart';
 import 'package:pgn_mobile/models/spbg_model.dart';
 import 'package:pgn_mobile/screens/gas_station/gs_detail.dart';
@@ -104,8 +105,10 @@ class GasStationState extends State<GasStation> {
 }
 
 Future<GetSpbg> fetchPost(BuildContext context) async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  String accessToken = prefs.getString('access_token');
+  // SharedPreferences prefs = await SharedPreferences.getInstance();
+  // String accessToken = prefs.getString('access_token');
+  final storageCache = FlutterSecureStorage();
+  String accessToken = await storageCache.read(key: 'access_token');
   var responseGetSpbg = await http.get(UrlCons.getSpbgArea, headers: {
     'Content-Type': 'application/json',
     'Authorization': 'Bearer $accessToken'

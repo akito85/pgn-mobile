@@ -1,6 +1,7 @@
 import 'package:charts_flutter/flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:pgn_mobile/models/url_cons.dart';
 import 'package:pgn_mobile/services/app_localizations.dart';
 import 'package:pgn_mobile/models/monthly_usage_trend_model.dart';
@@ -300,8 +301,10 @@ class LinearSales {
 }
 
 Future<MonthlyUsageTrend> getCustomerContract(BuildContext context) async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  String accessToken = prefs.getString('access_token');
+  // SharedPreferences prefs = await SharedPreferences.getInstance();
+  // String accessToken = prefs.getString('access_token');
+  final storageCache = FlutterSecureStorage();
+  String accessToken = await storageCache.read(key: 'access_token');
   var responseUsageTrend = await http
       .get('${UrlCons.mainProdUrl}summary/daily-usages-chart', headers: {
     'Content-Type': 'application/json',
