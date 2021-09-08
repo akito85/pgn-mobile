@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
 
 import 'package:flutter/material.dart';
@@ -1206,9 +1207,12 @@ class BillDetailState extends State<BillDetail>
 
 Future<CustomerInvoice> getCustomerInvoice(
     BuildContext context, String custID) async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  String accessToken = prefs.getString('access_token');
-  String lang = prefs.getString('lang');
+  // SharedPreferences prefs = await SharedPreferences.getInstance();
+  // String accessToken = prefs.getString('access_token');
+  // String lang = prefs.getString('lang');
+  final storageCache = FlutterSecureStorage();
+  String accessToken = await storageCache.read(key: 'access_token');
+  String lang = await storageCache.read(key: 'lang');
   var responseCustomerInvoice =
       await http.get('${UrlCons.mainProdUrl}invoice/$custID', headers: {
     'Content-Type': 'application/json',

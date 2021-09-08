@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:pgn_mobile/models/url_cons.dart';
 import 'package:pgn_mobile/screens/cutomer_bill/widgets/bill_detail.dart';
 import 'package:http/http.dart' as http;
@@ -127,9 +128,12 @@ class CustomerBillsState extends State<CustomerBills> {
 
   Future<CustomerInvoice> getCustomerInvoice(
       BuildContext context, String custID) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String accessToken = prefs.getString('access_token');
-    String lang = prefs.getString('lang');
+    // SharedPreferences prefs = await SharedPreferences.getInstance();
+    // String accessToken = prefs.getString('access_token');
+    // String lang = prefs.getString('lang');
+    final storageCache = FlutterSecureStorage();
+    String accessToken = await storageCache.read(key: 'access_token');
+    String lang = await storageCache.read(key: 'lang');
     var responseCustomerInvoice =
         await http.get('${UrlCons.mainProdUrl}invoice/$custID', headers: {
       'Content-Type': 'application/json',

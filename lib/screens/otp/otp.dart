@@ -35,9 +35,10 @@ class OTPFormState extends State<OTPForm> {
   String get timerText =>
       '${((timerMaxSeconds - currentSeconds) ~/ 60).toString().padLeft(2, '0')}: ${((timerMaxSeconds - currentSeconds) % 60).toString().padLeft(2, '0')}';
 
+  Timer _timer;
   startTimeout([int milliseconds]) {
     var duration = interval;
-    Timer.periodic(duration, (timer) {
+    _timer = Timer.periodic(duration, (timer) {
       setState(() {
         print(timer.tick);
         currentSeconds = timer.tick;
@@ -52,6 +53,12 @@ class OTPFormState extends State<OTPForm> {
 
     getCred();
     startTimeout();
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
   }
 
   void getCred() async {
