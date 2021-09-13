@@ -8,7 +8,6 @@ import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/rendering.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class Customers extends StatefulWidget {
   @override
@@ -243,9 +242,6 @@ class CustomerState extends State<Customers> {
 
   Future<CustListModel> fetchPost(
       BuildContext context, String searchKey) async {
-    // SharedPreferences prefs = await SharedPreferences.getInstance();
-    // String accessToken = prefs.getString('access_token');
-    // String lang = prefs.getString('lang');
     final storageCache = FlutterSecureStorage();
     String accessToken = await storageCache.read(key: 'access_token');
     String lang = await storageCache.read(key: 'lang');
@@ -271,7 +267,6 @@ class CustomerState extends State<Customers> {
           returnGetDataListCust.clear();
           returnGetDataListCust.addAll(returnGetListCust.data);
           lengthList = returnGetDataListCust.length;
-          // errorStat = returnGetListCust.message;
         });
       }
     }
@@ -281,9 +276,6 @@ class CustomerState extends State<Customers> {
 
   Future<CustListModel> fetchPostNextPage(
       BuildContext context, String searchKey) async {
-    // SharedPreferences prefs = await SharedPreferences.getInstance();
-    // String accessToken = prefs.getString('access_token');
-    // String lang = prefs.getString('lang');
     final storageCache = FlutterSecureStorage();
     String accessToken = await storageCache.read(key: 'access_token');
     String lang = await storageCache.read(key: 'lang');

@@ -5,7 +5,6 @@ import 'package:pgn_mobile/models/cust_profile_model.dart';
 import 'package:expandable/expandable.dart';
 import 'package:pgn_mobile/models/url_cons.dart';
 import 'package:pgn_mobile/services/app_localizations.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
@@ -585,9 +584,6 @@ class Card1 extends StatelessWidget {
 }
 
 Future<GetContract> getCustomerContract(BuildContext context, String id) async {
-  // SharedPreferences prefs = await SharedPreferences.getInstance();
-  // String accessToken = prefs.getString('access_token');
-  // String lang = prefs.getString('lang');
   final storageCache = FlutterSecureStorage();
   String accessToken = await storageCache.read(key: 'access_token');
   String lang = await storageCache.read(key: 'lang');

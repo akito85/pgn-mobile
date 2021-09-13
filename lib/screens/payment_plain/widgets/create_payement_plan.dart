@@ -6,7 +6,6 @@ import 'dart:convert';
 import 'package:flutter/rendering.dart';
 import 'package:pgn_mobile/models/url_cons.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:pgn_mobile/models/payment_plan_model.dart';
 import 'package:intl/intl.dart';
 
@@ -255,11 +254,8 @@ class CreatePPState extends State<CreatePaymentPlan> {
 
   Future<PutPaymentPlan> putPaymentPlan(
       BuildContext context, String paymentPlanID) async {
-    // SharedPreferences prefs = await SharedPreferences.getInstance();
-    // String accessToken = prefs.getString('access_token');
     final storageCache = FlutterSecureStorage();
     String accessToken = await storageCache.read(key: 'access_token');
-    print("ACCESS TOKEN: $accessToken");
 
     Map body = {
       'payment_date': dateTimeSelected,
@@ -267,7 +263,6 @@ class CreatePPState extends State<CreatePaymentPlan> {
       'customer_invoice_id': paymentPlanID,
       'customer_virtual_account_id': noVirtualAccountCtrl.text
     };
-    // var responsePutPaymentPlan = await http.post('http://192.168.105.184/v2/payment-plans',
     var responsePutPaymentPlan = await http.post(
         'http://192.168.105.184/pgn-mobile-api/v2/payment-plans',
         headers: {
@@ -276,8 +271,6 @@ class CreatePPState extends State<CreatePaymentPlan> {
           'accept': 'applictation/json'
         },
         body: jsonEncode(body));
-    print('HASIL VIRTUAL ACCOUNT: $body');
-    print('HASIL KONFIRMASI PAYMENT PLAN: ${responsePutPaymentPlan.body}');
 
     if (responsePutPaymentPlan.statusCode == 200) {
       successAlert(context, "Payment Plan berhasil dibuat!");
@@ -346,8 +339,6 @@ class CreatePPState extends State<CreatePaymentPlan> {
 }
 
 Future<NoVirtualAccount> getNoVirtualAccount() async {
-  // SharedPreferences prefs = await SharedPreferences.getInstance();
-  // String accessToken = prefs.getString('access_token');
   final storageCache = FlutterSecureStorage();
   String accessToken = await storageCache.read(key: 'access_token');
   var responseVirtualAccount = await http

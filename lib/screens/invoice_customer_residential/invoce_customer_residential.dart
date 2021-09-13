@@ -7,7 +7,6 @@ import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import 'package:pgn_mobile/services/user_credientials.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:pgn_mobile/services/app_localizations.dart';
 import 'package:http/http.dart' as http;
@@ -38,7 +37,6 @@ class BillDetailState extends State<InvoiceCustResidential>
   }
 
   Widget build(BuildContext context) {
-    final _prov = Provider.of<UserCred>(context);
     prevMonth1 = currentDate.month - 1;
     prevMonth2 = new DateTime(currentDate.month - 2);
     prevMonth3 = new DateTime(currentDate.month - 3);
@@ -922,8 +920,6 @@ class BillDetailState extends State<InvoiceCustResidential>
 
   Future<CustomerInvoiceResidential> getCustomerInvoice(
       BuildContext context, String custID) async {
-    // SharedPreferences prefs = await SharedPreferences.getInstance();
-    // String accessToken = prefs.getString('access_token');
     final storageCache = FlutterSecureStorage();
     String accessToken = await storageCache.read(key: 'access_token');
     var responseCustomerInvoice = await http

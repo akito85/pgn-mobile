@@ -9,7 +9,6 @@ import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/rendering.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class EnergyDict extends StatefulWidget {
   @override
@@ -116,9 +115,6 @@ class EnergyDictState extends State<EnergyDict> {
 }
 
 Future<GetVocabularies> fetchPost(BuildContext context) async {
-  // SharedPreferences prefs = await SharedPreferences.getInstance();
-  // String accessToken = prefs.getString('access_token');
-  // String lang = prefs.getString('lang');
   final storageCache = FlutterSecureStorage();
   String accessToken = await storageCache.read(key: 'access_token');
   String lang = await storageCache.read(key: 'lang');

@@ -5,7 +5,6 @@ import 'package:pgn_mobile/screens/settings/widgets/change_password.dart';
 import 'package:pgn_mobile/services/app_localizations.dart';
 import 'package:pgn_mobile/services/applications.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
@@ -40,7 +39,6 @@ class SettingState extends State<Settings> {
   }
 
   getLang() async {
-    // SharedPreferences prefs = await SharedPreferences.getInstance();
     currentLang = await storageCache.read(key: 'lang');
   }
 
@@ -244,7 +242,7 @@ Future<String> _getFCMToken() async {
 
 void changeLang(BuildContext context, String title, String lang) async {
   // SharedPreferences prefs = await SharedPreferences.getInstance();
-    final storageCache = FlutterSecureStorage();
+  final storageCache = FlutterSecureStorage();
   String fcmToken = await _getFCMToken();
 
   await storageCache.write(key: 'lang', value: lang);
@@ -260,14 +258,9 @@ void changeLang(BuildContext context, String title, String lang) async {
 }
 
 void _signingOff(BuildContext context) async {
-  // SharedPreferences prefs = await SharedPreferences.getInstance();
-  // prefs.setString('user_id', "kosong");
-  // prefs.setString('access_token', "kosong");
-
   final storageCache = FlutterSecureStorage();
   await storageCache.write(key: 'user_id', value: 'kosong');
   await storageCache.write(key: 'access_token', value: 'kosong');
-  // storageCache.deleteAll();
   Navigator.pushNamedAndRemoveUntil(
     context,
     '/login',

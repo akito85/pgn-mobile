@@ -9,7 +9,6 @@ import 'package:pgn_mobile/services/language.dart';
 class Calculator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final _lang = Provider.of<Language>(context);
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(

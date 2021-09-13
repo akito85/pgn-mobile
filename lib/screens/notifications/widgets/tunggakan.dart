@@ -9,7 +9,6 @@ import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/rendering.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class Tunggakan extends StatefulWidget {
   @override
@@ -180,8 +179,7 @@ class TunggakanState extends State<Tunggakan> {
   }
 
   void fetchPostNextPage(BuildContext context) async {
-    // SharedPreferences prefs = await SharedPreferences.getInstance();
-    // String accessToken = prefs.getString('access_token');
+
     final storageCache = FlutterSecureStorage();
     String accessToken = await storageCache.read(key: 'access_token');
     var responseGetSpbg = await http.get(
@@ -197,11 +195,9 @@ class TunggakanState extends State<Tunggakan> {
         returnGetNotifInvoice.length == 0) {
       setState(() {
         errorStat = returnGetNotifInvoices.message;
-        // returnGetNotifInvoice.addAll(returnGetNotifInvoices.data);
       });
     } else if (returnGetNotifInvoices.data != null) {
       setState(() {
-        // errorStat = "";
         nextPage = returnGetNotifInvoices.paging.next;
         returnGetNotifInvoice.addAll(returnGetNotifInvoices.data);
       });
@@ -211,8 +207,7 @@ class TunggakanState extends State<Tunggakan> {
 
 Future<CustomerInvoice> fetchPostBillDetail(
     BuildContext context, String id) async {
-  // SharedPreferences prefs = await SharedPreferences.getInstance();
-  // String accessToken = prefs.getString('access_token');
+
     final storageCache = FlutterSecureStorage();
   String accessToken = await storageCache.read(key: 'access_token');
   var responseCustInvoice = await http.get('${UrlCons.mainProdUrl}invoice/$id',

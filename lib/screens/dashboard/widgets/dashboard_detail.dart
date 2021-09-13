@@ -3,7 +3,6 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:intl/intl.dart';
 import 'package:pgn_mobile/models/url_cons.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
@@ -278,9 +277,6 @@ class DashDetailState extends State<DashboardDetail>
 
 Future<UsdArea> fetchGetChar(
     BuildContext context, String title, String cur) async {
-  // SharedPreferences prefs = await SharedPreferences.getInstance();
-
-  // String accessToken = prefs.getString('access_token');
   final storageCache = FlutterSecureStorage();
   String accessToken = await storageCache.read(key: 'access_token');
   var responseCharArea = await http.get(

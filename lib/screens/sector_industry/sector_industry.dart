@@ -10,7 +10,6 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/rendering.dart';
 import 'package:pgn_mobile/models/sector_industry_model.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class SectorIndustry extends StatelessWidget {
   @override
@@ -255,8 +254,7 @@ class SectorIndustry extends StatelessWidget {
 }
 
 Future<GetSectorIndustry> fetchPost(BuildContext context) async {
-  // SharedPreferences prefs = await SharedPreferences.getInstance();
-  // String accessToken = prefs.getString('access_token');
+
   final storageCache = FlutterSecureStorage();
   String accessToken = await storageCache.read(key: 'access_token');
   var responseGetSectorIndustry = await http

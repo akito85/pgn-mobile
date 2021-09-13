@@ -5,10 +5,8 @@ import 'package:pgn_mobile/models/notification_model.dart';
 import 'package:pgn_mobile/models/url_cons.dart';
 import 'package:pgn_mobile/screens/notifications/widgets/j_pembayaran_detail.dart';
 import 'package:http/http.dart' as http;
-import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/rendering.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class JaminanPembayaran extends StatefulWidget {
   @override
@@ -218,8 +216,6 @@ class JamPembayaranState extends State<JaminanPembayaran> {
   }
 
   void fetchPostNextPage(BuildContext context) async {
-    // SharedPreferences prefs = await SharedPreferences.getInstance();
-    // String accessToken = prefs.getString('access_token');
     final storageCache = FlutterSecureStorage();
     String accessToken = await storageCache.read(key: 'access_token');
     var responseGetSpbg = await http.get(

@@ -8,7 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class PaymentPlanDetail extends StatefulWidget {
   PaymentPlanDetail({this.paymentPlanID});
-  String paymentPlanID;
+  final String paymentPlanID;
   @override
   PaymentPlanDetailState createState() => PaymentPlanDetailState(paymentPlanID);
 }

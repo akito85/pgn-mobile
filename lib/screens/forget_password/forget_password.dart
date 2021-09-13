@@ -6,7 +6,6 @@ import 'package:provider/provider.dart';
 import 'package:pgn_mobile/services/language.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:pgn_mobile/models/auth_model.dart';
 
 class ForgetPassword extends StatefulWidget {
@@ -127,7 +126,6 @@ class ForgetPasswordState extends State<ForgetPassword> {
   }
 
   void fetchPost(BuildContext context) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
 
     var body = json.encode({'mobile_phone': "62${phoneNumberCtrl.text}"});
     var responseTokenBarrer =
@@ -145,7 +143,6 @@ class ForgetPasswordState extends State<ForgetPassword> {
               'Content-Type': 'application/json',
             },
             body: body);
-    // ResetPassword returnGetNotifUsages = ResetPassword.fromJson(
     ResetPass returnResetPass =
         ResetPass.fromJson(json.decode(responseResetPassword.body));
     if (returnResetPass.message == "pgn.phone_number_not_found") {
@@ -183,8 +180,7 @@ Widget _allertSucces(BuildContext context, String title) {
               ),
               onTap: () {
                 Navigator.pop(context);
-                // Navigator.pushReplacement(context,
-                //     MaterialPageRoute(builder: (context) => Dashboard()));
+         
               },
             )
           ],
