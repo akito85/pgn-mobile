@@ -246,7 +246,12 @@ Future<ChangePassword> changePassword(
       '${UrlCons.mainProdUrl}change-password',
       headers: {'Authorization': 'Bearer $accessToken'},
       body: {'old_password': oldPassword, 'new_password': validatePass});
-  if (responseChangePass.contentLength == 0) {
+  print('HASIL oldPassword PASS $oldPassword');
+  print('HASIL validatePass PASS STatus COde $validatePass');
+
+  print('HASIL CHANGE PASS ${responseChangePass.body}');
+  print('HASIL CHANGE PASS STatus COde ${responseChangePass.statusCode}');
+  if (responseChangePass.statusCode == 204) {
     _allertSucces(context, 'Success, Your password has been changed');
   } else {
     _allertSucces(context, 'Failed, Your password not match!');

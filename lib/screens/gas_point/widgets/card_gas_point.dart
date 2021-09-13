@@ -22,6 +22,7 @@ class _CardGasPointState extends State<CardGaspoint> {
           builder: (context, snapshot) {
             if (!snapshot.hasData)
               return Container(
+                height: 190,
                 decoration: BoxDecoration(
                   image: DecorationImage(
                     image: AssetImage('assets/virtual_card.png'),
@@ -53,16 +54,19 @@ class _CardGasPointState extends State<CardGaspoint> {
                       ],
                     ),
                     LinearProgressIndicator(),
-                    Container(
-                      height: 170,
-                    )
+                    // Container(
+                    //   height: 170,
+                    // )
                   ],
                 ),
               );
             return Container(
+              height: 190,
               decoration: BoxDecoration(
                 image: DecorationImage(
-                    image: AssetImage('assets/virtual_card.png')),
+                  image: AssetImage('assets/virtual_card.png'),
+                  fit: BoxFit.fill,
+                ),
                 borderRadius: BorderRadius.circular(15.0),
               ),
               margin: EdgeInsets.only(left: 15, right: 15),
