@@ -10,7 +10,6 @@ import 'package:intl/intl.dart';
 import 'package:flutter/rendering.dart';
 import 'package:pgn_mobile/screens/usage_detail/widgets/harian_detail_chart.dart';
 import 'package:pgn_mobile/services/app_localizations.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class PemakaianAbnormal extends StatefulWidget {
   @override
@@ -201,8 +200,6 @@ class PemAbnormalState extends State<PemakaianAbnormal> {
   }
 
   Future<GetNotificationList> fetchPost(BuildContext context) async {
-    // SharedPreferences prefs = await SharedPreferences.getInstance();
-    // String accessToken = prefs.getString('access_token');
     final storageCache = FlutterSecureStorage();
     String accessToken = await storageCache.read(key: 'access_token');
     var responseGetSpbg = await http
@@ -217,14 +214,12 @@ class PemAbnormalState extends State<PemakaianAbnormal> {
         returnGetNotifUSage.length == 0) {
       setState(() {
         errorStat = returnGetNotifUsages.message;
-        // returnGetNotifUSage.addAll(returnGetNotifUsages.data);
       });
     } else if (returnGetNotifUsages.data != null) {
       setState(() {
         nextPage = returnGetNotifUsages.paging.next;
         returnGetNotifUSage.addAll(returnGetNotifUsages.data);
       });
-      // return returnGetNotifUsages;
     }
   }
 }

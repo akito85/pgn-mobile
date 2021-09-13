@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:pgn_mobile/models/cust_list_model.dart';
 import 'package:pgn_mobile/models/cust_invoice_model.dart';
 import 'package:pgn_mobile/services/app_localizations.dart';
-// import 'package:provider/provider.dart';
-// import 'package:pgn_mobile/services/language.dart';
 
 class BillDetail extends StatefulWidget {
   BillDetail({this.data, this.dataInvoice});
@@ -19,8 +17,6 @@ class BillDetailState extends State<BillDetail> {
   BillDetailState(this.data, this.dataInvoice);
   @override
   Widget build(BuildContext context) {
-    // final _lang = Provider.of<Language>(context);
-
     if (data == null)
       return ListView(
         children: <Widget>[

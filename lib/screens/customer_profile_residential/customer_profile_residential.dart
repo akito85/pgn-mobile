@@ -10,7 +10,6 @@ class MyProfileCustResidential extends StatelessWidget {
   Widget build(BuildContext context) {
     addressCtrl.text = data.data.address;
     return Scaffold(
-      // backgroundColor: Colors.white,
       body: Stack(
         children: <Widget>[
           Container(

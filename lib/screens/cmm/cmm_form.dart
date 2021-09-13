@@ -10,7 +10,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:pgn_mobile/models/cmm_form_model.dart';
 import 'package:pgn_mobile/services/app_localizations.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class CMMForm extends StatefulWidget {
   CMMForm({this.custID, this.userid});
@@ -43,8 +42,6 @@ class CMMFormState extends State<CMMForm> {
     setState(() {
       if (pickedFile != null) {
         _image = File(pickedFile.path);
-        // varImage = picker.getImage(source: imageSource);
-        // print('No image selected. $varImage');
       } else {
         print('No image selected.');
       }
@@ -78,38 +75,6 @@ class CMMFormState extends State<CMMForm> {
             margin: EdgeInsets.only(right: 5.0, left: 5.0, bottom: 10.0),
             child: ListView(
               children: <Widget>[
-                // Container(
-                //   height: 50,
-                //   margin: EdgeInsets.only(top: 5.0, left: 10, right: 10),
-                //   padding: EdgeInsets.only(left: 10, right: 10),
-                //   decoration: BoxDecoration(
-                //     color: Colors.white,
-                //     borderRadius: BorderRadius.circular(15.0),
-                //     boxShadow: [
-                //       BoxShadow(
-                //         color: Colors.grey,
-                //         blurRadius: 2.0,
-                //         spreadRadius: 0.0,
-                //         offset:
-                //             Offset(1.0, 1.0), // shadow direction: bottom right
-                //       )
-                //     ],
-                //   ),
-                //   child: TextFormField(
-                //     keyboardType: TextInputType.number,
-                //     controller: noIDMeterCtrl,
-                //     decoration: InputDecoration(
-                //       labelText: 'No ID/Meter (auto generate)',
-                //       border: OutlineInputBorder(
-                //         borderRadius: BorderRadius.circular(8),
-                //         borderSide: BorderSide(
-                //           width: 0,
-                //           style: BorderStyle.none,
-                //         ),
-                //       ),
-                //     ),
-                //   ),
-                // ),
                 Container(
                   height: 50,
                   margin: EdgeInsets.only(top: 20, left: 10, right: 10),
@@ -287,8 +252,6 @@ class CMMFormState extends State<CMMForm> {
                 onTap: () {
                   Navigator.pop(context);
                   getImage('Camera');
-                  // Navigator.pushReplacement(context,
-                  //     MaterialPageRoute(builder: (context) => Dashboard()));
                 },
               ),
               SizedBox(height: 15),
@@ -319,8 +282,6 @@ class CMMFormState extends State<CMMForm> {
                 onTap: () {
                   Navigator.pop(context);
                   getImage('Gallery');
-                  // Navigator.pushReplacement(context,
-                  //     MaterialPageRoute(builder: (context) => Dashboard()));
                 },
               )
             ],
@@ -409,7 +370,6 @@ class CMMFormState extends State<CMMForm> {
                                   String fileExt = _image.path.split('.').last;
                                   String encodedImage =
                                       'data:image/$fileExt;base64,${base64Encode(imageUnit8)}';
-                                  print('ini Iimagenya : ${encodedImage}');
                                   // Navigator.pop(context);
                                   setState(() {
                                     visibilityBtn = false;
@@ -432,35 +392,20 @@ class CMMFormState extends State<CMMForm> {
 
   Future<CMMFormModel> postCMMForm(
       BuildContext context, String foto, String stand) async {
-    // String customerID;
-    // SharedPreferences prefs = await SharedPreferences.getInstance();
-    // customerID = prefs.getString('customer_id');
-    // String accessToken = prefs.getString('access_token');
-
     final storageCache = FlutterSecureStorage();
     String accessToken = await storageCache.read(key: 'access_token');
-    String customerID = await storageCache.read(key: 'customer_id');
-    print('INI STANDNYA $stand');
-    // var body = json.encode({
-    //   'customer_id': '005',
-    //   'photo': [foto],
-    //   'stand': stand,
-    // });
+
     var responsePostCMMForm =
         await http.post('https://devapi-mobile.pgn.co.id/v2/giore', headers: {
       'Authorization': 'Bearer $accessToken',
-      // 'Authorization': 'Bearer 0Dz4C3O9flOerWWYUaFFFQXYbwKr9tlHc60k4MVa '
     }, body: {
-      // 'customer_id': customerID,
       'photo[]': foto,
       'stand': stand,
     });
-    // print('BODY YANG DIRIKIM POST FORM : ${body}');
     print('Hasil POST FORM : ${responsePostCMMForm.body}');
     CMMFormModel cmmFormModel =
         CMMFormModel.fromJson(json.decode(responsePostCMMForm.body));
 
-    // if (responsePostCMMForm.statusCode == 200) {
     allertFormCMM(context, cmmFormModel.message, cmmFormModel.response);
     // }
     return cmmFormModel;

@@ -4,7 +4,6 @@ import 'package:pgn_mobile/models/cust_list_model.dart';
 import 'package:expandable/expandable.dart';
 import 'package:pgn_mobile/models/url_cons.dart';
 import 'package:pgn_mobile/services/app_localizations.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';

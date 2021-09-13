@@ -19,7 +19,6 @@ import 'package:pgn_mobile/screens/settings/settings.dart';
 import 'package:pgn_mobile/services/user_credientials.dart';
 import 'package:pgn_mobile/widgets/push_dialog.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
@@ -2686,9 +2685,6 @@ class SummaryModel {
 }
 
 Future<CustomerInvoice> getCustomerInvoice(BuildContext context) async {
-  // SharedPreferences prefs = await SharedPreferences.getInstance();
-  // String accessToken = prefs.getString('access_token');
-  // String lang = prefs.getString('lang');
   final storageCache = FlutterSecureStorage();
   String accessToken = await storageCache.read(key: 'access_token');
   String lang = await storageCache.read(key: 'lang');
@@ -2712,9 +2708,6 @@ Future<CustomerInvoice> getCustomerInvoice(BuildContext context) async {
 
 Future<CustomerInvoiceResidential> getCustomerInvoiceResidential(
     BuildContext context) async {
-  // SharedPreferences prefs = await SharedPreferences.getInstance();
-  // String accessToken = prefs.getString('access_token');
-  // String lang = prefs.getString('lang');
   final storageCache = FlutterSecureStorage();
   String accessToken = await storageCache.read(key: 'access_token');
   String lang = await storageCache.read(key: 'lang');
@@ -2750,9 +2743,6 @@ Widget showCustInvoiceCustomerResidential(BuildContext context,
 }
 
 Future<Customer> getCustomerProfile(BuildContext context) async {
-  // SharedPreferences prefs = await SharedPreferences.getInstance();
-  // String accessToken = prefs.getString('access_token');
-  // String lang = prefs.getString('lang');
   final storageCache = FlutterSecureStorage();
   String accessToken = await storageCache.read(key: 'access_token');
   String lang = await storageCache.read(key: 'lang');
@@ -2776,9 +2766,6 @@ Future<Customer> getCustomerProfile(BuildContext context) async {
 
 Future<CustomerProfileResidentialModel> getCustomerProfileResidential(
     BuildContext context) async {
-  // SharedPreferences prefs = await SharedPreferences.getInstance();
-  // String accessToken = prefs.getString('access_token');
-  // String lang = prefs.getString('lang');
   final storageCache = FlutterSecureStorage();
   String accessToken = await storageCache.read(key: 'access_token');
   String lang = await storageCache.read(key: 'lang');
@@ -2898,9 +2885,6 @@ Future<bool> accessTokenAlert(BuildContext context, String message) {
 void _signingOff(BuildContext context, String message) async {
   final storageCache = FlutterSecureStorage();
 
-  // SharedPreferences prefs = await SharedPreferences.getInstance();
-  // prefs.setString('user_id', "kosong");
-  // prefs.setString('access_token', "kosong");
   if (message == 'Device is registered successfully') {
     Navigator.pop(context);
     Navigator.pushReplacementNamed(context, '/dashboard');

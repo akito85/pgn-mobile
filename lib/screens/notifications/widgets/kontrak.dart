@@ -7,7 +7,6 @@ import 'package:pgn_mobile/screens/notifications/widgets/kontrak_detail.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter/rendering.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class Kontrak extends StatefulWidget {
   @override
@@ -174,8 +173,6 @@ class KontrakState extends State<Kontrak> {
   }
 
   void fetchPostNextPage(BuildContext context) async {
-    // SharedPreferences prefs = await SharedPreferences.getInstance();
-    // String accessToken = prefs.getString('access_token');
     final storageCache = FlutterSecureStorage();
     String accessToken = await storageCache.read(key: 'access_token');
     var responseGetSpbg = await http.get(

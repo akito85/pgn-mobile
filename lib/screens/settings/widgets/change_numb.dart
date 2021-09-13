@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:pgn_mobile/models/url_cons.dart';
 import 'package:provider/provider.dart';
 import 'package:pgn_mobile/services/language.dart';
 import 'package:pgn_mobile/models/change_password.dart';
 import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:async';
 
 class ChangeNumb extends StatefulWidget {
@@ -99,8 +99,8 @@ class ChangeNumbState extends State<ChangeNumb> {
 
 Future<ChangePhoneNumb> chagePhoneNumb(
     BuildContext context, String phoneNumb) async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  String accessToken = prefs.getString('access_token');
+  final storageCache = FlutterSecureStorage();
+  String accessToken = await storageCache.read(key: 'access_token');
   var responseChangeNumb =
       await http.post('${UrlCons.prodRelyonUrl}otp', headers: {
     'Authorization': 'Bearer $accessToken'

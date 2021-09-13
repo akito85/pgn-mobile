@@ -3,7 +3,6 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:pgn_mobile/models/url_cons.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:pgn_mobile/models/cust_invoice_model.dart';
 import 'package:pgn_mobile/screens/payment_plain/payment_plain.dart';
 import 'package:pgn_mobile/screens/payment_plain/widgets/create_payement_plan.dart';
@@ -37,11 +36,9 @@ class BillDetailState extends State<InvoiceCust>
   }
 
   Widget build(BuildContext context) {
-    // final _prov = Provider.of<UserCred>(context);
     prevMonth1 = currentDate.month - 1;
     prevMonth2 = new DateTime(currentDate.month - 2);
     prevMonth3 = new DateTime(currentDate.month - 3);
-    // DateTime newone = DateFormat("MMMM").parse(prevMonth1);
     print('prevMonth1: ${currentDate.month - 1}');
     int currentYear = DateTime.now().year;
     int currentMonth = DateTime.now().month;
@@ -53,7 +50,6 @@ class BillDetailState extends State<InvoiceCust>
 
     if (currentMonth == 2) {
       int currentYears = DateTime.now().year - 1;
-      // int yearNow = DateTime.now().year;
       String y1 = "12";
       int y2 = 11;
 
@@ -114,12 +110,12 @@ class BillDetailState extends State<InvoiceCust>
         DateFormat("yyyMM").format(DateTime.parse(dateformatCurrent2));
     String formatDate3 =
         DateFormat("yyyMM").format(DateTime.parse(dateformatCurrent3));
-    print(' DATE FORMAT TITLE CURRENT : $dateformatCurrent');
-    print(' DATE FORMAT TITLE 2 : $dateformatCurrent2');
-    print(' DATE FORMAT TITLE paling kiri : $dateformatCurrent3');
-    print(' DATE FORMAT API CURRENT : $formatDate');
-    print(' DATE FORMAT API 2 : $formatDate2');
-    print(' DATE FORMAT API paling kiri : $formatDate3');
+    // print(' DATE FORMAT TITLE CURRENT : $dateformatCurrent');
+    // print(' DATE FORMAT TITLE 2 : $dateformatCurrent2');
+    // print(' DATE FORMAT TITLE paling kiri : $dateformatCurrent3');
+    // print(' DATE FORMAT API CURRENT : $formatDate');
+    // print(' DATE FORMAT API 2 : $formatDate2');
+    // print(' DATE FORMAT API paling kiri : $formatDate3');
     return Scaffold(
       // backgroundColor: Colors.black,
       body: Stack(
@@ -2110,9 +2106,6 @@ class BillDetailState extends State<InvoiceCust>
 
 Future<CustomerInvoice> getCustomerInvoice(
     BuildContext context, String custID) async {
-  // SharedPreferences prefs = await SharedPreferences.getInstance();
-  // String accessToken = prefs.getString('access_token');
-  // String lang = prefs.getString('lang');
   final storageCache = FlutterSecureStorage();
   String accessToken = await storageCache.read(key: 'access_token');
   String lang = await storageCache.read(key: 'lang');

@@ -7,7 +7,6 @@ import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/rendering.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:pgn_mobile/models/dashboard_chart_model.dart';
 import 'package:intl/intl.dart';
 
@@ -665,8 +664,6 @@ class Card1 extends StatelessWidget {
 }
 
 Future<HarianDetailCustDashboard> fetchPost(BuildContext context) async {
-  // SharedPreferences prefs = await SharedPreferences.getInstance();
-  // String accessToken = prefs.getString('access_token');
   final storageCache = FlutterSecureStorage();
   String accessToken = await storageCache.read(key: 'access_token');
   String lang = await storageCache.read(key: 'lang');
@@ -683,7 +680,6 @@ Future<HarianDetailCustDashboard> fetchPost(BuildContext context) async {
       '${currentYear.toString()}${currentMonthS.toString()}';
   String formatDate =
       DateFormat("yyyMM").format(DateTime.parse(dateformatCurrent));
-  // String lang = prefs.getString('lang');
   var responseHourlyUsage = await http.get(
     '${UrlCons.mainProdUrl}customers/me/gas-usages/daily-list/$formatDate',
     headers: {

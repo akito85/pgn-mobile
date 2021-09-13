@@ -7,7 +7,6 @@ import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/rendering.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:pgn_mobile/services/app_localizations.dart';
 
 class GasStation extends StatefulWidget {
@@ -105,8 +104,6 @@ class GasStationState extends State<GasStation> {
 }
 
 Future<GetSpbg> fetchPost(BuildContext context) async {
-  // SharedPreferences prefs = await SharedPreferences.getInstance();
-  // String accessToken = prefs.getString('access_token');
   final storageCache = FlutterSecureStorage();
   String accessToken = await storageCache.read(key: 'access_token');
   var responseGetSpbg = await http.get(UrlCons.getSpbgArea, headers: {

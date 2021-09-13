@@ -7,7 +7,6 @@ import 'package:intl/intl.dart';
 import 'package:pgn_mobile/models/cmm_model.dart';
 import 'package:pgn_mobile/models/cust_invoice_model.dart';
 import 'package:pgn_mobile/services/app_localizations.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
 class CMM extends StatefulWidget {
@@ -29,8 +28,7 @@ class CMMState extends State<CMM> with SingleTickerProviderStateMixin {
   CMMState(this.data, this.custID, this.userid);
   var prevMonth1, prevMonth2, prevMonth3;
   var currentDate = new DateTime.now();
-  // var currentMonth =
-  //     DateFormat("MMMM").format(DateTime.parse(DateTime.now().toString()));
+
   TabController _tabController;
   @override
   void initState() {
@@ -52,7 +50,6 @@ class CMMState extends State<CMM> with SingleTickerProviderStateMixin {
 
     if (currentMonth == 2) {
       int currentYears = DateTime.now().year - 1;
-      int yearNow = DateTime.now().year;
       String y1 = "01";
       int y2 = 12;
 
@@ -63,7 +60,6 @@ class CMMState extends State<CMM> with SingleTickerProviderStateMixin {
       month3S = cal1;
     } else if (currentMonth == 1) {
       int currentYears = DateTime.now().year - 1;
-      int yearNow = DateTime.now().year;
       int y1 = 12;
       int y2 = 11;
       String cal2 = '$currentYears$y1';
@@ -74,7 +70,6 @@ class CMMState extends State<CMM> with SingleTickerProviderStateMixin {
     } else {
       currentYear = DateTime.now().year;
       if (currentMonth < 10) {
-        // currentMonth = currentMonth - 1;
         currentMonthS = '0$currentMonth';
       } else {
         currentMonthS = currentMonth.toString();
@@ -341,21 +336,6 @@ class CMMState extends State<CMM> with SingleTickerProviderStateMixin {
               elevation: 5,
               child: Column(
                 children: <Widget>[
-                  // Row(
-                  //   children: <Widget>[
-                  //     Container(
-                  //       // width: 125,
-                  //       margin: EdgeInsets.only(left: 20.0, top: 21.0),
-                  //       child: Text(
-                  //         '$dateMonth $year',
-                  //         style: TextStyle(
-                  //             fontSize: 18.0,
-                  //             fontWeight: FontWeight.bold,
-                  //             color: Colors.black),
-                  //       ),
-                  //     ),
-                  //   ],
-                  // ),
                   SizedBox(height: 20),
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -592,25 +572,6 @@ class CMMState extends State<CMM> with SingleTickerProviderStateMixin {
                       ),
                     ),
                   ),
-            // Container(
-            //   height: 45.0,
-            //   decoration: BoxDecoration(
-            //     borderRadius: BorderRadius.circular(5.0),
-            //     color: Color(0xFF427CEF),
-            //   ),
-            //   child: MaterialButton(
-            //     minWidth: MediaQuery.of(context).size.width,
-            //     child: Text(
-            //       'CATAT METER MANDIRI',
-            //       style: TextStyle(
-            //         color: Colors.white,
-            //       ),
-            //     ),
-            //     onPressed: () {
-            //       Navigator.pushNamed(context, '/cmmForm');
-            //     },
-            //   ),
-            // ),
           ],
         ),
       );
@@ -637,21 +598,6 @@ class CMMState extends State<CMM> with SingleTickerProviderStateMixin {
                     elevation: 5,
                     child: Column(
                       children: <Widget>[
-                        // Row(
-                        //   children: <Widget>[
-                        //     Container(
-                        //       // width: 125,
-                        //       margin: EdgeInsets.only(left: 20.0, top: 21.0),
-                        //       child: Text(
-                        //         '$dateMonth $year',
-                        //         style: TextStyle(
-                        //             fontSize: 18.0,
-                        //             fontWeight: FontWeight.bold,
-                        //             color: Colors.black),
-                        //       ),
-                        //     ),
-                        //   ],
-                        // ),
                         SizedBox(height: 20),
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -899,12 +845,8 @@ class CMMState extends State<CMM> with SingleTickerProviderStateMixin {
   }
 
   Future<CMMModel> getCMMList(BuildContext context, String period) async {
-    // int timestamp;
     DateFormat dateFormat = DateFormat("yyyy-MM-dd");
-    // SharedPreferences prefs = await SharedPreferences.getInstance();
-    // String accessToken = prefs.getString('access_token');
 
-    // currentLang = prefs.getString('lang');
     final storageCache = FlutterSecureStorage();
     String accessToken = await storageCache.read(key: 'access_token');
     currentLang = await storageCache.read(key: 'lang');
@@ -923,7 +865,6 @@ class CMMState extends State<CMM> with SingleTickerProviderStateMixin {
 
     _cmmList.dataListCMM.forEach((x) {
       x.timeStamp = dateFormat.parse(x.tanggal).millisecondsSinceEpoch;
-      print('DATETIMENYAs ${x.timeStamp} ');
       if (x.source == 'CMM') {
         _cmmList.statusCMM = 'Sudah CMM';
         statusCMM = 'Sudah CMM';
@@ -939,8 +880,6 @@ class CMMState extends State<CMM> with SingleTickerProviderStateMixin {
       statusCMM = 'Belum CMM';
     }
     _cmmList.dataListCMM.sort((a, b) => a.timeStamp.compareTo(b.timeStamp));
-
-    print("DATA BULAN : ${period.toUpperCase()}");
 
     return _cmmList;
   }

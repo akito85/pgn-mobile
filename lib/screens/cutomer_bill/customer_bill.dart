@@ -7,7 +7,6 @@ import 'package:pgn_mobile/services/app_localizations.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'dart:async';
 import 'dart:convert';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:pgn_mobile/models/cust_invoice_model.dart';
 import 'package:provider/provider.dart';
 import 'package:pgn_mobile/services/language.dart';
@@ -128,9 +127,7 @@ class CustomerBillsState extends State<CustomerBills> {
 
   Future<CustomerInvoice> getCustomerInvoice(
       BuildContext context, String custID) async {
-    // SharedPreferences prefs = await SharedPreferences.getInstance();
-    // String accessToken = prefs.getString('access_token');
-    // String lang = prefs.getString('lang');
+
     final storageCache = FlutterSecureStorage();
     String accessToken = await storageCache.read(key: 'access_token');
     String lang = await storageCache.read(key: 'lang');

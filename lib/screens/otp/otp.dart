@@ -1,4 +1,3 @@
-import 'package:encrypted_shared_preferences/encrypted_shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -12,7 +11,6 @@ import 'package:pgn_mobile/models/otp_model.dart';
 import 'package:pgn_mobile/models/url_cons.dart';
 import 'package:pgn_mobile/screens/dashboard/dashboard.dart';
 import 'package:pgn_mobile/services/app_localizations.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:provider/provider.dart';
 import 'package:pgn_mobile/services/language.dart';
 
@@ -257,7 +255,6 @@ class OTPFormState extends State<OTPForm> {
     if (responseTokenBarrer.statusCode == 200) {
       showToast('Resend Succed !');
     }
-    // return Otp.fromJson(json.decode(responseOtpForm.body));
   }
 
   Future<Otp> postOtpForm(BuildContext context, String codeotp) async {
@@ -291,9 +288,6 @@ class OTPFormState extends State<OTPForm> {
     } else if (_otp.status == 'Device is registered successfully') {
       Navigator.pushReplacementNamed(context, '/dashboard');
     } else {
-      // await storageCache.write(key: 'user_id', value: 'kosong');
-      // await storageCache.write(key: 'access_token', value: 'kosong');
-      // Navigator.pop(context);
       accessTokenAlert(context, _otp.message);
     }
     return Otp.fromJson(json.decode(responseOtpForm.body));

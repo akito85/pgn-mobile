@@ -4,7 +4,6 @@ import 'package:pgn_mobile/services/app_localizations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class AboutPgn extends StatelessWidget {
-  // final UrlLauncher urlLauncher = new UrlLauncher();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,7 +27,6 @@ class AboutPgn extends StatelessWidget {
             ),
           ),
           ListView(
-            // shrinkWrap: true,
             children: <Widget>[
               SizedBox(height: 15),
               Container(
@@ -55,7 +53,6 @@ class AboutPgn extends StatelessWidget {
                                 tapHeaderToExpand: true,
                                 hasIcon: false,
                                 tapBodyToCollapse: true,
-                                // headerAlignment: ExpandablePanelHeaderAlignment.top,
                                 collapsed: Row(
                                   children: <Widget>[
                                     Container(
@@ -440,7 +437,6 @@ class AboutPgn extends StatelessWidget {
                                 tapHeaderToExpand: true,
                                 hasIcon: false,
                                 tapBodyToCollapse: true,
-                                // headerAlignment: ExpandablePanelHeaderAlignment.top,
                                 collapsed: Row(
                                   children: <Widget>[
                                     Container(
@@ -784,10 +780,6 @@ class AboutPgn extends StatelessWidget {
                                           height: 70,
                                           margin: EdgeInsets.fromLTRB(
                                               15.0, 0.0, 0.0, 0),
-                                          // decoration: new BoxDecoration(
-                                          //   color: Color(0xFF4578EF),
-                                          //   shape: BoxShape.circle,
-                                          // ),
                                           child: Image.asset(
                                             'assets/ic_about4.png',
                                             height: 50.0,
