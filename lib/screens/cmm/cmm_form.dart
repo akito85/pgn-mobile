@@ -8,6 +8,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:pgn_mobile/models/cmm_form_model.dart';
+import 'package:pgn_mobile/models/url_cons.dart';
 import 'package:pgn_mobile/services/app_localizations.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
@@ -396,7 +397,7 @@ class CMMFormState extends State<CMMForm> {
     String accessToken = await storageCache.read(key: 'access_token');
 
     var responsePostCMMForm =
-        await http.post('https://devapi-mobile.pgn.co.id/v2/giore', headers: {
+        await http.post('${UrlCons.mainProdUrl}giore', headers: {
       'Authorization': 'Bearer $accessToken',
     }, body: {
       'photo[]': foto,
