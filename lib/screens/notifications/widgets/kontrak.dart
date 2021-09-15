@@ -40,18 +40,6 @@ class KontrakState extends State<Kontrak> {
     super.dispose();
   }
 
-  // Widget _buildProgressIndicator() {
-  //   return new Padding(
-  //     padding: const EdgeInsets.all(8.0),
-  //     child: new Center(
-  //       child: new Opacity(
-  //         opacity: isLoading ? 1.0 : 00,
-  //         child: new CircularProgressIndicator(),
-  //       ),
-  //     ),
-  //   );
-  // }
-
   @override
   Widget build(BuildContext context) {
     if (errorStat != "")

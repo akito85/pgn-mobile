@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:pgn_mobile/screens/gas_point/widgets/card_gas_point.dart';
+import 'package:pgn_mobile/screens/gas_point/widgets/points_gas_point.dart';
+import 'package:pgn_mobile/screens/gas_point/widgets/redeem_gas_point.dart';
+import 'package:pgn_mobile/screens/gas_point/widgets/rewards_gas_point.dart';
 
 class GasPoint extends StatefulWidget {
   @override
@@ -73,9 +76,9 @@ class _GasPointState extends State<GasPoint> with TickerProviderStateMixin {
           ),
           body: TabBarView(controller: _tabController, children: [
             CardGaspoint(),
-            Container(),
-            Container(),
-            Container()
+            RewardsGasPoint(),
+            PointsGasPoint(),
+            RedeemGasPoint()
           ])),
     );
   }
