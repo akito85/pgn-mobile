@@ -6,6 +6,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
 import 'package:pgn_mobile/models/cmm_model.dart';
 import 'package:pgn_mobile/models/cust_invoice_model.dart';
+import 'package:pgn_mobile/models/url_cons.dart';
 import 'package:pgn_mobile/services/app_localizations.dart';
 import 'package:http/http.dart' as http;
 
@@ -852,14 +853,14 @@ class CMMState extends State<CMM> with SingleTickerProviderStateMixin {
     currentLang = await storageCache.read(key: 'lang');
     print("ACCESS TOKEN: ${period.toUpperCase()}");
     var responseCMMList = await http.get(
-        'https://devapi-mobile.pgn.co.id/v2/giore?P_PERIOD=${period.toUpperCase()}',
+        '${UrlCons.mainProdUrl}giore?P_PERIOD=${period.toUpperCase()}',
         headers: {
           // .get('http://192.168.105.184/pgn-mobile-api/v2/customers/me/invoices', headers: {
           'Authorization': 'Bearer $accessToken',
           // 'Authorization': 'Bearer 0Dz4C3O9flOerWWYUaFFFQXYbwKr9tlHc60k4MVa',
         });
-    print(
-        'ALAMAT CMM LIST :ttps://devapi-mobile.pgn.co.id/v2/giore?P_PERIOD=${period.toUpperCase()}');
+    // print(
+    //     'ALAMAT CMM LIST :ttps://devapi-mobile.pgn.co.id/v2/giore?P_PERIOD=${period.toUpperCase()}');
     print('Data CMM LIST : ${responseCMMList.body}');
     CMMModel _cmmList = CMMModel.fromJson(json.decode(responseCMMList.body));
 
