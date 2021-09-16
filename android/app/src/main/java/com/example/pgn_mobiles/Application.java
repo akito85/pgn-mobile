@@ -1,4 +1,4 @@
-package id.co.pgn.pgn_mobile;
+package id.co.pgn.pgn_mobiles;
 
  import io.flutter.app.FlutterApplication;
  import io.flutter.plugin.common.PluginRegistry;

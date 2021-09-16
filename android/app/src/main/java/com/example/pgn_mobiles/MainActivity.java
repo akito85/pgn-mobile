@@ -1,4 +1,4 @@
-package id.co.pgn.pgn_mobile;
+package id.co.pgn.pgn_mobiles;
 
 import androidx.annotation.NonNull;
 import io.flutter.embedding.android.FlutterActivity;
