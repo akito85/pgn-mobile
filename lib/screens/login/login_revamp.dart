@@ -1,9 +1,9 @@
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:flutter/material.dart';
+import 'package:pgn_mobile/screens/about_pgn/pgn_services.dart';
 import 'package:pgn_mobile/services/app_localizations.dart';
 import 'package:pgn_mobile/services/language.dart';
 import 'package:provider/provider.dart';
-import 'login_screen.dart';
 
 class LoginRevamp extends StatefulWidget {
   @override
@@ -85,7 +85,12 @@ class LoginRevampState extends State<LoginRevamp> {
                               'PGN Product & Services',
                               style: TextStyle(color: Color(0xFF427CEF)),
                             ),
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => PgnServices()));
+                            },
                           ),
                         ),
                         Row(
