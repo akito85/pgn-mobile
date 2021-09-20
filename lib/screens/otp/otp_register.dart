@@ -11,16 +11,26 @@ import 'package:pgn_mobile/models/otp_model.dart';
 import 'package:pgn_mobile/models/url_cons.dart';
 import 'package:pgn_mobile/screens/dashboard/dashboard.dart';
 import 'package:pgn_mobile/services/app_localizations.dart';
-import 'package:provider/provider.dart';
-import 'package:pgn_mobile/services/language.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
+import 'package:flutter/painting.dart' as painting;
 
-class OTPForm extends StatefulWidget {
+class OTPRegisterForm extends StatefulWidget {
+  final String numberPhone, idCust, pass, requestCode, accessToken;
+  OTPRegisterForm(
+      {this.idCust,
+      this.numberPhone,
+      this.pass,
+      this.requestCode,
+      this.accessToken});
   @override
-  OTPFormState createState() => OTPFormState();
+  OTPRegisterFormState createState() =>
+      OTPRegisterFormState(numberPhone, idCust, pass, requestCode, accessToken);
 }
 
-class OTPFormState extends State<OTPForm> {
-  String numberPhone;
+class OTPRegisterFormState extends State<OTPRegisterForm> {
+  final String numberPhone, idCust, pass, requestCode, accessToken;
+  OTPRegisterFormState(this.numberPhone, this.idCust, this.pass,
+      this.requestCode, this.accessToken);
   String newNumber;
   TextEditingController otpCtrl = new TextEditingController();
   final storageCache = new FlutterSecureStorage();
@@ -60,9 +70,9 @@ class OTPFormState extends State<OTPForm> {
   }
 
   void getCred() async {
-    String numberPhones = await storageCache.read(key: 'user_mobile_otp') ?? "";
+    // String numberPhones = await storageCache.read(key: 'user_mobile_otp') ?? "";
     setState(() {
-      numberPhone = numberPhones;
+      // numberPhone = numberPhones;
       newNumber = numberPhone;
       print('USRER TYPE GET AUTH : $numberPhone');
       for (int i = 0; i < 8; i++) {
@@ -80,7 +90,7 @@ class OTPFormState extends State<OTPForm> {
 
   @override
   Widget build(BuildContext context) {
-    final _lang = Provider.of<Language>(context);
+    // final _lang = Provider.of<Language>(context);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blue[550],
@@ -96,17 +106,10 @@ class OTPFormState extends State<OTPForm> {
           Container(
             margin: EdgeInsets.fromLTRB(15, 25, 15, 20),
             child: Text(
-              '${_lang.descVer} (+$newNumber)',
+              '${Translations.of(context).text('ff_otp_tv_instruction_desc')} (+$newNumber)',
               style: TextStyle(fontSize: 18),
             ),
           ),
-          // Container(
-          //   child: TextField(
-          //     controller: otpCtrl,
-          //     keyboardType: TextInputType.number,
-          //   ),
-          // ),
-
           Center(
             child: Padding(
               padding: const EdgeInsets.only(left: 15, right: 15, top: 20),
@@ -148,7 +151,7 @@ class OTPFormState extends State<OTPForm> {
               Container(
                   margin: EdgeInsets.fromLTRB(25.0, 55.0, 0.0, 10.0),
                   child: Text(
-                    _lang.verUbahNo,
+                    Translations.of(context).text('ff_otp_bt_change_number'),
                     style: TextStyle(
                       fontSize: 12.0,
                       color: Color(0xFF427CEF),
@@ -163,7 +166,7 @@ class OTPFormState extends State<OTPForm> {
                       alignment: Alignment.centerRight,
                       margin: EdgeInsets.fromLTRB(5.0, 55.0, 25.0, 10.0),
                       child: Text(
-                        _lang.kirimUlangNo,
+                        Translations.of(context).text('ff_otp_bt_resend'),
                         style: TextStyle(
                           color: Color(0xFF427CEF),
                           fontSize: 12.0,
@@ -184,7 +187,7 @@ class OTPFormState extends State<OTPForm> {
                 // color: color: Color(0xFF427CEF),,
                 minWidth: MediaQuery.of(context).size.width,
                 child: Text(
-                  _lang.konfirmasi ?? '',
+                  Translations.of(context).text('ff_otp_bt_confirmation'),
                   style: TextStyle(
                     color: Colors.white,
                   ),
@@ -196,63 +199,34 @@ class OTPFormState extends State<OTPForm> {
                   // Navigator.pushReplacementNamed(context, '/dashboard');
                 },
               )),
-          Container(
-              height: 50.0,
-              margin: EdgeInsets.fromLTRB(15.0, 5.0, 15.0, 30.0),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(18.0),
-                color: Colors.grey[400],
-              ),
-              child: MaterialButton(
-                // color: color: Color(0xFF427CEF),,
-                minWidth: MediaQuery.of(context).size.width,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Bypass Otp',
-                      style: TextStyle(
-                        color: Colors.black,
-                      ),
-                    ),
-                    Text(
-                      'Tombol ini hanya ada di beta untuk keperluan testing !',
-                      style: TextStyle(color: Colors.black, fontSize: 11),
-                    ),
-                  ],
-                ),
-                onPressed: () {
-                  Navigator.pop(context);
-                  Navigator.pushReplacementNamed(context, '/dashboard');
-                },
-              )),
         ],
       ),
     );
   }
 
   Future<AuthSales> postResendOtp(BuildContext context) async {
-    final storageCache = FlutterSecureStorage();
+    // final storageCache = FlutterSecureStorage();
 
-    String accessToken = await storageCache.read(key: 'access_token');
+    // String accessToken = await storageCache.read(key: 'access_token');
     print('ACCESS TOKEN : $accessToken');
     String devicesId = await storageCache.read(key: 'devices_id');
-    String userName = await storageCache.read(key: 'user_name_login');
-    String pass = await storageCache.read(key: 'pass_login');
-
-    var responseTokenBarrer =
-        await http.post('${UrlCons.mainProdUrl}authentication', headers: {
-      'X-Pgn-Device-Id': devicesId
-      // 'X-Pgn-Device-Id': "jnskdoandsoando"
-    }, body: {
-      'client_id': '0dUIDb81bBUsGDfDsYYHQ9wBujfjL9XWfH0ZoAzi',
-      'client_secret': '0DTuUFYRPtWUFN2UbzSvzqZMzNsW4kAl4t4PTrtC',
-      'grant_type': 'password',
-      'username': userName,
-      'password': pass
+    var bodySentTrans5 = json.encode({
+      "customer_id": idCust,
+      "mobile_phone": numberPhone,
+      "password": pass,
+      "transaction_type_id": 5,
     });
-    print('HASIL RESEND : ${responseTokenBarrer.body}');
-    if (responseTokenBarrer.statusCode == 200) {
+
+    var responseSentOTPRegisResidential =
+        await http.post('${UrlCons.mainProdUrl}otp',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer $accessToken',
+              'X-Pgn-Device-Id': devicesId,
+            },
+            body: bodySentTrans5);
+    print('HASIL RESEND : ${responseSentOTPRegisResidential.body}');
+    if (responseSentOTPRegisResidential.statusCode == 200) {
       showToast('Resend Succed !');
     }
   }
@@ -260,37 +234,36 @@ class OTPFormState extends State<OTPForm> {
   Future<Otp> postOtpForm(BuildContext context, String codeotp) async {
     final storageCache = FlutterSecureStorage();
 
-    String accessToken = await storageCache.read(key: 'access_token');
-    print('ACCESS TOKEN : $accessToken');
+    // String accessToken = await storageCache.read(key: 'access_token');
+    // print('ACCESS TOKEN : $accessToken');
     String devicesId = await storageCache.read(key: 'devices_id');
-    String requestCode = await storageCache.read(key: 'request_code');
-    String nextOtpTypeId = await storageCache.read(key: 'next_otp_type_id');
 
-    var responseOtpForm =
-        await http.post('${UrlCons.mainProdUrl}users/devices', headers: {
-      'Authorization': 'Bearer $accessToken',
-      // 'Content-Type': 'application/json',
-      'X-Pgn-Device-Id': '$devicesId'
-
-      // 'X-Pgn-Device-Id': 'jnskdoandsoando'
-    }, body: {
-      'transaction_type_id ': '$nextOtpTypeId',
-      'code': '$codeotp',
-      'request_code': '$requestCode'
+    var body = json.encode({
+      "request_code": requestCode,
+      "customer_id": idCust,
+      "mobile_phone": numberPhone,
+      "password": pass,
+      "code": codeotp,
     });
-    print('HASIL OTP : ${responseOtpForm.body}');
-    print('RE CODE : $requestCode');
-    print('Dev id : $devicesId');
-    print('Next OTP : $nextOtpTypeId');
-    Otp _otp = Otp.fromJson(json.decode(responseOtpForm.body));
-    if (_otp.status == 'true') {
-      Navigator.pushReplacementNamed(context, '/dashboard');
-    } else if (_otp.status == 'Device is registered successfully') {
-      Navigator.pushReplacementNamed(context, '/dashboard');
+    var responseSentOTPRegisResidential =
+        await http.post('${UrlCons.mainProdUrl}users/registrations',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer $accessToken',
+              'X-Pgn-Device-Id': devicesId,
+            },
+            body: body);
+    // print('HASIL OTP : ${responseSentOTPRegisResidential.body}');
+    // print('RE CODE : $requestCode');
+    // print('Dev id : $devicesId');
+    PostDataRegisterPGNUser postOTPRegisterResidential =
+        PostDataRegisterPGNUser.fromJson(
+            json.decode(responseSentOTPRegisResidential.body));
+    if (responseSentOTPRegisResidential.statusCode == 200) {
+      registerNewUserAlert(context, 'Silahkan masuk ke halaman login');
     } else {
-      accessTokenAlert(context, _otp.message);
+      registerNewUserAlert(context, postOTPRegisterResidential.message);
     }
-    return Otp.fromJson(json.decode(responseOtpForm.body));
   }
 }
 
@@ -300,4 +273,58 @@ void showToast(String msg) {
     toastLength: Toast.LENGTH_SHORT,
     gravity: ToastGravity.CENTER,
   );
+}
+
+Future<bool> registerNewUserAlert(BuildContext context, String message) {
+  var alertStyle = AlertStyle(
+    animationType: AnimationType.fromTop,
+    isCloseButton: false,
+    isOverlayTapDismiss: false,
+    descStyle: painting.TextStyle(fontWeight: FontWeight.bold),
+    animationDuration: Duration(milliseconds: 400),
+    alertBorder: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(0.0),
+      side: BorderSide(
+        color: Colors.grey,
+      ),
+    ),
+    titleStyle: painting.TextStyle(
+      color: Colors.black,
+    ),
+  );
+  return Alert(
+    context: context,
+    style: alertStyle,
+    title: "Information !",
+    content: Column(
+      children: <Widget>[
+        SizedBox(height: 5),
+        Text(
+          '$message' ?? '',
+          style: painting.TextStyle(
+              // color: painting.Color.fromRGBO(255, 255, 255, 0),
+              fontSize: 17,
+              fontWeight: FontWeight.w400),
+          textAlign: TextAlign.center,
+        ),
+        SizedBox(height: 10)
+      ],
+    ),
+    buttons: [
+      DialogButton(
+        width: 130,
+        onPressed: () async {
+          Navigator.pop(context);
+          Navigator.pop(context);
+          Navigator.pop(context);
+        },
+        color: Colors.green,
+        child: Text(
+          "OK",
+          style: painting.TextStyle(
+              color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
+        ),
+      )
+    ],
+  ).show();
 }

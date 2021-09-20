@@ -6,12 +6,11 @@ class CMMModel {
   CMMModel({this.dataListCMM, this.message, this.statusCMM});
 
   factory CMMModel.fromJson(Map<String, dynamic> json) {
-    if (json['data'] != []) {
-      return CMMModel(
-          dataListCMM: parseDataListCMM(json['data']), message: 'Berhasil');
+    if (json['message'] != null) {
+      return CMMModel(message: json['message']);
     } else {
       print('mASUK ');
-      return CMMModel(message: 'Tidak ada Data');
+      return CMMModel(dataListCMM: parseDataListCMM(json['data']));
     }
   }
   static List<DataListCMM> parseDataListCMM(datasJson) {

@@ -2767,10 +2767,26 @@ Future<bool> successAlert(BuildContext context, String formID) {
       children: <Widget>[
         SizedBox(height: 5),
         Text(
-          'Your Form ID is : $formID' ?? '',
+          Translations.of(context).text('ff_login_dialog_success_text') ?? '',
           style: TextStyle(
               color: Color(0xFF707070),
               fontSize: 17,
+              fontWeight: FontWeight.w400),
+          textAlign: TextAlign.center,
+        ),
+        SizedBox(height: 5),
+        Text(
+          Translations.of(context).text('f_residential_thank_you_message') ??
+              '',
+          style: TextStyle(color: Color(0xFF707070), fontSize: 14),
+          textAlign: TextAlign.center,
+        ),
+        SizedBox(height: 5),
+        Text(
+          "Form Id : ${formID ?? ''}",
+          style: TextStyle(
+              color: Color(0xFF707070),
+              fontSize: 14,
               fontWeight: FontWeight.w400),
           textAlign: TextAlign.center,
         ),

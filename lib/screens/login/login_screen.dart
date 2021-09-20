@@ -309,7 +309,16 @@ class LoginScreenState extends State<LoginScreen> {
   Future<AuthSales> fetchPost(
       BuildContext context, String password, String username) async {
     String deviceId = await storageCache.read(key: 'devices_id');
-
+    String usernames = '';
+    print('MASUK SINI USERNAMEs ${username[0]}');
+    if (username[0] == '0') {
+      print('MASUK SINI USERNAME');
+      usernames = '62${username.substring(1)}';
+      print('INI USERNYA : $usernames');
+    } else {
+      print('MASUK SINI USERNAMEs');
+      usernames = username;
+    }
     var responseTokenBarrer =
         await http.post('${UrlCons.mainProdUrl}authentication', headers: {
       'X-Pgn-Device-Id': deviceId
@@ -318,7 +327,7 @@ class LoginScreenState extends State<LoginScreen> {
       'client_id': '0dUIDb81bBUsGDfDsYYHQ9wBujfjL9XWfH0ZoAzi',
       'client_secret': '0DTuUFYRPtWUFN2UbzSvzqZMzNsW4kAl4t4PTrtC',
       'grant_type': 'password',
-      'username': username,
+      'username': usernames,
       'password': password
     });
     print('HASIL LOGIN ${responseTokenBarrer.body}');

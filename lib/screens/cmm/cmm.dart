@@ -229,12 +229,13 @@ class CMMState extends State<CMM> with SingleTickerProviderStateMixin {
               LinearProgressIndicator(),
             ],
           );
-        if (snapshot.data.message == 'Tidak ada Data')
+        if (snapshot.data.message != null)
           return Column(
             crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
+            // mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Container(
+                margin: EdgeInsets.only(top: 40),
                 alignment: Alignment.center,
                 child: Image.asset('assets/penggunaan_gas.png'),
               ),
@@ -552,7 +553,7 @@ class CMMState extends State<CMM> with SingleTickerProviderStateMixin {
                       decoration: const BoxDecoration(
                         borderRadius: BorderRadius.all(Radius.circular(20)),
                         image: DecorationImage(
-                            image: AssetImage("assets/CMMeng.jpeg"),
+                            image: AssetImage("assets/CMMeng.jpg"),
                             fit: BoxFit.fill),
                       ),
                     ),
@@ -568,7 +569,7 @@ class CMMState extends State<CMM> with SingleTickerProviderStateMixin {
                       decoration: const BoxDecoration(
                         borderRadius: BorderRadius.all(Radius.circular(20)),
                         image: DecorationImage(
-                            image: AssetImage("assets/CMMindo.jpeg"),
+                            image: AssetImage("assets/CMMindo.jpg"),
                             fit: BoxFit.fill),
                       ),
                     ),
@@ -857,30 +858,34 @@ class CMMState extends State<CMM> with SingleTickerProviderStateMixin {
         headers: {
           // .get('http://192.168.105.184/pgn-mobile-api/v2/customers/me/invoices', headers: {
           'Authorization': 'Bearer $accessToken',
+          'Accept-Language': currentLang,
           // 'Authorization': 'Bearer 0Dz4C3O9flOerWWYUaFFFQXYbwKr9tlHc60k4MVa',
         });
     // print(
     //     'ALAMAT CMM LIST :ttps://devapi-mobile.pgn.co.id/v2/giore?P_PERIOD=${period.toUpperCase()}');
     print('Data CMM LIST : ${responseCMMList.body}');
     CMMModel _cmmList = CMMModel.fromJson(json.decode(responseCMMList.body));
-
-    _cmmList.dataListCMM.forEach((x) {
-      x.timeStamp = dateFormat.parse(x.tanggal).millisecondsSinceEpoch;
-      if (x.source == 'CMM') {
-        _cmmList.statusCMM = 'Sudah CMM';
-        statusCMM = 'Sudah CMM';
-      } else if (x.source == 'Catat Meter Mandiri') {
-        _cmmList.statusCMM = 'Sudah CMM';
-        statusCMM = 'Sudah CMM';
-      } else {
-        _cmmList.statusCMM = 'Belum CMM';
+    if (responseCMMList.statusCode == 200) {
+      _cmmList.dataListCMM.forEach((x) {
+        x.timeStamp = dateFormat.parse(x.tanggal).millisecondsSinceEpoch;
+        if (x.source == 'CMM') {
+          _cmmList.statusCMM = 'Sudah CMM';
+          statusCMM = 'Sudah CMM';
+        } else if (x.source == 'Catat Meter Mandiri') {
+          _cmmList.statusCMM = 'Sudah CMM';
+          statusCMM = 'Sudah CMM';
+        } else {
+          _cmmList.statusCMM = 'Belum CMM';
+          statusCMM = 'Belum CMM';
+        }
+      });
+      if (_cmmList.dataListCMM.length == null) {
         statusCMM = 'Belum CMM';
       }
-    });
-    if (_cmmList.dataListCMM.length == null) {
-      statusCMM = 'Belum CMM';
+      _cmmList.dataListCMM.sort((a, b) => a.timeStamp.compareTo(b.timeStamp));
+    } else {
+      // _cmmList ;
     }
-    _cmmList.dataListCMM.sort((a, b) => a.timeStamp.compareTo(b.timeStamp));
 
     return _cmmList;
   }

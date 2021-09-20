@@ -181,6 +181,50 @@ class PostRegisterResidential {
   }
 }
 
+class RegisteraUserPGN {
+  int code;
+  String message; //"gas tool usages wajib diisi."
+  DataRegistUserPGN dataRegistUserPGN;
+  RegisteraUserPGN({this.code, this.message, this.dataRegistUserPGN});
+
+  factory RegisteraUserPGN.fromJson(Map<String, dynamic> json) {
+    if (json['message'] != null) {
+      return RegisteraUserPGN(code: json['code'], message: json['message']);
+    } else {
+      return RegisteraUserPGN(
+        dataRegistUserPGN: DataRegistUserPGN.fromJson(json['data']),
+      );
+    }
+  }
+}
+
+class DataRegistUserPGN {
+  String requestCode;
+  String otpTransId;
+
+  DataRegistUserPGN({this.otpTransId, this.requestCode});
+
+  factory DataRegistUserPGN.fromJson(Map<String, dynamic> json) {
+    return DataRegistUserPGN(
+        requestCode: json['request_code'],
+        otpTransId: json['otp_transaction_type_id']);
+  }
+}
+
+class PostDataRegisterPGNUser {
+  String accessToken;
+  String customerId;
+  String message;
+  PostDataRegisterPGNUser({this.accessToken, this.customerId, this.message});
+
+  factory PostDataRegisterPGNUser.fromJson(Map<String, dynamic> json) {
+    return PostDataRegisterPGNUser(
+        accessToken: json['access_token'],
+        message: json['message'],
+        customerId: json['customer_id']);
+  }
+}
+
 class ResetPassword {
   String status;
   String message;
