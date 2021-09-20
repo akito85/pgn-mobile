@@ -1,9 +1,12 @@
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:flutter/material.dart';
 import 'package:pgn_mobile/screens/about_pgn/pgn_services.dart';
+import 'package:pgn_mobile/screens/register/register.dart';
 import 'package:pgn_mobile/services/app_localizations.dart';
 import 'package:pgn_mobile/services/language.dart';
 import 'package:provider/provider.dart';
+
+import 'login_screen.dart';
 
 class LoginRevamp extends StatefulWidget {
   @override
@@ -108,7 +111,14 @@ class LoginRevampState extends State<LoginRevamp> {
                                     'Sign in',
                                     style: TextStyle(color: Colors.white),
                                   ),
-                                  onPressed: () {}),
+                                  onPressed: () {
+                                    setLang(context, false);
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                LoginScreen()));
+                                  }),
                             ),
                             Container(
                               margin: EdgeInsets.only(left: 8.0, top: 12.0),
@@ -123,7 +133,26 @@ class LoginRevampState extends State<LoginRevamp> {
                                     'Sign Up',
                                     style: TextStyle(color: Colors.white),
                                   ),
-                                  onPressed: () {}),
+                                  onPressed: () {
+                                    Provider.of<Language>(context,
+                                            listen: false)
+                                        .lang(
+                                      registration: Translations.of(context)
+                                          .text('title_bar_register'),
+                                      phonNumb: Translations.of(context).text(
+                                          'ff_change_number_et_hint_phone_number'),
+                                      idPelanggan: Translations.of(context)
+                                          .text('f_household_invoice_form_et'),
+                                      registDesc: Translations.of(context)
+                                          .text('ff_register_note'),
+                                      register: Translations.of(context)
+                                          .text('ff_guest_home_tv_register'),
+                                    );
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => Register()));
+                                  }),
                             ),
                           ],
                         ),
