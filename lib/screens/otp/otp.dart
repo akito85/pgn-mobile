@@ -85,7 +85,7 @@ class OTPFormState extends State<OTPForm> {
       appBar: AppBar(
         backgroundColor: Colors.blue[550],
         title: Text(
-          _lang.verifikasi,
+          Translations.of(context).text('title_bar_otp') ?? '',
           style: TextStyle(
             color: Colors.white,
           ),

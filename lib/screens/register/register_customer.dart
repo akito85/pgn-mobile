@@ -2,8 +2,11 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:pgn_mobile/models/auth_model.dart';
 import 'package:pgn_mobile/models/url_cons.dart';
+import 'package:pgn_mobile/screens/login/login_screen.dart';
+import 'package:pgn_mobile/screens/otp/otp_register.dart';
 
 import 'package:pgn_mobile/services/register_residential.dart';
 import 'package:provider/provider.dart';
@@ -26,6 +29,13 @@ class RegistCustState extends State<RegisterCustomer> {
   final encrypter = encrypt.Encrypter(encrypt.AES(
       encrypt.Key.fromUtf8('zNsW4kAl4t4PTrtC'),
       mode: encrypt.AESMode.cbc));
+
+  @override
+  void initState() {
+    super.initState();
+
+    deviceID();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -77,6 +87,7 @@ class RegistCustState extends State<RegisterCustomer> {
             padding: EdgeInsets.only(left: 20.0, right: 20.0, top: 15.0),
             child: TextFormField(
               controller: idCust,
+              keyboardType: TextInputType.number,
               decoration: InputDecoration(
                 labelText: _lang.idPelanggan,
               ),
@@ -148,7 +159,10 @@ class RegistCustState extends State<RegisterCustomer> {
 
   Future<PostRegisterResidential> postRegisterNewCust(
       BuildContext context, String password) async {
-    final _provRegResidential = Provider.of<RegistResidential>(context);
+    // final _provRegResidential = Provider.of<RegistResidential>(context);
+
+    final storageCache = FlutterSecureStorage();
+    String devicesId = await storageCache.read(key: 'devices_id');
     var responseTokenBarrer =
         await http.post('${UrlCons.mainProdUrl}authentication', body: {
       'client_id': '0dUIDb81bBUsGDfDsYYHQ9wBujfjL9XWfH0ZoAzi',
@@ -156,29 +170,48 @@ class RegistCustState extends State<RegisterCustomer> {
       'grant_type': 'client_credentials'
     });
     print('AccessTokens ${responseTokenBarrer.body}');
+
     AuthSalesRegit _auth =
         AuthSalesRegit.fromJson(json.decode(responseTokenBarrer.body));
-    var body = json.encode({
-      "request_code": " ",
+
+    var bodySentTrans5 = json.encode({
       "customer_id": "${idCust.text}",
       "mobile_phone": "62${phoneNumb.text}",
       "password": "$password",
-      "code": " ",
+      "transaction_type_id": 5,
     });
-    var responseRegisResidential =
-        await http.post('${UrlCons.mainProdUrl}users/registrations',
+
+    var responseSentOTPRegisResidential =
+        await http.post('${UrlCons.mainProdUrl}otp',
             headers: {
               'Content-Type': 'application/json',
-              'Authorization': 'Bearer ${_auth.accessToken}'
+              'Authorization': 'Bearer ${_auth.accessToken}',
+              'X-Pgn-Device-Id': devicesId,
             },
-            body: body);
-    print(responseRegisResidential.body);
-    // if (responseRegisResidential.statusCode == 200) {
-    PostRegisterResidential postRegisterResidential =
-        PostRegisterResidential.fromJson(
-            json.decode(responseRegisResidential.body));
-    successAlert(context, postRegisterResidential.message);
-    // }
+            body: bodySentTrans5);
+    print(responseSentOTPRegisResidential.body);
+    RegisteraUserPGN postOTPRegisterResidential = RegisteraUserPGN.fromJson(
+        json.decode(responseSentOTPRegisResidential.body));
+
+    if (responseSentOTPRegisResidential.statusCode == 200) {
+      if (postOTPRegisterResidential.dataRegistUserPGN.otpTransId == '5') {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => OTPRegisterForm(
+                      numberPhone: '62${phoneNumb.text}',
+                      idCust: idCust.text,
+                      pass: password,
+                      requestCode: postOTPRegisterResidential
+                          .dataRegistUserPGN.requestCode,
+                      accessToken: _auth.accessToken,
+                    )));
+      } else {
+        successAlert(context, postOTPRegisterResidential.message);
+      }
+    } else {
+      successAlert(context, postOTPRegisterResidential.message);
+    }
     // return PostRegisterResidential.fromJson(json.decode(responseRegisResidential.body));
   }
 
