@@ -90,14 +90,16 @@ class DataVCGasPoint {
   String nameCust;
   String custId;
   String pointReward;
+  String address;
 
-  DataVCGasPoint({this.custId, this.nameCust, this.pointReward});
+  DataVCGasPoint({this.custId, this.nameCust, this.pointReward, this.address});
 
   factory DataVCGasPoint.fromJson(Map<String, dynamic> json) {
     return DataVCGasPoint(
       nameCust: json['name'],
       custId: json['customer_id'],
       pointReward: json['point_reward'],
+      address: json['address'],
     );
   }
 }
@@ -327,6 +329,7 @@ class DataGetRedeem {
   String redeemDate;
   int pointRewardCost;
   String statusRedeem;
+  int idStatusRedeem;
 
   DataGetRedeem(
       {this.id,
@@ -334,7 +337,8 @@ class DataGetRedeem {
       this.name,
       this.pointRewardCost,
       this.redeemDate,
-      this.statusRedeem});
+      this.statusRedeem,
+      this.idStatusRedeem});
 
   factory DataGetRedeem.fromJson(Map<String, dynamic> json) {
     return DataGetRedeem(
@@ -343,7 +347,8 @@ class DataGetRedeem {
         name: json['name'],
         redeemDate: json['redeem_date'],
         pointRewardCost: json['point_reward_cost'],
-        statusRedeem: json['status_redeem_transaction']);
+        statusRedeem: json['status_redeem_transaction'],
+        idStatusRedeem: json['status_redeem_transaction_id']);
   }
 }
 

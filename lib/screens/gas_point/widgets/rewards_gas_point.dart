@@ -1,13 +1,11 @@
 import 'dart:convert';
 
-import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:pgn_mobile/models/gas_point_model.dart';
 import 'package:pgn_mobile/models/url_cons.dart';
 import 'package:http/http.dart' as http;
-import 'package:rflutter_alert/rflutter_alert.dart';
 
 class RewardsGasPoint extends StatefulWidget {
   @override
@@ -20,7 +18,6 @@ class _RewardsGasPointState extends State<RewardsGasPoint> {
   bool selected = false;
   String idRewards, name, imgUrl;
   int pointNeeded, remainingPoint;
-  bool _visibleAllert = false;
   ScrollController _scrollController = ScrollController();
   List<DataGetRewards> returnDataRewards = [];
   bool _isLoading = false;
@@ -81,6 +78,7 @@ class _RewardsGasPointState extends State<RewardsGasPoint> {
                             color: Color(0xFF7C6400),
                           ),
                         ),
+                        SizedBox(height: 10),
                         Text(
                           pointGasPoint,
                           style: TextStyle(
@@ -101,7 +99,7 @@ class _RewardsGasPointState extends State<RewardsGasPoint> {
                 'Amazing Rewards Just for You!',
                 style: TextStyle(
                   fontSize: 14,
-                  fontWeight: FontWeight.w500,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
             ),
@@ -155,6 +153,19 @@ class _RewardsGasPointState extends State<RewardsGasPoint> {
                           name = returnDataRewards[i].nameRewards;
                           imgUrl = returnDataRewards[i].imgRedeem;
                         });
+                        remainingPoint = int.parse(pointGasPoint) - pointNeeded;
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return redeemPointFormAlert(
+                                  context,
+                                  name,
+                                  idRewards,
+                                  pointGasPoint,
+                                  pointNeeded,
+                                  remainingPoint,
+                                  imgUrl);
+                            });
                       },
                       child: Card(
                         margin:
@@ -208,6 +219,7 @@ class _RewardsGasPointState extends State<RewardsGasPoint> {
                                                 ? Color(0xFF427CEF)
                                                 : Colors.black),
                                   ),
+                                  SizedBox(height: 5),
                                   Text(
                                     'POINTS',
                                     style: TextStyle(fontSize: 9),
@@ -249,37 +261,37 @@ class _RewardsGasPointState extends State<RewardsGasPoint> {
             // ),
           ],
         ),
-        Positioned(
-          bottom: 10,
-          left: 18,
-          right: 18,
-          child: Container(
-            height: 50.0,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(14.0),
-              color: Color(0xFF427CEF),
-            ),
-            child: MaterialButton(
-              minWidth: MediaQuery.of(context).size.width,
-              child: Text(
-                'Pick Reward',
-                style: TextStyle(
-                  color: Colors.white,
-                ),
-              ),
-              onPressed: () {
-                print('ID NYA : $idRewards');
-                remainingPoint = int.parse(pointGasPoint) - pointNeeded;
-                showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return redeemPointFormAlert(context, name, idRewards,
-                          pointGasPoint, pointNeeded, remainingPoint, imgUrl);
-                    });
-              },
-            ),
-          ),
-        ),
+        // Positioned(
+        //   bottom: 10,
+        //   left: 18,
+        //   right: 18,
+        //   child: Container(
+        //     height: 50.0,
+        //     decoration: BoxDecoration(
+        //       borderRadius: BorderRadius.circular(14.0),
+        //       color: Color(0xFF427CEF),
+        //     ),
+        //     child: MaterialButton(
+        //       minWidth: MediaQuery.of(context).size.width,
+        //       child: Text(
+        //         'Pick Reward',
+        //         style: TextStyle(
+        //           color: Colors.white,
+        //         ),
+        //       ),
+        //       onPressed: () {
+        //         print('ID NYA : $idRewards');
+        //         remainingPoint = int.parse(pointGasPoint) - pointNeeded;
+        //         showDialog(
+        //             context: context,
+        //             builder: (BuildContext context) {
+        //               return redeemPointFormAlert(context, name, idRewards,
+        //                   pointGasPoint, pointNeeded, remainingPoint, imgUrl);
+        //             });
+        //       },
+        //     ),
+        //   ),
+        // ),
       ],
     );
   }

@@ -321,6 +321,7 @@ class LoginScreenState extends State<LoginScreen> {
       'username': username,
       'password': password
     });
+    print('HASIL LOGIN ${responseTokenBarrer.body}');
     if (responseTokenBarrer.statusCode == 401) {
       setState(() {
         visible = false;

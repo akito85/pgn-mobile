@@ -44,7 +44,7 @@ class _GasPointState extends State<GasPoint> with TickerProviderStateMixin {
                   ),
                   insets: EdgeInsets.only(
                     left: 0,
-                    right: 15,
+                    right: 25,
                   ),
                 ),
                 labelPadding: EdgeInsets.only(left: 0, right: 25),

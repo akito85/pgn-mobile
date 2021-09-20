@@ -48,7 +48,7 @@ class _RedeemGasPointState extends State<RedeemGasPoint> {
             'List of Reward Redeemed',
             style: TextStyle(
               fontSize: 14,
-              fontWeight: FontWeight.w500,
+              fontWeight: FontWeight.bold,
             ),
           ),
         ),
@@ -104,39 +104,72 @@ class _RedeemGasPointState extends State<RedeemGasPoint> {
                       Row(
                         children: [
                           Padding(
-                            padding: const EdgeInsets.only(left: 16, right: 16),
+                            padding: const EdgeInsets.only(right: 16),
                             child: Image.network(
                               returnHistoryRedeem[i].imgUrl,
                               width: 76,
                               height: 76,
                             ),
                           ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.only(bottom: 5),
-                                child: Text(
-                                  formatDate(dateFormated,
-                                      [dd, ' ', MM, ' ', yyyy]).toUpperCase(),
-                                  style: TextStyle(fontSize: 11),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  // mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    Expanded(
+                                      child: Text(
+                                        formatDate(dateFormated, [
+                                          dd,
+                                          ' ',
+                                          MM,
+                                          ' ',
+                                          yyyy
+                                        ]).toUpperCase(),
+                                        style: TextStyle(fontSize: 11),
+                                      ),
+                                    ),
+                                    Container(
+                                      padding: EdgeInsets.only(
+                                          top: 5, bottom: 5, left: 9, right: 9),
+                                      decoration: BoxDecoration(
+                                          color: returnHistoryRedeem[i]
+                                                      .idStatusRedeem ==
+                                                  1
+                                              ? Color(0xFF02ACEF)
+                                              : returnHistoryRedeem[i]
+                                                          .idStatusRedeem ==
+                                                      2
+                                                  ? Color(0xFFFAC842)
+                                                  : returnHistoryRedeem[i]
+                                                              .idStatusRedeem ==
+                                                          4
+                                                      ? Color(0xFFFF0000)
+                                                      : Color(0xFF81C153),
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(20))),
+                                      child: Text(
+                                          '${returnHistoryRedeem[i].statusRedeem}',
+                                          textAlign: TextAlign.end,
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 10.5,
+                                              color: Colors.white)),
+                                    ),
+                                  ],
                                 ),
-                              ),
-                              Text(returnHistoryRedeem[i].name ?? '-'),
-                              SizedBox(height: 4),
-                              Text(
-                                  'Status : ${returnHistoryRedeem[i].statusRedeem}',
+                                SizedBox(height: 12),
+                                Text(returnHistoryRedeem[i].name ?? '-'),
+                                SizedBox(height: 6),
+                                Text(
+                                  'Redeem ${returnHistoryRedeem[i].pointRewardCost} Point',
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
-                                      color: Color(0xFF81C153))),
-                              SizedBox(height: 4),
-                              Text(
-                                'Redeem ${returnHistoryRedeem[i].pointRewardCost} Point',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Color(0xFFFAC842)),
-                              ),
-                            ],
+                                      color: Color(0xFFFAC842)),
+                                ),
+                              ],
+                            ),
                           ),
                         ],
                       ),
@@ -168,11 +201,12 @@ class _RedeemGasPointState extends State<RedeemGasPoint> {
   void getRedeemistory(BuildContext context) async {
     final storageCache = FlutterSecureStorage();
     String accessToken = await storageCache.read(key: 'access_token');
-
+    String lang = await storageCache.read(key: 'lang');
     var responseGetRedeemGasPoint = await http
         .get('${UrlCons.mainDevUrl}redeem_history?cursor=$nextPage', headers: {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer $accessToken',
+      'Accept-Language': lang,
     });
 
     print('HASILNYA GAS POINT Scroll : ${responseGetRedeemGasPoint.body}');

@@ -26,6 +26,7 @@ import 'package:pgn_mobile/services/user_credientials.dart';
 import 'package:pgn_mobile/services/language.dart';
 import 'package:pgn_mobile/services/usage_detail.dart';
 import 'package:pgn_mobile/services/push_notification.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class Routes {
   Routes() {
@@ -90,7 +91,8 @@ class _MyFirstState extends State<FirstScreen> {
     return MaterialApp(
       title: 'PGN Mobile',
       theme: ThemeData(
-        primaryColor: Colors.blue[300],
+        textTheme: GoogleFonts.robotoTextTheme(Theme.of(context).textTheme),
+        primaryColor: Color(0xFF427CEF),
         primaryColorDark: Colors.blue[800],
         accentColor: Colors.blue[600],
         appBarTheme: AppBarTheme(
