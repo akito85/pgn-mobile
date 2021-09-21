@@ -16,7 +16,6 @@ class PgnServices extends StatefulWidget {
 class PgnServicesState extends State<PgnServices> {
   @override
   Widget build(BuildContext context) {
-    Future<void> _launched;
     return Scaffold(
       extendBodyBehindAppBar: true,
       body: Stack(

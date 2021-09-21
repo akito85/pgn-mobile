@@ -10,6 +10,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:pgn_mobile/models/dashboard_chart_invoice_residential.dart';
 import 'package:pgn_mobile/models/url_cons.dart';
+import 'package:pgn_mobile/screens/cm_visit/cm_visit.dart';
 import 'package:pgn_mobile/screens/gas_point/gas_point.dart';
 import 'package:pgn_mobile/services/app_localizations.dart';
 import 'package:pgn_mobile/widgets/navigation_drawer.dart';
@@ -501,7 +502,7 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
                       context, _prov.custName.toString() ?? ""),
                   showCustInvoiceCustomerResidential(context,
                       getCustomerInvoiceResidential(context), _prov.custId),
-                  GasPoint(),
+                  CMVisit(),
                   showCustProfileCustomerResidential(
                       context, getCustomerProfileResidential(context))
                 ],
