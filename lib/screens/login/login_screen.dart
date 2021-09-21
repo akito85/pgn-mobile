@@ -448,8 +448,11 @@ class LoginScreenState extends State<LoginScreen> {
             print('2. MASUK KE SINI ${_auth.customer.custName}');
             await storageCache.write(
                 key: 'user_name_cust', value: _auth.customer.custName);
+            // await storageCache.write(
+            //     key: 'customerGroupId',
+            //     value: _auth.customer.groupId.toString());
             await storageCache.write(
-                key: 'customerGroupId',
+                key: 'customer_groupId',
                 value: _auth.customer.groupId.toString());
             await storageCache.write(
                 key: 'user_mobile_otp', value: _auth.user.userMobilePhone);
@@ -605,8 +608,10 @@ class LoginScreenState extends State<LoginScreen> {
             key: 'user_type', value: _auth.user.userType.toString());
         await storageCache.write(
             key: 'usergroup_id', value: _auth.user.userGroupId);
+        // await storageCache.write(
+        //     key: 'customerGroupId', value: _auth.customer.groupId.toString());
         await storageCache.write(
-            key: 'customerGroupId', value: _auth.customer.groupId.toString());
+            key: 'customer_groupId', value: _auth.customer.groupId.toString());
         setState(() {
           Provider.of<UserCred>(context).userCred(
               accessToken: _auth.accessToken,

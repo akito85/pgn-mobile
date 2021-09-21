@@ -243,6 +243,7 @@ class CMMState extends State<CMM> with SingleTickerProviderStateMixin {
               Container(
                 child: Text(
                   snapshot.data.message,
+                  textAlign: TextAlign.center,
                   style: TextStyle(fontSize: 18),
                 ),
               )
@@ -879,7 +880,8 @@ class CMMState extends State<CMM> with SingleTickerProviderStateMixin {
           statusCMM = 'Belum CMM';
         }
       });
-      if (_cmmList.dataListCMM.length == null) {
+      if (_cmmList.dataListCMM.length == null ||
+          _cmmList.dataListCMM.length == 0) {
         statusCMM = 'Belum CMM';
       }
       _cmmList.dataListCMM.sort((a, b) => a.timeStamp.compareTo(b.timeStamp));
