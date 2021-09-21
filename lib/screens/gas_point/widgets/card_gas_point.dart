@@ -70,25 +70,32 @@ class _CardGasPointState extends State<CardGaspoint> {
                 if (snapshot.hasError) return Container();
                 return Container(
                   decoration: BoxDecoration(
+                    color: Color(0xFF00000029),
                     boxShadow: [
                       BoxShadow(
-                          color: Color(0xFF00000029),
-                          blurRadius: 2.0,
-                          spreadRadius: 0.0,
-                          offset: Offset(2.0, 2.0)),
+                        color: Color(0xFF00000029).withOpacity(0.5),
+                        spreadRadius: 3,
+                        blurRadius: 7,
+                        offset: Offset(0, 3), // changes position of shadow
+                      ),
                     ],
                     image: DecorationImage(
                       image: AssetImage('assets/pgn_card.jpg'),
                       fit: BoxFit.fill,
                     ),
-                    borderRadius: BorderRadius.circular(15.0),
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(10),
+                        topRight: Radius.circular(10),
+                        bottomLeft: Radius.circular(10),
+                        bottomRight: Radius.circular(10)),
                   ),
                   margin: EdgeInsets.only(left: 18, right: 18),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Padding(
-                        padding: EdgeInsets.only(left: 16, top: 80),
+                      Container(
+                        width: 176,
+                        margin: EdgeInsets.only(left: 16, top: 80),
                         child: Text(
                           '${snapshot.data.dataVCGasPoint.nameCust ?? ''}',
                           style: TextStyle(fontSize: 15, color: Colors.white),
