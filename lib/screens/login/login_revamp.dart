@@ -55,7 +55,7 @@ class LoginRevampState extends State<LoginRevamp> {
                 Container(
                   alignment: Alignment.center,
                   margin: EdgeInsets.only(top: 52.0),
-                  child: const Text('Welcome to PGN Mobile',
+                  child: const Text('Welcome to PGN Mobile' ?? '',
                       style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w500,
@@ -65,7 +65,8 @@ class LoginRevampState extends State<LoginRevamp> {
                     alignment: Alignment.center,
                     margin: EdgeInsets.only(top: 12.0, left: 18.0, right: 18.0),
                     child: const Text(
-                        'PGN Mobile is a one stop app for all your energy needs. Track, manage, and optimize your daily energy consumption.',
+                        'PGN Mobile is a one stop app for all your energy needs. Track, manage, and optimize your daily energy consumption.' ??
+                            '',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                             height: 2,
@@ -97,11 +98,12 @@ class LoginRevampState extends State<LoginRevamp> {
                           ),
                         ),
                         Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
                             Container(
                               width: 170.0,
                               height: 50.0,
-                              margin: EdgeInsets.only(top: 12.0, right: 8.0),
+                              margin: EdgeInsets.only(top: 12.0),
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10.0),
                                 color: Color(0xFF427CEF),
@@ -121,7 +123,7 @@ class LoginRevampState extends State<LoginRevamp> {
                                   }),
                             ),
                             Container(
-                              margin: EdgeInsets.only(left: 8.0, top: 12.0),
+                              margin: EdgeInsets.only(top: 12.0),
                               width: 170.0,
                               height: 50.0,
                               decoration: BoxDecoration(

@@ -6,6 +6,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:pgn_mobile/models/product_infromation.dart';
 import 'package:pgn_mobile/models/url_cons.dart';
 import 'package:pgn_mobile/services/app_localizations.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class PgnServices extends StatefulWidget {
   @override
@@ -15,6 +16,7 @@ class PgnServices extends StatefulWidget {
 class PgnServicesState extends State<PgnServices> {
   @override
   Widget build(BuildContext context) {
+    Future<void> _launched;
     return Scaffold(
       extendBodyBehindAppBar: true,
       body: Stack(
@@ -128,7 +130,7 @@ Widget _buildRow(DataProduct data, BuildContext context) {
                                 alignment: Alignment.topLeft,
                                 margin: EdgeInsets.only(left: 12),
                                 child: Text(
-                                  data.name_en,
+                                  data.name,
                                   maxLines: 1,
                                   style: TextStyle(
                                     color: Colors.blue,
@@ -141,7 +143,7 @@ Widget _buildRow(DataProduct data, BuildContext context) {
                                 alignment: Alignment.centerLeft,
                                 margin: EdgeInsets.only(top: 5, left: 12),
                                 child: Text(
-                                  data.description_en,
+                                  data.description,
                                   maxLines: 2,
                                   textAlign: TextAlign.start,
                                   style: TextStyle(
@@ -175,7 +177,7 @@ Widget _buildRow(DataProduct data, BuildContext context) {
                               ),
                             ),
                             SizedBox(width: 10),
-                            Text(data.name_en,
+                            Text(data.name,
                                 overflow: TextOverflow.clip,
                                 softWrap: true,
                                 style: TextStyle(
@@ -198,7 +200,7 @@ Widget _buildRow(DataProduct data, BuildContext context) {
                               width: MediaQuery.of(context).size.width,
                               margin: EdgeInsets.symmetric(horizontal: 16),
                               child: Text(
-                                data.description_en,
+                                data.description,
                                 textAlign: TextAlign.start,
                                 style: TextStyle(
                                   color: Colors.black,
@@ -294,10 +296,12 @@ Widget _buildRow(DataProduct data, BuildContext context) {
 Future<GetProductInformation> fetchPost(BuildContext context) async {
   final sotarageCache = FlutterSecureStorage();
   String accessToken = await sotarageCache.read(key: 'access_token');
-  var responseGetProduct = await http.get(UrlCons.getInformationProduct,
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer $accessToken'
-      });
+  String lang = await sotarageCache.read(key: 'lang');
+  var responseGetProduct =
+      await http.get('${UrlCons.mainDevUrl}products', headers: {
+    'Content-Type': 'application/json',
+    'Authorization': 'Bearer $accessToken',
+    'Accept-Language': lang
+  });
   return GetProductInformation.fromJson(json.decode(responseGetProduct.body));
 }
