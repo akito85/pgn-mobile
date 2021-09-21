@@ -4,6 +4,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/rendering.dart';
 import 'package:pgn_mobile/models/url_cons.dart';
+import 'package:pgn_mobile/screens/otp/otp_register.dart';
 import 'package:pgn_mobile/services/register_residential.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -2737,6 +2738,11 @@ class RegisterResidentialsState extends State<RegisterResidentials>
           PostRegisterResidential.fromJson(
               json.decode(responseRegisResidential.body));
       successAlert(context, postRegisterResidential.formId);
+    } else {
+      PostRegisterResidential postRegisterResidential =
+          PostRegisterResidential.fromJson(
+              json.decode(responseRegisResidential.body));
+      showToast(postRegisterResidential.message);
     }
     // return PostRegisterResidential.fromJson(json.decode(responseRegisResidential.body));
   }
