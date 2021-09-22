@@ -126,12 +126,16 @@ class GasPointHistoryModel {
   GasPointHistoryModel(
       {this.code, this.dataGPHistory, this.message, this.gasPointPaging});
   factory GasPointHistoryModel.fromJson(Map<String, dynamic> json) {
-    return GasPointHistoryModel(
-      message: json['message'],
-      code: json['code'],
-      dataGPHistory: parseDataGPHistory(json['data']),
-      gasPointPaging: GasPointPaging.fromJson(json['paging']),
-    );
+    if (json['message'] != null) {
+      return GasPointHistoryModel(message: json['message'], code: json['code']);
+    } else {
+      return GasPointHistoryModel(
+        message: json['message'],
+        code: json['code'],
+        dataGPHistory: parseDataGPHistory(json['data']),
+        gasPointPaging: GasPointPaging.fromJson(json['paging']),
+      );
+    }
   }
   static List<HistoryGasPoint> parseDataGPHistory(dataJson) {
     var list = dataJson as List;
@@ -207,12 +211,17 @@ class GetRewardsModel {
       {this.dataGetRewards, this.code, this.message, this.gasPointPaging});
 
   factory GetRewardsModel.fromJson(Map<String, dynamic> json) {
-    return GetRewardsModel(
-      message: json['message'],
-      code: json['code'],
-      gasPointPaging: GasPointPaging.fromJson(json['paging']),
-      dataGetRewards: parsedDataGetRewards(json['data']),
-    );
+    if (json['message'] != null) {
+      return GetRewardsModel(
+        message: json['message'],
+        code: json['code'],
+      );
+    } else {
+      return GetRewardsModel(
+        gasPointPaging: GasPointPaging.fromJson(json['paging']),
+        dataGetRewards: parsedDataGetRewards(json['data']),
+      );
+    }
   }
   static List<DataGetRewards> parsedDataGetRewards(dataJson) {
     var list = dataJson as List;
@@ -256,10 +265,16 @@ class PostRedeemModel {
   PostRedeemModel({this.dataPostRedeem, this.message});
 
   factory PostRedeemModel.fromJson(Map<String, dynamic> json) {
-    return PostRedeemModel(
-      dataPostRedeem: DataPostRedeem.fromJson(json['data']),
-      message: json['message'],
-    );
+    if (json['message'] != null) {
+      return PostRedeemModel(
+        message: json['message'],
+      );
+    } else {
+      return PostRedeemModel(
+        message: json['message'],
+        dataPostRedeem: DataPostRedeem.fromJson(json['data']),
+      );
+    }
   }
 }
 
@@ -307,12 +322,17 @@ class RedeemHistoryModel {
       {this.dataGetRedeem, this.code, this.message, this.gasPointPaging});
 
   factory RedeemHistoryModel.fromJson(Map<String, dynamic> json) {
-    return RedeemHistoryModel(
-      message: json['message'],
-      code: json['code'],
-      gasPointPaging: GasPointPaging.fromJson(json['paging']),
-      dataGetRedeem: parsedDataGetRedeem(json['data']),
-    );
+    if (json['message'] != null) {
+      return RedeemHistoryModel(
+        message: json['message'],
+        code: json['code'],
+      );
+    } else {
+      return RedeemHistoryModel(
+        gasPointPaging: GasPointPaging.fromJson(json['paging']),
+        dataGetRedeem: parsedDataGetRedeem(json['data']),
+      );
+    }
   }
   static List<DataGetRedeem> parsedDataGetRedeem(dataJson) {
     var list = dataJson as List;
@@ -353,6 +373,38 @@ class DataGetRedeem {
 }
 
 //////////////////////////GET Redeem History
+
+//////////////////////////GET T&C
+
+class TandCModel {
+  List<DataTandC> dataTandC;
+  String message;
+  TandCModel({this.dataTandC, this.message});
+  factory TandCModel.fromJson(Map<String, dynamic> json) {
+    return TandCModel(
+      message: json['message'],
+      dataTandC: parsedDataTandC(json['data']),
+    );
+  }
+  static List<DataTandC> parsedDataTandC(dataJson) {
+    var list = dataJson as List;
+    List<DataTandC> dataGetTandC =
+        list.map((data) => DataTandC.fromJson(data)).toList();
+    return dataGetTandC;
+  }
+}
+
+class DataTandC {
+  int id;
+  String content;
+
+  DataTandC({this.content, this.id});
+  factory DataTandC.fromJson(Map<String, dynamic> json) {
+    return DataTandC(id: json['id'], content: json['content']);
+  }
+}
+
+//////////////////////////GET T&C
 
 class GasPointPaging {
   String currentPage;

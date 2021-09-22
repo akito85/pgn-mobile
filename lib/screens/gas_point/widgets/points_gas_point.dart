@@ -76,6 +76,7 @@ class _PointsGasPointState extends State<PointsGasPoint> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Container(
+                    margin: EdgeInsets.only(top: 50),
                     alignment: Alignment.center,
                     child: Image.asset('assets/penggunaan_gas.png'),
                   ),
@@ -163,33 +164,33 @@ class _PointsGasPointState extends State<PointsGasPoint> {
   void getGasPointHistory(BuildContext context) async {
     final storageCache = FlutterSecureStorage();
     String accessToken = await storageCache.read(key: 'access_token');
-
+    String lang = await storageCache.read(key: 'lang');
     var responseGetHistoryGasPoint = await http.get(
         '${UrlCons.mainDevUrl}gas_point_history?cursor=$nextPage',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $accessToken',
+          'Accept-Language': lang,
         });
 
-    if (responseGetHistoryGasPoint.statusCode == 200) {
-      GasPointHistoryModel returnGetPointHistory =
-          GasPointHistoryModel.fromJson(
-              json.decode(responseGetHistoryGasPoint.body));
-      if (returnGetPointHistory.message == null &&
-          returnGetPointHistory.dataGPHistory.length > 0) {
-        setState(() {
-          nextPage = returnGetPointHistory.gasPointPaging.nextPage;
-          returnHistoryGP.addAll(returnGetPointHistory.dataGPHistory);
-          _isLoading = false;
-        });
-      } else {
-        setState(() {
-          _isLoading = false;
-        });
-      }
+    // if (responseGetHistoryGasPoint.statusCode == 200) {
+    GasPointHistoryModel returnGetPointHistory = GasPointHistoryModel.fromJson(
+        json.decode(responseGetHistoryGasPoint.body));
+    if (returnGetPointHistory.message == null &&
+        returnGetPointHistory.dataGPHistory.length > 0) {
+      setState(() {
+        nextPage = returnGetPointHistory.gasPointPaging.nextPage;
+        returnHistoryGP.addAll(returnGetPointHistory.dataGPHistory);
+        _isLoading = false;
+      });
     } else {
-      throw Exception('Could not get any response');
+      setState(() {
+        _isLoading = false;
+      });
     }
+    // } else {
+    //   throw Exception('Could not get any response');
+    // }
   }
 }
 
@@ -205,10 +206,10 @@ Future<GasPointHistoryModel> getFutureGasPointHistory(
     'Accept-Language': lang,
   });
 
-  if (responseGetHistoryGasPoint.statusCode == 200) {
-    return GasPointHistoryModel.fromJson(
-        json.decode(responseGetHistoryGasPoint.body));
-  } else {
-    throw Exception('Could not get any response');
-  }
+  // if (responseGetHistoryGasPoint.statusCode == 200) {
+  return GasPointHistoryModel.fromJson(
+      json.decode(responseGetHistoryGasPoint.body));
+  // } else {
+  //   throw Exception('Could not get any response');
+  // }
 }

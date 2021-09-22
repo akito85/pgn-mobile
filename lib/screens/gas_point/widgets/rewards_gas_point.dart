@@ -6,6 +6,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:pgn_mobile/models/gas_point_model.dart';
 import 'package:pgn_mobile/models/url_cons.dart';
 import 'package:http/http.dart' as http;
+import 'package:pgn_mobile/screens/otp/otp_register.dart';
 
 class RewardsGasPoint extends StatefulWidget {
   @override
@@ -17,7 +18,7 @@ class _RewardsGasPointState extends State<RewardsGasPoint> {
   String messageAlert = '';
   bool selected = false;
   String idRewards, name, imgUrl;
-  int pointNeeded, remainingPoint;
+  int pointNeeded, remainingPoint = 0;
   ScrollController _scrollController = ScrollController();
   List<DataGetRewards> returnDataRewards = [];
   bool _isLoading = false;
@@ -127,6 +128,7 @@ class _RewardsGasPointState extends State<RewardsGasPoint> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       Container(
+                        margin: EdgeInsets.only(top: 50),
                         alignment: Alignment.center,
                         child: Image.asset('assets/penggunaan_gas.png'),
                       ),
@@ -153,19 +155,29 @@ class _RewardsGasPointState extends State<RewardsGasPoint> {
                           name = returnDataRewards[i].nameRewards;
                           imgUrl = returnDataRewards[i].imgRedeem;
                         });
-                        remainingPoint = int.parse(pointGasPoint) - pointNeeded;
-                        showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return redeemPointFormAlert(
-                                  context,
-                                  name,
-                                  idRewards,
-                                  pointGasPoint,
-                                  pointNeeded,
-                                  remainingPoint,
-                                  imgUrl);
-                            });
+                        if (pointGasPoint == '0') {
+                          showToast('Gas Point 0');
+                        } else {
+                          // if (remainingPoint <= 0) {
+                          //   remainingPoint = 0;
+                          // } else {
+                          remainingPoint =
+                              int.parse(pointGasPoint) - pointNeeded;
+                          // }
+
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return redeemPointFormAlert(
+                                    context,
+                                    name,
+                                    idRewards,
+                                    pointGasPoint,
+                                    pointNeeded,
+                                    remainingPoint,
+                                    imgUrl);
+                              });
+                        }
                       },
                       child: Card(
                         margin:
@@ -241,7 +253,7 @@ class _RewardsGasPointState extends State<RewardsGasPoint> {
                     padding: EdgeInsets.only(top: 5),
                     child: CircularProgressIndicator(),
                   ))
-                : SizedBox(height: 60),
+                : SizedBox(height: 10),
             // Padding(
             //   padding: EdgeInsets.only(left: 18, top: 20, bottom: 7),
             //   child: Text(
@@ -441,9 +453,9 @@ class _RewardsGasPointState extends State<RewardsGasPoint> {
                           showDialog(
                             context: context,
                             builder: (BuildContext context) {
-                              Future.delayed(Duration(seconds: 2), () {
-                                Navigator.of(context).pop(true);
-                              });
+                              // Future.delayed(Duration(seconds: 2), () {
+                              //   Navigator.of(context).pop(true);
+                              // });
                               return redeemSuccessAlert(context);
                             },
                           );
@@ -492,39 +504,56 @@ class _RewardsGasPointState extends State<RewardsGasPoint> {
     });
 
     print('HASILNYA Post Redeem: ${responsePostRedeemGasPoint.body}');
-    if (responsePostRedeemGasPoint.statusCode == 200) {
-      PostRedeemModel postRedeemGasPoint = PostRedeemModel.fromJson(
-          json.decode(responsePostRedeemGasPoint.body));
-      if (postRedeemGasPoint.message == null) {
-        print('MASUK SINI');
-        setState(() {
-          idRewards = '';
-          pointGasPoint = remainingPoint.toString();
-          messageAlert = postRedeemGasPoint.dataPostRedeem.message;
-        });
-      }
+    // if (responsePostRedeemGasPoint.statusCode == 200) {
+    PostRedeemModel postRedeemGasPoint =
+        PostRedeemModel.fromJson(json.decode(responsePostRedeemGasPoint.body));
+    if (postRedeemGasPoint.message == null) {
+      print('MASUK SINI ${postRedeemGasPoint.dataPostRedeem.message}');
+      setState(() {
+        idRewards = '';
+        pointGasPoint = remainingPoint.toString();
+        messageAlert = postRedeemGasPoint.dataPostRedeem.message;
+      });
     } else {
-      throw Exception('Could not get any response');
+      setState(() {
+        idRewards = '';
+        pointGasPoint = remainingPoint.toString();
+        messageAlert = postRedeemGasPoint.message;
+      });
     }
+    // } else {
+    //   throw Exception('Could not get any response');
+    // }
   }
 
   Widget redeemSuccessAlert(context) {
     return Dialog(
       child: Container(
         padding: EdgeInsets.all(16),
-        height: 100,
-        child: Row(
+        height: 150,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            FaIcon(
-              Icons.check_circle_outline,
-              size: 70,
-              color: Color(0xFF81C153),
+            Row(
+              children: [
+                FaIcon(
+                  Icons.check_circle_outline,
+                  size: 70,
+                  color: Color(0xFF81C153),
+                ),
+                Expanded(
+                    child: Padding(
+                  padding: EdgeInsets.only(left: 20),
+                  child: Text(messageAlert),
+                ))
+              ],
             ),
-            Expanded(
-                child: Padding(
-              padding: EdgeInsets.only(left: 20),
-              child: Text(messageAlert),
-            ))
+            RaisedButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text('Ok'),
+            )
           ],
         ),
       ),
@@ -566,20 +595,20 @@ class _RewardsGasPointState extends State<RewardsGasPoint> {
     });
 
     print('HASILNYA Get Rewards: ${responseGetRewardsGasPoint.body}');
-    if (responseGetRewardsGasPoint.statusCode == 200) {
-      GetRewardsModel returnGetRewardsModel = GetRewardsModel.fromJson(
-          json.decode(responseGetRewardsGasPoint.body));
-      if (returnGetRewardsModel.message == null &&
-          returnGetRewardsModel.dataGetRewards.length > 0) {
-        setState(() {
-          nextPage = returnGetRewardsModel.gasPointPaging.nextPage;
-          returnDataRewards.addAll(returnGetRewardsModel.dataGetRewards);
-          _isLoading = false;
-        });
-      }
-    } else {
-      throw Exception('Could not get any response');
+    // if (responseGetRewardsGasPoint.statusCode == 200) {
+    GetRewardsModel returnGetRewardsModel =
+        GetRewardsModel.fromJson(json.decode(responseGetRewardsGasPoint.body));
+    if (returnGetRewardsModel.message == null &&
+        returnGetRewardsModel.dataGetRewards.length > 0) {
+      setState(() {
+        nextPage = returnGetRewardsModel.gasPointPaging.nextPage;
+        returnDataRewards.addAll(returnGetRewardsModel.dataGetRewards);
+        _isLoading = false;
+      });
     }
+    // } else {
+    //   throw Exception('Could not get any response');
+    // }
   }
 }
 
@@ -596,10 +625,9 @@ Future<GetRewardsModel> getRewards(BuildContext context) async {
   });
 
   print('HASILNYA Get Rewards: ${responseGetRewardsGasPoint.body}');
-  if (responseGetRewardsGasPoint.statusCode == 200) {
-    return GetRewardsModel.fromJson(
-        json.decode(responseGetRewardsGasPoint.body));
-  } else {
-    throw Exception('Could not get any response');
-  }
+  // if (responseGetRewardsGasPoint.statusCode == 200) {
+  return GetRewardsModel.fromJson(json.decode(responseGetRewardsGasPoint.body));
+  // } else {
+  //   throw Exception('Could not get any response');
+  // }
 }

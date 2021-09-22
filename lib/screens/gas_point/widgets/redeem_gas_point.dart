@@ -62,6 +62,7 @@ class _RedeemGasPointState extends State<RedeemGasPoint> {
         FutureBuilder<RedeemHistoryModel>(
           future: getFutureRedeemHistory(context),
           builder: (context, snapshot) {
+            print('HASIL SNAPSHOTNYA : ${snapshot.data}');
             if (!snapshot.hasData)
               return Padding(
                 padding: const EdgeInsets.only(left: 18, right: 18, top: 10),
@@ -74,8 +75,10 @@ class _RedeemGasPointState extends State<RedeemGasPoint> {
             if (snapshot.data.message != null)
               return Column(
                 mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   Container(
+                    margin: EdgeInsets.only(top: 50),
                     alignment: Alignment.center,
                     child: Image.asset('assets/penggunaan_gas.png'),
                   ),
@@ -211,24 +214,24 @@ class _RedeemGasPointState extends State<RedeemGasPoint> {
 
     print('HASILNYA GAS POINT Scroll : ${responseGetRedeemGasPoint.body}');
 
-    if (responseGetRedeemGasPoint.statusCode == 200) {
-      RedeemHistoryModel returnGetRedeemHistory = RedeemHistoryModel.fromJson(
-          json.decode(responseGetRedeemGasPoint.body));
-      if (returnGetRedeemHistory.message == null &&
-          returnGetRedeemHistory.dataGetRedeem.length > 0) {
-        setState(() {
-          nextPage = returnGetRedeemHistory.gasPointPaging.nextPage;
-          returnHistoryRedeem.addAll(returnGetRedeemHistory.dataGetRedeem);
-          _isLoading = false;
-        });
-      } else {
-        setState(() {
-          _isLoading = false;
-        });
-      }
+    // if (responseGetRedeemGasPoint.statusCode == 200) {
+    RedeemHistoryModel returnGetRedeemHistory = RedeemHistoryModel.fromJson(
+        json.decode(responseGetRedeemGasPoint.body));
+    if (returnGetRedeemHistory.message == null &&
+        returnGetRedeemHistory.dataGetRedeem.length > 0) {
+      setState(() {
+        nextPage = returnGetRedeemHistory.gasPointPaging.nextPage;
+        returnHistoryRedeem.addAll(returnGetRedeemHistory.dataGetRedeem);
+        _isLoading = false;
+      });
     } else {
-      throw Exception('Could not get any response');
+      setState(() {
+        _isLoading = false;
+      });
     }
+    // } else {
+    //   throw Exception('Could not get any response');
+    // }
   }
 }
 
@@ -244,10 +247,12 @@ Future<RedeemHistoryModel> getFutureRedeemHistory(BuildContext context) async {
   });
 
   print('HASILNYA GAS POINT : ${responseGetRedeemGasPoint.body}');
-  if (responseGetRedeemGasPoint.statusCode == 200) {
-    return RedeemHistoryModel.fromJson(
-        json.decode(responseGetRedeemGasPoint.body));
-  } else {
-    throw Exception('Could not get any response');
-  }
+  // if (responseGetRedeemGasPoint.statusCode == 200) {
+  print('MASUK SINI REDEEM');
+  return RedeemHistoryModel.fromJson(
+      json.decode(responseGetRedeemGasPoint.body));
+  // } else {
+  //   print('MASUK SINI REDEEMs');
+  //   throw Exception('Could not get any response');
+  // }
 }

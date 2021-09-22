@@ -225,7 +225,7 @@ class FirstTabState extends State<FirstTab> {
 
     UsageDetails returnGetUsageDetail =
         UsageDetails.fromJson(json.decode(responseGetUsageDetail.body));
-    print('isinya1 ${returnGetUsageDetail.message}');
+    print('isinya1 ${responseGetUsageDetail.body}');
     print('masuk kah');
     if (nextPage == "") {
       print('masuk kah 1 ');

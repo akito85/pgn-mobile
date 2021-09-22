@@ -3,6 +3,7 @@ import 'package:pgn_mobile/screens/gas_point/widgets/card_gas_point.dart';
 import 'package:pgn_mobile/screens/gas_point/widgets/points_gas_point.dart';
 import 'package:pgn_mobile/screens/gas_point/widgets/redeem_gas_point.dart';
 import 'package:pgn_mobile/screens/gas_point/widgets/rewards_gas_point.dart';
+import 'package:pgn_mobile/screens/gas_point/widgets/tandc_gas_point.dart';
 
 class GasPoint extends StatefulWidget {
   @override
@@ -14,13 +15,13 @@ class _GasPointState extends State<GasPoint> with TickerProviderStateMixin {
   void initState() {
     super.initState();
 
-    _tabController = new TabController(vsync: this, length: 4, initialIndex: 0);
+    _tabController = new TabController(vsync: this, length: 5, initialIndex: 0);
   }
 
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 4,
+      length: 5,
       child: Scaffold(
           backgroundColor: Colors.white,
           appBar: PreferredSize(
@@ -70,16 +71,52 @@ class _GasPointState extends State<GasPoint> with TickerProviderStateMixin {
                       child: Align(
                           alignment: Alignment.centerLeft,
                           child: Text('Redeem'))),
+                  Tab(
+                      child: Align(
+                          alignment: Alignment.centerLeft, child: Text('T&C'))),
                 ],
               ),
             ),
           ),
-          body: TabBarView(controller: _tabController, children: [
-            CardGaspoint(),
-            RewardsGasPoint(),
-            PointsGasPoint(),
-            RedeemGasPoint()
-          ])),
+          body: Stack(
+            children: [
+              TabBarView(controller: _tabController, children: [
+                CardGaspoint(),
+                RewardsGasPoint(),
+                PointsGasPoint(),
+                RedeemGasPoint(),
+                TandCGasPoint()
+              ]),
+              _tabController.index == 0
+                  ? Positioned(
+                      bottom: 10,
+                      left: 18,
+                      right: 18,
+                      child: Container(
+                        height: 50.0,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(14.0),
+                          color: Color(0xFF427CEF),
+                        ),
+                        child: MaterialButton(
+                          minWidth: MediaQuery.of(context).size.width,
+                          child: Text(
+                            'Redeem Point',
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              _tabController.index = 1;
+                            });
+                          },
+                        ),
+                      ),
+                    )
+                  : SizedBox(),
+            ],
+          )),
     );
   }
 }
