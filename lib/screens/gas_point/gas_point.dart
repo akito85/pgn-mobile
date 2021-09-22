@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:pgn_mobile/screens/gas_point/widgets/card_gas_point.dart';
 import 'package:pgn_mobile/screens/gas_point/widgets/points_gas_point.dart';
 import 'package:pgn_mobile/screens/gas_point/widgets/redeem_gas_point.dart';
@@ -12,10 +13,16 @@ class GasPoint extends StatefulWidget {
 
 class _GasPointState extends State<GasPoint> with TickerProviderStateMixin {
   TabController _tabController;
+  int selectedIndex = 0;
   void initState() {
     super.initState();
 
     _tabController = new TabController(vsync: this, length: 5, initialIndex: 0);
+    _tabController.addListener(() {
+      setState(() {
+        selectedIndex = _tabController.index;
+      });
+    });
   }
 
   @override
@@ -51,7 +58,8 @@ class _GasPointState extends State<GasPoint> with TickerProviderStateMixin {
                 labelPadding: EdgeInsets.only(left: 0, right: 25),
                 onTap: (index) {
                   setState(() {
-                    _tabController.index = index;
+                    selectedIndex = index;
+                    // _tabController.index = index;
                   });
                 },
                 tabs: <Widget>[
@@ -87,7 +95,7 @@ class _GasPointState extends State<GasPoint> with TickerProviderStateMixin {
                 RedeemGasPoint(),
                 TandCGasPoint()
               ]),
-              _tabController.index == 0
+              selectedIndex == 0
                   ? Positioned(
                       bottom: 10,
                       left: 18,

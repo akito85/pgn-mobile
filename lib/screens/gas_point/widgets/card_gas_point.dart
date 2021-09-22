@@ -135,8 +135,8 @@ class _CardGasPointState extends State<CardGaspoint> {
                   Row(
                     children: [
                       Padding(
-                        padding: EdgeInsets.only(
-                            left: 16, right: 10, top: 12, bottom: 20),
+                        padding:
+                            EdgeInsets.only(left: 16, right: 15, bottom: 20),
                         child: Text(
                           'Point',
                           style: TextStyle(fontSize: 10.5, color: Colors.white),
@@ -147,7 +147,11 @@ class _CardGasPointState extends State<CardGaspoint> {
                             EdgeInsets.only(top: 12, right: 16, bottom: 20),
                         child: Text(
                           '${snapshot.data.dataVCGasPoint.pointReward ?? ''}',
-                          style: TextStyle(fontSize: 26, color: Colors.white),
+                          style: TextStyle(
+                              fontSize: 26,
+                              color: Colors.white,
+                              letterSpacing: 2,
+                              fontWeight: FontWeight.bold),
                         ),
                       )
                     ],

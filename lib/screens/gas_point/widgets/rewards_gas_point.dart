@@ -325,7 +325,7 @@ class _RewardsGasPointState extends State<RewardsGasPoint> {
                 style: TextStyle(
                     color: Color(0xFF427CEF),
                     fontSize: 18,
-                    fontWeight: FontWeight.w500),
+                    fontWeight: FontWeight.w600),
               ),
             ),
             Row(
@@ -420,7 +420,7 @@ class _RewardsGasPointState extends State<RewardsGasPoint> {
                   child: MaterialButton(
                     minWidth: MediaQuery.of(context).size.width,
                     child: Text(
-                      'cancle',
+                      'Cancel',
                       style: TextStyle(
                         color: Colors.white,
                       ),
@@ -528,11 +528,13 @@ class _RewardsGasPointState extends State<RewardsGasPoint> {
 
   Widget redeemSuccessAlert(context) {
     return Dialog(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
       child: Container(
         padding: EdgeInsets.all(16),
-        height: 150,
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.end,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Row(
               children: [
@@ -542,13 +544,35 @@ class _RewardsGasPointState extends State<RewardsGasPoint> {
                   color: Color(0xFF81C153),
                 ),
                 Expanded(
-                    child: Padding(
-                  padding: EdgeInsets.only(left: 20),
-                  child: Text(messageAlert),
-                ))
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(left: 20, bottom: 5),
+                        child: Text(
+                          'Thank You! ',
+                          style: TextStyle(
+                              fontSize: 18,
+                              color: Color(0xFF81C153),
+                              fontWeight: FontWeight.w500),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(left: 20),
+                        child: Text(messageAlert),
+                      ),
+                    ],
+                  ),
+                )
               ],
             ),
-            RaisedButton(
+            SizedBox(height: 5),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                  primary: Color(0xFFD3D3D3),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(5),
+                  )),
               onPressed: () {
                 Navigator.pop(context);
               },
