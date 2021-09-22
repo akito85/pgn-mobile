@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pgn_mobile/screens/cm_visit/cm_visit_detail.dart';
+import 'package:pgn_mobile/screens/cm_visit/cm_visit_form.dart';
 
 class CMVisit extends StatefulWidget {
   @override
@@ -30,7 +31,7 @@ class _CMVisitState extends State<CMVisit> with TickerProviderStateMixin {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => CMVisitDetail()));
+                              builder: (context) => CMVisitForm()));
                     },
                     icon: Icon(Icons.add, color: Colors.white),
                     label: Text('Add New Visit Report',
