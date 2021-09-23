@@ -134,7 +134,7 @@ class _CMVisitFormState extends State<CMVisitForm> {
                 Container(
                     width: MediaQuery.of(context).size.width,
                     child: TextField(
-                      minLines: 1,
+                      minLines: 6,
                       maxLines: 10,
                       autocorrect: true,
                       style: TextStyle(height: 1, fontSize: 14),
@@ -358,7 +358,7 @@ class _CMVisitFormState extends State<CMVisitForm> {
                 Container(
                     width: MediaQuery.of(context).size.width,
                     child: TextField(
-                      minLines: 1,
+                      minLines: 5,
                       maxLines: 10,
                       autocorrect: true,
                       style: TextStyle(height: 1, fontSize: 14),
@@ -536,7 +536,7 @@ void _showAlertDialog(BuildContext context) {
       builder: (BuildContext context) {
         return AlertDialog(
             content: Container(
-          width: MediaQuery.of(context).size.width / 1,
+          width: MediaQuery.of(context).size.width,
           height: 140.0,
           decoration: BoxDecoration(
               shape: BoxShape.rectangle,
@@ -602,5 +602,71 @@ void _showAlertDialog(BuildContext context) {
             ],
           ),
         ));
+      });
+}
+
+void _showialogDeleteImage(BuildContext context) {
+  showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: Container(
+            width: MediaQuery.of(context).size.width,
+            height: 100.0,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10.0), color: Colors.white),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Container(
+                  margin: EdgeInsets.only(bottom: 20.0),
+                  child: Text('Delete Image?',
+                      style: TextStyle(
+                          color: Color(0xFF427CEF),
+                          fontWeight: FontWeight.w600,
+                          fontSize: 18)),
+                ),
+                Positioned(
+                    child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Container(
+                      width: 125.0,
+                      height: 40.0,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                          color: Color(0xFFD3D3D3)),
+                      child: MaterialButton(
+                          child: Text('Cancel',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w600)),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          }),
+                    ),
+                    Container(
+                      width: 125.0,
+                      height: 40.0,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                          color: Color(0xFF427CEF)),
+                      child: MaterialButton(
+                          child: Text('Delete',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w600)),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          }),
+                    ),
+                  ],
+                ))
+              ],
+            ),
+          ),
+        );
       });
 }

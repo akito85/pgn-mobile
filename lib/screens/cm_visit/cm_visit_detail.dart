@@ -17,6 +17,8 @@ class _CMVisitDetailState extends State<CMVisitDetail> {
             style: TextStyle(color: Colors.black)),
       ),
       body: ListView(
+        shrinkWrap: true,
+        scrollDirection: Axis.vertical,
         children: <Widget>[
           Container(
             margin: EdgeInsets.only(top: 12, left: 16, right: 16),
@@ -91,6 +93,7 @@ class _CMVisitDetailState extends State<CMVisitDetail> {
               children: <Widget>[
                 Column(
                   mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Container(
                       alignment: Alignment.topLeft,
@@ -116,6 +119,7 @@ class _CMVisitDetailState extends State<CMVisitDetail> {
                   ],
                 ),
                 Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
                     Container(
@@ -234,20 +238,53 @@ class _CMVisitDetailState extends State<CMVisitDetail> {
               ],
             ),
           ),
-          Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
-            Container(
-              alignment: Alignment.topLeft,
-              child: Text(
-                'Documentation',
-                style: TextStyle(
-                    color: const Color(0xFF427CEF),
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600),
-              ),
-            ),
-          ]),
+          Container(
+            width: MediaQuery.of(context).size.width,
+            margin: EdgeInsets.only(top: 20, left: 16, right: 16, bottom: 40),
+            child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Container(
+                    margin: EdgeInsets.only(bottom: 12),
+                    alignment: Alignment.topLeft,
+                    child: Text(
+                      'Documentation',
+                      style: TextStyle(
+                          color: const Color(0xFF427CEF),
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600),
+                    ),
+                  ),
+                  Container(
+                    height: 100,
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: 3,
+                      itemBuilder: (context, int index) {
+                        return _listPhotos(context);
+                      },
+                    ),
+                  )
+                ]),
+          )
         ],
       ),
     );
   }
+}
+
+Widget _listPhotos(BuildContext context) {
+  return Container(
+    width: 100,
+    height: 100,
+    margin: EdgeInsets.only(right: 20),
+    decoration: BoxDecoration(
+      color: Colors.black,
+      borderRadius: BorderRadius.circular(5),
+    ),
+    child: Text('Test 1',
+        style: TextStyle(
+            color: Colors.white, fontWeight: FontWeight.bold, fontSize: 12)),
+  );
 }
