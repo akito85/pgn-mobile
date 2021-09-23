@@ -1,9 +1,11 @@
 class UrlCons {
-  static String mainProdUrl = 'https://api-mobile.pgn.co.id/v2/';
+  // static String mainProdUrl = 'https://api-mobile.pgn.co.id/v2/';
+  static String mainProdUrl = 'https://dev-api-mobile.pgn.co.id/v2/';
   static String prodRelyonUrl = 'https://relyon-api.pgn.co.id/';
   static String mainDevUrl = 'https://dev-api-mobile.pgn.co.id/v2/';
   // static String getTokenBarrer =
   //     'https://api-mobile.pgn.co.id/v2/authentication';
+
   static String getSpbgArea = 'https://api-mobile.pgn.co.id/v2/spbg';
   static String getCustProfileCust =
       'https://api-mobile.pgn.co.id/v2/customers/me';

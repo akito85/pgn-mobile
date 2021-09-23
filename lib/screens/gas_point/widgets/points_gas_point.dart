@@ -27,14 +27,22 @@ class _PointsGasPointState extends State<PointsGasPoint> {
           _scrollController.position.maxScrollExtent) {
         _isLoading = true;
         this.getGasPointHistory(context);
+
+        Future.delayed(Duration(seconds: 3), _updateStatus);
       }
     });
   }
 
   @override
   void dispose() {
-    _scrollController.dispose();
     super.dispose();
+    _scrollController.dispose();
+  }
+
+  Future _updateStatus() async {
+    setState(() {
+      _isLoading = false;
+    });
   }
 
   @override
@@ -96,7 +104,12 @@ class _PointsGasPointState extends State<PointsGasPoint> {
               itemBuilder: (context, i) {
                 DateTime dateFormated =
                     DateTime.parse(returnHistoryGP[i].dateHistory);
-
+                // if (returnHistoryGP.length == i)
+                //   return Center(
+                //       child: Padding(
+                //     padding: EdgeInsets.only(top: 5),
+                //     child: CircularProgressIndicator(),
+                //   ));
                 return Padding(
                   padding: EdgeInsets.only(left: 23, right: 23),
                   child: Column(
@@ -152,10 +165,12 @@ class _PointsGasPointState extends State<PointsGasPoint> {
         _isLoading
             ? Center(
                 child: Padding(
-                padding: EdgeInsets.only(top: 5),
-                child: CircularProgressIndicator(),
-              ))
+                  padding: const EdgeInsets.only(bottom: 10.0),
+                  child: CircularProgressIndicator(),
+                ),
+              )
             : SizedBox(height: 10),
+        SizedBox(height: 15),
       ],
     );
   }
@@ -171,44 +186,41 @@ class _PointsGasPointState extends State<PointsGasPoint> {
           'Authorization': 'Bearer $accessToken',
         });
 
-    if (responseGetHistoryGasPoint.statusCode == 200) {
-      GasPointHistoryModel returnGetPointHistory =
-          GasPointHistoryModel.fromJson(
-              json.decode(responseGetHistoryGasPoint.body));
-      if (returnGetPointHistory.message == null &&
-          returnGetPointHistory.dataGPHistory.length > 0) {
-        setState(() {
-          nextPage = returnGetPointHistory.gasPointPaging.nextPage;
-          returnHistoryGP.addAll(returnGetPointHistory.dataGPHistory);
-          _isLoading = false;
-        });
-      } else {
-        setState(() {
-          _isLoading = false;
-        });
-      }
-    } else {
-      throw Exception('Could not get any response');
+    // // if (!_isLoading) {
+    // setState(() {
+    //   _isLoading = false;
+    // });
+    // }
+    // if (responseGetHistoryGasPoint.statusCode == 200) {
+    GasPointHistoryModel returnGetPointHistory = GasPointHistoryModel.fromJson(
+        json.decode(responseGetHistoryGasPoint.body));
+
+    if (returnGetPointHistory.message == null &&
+        returnGetPointHistory.dataGPHistory.length > 0) {
+      setState(() {
+        nextPage = returnGetPointHistory.gasPointPaging.nextPage;
+        returnHistoryGP.addAll(returnGetPointHistory.dataGPHistory);
+        // _isLoading = false;
+      });
     }
   }
-}
 
-Future<GasPointHistoryModel> getFutureGasPointHistory(
-    BuildContext context) async {
-  final storageCache = FlutterSecureStorage();
-  String accessToken = await storageCache.read(key: 'access_token');
-  String lang = await storageCache.read(key: 'lang');
-  var responseGetHistoryGasPoint =
-      await http.get('${UrlCons.mainDevUrl}gas_point_history', headers: {
-    'Content-Type': 'application/json',
-    'Authorization': 'Bearer $accessToken',
-    'Accept-Language': lang,
-  });
-
-  if (responseGetHistoryGasPoint.statusCode == 200) {
+  Future<GasPointHistoryModel> getFutureGasPointHistory(
+      BuildContext context) async {
+    final storageCache = FlutterSecureStorage();
+    String accessToken = await storageCache.read(key: 'access_token');
+    String lang = await storageCache.read(key: 'lang');
+    var responseGetHistoryGasPoint =
+        await http.get('${UrlCons.mainDevUrl}gas_point_history', headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $accessToken',
+      'Accept-Language': lang,
+    });
+    // if (responseGetHistoryGasPoint.statusCode == 200) {
     return GasPointHistoryModel.fromJson(
         json.decode(responseGetHistoryGasPoint.body));
-  } else {
-    throw Exception('Could not get any response');
+    // } else {
+    //   throw Exception('Could not get any response');
+    // }
   }
 }
