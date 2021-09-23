@@ -445,15 +445,12 @@ class LoginScreenState extends State<LoginScreen> {
             _auth.user.userGroupId == "10" ||
             _auth.user.userGroupId == "3") {
           if (_auth.user.userType == 2 && _auth.customerId != null) {
-            print('2. MASUK KE SINI ${_auth.customer.custName}');
+            // print('2. MASUK KE SINI ${_auth.customer.custName}');
             await storageCache.write(
                 key: 'user_name_cust', value: _auth.customer.custName);
-            // await storageCache.write(
-            //     key: 'customerGroupId',
-            //     value: _auth.customer.groupId.toString());
             await storageCache.write(
                 key: 'customer_groupId',
-                value: _auth.customer.groupId.toString());
+                value: _auth.customer.groupId.toString() ?? '');
             await storageCache.write(
                 key: 'user_mobile_otp', value: _auth.user.userMobilePhone);
             await storageCache.write(
@@ -493,9 +490,7 @@ class LoginScreenState extends State<LoginScreen> {
                 key: 'user_name_cust', value: _auth.user.userName);
             await storageCache.write(
                 key: 'user_mobile_otp', value: _auth.user.userMobilePhone);
-            await storageCache.write(
-                key: 'customer_groupId',
-                value: _auth.customer.groupId.toString());
+            await storageCache.write(key: 'customer_groupId', value: '-');
             // prefs.setString('user_name_cust', _auth.user.userName);
           } else if (_auth.user.userType == 1) {
             await storageCache.write(

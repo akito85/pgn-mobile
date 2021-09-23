@@ -403,6 +403,7 @@ class SimpleLineChart extends State<SimpleLineCharts> {
       _timeSeriesChart = TimeSeriesChart(
         seriesList,
         defaultRenderer: new LineRendererConfig(
+            roundEndCaps: true,
             includeArea: false,
             stacked: false,
             includePoints: true,

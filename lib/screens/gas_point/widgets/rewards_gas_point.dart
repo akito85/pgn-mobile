@@ -145,8 +145,16 @@ class _RewardsGasPointState extends State<RewardsGasPoint> {
                 return ListView.builder(
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(),
-                  itemCount: returnDataRewards.length,
+                  itemCount: _isLoading
+                      ? returnDataRewards.length + 1
+                      : returnDataRewards.length,
                   itemBuilder: (context, i) {
+                    if (returnDataRewards.length == i)
+                      return Center(
+                          child: Padding(
+                        padding: EdgeInsets.only(top: 5),
+                        child: CircularProgressIndicator(),
+                      ));
                     return InkWell(
                       onTap: () {
                         setState(() {
@@ -154,6 +162,7 @@ class _RewardsGasPointState extends State<RewardsGasPoint> {
                           pointNeeded = returnDataRewards[i].cost;
                           name = returnDataRewards[i].nameRewards;
                           imgUrl = returnDataRewards[i].imgRedeem;
+                          _isLoading = false;
                         });
                         if (pointGasPoint == '0') {
                           showToast('Gas Point 0');
@@ -254,56 +263,8 @@ class _RewardsGasPointState extends State<RewardsGasPoint> {
                     child: CircularProgressIndicator(),
                   ))
                 : SizedBox(height: 10),
-            // Padding(
-            //   padding: EdgeInsets.only(left: 18, top: 20, bottom: 7),
-            //   child: Text(
-            //     'Collect More Points to Redeem',
-            //     style: TextStyle(
-            //       fontSize: 14,
-            //       fontWeight: FontWeight.w500,
-            //     ),
-            //   ),
-            // ),
-            // Padding(
-            //   padding: EdgeInsets.only(left: 18, right: 18, bottom: 7),
-            //   child: Divider(
-            //     color: Color(0xFFF4F4F4),
-            //     thickness: 2,
-            //   ),
-            // ),
           ],
         ),
-        // Positioned(
-        //   bottom: 10,
-        //   left: 18,
-        //   right: 18,
-        //   child: Container(
-        //     height: 50.0,
-        //     decoration: BoxDecoration(
-        //       borderRadius: BorderRadius.circular(14.0),
-        //       color: Color(0xFF427CEF),
-        //     ),
-        //     child: MaterialButton(
-        //       minWidth: MediaQuery.of(context).size.width,
-        //       child: Text(
-        //         'Pick Reward',
-        //         style: TextStyle(
-        //           color: Colors.white,
-        //         ),
-        //       ),
-        //       onPressed: () {
-        //         print('ID NYA : $idRewards');
-        //         remainingPoint = int.parse(pointGasPoint) - pointNeeded;
-        //         showDialog(
-        //             context: context,
-        //             builder: (BuildContext context) {
-        //               return redeemPointFormAlert(context, name, idRewards,
-        //                   pointGasPoint, pointNeeded, remainingPoint, imgUrl);
-        //             });
-        //       },
-        //     ),
-        //   ),
-        // ),
       ],
     );
   }

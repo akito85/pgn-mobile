@@ -59,7 +59,7 @@ class _CardGasPointState extends State<CardGaspoint> {
                     ),
                   ],
                   image: DecorationImage(
-                    image: AssetImage('assets/pgn_card.jpg'),
+                    image: AssetImage('assets/card_gaspoint.jpg'),
                     fit: BoxFit.fill,
                   ),
                   borderRadius: BorderRadius.only(
@@ -91,7 +91,7 @@ class _CardGasPointState extends State<CardGaspoint> {
                   ),
                 ],
                 image: DecorationImage(
-                  image: AssetImage('assets/pgn_card.jpg'),
+                  image: AssetImage('assets/card_gaspoint.jpg'),
                   fit: BoxFit.fill,
                 ),
                 borderRadius: BorderRadius.only(
