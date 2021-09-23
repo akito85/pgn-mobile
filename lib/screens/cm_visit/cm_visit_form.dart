@@ -515,7 +515,7 @@ class _CMVisitFormState extends State<CMVisitForm> {
                                     color: Colors.white,
                                     fontWeight: FontWeight.w600)),
                             onPressed: () {
-                              Navigator.of(context).pop();
+                              _showAlertDialog(context);
                             }),
                       ),
                     ],
@@ -528,4 +528,79 @@ class _CMVisitFormState extends State<CMVisitForm> {
       )),
     );
   }
+}
+
+void _showAlertDialog(BuildContext context) {
+  showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+            content: Container(
+          width: MediaQuery.of(context).size.width / 1,
+          height: 140.0,
+          decoration: BoxDecoration(
+              shape: BoxShape.rectangle,
+              borderRadius: BorderRadius.circular(10.0),
+              color: Colors.white),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Container(
+                margin: EdgeInsets.only(bottom: 20.0),
+                child: Text(
+                  'CM Visit Form Confirmation',
+                  style: TextStyle(
+                      color: Color(0xFF427CEF),
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.w600),
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.only(bottom: 24.0),
+                child: Text(
+                    'Are you sure that the information that you entered is correct?',
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.normal,
+                        fontSize: 14.0)),
+              ),
+              Positioned(
+                  child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Container(
+                    width: 84.0,
+                    height: 40.0,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5),
+                        color: Color(0xFFD3D3D3)),
+                    child: MaterialButton(
+                        child: Text('Cancel',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w600)),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        }),
+                  ),
+                  Container(
+                      width: 170.0,
+                      height: 40.0,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                          color: Color(0xFF427CEF)),
+                      child: MaterialButton(
+                          child: Text('Save Report',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w600)),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          }))
+                ],
+              ))
+            ],
+          ),
+        ));
+      });
 }
