@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:dotted_decoration/dotted_decoration.dart';
+import 'package:intl/intl.dart';
 
 class CMVisitForm extends StatefulWidget {
   @override
@@ -7,6 +8,22 @@ class CMVisitForm extends StatefulWidget {
 }
 
 class _CMVisitFormState extends State<CMVisitForm> {
+  String _onDateSelected = '18 November 2021';
+  TextEditingController controllers;
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime d = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2015),
+      lastDate: DateTime(2050),
+    );
+    if (d != null)
+      setState(() {
+        _onDateSelected = new DateFormat('dd MMMM yyy').format(d);
+      });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,19 +54,23 @@ class _CMVisitFormState extends State<CMVisitForm> {
                           fontWeight: FontWeight.w600)),
                 ),
                 Container(
-                    width: MediaQuery.of(context).size.width,
-                    child: TextField(
+                  width: MediaQuery.of(context).size.width,
+                  child: InkWell(
+                    child: TextFormField(
+                      controller: controllers,
+                      enabled: false,
                       autocorrect: true,
                       style: TextStyle(height: 1, fontSize: 14),
                       decoration: InputDecoration(
-                        hintText: '18 November 2021',
+                        hintText: _onDateSelected,
+                        hintStyle: TextStyle(color: Color(0xFF455055)),
                         suffixIcon: Icon(
                           Icons.calendar_today_outlined,
                           color: Colors.black87,
                         ),
                         filled: true,
                         fillColor: Colors.white70,
-                        enabledBorder: OutlineInputBorder(
+                        disabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.all(Radius.circular(5)),
                             borderSide:
                                 BorderSide(color: Color(0xFFD3D3D3), width: 2)),
@@ -58,7 +79,12 @@ class _CMVisitFormState extends State<CMVisitForm> {
                             borderSide:
                                 BorderSide(color: Colors.black38, width: 2)),
                       ),
-                    )),
+                    ),
+                    onTap: () {
+                      _selectDate(context);
+                    },
+                  ),
+                ),
                 Container(
                   margin: EdgeInsets.only(bottom: 4, top: 20),
                   child: Text('Visit Type',
@@ -515,7 +541,7 @@ class _CMVisitFormState extends State<CMVisitForm> {
                                     color: Colors.white,
                                     fontWeight: FontWeight.w600)),
                             onPressed: () {
-                              _showDialogSuccessSubmit(context);
+                              _showAlertDialog(context);
                             }),
                       ),
                     ],
