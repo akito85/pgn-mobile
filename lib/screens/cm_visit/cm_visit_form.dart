@@ -515,7 +515,7 @@ class _CMVisitFormState extends State<CMVisitForm> {
                                     color: Colors.white,
                                     fontWeight: FontWeight.w600)),
                             onPressed: () {
-                              _showAlertDialog(context);
+                              _showDialogSuccessSubmit(context);
                             }),
                       ),
                     ],
@@ -664,6 +664,49 @@ void _showialogDeleteImage(BuildContext context) {
                     ),
                   ],
                 ))
+              ],
+            ),
+          ),
+        );
+      });
+}
+
+void _showDialogSuccessSubmit(BuildContext context) {
+  showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: Container(
+            width: MediaQuery.of(context).size.width,
+            height: 70.0,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Container(
+                  width: 70.0,
+                  height: 70.0,
+                  child: Icon(Icons.check_circle_outline_rounded,
+                      color: Color(0xFF81C153), size: 50),
+                ),
+                Container(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text('Thank You!',
+                          style: TextStyle(
+                              color: Color(0xFF81C153),
+                              fontSize: 18,
+                              fontWeight: FontWeight.w600)),
+                      SizedBox(height: 4),
+                      Text('Your report has been submitted',
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 12,
+                              fontWeight: FontWeight.normal)),
+                    ],
+                  ),
+                )
               ],
             ),
           ),
