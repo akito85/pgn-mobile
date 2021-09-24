@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:typed_data';
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -115,19 +116,17 @@ Widget _buildRow(DataProduct data, BuildContext context) {
                         Container(
                           height: 100,
                           margin: EdgeInsets.fromLTRB(15.0, 0.0, 0.0, 0),
-                          child: Image.asset(
-                            'assets/sinergi_image.jpeg',
-                            height: 60.0,
-                            width: 80.0,
-                          ),
+                          child: _setImage(context, data),
                         ),
                         Flexible(
+                          flex: 3,
                           child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.max,
                             children: <Widget>[
                               Container(
                                 alignment: Alignment.topLeft,
-                                margin: EdgeInsets.only(left: 12),
+                                margin: EdgeInsets.only(left: 18),
                                 child: Text(
                                   data.name,
                                   maxLines: 1,
@@ -140,14 +139,14 @@ Widget _buildRow(DataProduct data, BuildContext context) {
                               ),
                               Container(
                                 alignment: Alignment.centerLeft,
-                                margin: EdgeInsets.only(top: 5, left: 12),
+                                margin: EdgeInsets.only(top: 5, left: 18),
                                 child: Text(
                                   data.description,
                                   maxLines: 2,
-                                  textAlign: TextAlign.start,
                                   style: TextStyle(
                                     color: Colors.black,
                                     fontWeight: FontWeight.normal,
+                                    height: 1.5,
                                     fontSize: 12.0,
                                   ),
                                 ),
@@ -167,15 +166,11 @@ Widget _buildRow(DataProduct data, BuildContext context) {
                         Row(
                           children: <Widget>[
                             Container(
-                              height: 70,
-                              margin: EdgeInsets.fromLTRB(15.0, 0.0, 0.0, 0),
-                              child: Image.asset(
-                                'assets/sinergi_image.jpeg',
-                                height: 60.0,
-                                width: 80.0,
-                              ),
-                            ),
-                            SizedBox(width: 10),
+                                height: 100,
+                                alignment: Alignment.center,
+                                margin: EdgeInsets.fromLTRB(15.0, 0.0, 0.0, 0),
+                                child: _setImage(context, data)),
+                            SizedBox(width: 18),
                             Text(data.name,
                                 overflow: TextOverflow.clip,
                                 softWrap: true,
@@ -230,9 +225,11 @@ Widget _buildRow(DataProduct data, BuildContext context) {
                               ),
                             ),
                             Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
                                 Container(
-                                    width: 222.0,
+                                    width: MediaQuery.of(context).size.width /
+                                        1.73,
                                     height: 40.0,
                                     margin: EdgeInsets.only(
                                         left: 16.0, right: 12.0, bottom: 20),
@@ -241,7 +238,9 @@ Widget _buildRow(DataProduct data, BuildContext context) {
                                             BorderRadius.circular(5.0),
                                         color: Color(0xFF427CEF)),
                                     child: ElevatedButton.icon(
-                                        onPressed: () {},
+                                        onPressed: () async {
+                                          await sendEmail(data.pic_email);
+                                        },
                                         icon: Icon(Icons.email_outlined,
                                             color: Colors.white),
                                         label: Text(data.pic_email))),
@@ -257,8 +256,15 @@ Widget _buildRow(DataProduct data, BuildContext context) {
                                           shape: RoundedRectangleBorder(
                                               borderRadius:
                                                   BorderRadius.circular(5.0)),
-                                          minimumSize: Size(84, 40)),
-                                      onPressed: () {},
+                                          minimumSize: Size(
+                                              MediaQuery.of(context)
+                                                      .size
+                                                      .width /
+                                                  5,
+                                              40)),
+                                      onPressed: () async {
+                                        await call(data.pic_phone);
+                                      },
                                       child: Image.asset(
                                           'assets/ic_phone_outline.png',
                                           width: 24.0,
@@ -303,4 +309,30 @@ Future<GetProductInformation> fetchPost(BuildContext context) async {
     'Accept-Language': lang
   });
   return GetProductInformation.fromJson(json.decode(responseGetProduct.body));
+}
+
+Future<void> call(String phoneNumber) async {
+  return launch('tel:$phoneNumber');
+}
+
+Future<void> sendEmail(String email) async {
+  return launch('mailto:$email');
+}
+
+Widget _setImage(BuildContext context, DataProduct data) {
+  if (data.image != null) {
+    var splitString = data.image.split(',');
+    Uint8List imgs = base64.decode(splitString[1]);
+    return Image.memory(
+      imgs,
+      width: 85.0,
+      height: 65.0,
+    );
+  } else {
+    return Image.asset(
+      'assets/sinergi_image.jpeg',
+      height: 65.0,
+      width: 85.0,
+    );
+  }
 }
