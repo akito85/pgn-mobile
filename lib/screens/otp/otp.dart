@@ -207,7 +207,12 @@ class OTPFormState extends State<OTPForm> {
                 ),
                 onPressed: () {
                   print('INI PIN NYA ${otpCtrl.text}');
+                  setState(() {
+                    visible = true;
+                    btnVisible = false;
+                  });
                   postOtpForm(context, otpCtrl.text);
+
                   // Navigator.pop(context);
                   // Navigator.pushReplacementNamed(context, '/dashboard');
                 },
@@ -301,8 +306,12 @@ class OTPFormState extends State<OTPForm> {
     // print('RE CODE : $requestCode');
     // print('Dev id : $devicesId');
     // print('Next OTP : $nextOtpTypeId');
+    setState(() {
+      visible = false;
+      btnVisible = true;
+    });
     Otp _otp = Otp.fromJson(json.decode(responseOtpForm.body));
-    if (_otp.status == 'true') {
+    if (_otp.status == true) {
       Navigator.pushReplacementNamed(context, '/dashboard');
     } else if (_otp.status == 'Device is registered successfully') {
       Navigator.pushReplacementNamed(context, '/dashboard');
