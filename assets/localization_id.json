@@ -757,5 +757,6 @@
     "cmm_form_btn_confirm_Sent": "KIRIM",
     "cmm_form_retake_photo": "Ambil Ulang Foto",
     "cmm_form_alert_post_failed": "Data Pencatatan sudah pernah dilakukan",
-    "cmm_form_alert_post_success": "Data Pencatatan Meter berhasil"
+    "cmm_form_alert_post_success": "Data Pencatatan Meter berhasil",
+    "field_input_allert": "Semua field harus terisi !"
 }

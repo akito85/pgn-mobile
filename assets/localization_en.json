@@ -778,6 +778,7 @@
     "cmm_form_btn_confirm_Sent": "SEND",
     "cmm_form_retake_photo": "Re-take Photo",
     "cmm_form_alert_post_failed": "Failed, Data already recorded",
-    "cmm_form_alert_post_success": "Successed, Data successfully recorded"
+    "cmm_form_alert_post_success": "Successed, Data successfully recorded",
+    "field_input_allert": "All fields must be filled !"
     
 }

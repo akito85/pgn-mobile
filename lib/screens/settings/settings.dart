@@ -1,6 +1,7 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:pgn_mobile/screens/settings/widgets/change_numb.dart';
 import 'package:pgn_mobile/screens/settings/widgets/change_password.dart';
 import 'package:pgn_mobile/services/app_localizations.dart';
 import 'package:pgn_mobile/services/applications.dart';
@@ -182,6 +183,23 @@ class SettingState extends State<Settings> {
                     MaterialPageRoute(builder: (context) => ChangePassword()));
               },
             ),
+            // Divider(
+            //   color: Colors.black,
+            // ),
+            // InkWell(
+            //   child: Container(
+            //     margin: EdgeInsets.only(top: 10, left: 10, bottom: 10),
+            //     width: MediaQuery.of(context).size.width,
+            //     child: Text(
+            //       Translations.of(context).text('title_bar_change_number'),
+            //       style: TextStyle(fontSize: 16),
+            //     ),
+            //   ),
+            //   onTap: () {
+            //     Navigator.push(context,
+            //         MaterialPageRoute(builder: (context) => ChangeNumb()));
+            //   },
+            // ),
             Divider(
               color: Colors.black,
             ),

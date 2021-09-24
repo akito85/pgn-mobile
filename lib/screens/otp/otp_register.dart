@@ -9,7 +9,6 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:pgn_mobile/models/otp_model.dart';
 import 'package:pgn_mobile/models/url_cons.dart';
-import 'package:pgn_mobile/screens/dashboard/dashboard.dart';
 import 'package:pgn_mobile/services/app_localizations.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:flutter/painting.dart' as painting;
@@ -32,6 +31,8 @@ class OTPRegisterFormState extends State<OTPRegisterForm> {
   OTPRegisterFormState(this.numberPhone, this.idCust, this.pass,
       this.requestCode, this.accessToken);
   String newNumber;
+  bool visible = false;
+  bool btnVisible = true;
   TextEditingController otpCtrl = new TextEditingController();
   final storageCache = new FlutterSecureStorage();
   final interval = const Duration(seconds: 1);
@@ -176,29 +177,48 @@ class OTPRegisterFormState extends State<OTPRegisterForm> {
               ),
             ],
           ),
-          Container(
-              height: 50.0,
-              margin: EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 30.0),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(18.0),
-                color: Color(0xFF427CEF),
-              ),
-              child: MaterialButton(
-                // color: color: Color(0xFF427CEF),,
-                minWidth: MediaQuery.of(context).size.width,
-                child: Text(
-                  Translations.of(context).text('ff_otp_bt_confirmation'),
-                  style: TextStyle(
-                    color: Colors.white,
-                  ),
-                ),
-                onPressed: () {
-                  print('INI PIN NYA ${otpCtrl.text}');
-                  postOtpForm(context, otpCtrl.text);
-                  // Navigator.pop(context);
-                  // Navigator.pushReplacementNamed(context, '/dashboard');
-                },
+          Visibility(
+              maintainSize: true,
+              maintainAnimation: true,
+              maintainState: true,
+              visible: visible,
+              child: Column(
+                children: <Widget>[
+                  Container(
+                      margin: EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 30.0),
+                      child: CircularProgressIndicator())
+                ],
               )),
+          Visibility(
+            visible: btnVisible,
+            child: Container(
+                height: 50.0,
+                margin: EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 30.0),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(18.0),
+                  color: Color(0xFF427CEF),
+                ),
+                child: MaterialButton(
+                  // color: color: Color(0xFF427CEF),,
+                  minWidth: MediaQuery.of(context).size.width,
+                  child: Text(
+                    Translations.of(context).text('ff_otp_bt_confirmation'),
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
+                  onPressed: () {
+                    print('INI PIN NYA ${otpCtrl.text}');
+                    postOtpForm(context, otpCtrl.text);
+                    setState(() {
+                      visible = true;
+                      btnVisible = false;
+                    });
+                    // Navigator.pop(context);
+                    // Navigator.pushReplacementNamed(context, '/dashboard');
+                  },
+                )),
+          ),
         ],
       ),
     );
@@ -260,8 +280,16 @@ class OTPRegisterFormState extends State<OTPRegisterForm> {
         PostDataRegisterPGNUser.fromJson(
             json.decode(responseSentOTPRegisResidential.body));
     if (responseSentOTPRegisResidential.statusCode == 200) {
+      setState(() {
+        visible = false;
+        btnVisible = true;
+      });
       registerNewUserAlert(context, 'Silahkan masuk ke halaman login');
     } else {
+      setState(() {
+        visible = false;
+        btnVisible = true;
+      });
       registerNewUserAlert(context, postOTPRegisterResidential.message);
     }
   }

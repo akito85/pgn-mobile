@@ -51,7 +51,7 @@ class GasDetailState extends State<GasDetail> {
               markers: Set<Marker>.of(
                 <Marker>[
                   Marker(
-                      draggable: true,
+                      draggable: false,
                       markerId: MarkerId("1"),
                       position: LatLng(double.parse(data.location.latitude),
                           double.parse(data.location.longitude)),
