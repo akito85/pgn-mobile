@@ -84,13 +84,25 @@ class LoginRevampState extends State<LoginRevamp> {
                         Container(
                           height: 45.0,
                           decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5.0),
+                              borderRadius: BorderRadius.circular(10.0),
                               color: Colors.white),
                           child: MaterialButton(
                             minWidth: MediaQuery.of(context).size.width,
-                            child: Text(
-                              'PGN Product & Services',
-                              style: TextStyle(color: Color(0xFF427CEF)),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Container(
+                                  margin: EdgeInsets.only(right: 18.0),
+                                  width: 17.0,
+                                  height: 19.0,
+                                  child: Image.asset('assets/logo_head.png'),
+                                ),
+                                Text(
+                                  'PGN Product & Services',
+                                  style: TextStyle(color: Color(0xFF427CEF)),
+                                ),
+                              ],
                             ),
                             onPressed: () {
                               Navigator.push(
