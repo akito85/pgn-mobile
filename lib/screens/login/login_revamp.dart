@@ -95,8 +95,11 @@ class LoginRevampState extends State<LoginRevamp> {
                                 Container(
                                   margin: EdgeInsets.only(right: 18.0),
                                   width: 17.0,
-                                  height: 19.0,
-                                  child: Image.asset('assets/logo_head.png'),
+                                  height: 20.0,
+                                  child: Image.asset(
+                                    'assets/logo_head.png',
+                                    color: Color(0xFF427CEF),
+                                  ),
                                 ),
                                 Text(
                                   'PGN Product & Services',
