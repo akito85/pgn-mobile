@@ -56,7 +56,9 @@ class LoginRevampState extends State<LoginRevamp> {
                 Container(
                   alignment: Alignment.center,
                   margin: EdgeInsets.only(top: 52.0),
-                  child: const Text('Welcome to PGN Mobile' ?? '',
+                  child: Text(
+                      Translations.of(context)
+                          .text('title_welcome_screen' ?? '-'),
                       style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w500,
@@ -65,9 +67,9 @@ class LoginRevampState extends State<LoginRevamp> {
                 Container(
                     alignment: Alignment.center,
                     margin: EdgeInsets.only(top: 12.0, left: 18.0, right: 18.0),
-                    child: const Text(
-                        'PGN Mobile is a one stop app for all your energy needs. Track, manage, and optimize your daily energy consumption.' ??
-                            '',
+                    child: Text(
+                        Translations.of(context)
+                            .text('subtitle_welcome_screen' ?? '-'),
                         textAlign: TextAlign.center,
                         style: TextStyle(
                             height: 2,
@@ -102,7 +104,7 @@ class LoginRevampState extends State<LoginRevamp> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
                             Container(
-                              width: 170.0,
+                              width: MediaQuery.of(context).size.width / 2.3,
                               height: 50.0,
                               margin: EdgeInsets.only(top: 12.0),
                               decoration: BoxDecoration(
@@ -111,7 +113,8 @@ class LoginRevampState extends State<LoginRevamp> {
                               ),
                               child: MaterialButton(
                                   child: Text(
-                                    'Sign in',
+                                    Translations.of(context)
+                                        .text('label_signin_button' ?? '-'),
                                     style: TextStyle(color: Colors.white),
                                   ),
                                   onPressed: () {
@@ -125,7 +128,7 @@ class LoginRevampState extends State<LoginRevamp> {
                             ),
                             Container(
                               margin: EdgeInsets.only(top: 12.0),
-                              width: 170.0,
+                              width: MediaQuery.of(context).size.width / 2.3,
                               height: 50.0,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10.0),
@@ -133,7 +136,8 @@ class LoginRevampState extends State<LoginRevamp> {
                               ),
                               child: MaterialButton(
                                   child: Text(
-                                    'Sign Up',
+                                    Translations.of(context)
+                                        .text('label_register_button'),
                                     style: TextStyle(color: Colors.white),
                                   ),
                                   onPressed: () {

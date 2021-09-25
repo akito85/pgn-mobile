@@ -216,7 +216,8 @@ Widget _buildRow(DataProduct data, BuildContext context) {
                               alignment: Alignment.bottomLeft,
                               margin: EdgeInsets.only(bottom: 12, left: 16),
                               child: Text(
-                                data.pic_name,
+                                Translations.of(context)
+                                    .text('for_further_information' ?? "-"),
                                 textAlign: TextAlign.start,
                                 style: TextStyle(
                                     color: Colors.black,
