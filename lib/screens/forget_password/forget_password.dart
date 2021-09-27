@@ -108,7 +108,7 @@ class ForgetPasswordState extends State<ForgetPassword> {
               margin: EdgeInsets.fromLTRB(20.0, 100.0, 20.0, 0.0),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(5.0),
-                color: Theme.of(context).primaryColor,
+                color: Color(0xFF427CEF),
               ),
               child: MaterialButton(
                 minWidth: MediaQuery.of(context).size.width,

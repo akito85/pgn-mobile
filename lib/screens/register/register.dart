@@ -6,6 +6,14 @@ class Register extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        elevation: 0,
+        backgroundColor: Colors.white,
+        title: Text(
+          'Registration',
+          style: TextStyle(color: Colors.black),
+        ),
+      ),
       body: Stack(
         children: <Widget>[
           Container(
@@ -19,7 +27,7 @@ class Register extends StatelessWidget {
           Positioned(
             bottom: 170.0,
             child: Container(
-                margin: EdgeInsets.only(left: 20.0),
+                margin: EdgeInsets.only(left: 20.0, right: 20.0),
                 child: Text(
                   'Welcome, PGN Mobile',
                   style: TextStyle(color: Colors.white, fontSize: 34.0),
@@ -28,7 +36,7 @@ class Register extends StatelessWidget {
           Positioned(
             bottom: 120.0,
             child: Container(
-                margin: EdgeInsets.only(left: 20.0),
+                margin: EdgeInsets.only(left: 20.0, right: 20.0),
                 child: Text(
                   'Already a PGN Customer?',
                   style: TextStyle(

@@ -7,8 +7,7 @@ import 'package:pgn_mobile/models/auth_model.dart';
 import 'package:pgn_mobile/models/url_cons.dart';
 import 'package:pgn_mobile/screens/login/login_screen.dart';
 import 'package:pgn_mobile/screens/otp/otp_register.dart';
-
-import 'package:pgn_mobile/services/register_residential.dart';
+import 'package:pgn_mobile/services/app_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:pgn_mobile/services/language.dart';
 import 'package:encrypt/encrypt.dart' as encrypt;
@@ -147,8 +146,16 @@ class RegistCustState extends State<RegisterCustomer> {
                 ),
               ),
               onPressed: () {
-                final encrypted = encrypter.encrypt(password.text, iv: iv);
-                postRegisterNewCust(context, encrypted.base64);
+                if (phoneNumb.text == '' &&
+                    idCust.text == '' &&
+                    password.text == '') {
+                  showToast(
+                    Translations.of(context).text('field_input_allert'),
+                  );
+                } else {
+                  final encrypted = encrypter.encrypt(password.text, iv: iv);
+                  postRegisterNewCust(context, encrypted.base64);
+                }
               },
             ),
           ),

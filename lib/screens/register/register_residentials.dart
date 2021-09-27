@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'package:flutter/rendering.dart';
 import 'package:pgn_mobile/models/url_cons.dart';
 import 'package:pgn_mobile/screens/otp/otp_register.dart';
+import 'package:pgn_mobile/screens/register/widgets/map_point.dart';
 import 'package:pgn_mobile/services/register_residential.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -42,6 +43,7 @@ class RegisterResidentialsState extends State<RegisterResidentials>
   TextEditingController rwCtrl = new TextEditingController();
   TextEditingController postalCodeCtrl = new TextEditingController();
   TextEditingController revWatCtrl = new TextEditingController();
+  TextEditingController lotlangCtrl = new TextEditingController();
 
   DataProvinces data;
   RegisterResidentialsState(this.data);
@@ -405,6 +407,22 @@ class RegisterResidentialsState extends State<RegisterResidentials>
                 ),
               ),
             ),
+            // Container(
+            //   padding: EdgeInsets.only(top: 5.0),
+            //   // width: 295,
+            //   child: InkWell(
+            //     onTap: () {
+            //       _nextLokasiPesangan(context);
+            //     },
+            //     child: TextFormField(
+            //       controller: lotlangCtrl,
+            //       enabled: false,
+            //       decoration: InputDecoration(
+            //         labelText: 'Lokasi Peta Pemasangan',
+            //       ),
+            //     ),
+            //   ),
+            // ),
             Container(
               margin: EdgeInsets.only(top: 5.0),
               child: Row(
@@ -2653,6 +2671,11 @@ class RegisterResidentialsState extends State<RegisterResidentials>
     setState(() {
       villageCtrl.text = result;
     });
+  }
+
+  void _nextLokasiPesangan(BuildContext context) async {
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => MapPoint()));
   }
 
   void _nextScreenBuildingType(BuildContext context) async {

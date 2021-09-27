@@ -277,26 +277,26 @@ class LoginScreenState extends State<LoginScreen> {
                               child: CircularProgressIndicator())
                         ],
                       )),
-                  InkWell(
-                    onTap: () {
-                      // deviceID();
-                      // Navigator.push(
-                      //     context,
-                      //     MaterialPageRoute(
-                      //         builder: (context) => ForgetPassword()));
-                    },
-                    child: Container(
-                        alignment: Alignment.center,
-                        margin: EdgeInsets.only(top: 35),
-                        child: Text(
-                          'Terms & Conditions' ?? '',
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w500,
-                            color: Color(0xFF427CEF),
-                          ),
-                        )),
-                  ),
+                  // InkWell(
+                  //   onTap: () {
+                  //     // deviceID();
+                  //     // Navigator.push(
+                  //     //     context,
+                  //     //     MaterialPageRoute(
+                  //     //         builder: (context) => ForgetPassword()));
+                  //   },
+                  //   child: Container(
+                  //       alignment: Alignment.center,
+                  //       margin: EdgeInsets.only(top: 35),
+                  //       child: Text(
+                  //         'Terms & Conditions' ?? '',
+                  //         style: TextStyle(
+                  //           fontSize: 14,
+                  //           fontWeight: FontWeight.w500,
+                  //           color: Color(0xFF427CEF),
+                  //         ),
+                  //       )),
+                  // ),
                 ],
               ),
             ),
@@ -360,7 +360,7 @@ class LoginScreenState extends State<LoginScreen> {
       await storageCache.write(
           key: 'request_code', value: _auth.verificationStatus.requestCode);
       if (_auth.user.userType == 2 && _auth.user.userGroupId == "11") {
-        print('1. MASUK KE SINI ${_auth.customer.custName}');
+        // print('1. MASUK KE SINI ${_auth.customer.custName}');
 
         await storageCache.write(key: 'access_token', value: _auth.accessToken);
         await storageCache.write(
@@ -497,6 +497,7 @@ class LoginScreenState extends State<LoginScreen> {
                 key: 'user_name_cust', value: _auth.user.userName);
             await storageCache.write(
                 key: 'user_mobile_otp', value: _auth.user.userMobilePhone);
+            await storageCache.write(key: 'customer_groupId', value: '-');
             // prefs.setString('user_name_cust', _auth.user.userName);
           }
         } else {
@@ -575,7 +576,7 @@ class LoginScreenState extends State<LoginScreen> {
           }
         });
       } else {
-        print('3. MASUK KE SINI ${_auth.customer.custName}');
+        // print('3. MASUK KE SINI ${_auth.customer.custName}');
         await storageCache.write(key: 'user_id', value: _auth.user.userID);
 
         await storageCache.write(
@@ -632,8 +633,8 @@ class LoginScreenState extends State<LoginScreen> {
         String accessToken = await storageCache.read(key: 'access_token');
         // prefs.getString('access_token');
 
-        print('Accesss TOKENss : $accessToken');
-        print('PHONE NUMBs : ${_auth.verificationStatus.message}');
+        // print('Accesss TOKENss : $accessToken');
+        // print('PHONE NUMBs : ${_auth.verificationStatus.message}');
         if (_auth.verificationStatus.message ==
             'Anda pernah login melalui device ini') {
           Navigator.pop(context);

@@ -22,6 +22,8 @@ class OTPForm extends StatefulWidget {
 class OTPFormState extends State<OTPForm> {
   String numberPhone;
   String newNumber;
+  bool visible = false;
+  bool btnVisible = true;
   TextEditingController otpCtrl = new TextEditingController();
   final storageCache = new FlutterSecureStorage();
   final interval = const Duration(seconds: 1);
@@ -173,7 +175,21 @@ class OTPFormState extends State<OTPForm> {
               ),
             ],
           ),
-          Container(
+          Visibility(
+              maintainSize: true,
+              maintainAnimation: true,
+              maintainState: true,
+              visible: visible,
+              child: Column(
+                children: <Widget>[
+                  Container(
+                      margin: EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 30.0),
+                      child: CircularProgressIndicator())
+                ],
+              )),
+          Visibility(
+            visible: btnVisible,
+            child: Container(
               height: 50.0,
               margin: EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 30.0),
               decoration: BoxDecoration(
@@ -191,41 +207,49 @@ class OTPFormState extends State<OTPForm> {
                 ),
                 onPressed: () {
                   print('INI PIN NYA ${otpCtrl.text}');
+                  setState(() {
+                    visible = true;
+                    btnVisible = false;
+                  });
                   postOtpForm(context, otpCtrl.text);
+
                   // Navigator.pop(context);
                   // Navigator.pushReplacementNamed(context, '/dashboard');
                 },
-              )),
-          Container(
-              height: 50.0,
-              margin: EdgeInsets.fromLTRB(15.0, 5.0, 15.0, 30.0),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(18.0),
-                color: Colors.grey[400],
               ),
-              child: MaterialButton(
-                // color: color: Color(0xFF427CEF),,
-                minWidth: MediaQuery.of(context).size.width,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Bypass Otp',
-                      style: TextStyle(
-                        color: Colors.black,
-                      ),
-                    ),
-                    Text(
-                      'Tombol ini hanya ada di beta untuk keperluan testing !',
-                      style: TextStyle(color: Colors.black, fontSize: 11),
-                    ),
-                  ],
-                ),
-                onPressed: () {
-                  Navigator.pop(context);
-                  Navigator.pushReplacementNamed(context, '/dashboard');
-                },
-              )),
+            ),
+          ),
+
+          // Container(
+          //     height: 50.0,
+          //     margin: EdgeInsets.fromLTRB(15.0, 5.0, 15.0, 30.0),
+          //     decoration: BoxDecoration(
+          //       borderRadius: BorderRadius.circular(18.0),
+          //       color: Colors.grey[400],
+          //     ),
+          //     child: MaterialButton(
+          //       // color: color: Color(0xFF427CEF),,
+          //       minWidth: MediaQuery.of(context).size.width,
+          //       child: Column(
+          //         mainAxisAlignment: MainAxisAlignment.center,
+          //         children: [
+          //           Text(
+          //             'Bypass Otp',
+          //             style: TextStyle(
+          //               color: Colors.black,
+          //             ),
+          //           ),
+          //           Text(
+          //             'Tombol ini hanya ada di beta untuk keperluan testing !',
+          //             style: TextStyle(color: Colors.black, fontSize: 11),
+          //           ),
+          //         ],
+          //       ),
+          //       onPressed: () {
+          //         Navigator.pop(context);
+          //         Navigator.pushReplacementNamed(context, '/dashboard');
+          //       },
+          //     )),
         ],
       ),
     );
@@ -278,12 +302,16 @@ class OTPFormState extends State<OTPForm> {
       'code': '$codeotp',
       'request_code': '$requestCode'
     });
-    print('HASIL OTP : ${responseOtpForm.body}');
-    print('RE CODE : $requestCode');
-    print('Dev id : $devicesId');
-    print('Next OTP : $nextOtpTypeId');
+    // print('HASIL OTP : ${responseOtpForm.body}');
+    // print('RE CODE : $requestCode');
+    // print('Dev id : $devicesId');
+    // print('Next OTP : $nextOtpTypeId');
+    setState(() {
+      visible = false;
+      btnVisible = true;
+    });
     Otp _otp = Otp.fromJson(json.decode(responseOtpForm.body));
-    if (_otp.status == 'true') {
+    if (_otp.status == true) {
       Navigator.pushReplacementNamed(context, '/dashboard');
     } else if (_otp.status == 'Device is registered successfully') {
       Navigator.pushReplacementNamed(context, '/dashboard');
