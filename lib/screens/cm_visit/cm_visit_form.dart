@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:dotted_decoration/dotted_decoration.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'dart:io';
 
 class CMVisitForm extends StatefulWidget {
   @override
@@ -10,6 +12,66 @@ class CMVisitForm extends StatefulWidget {
 class _CMVisitFormState extends State<CMVisitForm> {
   String _onDateSelected = '18 November 2021';
   TextEditingController controllers;
+  File _image;
+  File _image2;
+  File _image3;
+  final picker = ImagePicker();
+  Future getImage(String title) async {
+    ImageSource imageSource;
+    if (title == 'Camera') {
+      imageSource = ImageSource.camera;
+    } else {
+      imageSource = ImageSource.gallery;
+    }
+
+    final pickedFile = await picker.getImage(
+        source: imageSource, maxWidth: 100, maxHeight: 100, imageQuality: 50);
+    setState(() {
+      if (pickedFile != null) {
+        _image = File(pickedFile.path);
+      } else {
+        print('No image selected.');
+      }
+    });
+  }
+
+  Future getImage2(String title) async {
+    ImageSource imageSource;
+    if (title == 'Camera') {
+      imageSource = ImageSource.camera;
+    } else {
+      imageSource = ImageSource.gallery;
+    }
+
+    final pickedFile = await picker.getImage(
+        source: imageSource, maxWidth: 100, maxHeight: 100, imageQuality: 50);
+    setState(() {
+      if (pickedFile != null) {
+        _image2 = File(pickedFile.path);
+      } else {
+        print('No image selected.');
+      }
+    });
+  }
+
+  Future getImage3(String title) async {
+    ImageSource imageSource;
+    if (title == 'Camera') {
+      imageSource = ImageSource.camera;
+    } else {
+      imageSource = ImageSource.gallery;
+    }
+
+    final pickedFile = await picker.getImage(
+        source: imageSource, maxWidth: 100, maxHeight: 100, imageQuality: 50);
+    setState(() {
+      if (pickedFile != null) {
+        _image3 = File(pickedFile.path);
+      } else {
+        print('No image selected.');
+      }
+    });
+  }
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime d = await showDatePicker(
@@ -419,91 +481,205 @@ class _CMVisitFormState extends State<CMVisitForm> {
                       Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          Container(
-                              alignment: Alignment.center,
-                              padding: EdgeInsets.all(40.0),
-                              decoration: DottedDecoration(
-                                  shape: Shape.box,
-                                  color: Color(0xFF427CEF),
-                                  dash: <int>[3, 3],
-                                  borderRadius: BorderRadius.circular(3)),
-                              child: Container(
-                                  width: 20,
-                                  height: 20,
-                                  child: FloatingActionButton(
-                                    onPressed: () {},
-                                    elevation: 0,
-                                    child: Icon(Icons.add,
-                                        color: Colors.white, size: 20),
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(3)),
-                                  ))),
+                          _image != null
+                              ? Container(
+                                  alignment: Alignment.center,
+                                  padding: EdgeInsets.all(40.0),
+                                  decoration: BoxDecoration(
+                                      shape: BoxShape.rectangle,
+                                      borderRadius: BorderRadius.circular(5),
+                                      image: DecorationImage(
+                                          image: FileImage(_image),
+                                          fit: BoxFit.fill)),
+                                  child: Container(
+                                      width: 20,
+                                      height: 20,
+                                      child: FloatingActionButton(
+                                        backgroundColor:
+                                            Colors.black.withOpacity(0.5),
+                                        onPressed: () {
+                                          _showialogDeleteImage(context);
+                                        },
+                                        elevation: 0,
+                                        child: Icon(Icons.delete_outlined,
+                                            color: Colors.white, size: 20),
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(3)),
+                                      )))
+                              : Container(
+                                  alignment: Alignment.center,
+                                  padding: EdgeInsets.all(40.0),
+                                  decoration: DottedDecoration(
+                                      shape: Shape.box,
+                                      color: Color(0xFF427CEF),
+                                      dash: <int>[3, 3],
+                                      borderRadius: BorderRadius.circular(3)),
+                                  child: Container(
+                                      width: 20,
+                                      height: 20,
+                                      child: FloatingActionButton(
+                                        onPressed: () {
+                                          dialogChoosePic(context);
+                                        },
+                                        elevation: 0,
+                                        child: Icon(Icons.add,
+                                            color: Colors.white, size: 20),
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(3)),
+                                      ))),
                           SizedBox(height: 8),
-                          Text('Add Image',
-                              style: TextStyle(
-                                  color: Color(0xFF427CEF),
-                                  fontWeight: FontWeight.normal,
-                                  fontSize: 12))
+                          _image != null
+                              ? Container(
+                                  width: 110.0,
+                                  child: Text(_image.path,
+                                      maxLines: 1,
+                                      style: TextStyle(
+                                          color: Color(0xFF427CEF),
+                                          fontWeight: FontWeight.normal,
+                                          fontSize: 12)))
+                              : Text('Add Image',
+                                  style: TextStyle(
+                                      color: Color(0xFF427CEF),
+                                      fontWeight: FontWeight.normal,
+                                      fontSize: 12))
                         ],
                       ),
                       Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          Container(
-                              alignment: Alignment.center,
-                              padding: EdgeInsets.all(40.0),
-                              decoration: DottedDecoration(
-                                  shape: Shape.box,
-                                  color: Color(0xFF427CEF),
-                                  dash: <int>[3, 3],
-                                  borderRadius: BorderRadius.circular(3)),
-                              child: Container(
-                                  width: 20,
-                                  height: 20,
-                                  child: FloatingActionButton(
-                                    onPressed: () {},
-                                    elevation: 0,
-                                    child: Icon(Icons.add,
-                                        color: Colors.white, size: 20),
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(3)),
-                                  ))),
+                          _image2 != null
+                              ? Container(
+                                  alignment: Alignment.center,
+                                  padding: EdgeInsets.all(40.0),
+                                  decoration: BoxDecoration(
+                                      shape: BoxShape.rectangle,
+                                      borderRadius: BorderRadius.circular(5),
+                                      image: DecorationImage(
+                                          image: FileImage(_image2),
+                                          fit: BoxFit.fill)),
+                                  child: Container(
+                                      width: 20,
+                                      height: 20,
+                                      child: FloatingActionButton(
+                                        backgroundColor:
+                                            Colors.black.withOpacity(0.5),
+                                        onPressed: () {
+                                          _showialogDeleteImage(context);
+                                        },
+                                        elevation: 0,
+                                        child: Icon(Icons.delete_outlined,
+                                            color: Colors.white, size: 20),
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(3)),
+                                      )))
+                              : Container(
+                                  alignment: Alignment.center,
+                                  padding: EdgeInsets.all(40.0),
+                                  decoration: DottedDecoration(
+                                      shape: Shape.box,
+                                      color: Color(0xFF427CEF),
+                                      dash: <int>[3, 3],
+                                      borderRadius: BorderRadius.circular(3)),
+                                  child: Container(
+                                      width: 20,
+                                      height: 20,
+                                      child: FloatingActionButton(
+                                        onPressed: () {
+                                          dialogChoosePic2(context);
+                                        },
+                                        elevation: 0,
+                                        child: Icon(Icons.add,
+                                            color: Colors.white, size: 20),
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(3)),
+                                      ))),
                           SizedBox(height: 8),
-                          Text('Add Image',
-                              style: TextStyle(
-                                  color: Color(0xFF427CEF),
-                                  fontWeight: FontWeight.normal,
-                                  fontSize: 12))
+                          _image2 != null
+                              ? Container(
+                                  width: 110.0,
+                                  child: Text(_image2.path,
+                                      maxLines: 1,
+                                      style: TextStyle(
+                                          color: Color(0xFF427CEF),
+                                          fontWeight: FontWeight.normal,
+                                          fontSize: 12)))
+                              : Text('Add Image',
+                                  style: TextStyle(
+                                      color: Color(0xFF427CEF),
+                                      fontWeight: FontWeight.normal,
+                                      fontSize: 12))
                         ],
                       ),
                       Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          Container(
-                              alignment: Alignment.center,
-                              padding: EdgeInsets.all(40.0),
-                              decoration: DottedDecoration(
-                                  shape: Shape.box,
-                                  color: Color(0xFF427CEF),
-                                  dash: <int>[3, 3],
-                                  borderRadius: BorderRadius.circular(3)),
-                              child: Container(
-                                  width: 20,
-                                  height: 20,
-                                  child: FloatingActionButton(
-                                    onPressed: () {},
-                                    elevation: 0,
-                                    child: Icon(Icons.add,
-                                        color: Colors.white, size: 20),
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(3)),
-                                  ))),
+                          _image3 != null
+                              ? Container(
+                                  alignment: Alignment.center,
+                                  padding: EdgeInsets.all(40.0),
+                                  decoration: BoxDecoration(
+                                      shape: BoxShape.rectangle,
+                                      borderRadius: BorderRadius.circular(5),
+                                      image: DecorationImage(
+                                          image: FileImage(_image3),
+                                          fit: BoxFit.fill)),
+                                  child: Container(
+                                      width: 20,
+                                      height: 20,
+                                      child: FloatingActionButton(
+                                        backgroundColor:
+                                            Colors.black.withOpacity(0.5),
+                                        onPressed: () {
+                                          _showialogDeleteImage(context);
+                                        },
+                                        elevation: 0,
+                                        child: Icon(Icons.delete_outlined,
+                                            color: Colors.white, size: 20),
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(3)),
+                                      )))
+                              : Container(
+                                  alignment: Alignment.center,
+                                  padding: EdgeInsets.all(40.0),
+                                  decoration: DottedDecoration(
+                                      shape: Shape.box,
+                                      color: Color(0xFF427CEF),
+                                      dash: <int>[3, 3],
+                                      borderRadius: BorderRadius.circular(3)),
+                                  child: Container(
+                                      width: 20,
+                                      height: 20,
+                                      child: FloatingActionButton(
+                                        onPressed: () {
+                                          dialogChoosePic3(context);
+                                        },
+                                        elevation: 0,
+                                        child: Icon(Icons.add,
+                                            color: Colors.white, size: 20),
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(3)),
+                                      ))),
                           SizedBox(height: 8),
-                          Text('Add Image',
-                              style: TextStyle(
-                                  color: Color(0xFF427CEF),
-                                  fontWeight: FontWeight.normal,
-                                  fontSize: 12))
+                          _image3 != null
+                              ? Container(
+                                  width: 110.0,
+                                  child: Text(_image3.path,
+                                      maxLines: 1,
+                                      style: TextStyle(
+                                          color: Color(0xFF427CEF),
+                                          fontWeight: FontWeight.normal,
+                                          fontSize: 12)))
+                              : Text('Add Image',
+                                  style: TextStyle(
+                                      color: Color(0xFF427CEF),
+                                      fontWeight: FontWeight.normal,
+                                      fontSize: 12))
                         ],
                       ),
                     ],
@@ -552,6 +728,237 @@ class _CMVisitFormState extends State<CMVisitForm> {
           ),
         ],
       )),
+    );
+  }
+
+  Widget dialogChoosePic(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Text('Select Method'),
+              SizedBox(height: 20),
+              InkWell(
+                child: Container(
+                  padding: EdgeInsets.only(left: 8, right: 8),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                    color: Color(0xFF427CEF),
+                  ),
+                  alignment: Alignment.center,
+                  height: 50,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.camera_alt,
+                        color: Colors.white,
+                      ),
+                      SizedBox(width: 10),
+                      Text(
+                        'Camera',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ],
+                  ),
+                ),
+                onTap: () {
+                  Navigator.pop(context);
+                  getImage('Camera');
+                },
+              ),
+              SizedBox(height: 15),
+              InkWell(
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                    color: Color(0xFF427CEF),
+                  ),
+                  alignment: Alignment.center,
+                  height: 50,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.insert_photo,
+                        color: Colors.white,
+                      ),
+                      SizedBox(width: 10),
+                      Text(
+                        'Gallery',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ],
+                  ),
+                ),
+                onTap: () {
+                  Navigator.pop(context);
+                  getImage('Gallery');
+                },
+              )
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Widget dialogChoosePic2(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Text('Select Method'),
+              SizedBox(height: 20),
+              InkWell(
+                child: Container(
+                  padding: EdgeInsets.only(left: 8, right: 8),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                    color: Color(0xFF427CEF),
+                  ),
+                  alignment: Alignment.center,
+                  height: 50,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.camera_alt,
+                        color: Colors.white,
+                      ),
+                      SizedBox(width: 10),
+                      Text(
+                        'Camera',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ],
+                  ),
+                ),
+                onTap: () {
+                  Navigator.pop(context);
+                  getImage2('Camera');
+                },
+              ),
+              SizedBox(height: 15),
+              InkWell(
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                    color: Color(0xFF427CEF),
+                  ),
+                  alignment: Alignment.center,
+                  height: 50,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.insert_photo,
+                        color: Colors.white,
+                      ),
+                      SizedBox(width: 10),
+                      Text(
+                        'Gallery',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ],
+                  ),
+                ),
+                onTap: () {
+                  Navigator.pop(context);
+                  getImage2('Gallery');
+                },
+              )
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Widget dialogChoosePic3(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Text('Select Method'),
+              SizedBox(height: 20),
+              InkWell(
+                child: Container(
+                  padding: EdgeInsets.only(left: 8, right: 8),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                    color: Color(0xFF427CEF),
+                  ),
+                  alignment: Alignment.center,
+                  height: 50,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.camera_alt,
+                        color: Colors.white,
+                      ),
+                      SizedBox(width: 10),
+                      Text(
+                        'Camera',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ],
+                  ),
+                ),
+                onTap: () {
+                  Navigator.pop(context);
+                  getImage3('Camera');
+                },
+              ),
+              SizedBox(height: 15),
+              InkWell(
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                    color: Color(0xFF427CEF),
+                  ),
+                  alignment: Alignment.center,
+                  height: 50,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.insert_photo,
+                        color: Colors.white,
+                      ),
+                      SizedBox(width: 10),
+                      Text(
+                        'Gallery',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ],
+                  ),
+                ),
+                onTap: () {
+                  Navigator.pop(context);
+                  getImage3('Gallery');
+                },
+              )
+            ],
+          ),
+        );
+      },
     );
   }
 }
