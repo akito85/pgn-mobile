@@ -598,6 +598,7 @@
     "f_can_not_select_weekend_warning": "Sorry, payment can\\'t be made on holidays.",
     "f_dialog_warning_payment_late": "Your payment plan goes beyond the due date (%1$s). Sanctions for late payments and other sanctions in accordance with the General Provisions shall be applied.",
     "f_dialog_confirmation_delete": "Are you sure delete this payment plan?",
+    "f_dialog_confirmation_delete_custid": "Are you sure delete this customer Id",
     "feature_not_available": "Sorry, this feature is not available yet.",
     "text_common_proceed": "Next",
     "btn_yes": "Yes",

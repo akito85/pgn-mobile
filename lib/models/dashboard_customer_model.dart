@@ -108,3 +108,68 @@ class DataSwitchCustomerId {
     );
   }
 }
+
+////////////////////////// Get Delete Cust ID
+
+class DeleteCustomerId {
+  String message;
+  int code;
+  DataDeleteCustomerId dataDeleteCustomerId;
+
+  DeleteCustomerId({this.code, this.dataDeleteCustomerId, this.message});
+
+  factory DeleteCustomerId.fromJson(Map<String, dynamic> json) {
+    if (json['code'] != null) {
+      return DeleteCustomerId(code: json['code'], message: json['message']);
+    } else {
+      return DeleteCustomerId(
+        dataDeleteCustomerId: DataDeleteCustomerId.fromJson(json['data']),
+      );
+    }
+  }
+}
+
+class DataDeleteCustomerId {
+  String message;
+  DataDeleteCustomerId({this.message});
+
+  factory DataDeleteCustomerId.fromJson(Map<String, dynamic> json) {
+    return DataDeleteCustomerId(
+      message: json['message'],
+    );
+  }
+}
+
+/////////////////// Get Add Customer ID
+class AddNewCustomerID {
+  String message;
+  int code;
+  DataAddCustomerId dataAddCustomerId;
+
+  AddNewCustomerID({this.code, this.dataAddCustomerId, this.message});
+
+  factory AddNewCustomerID.fromJson(Map<String, dynamic> json) {
+    if (json['code'] != null) {
+      return AddNewCustomerID(code: json['code'], message: json['message']);
+    } else {
+      return AddNewCustomerID(
+        dataAddCustomerId: DataAddCustomerId.fromJson(json['data']),
+      );
+    }
+  }
+}
+
+class DataAddCustomerId {
+  String custID;
+  String message;
+  String custName;
+  DataAddCustomerId({this.custID, this.message, this.custName});
+
+  factory DataAddCustomerId.fromJson(Map<String, dynamic> json) {
+    return DataAddCustomerId(
+      custID: json['customer_id'],
+      message: json['message'],
+      custName: json['customer_name'],
+    );
+  }
+}

@@ -1,8 +1,16 @@
+import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:pgn_mobile/models/dashboard_customer_model.dart';
+import 'package:pgn_mobile/models/url_cons.dart';
+import 'package:http/http.dart' as http;
+import 'package:pgn_mobile/screens/otp/otp.dart';
 import 'package:pgn_mobile/services/app_localizations.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 class DashboardCustAdd extends StatefulWidget {
   @override
@@ -155,18 +163,23 @@ class DashboardCustAddState extends State<DashboardCustAdd> {
                       ),
                       _image != null
                           ? Padding(
-                              padding: EdgeInsets.only(top: 15, bottom: 15),
-                              child: InkWell(
-                                onTap: () {
-                                  dialogChoosePic(context, 'ktp');
-                                  // getImage();
-                                },
-                                child: Text(
-                                  Translations.of(context)
-                                          .text('cmm_form_retake_photo') ??
-                                      '',
-                                  style: TextStyle(
-                                      fontSize: 12, color: Color(0xFF427CEF)),
+                              padding: EdgeInsets.only(
+                                top: 15,
+                                bottom: 15,
+                              ),
+                              child: Center(
+                                child: InkWell(
+                                  onTap: () {
+                                    dialogChoosePic(context, 'ktp');
+                                    // getImage();
+                                  },
+                                  child: Text(
+                                    Translations.of(context)
+                                            .text('cmm_form_retake_photo') ??
+                                        '',
+                                    style: TextStyle(
+                                        fontSize: 12, color: Color(0xFF427CEF)),
+                                  ),
                                 ),
                               ),
                             )
@@ -238,17 +251,19 @@ class DashboardCustAddState extends State<DashboardCustAdd> {
                       _imageSelfie != null
                           ? Padding(
                               padding: EdgeInsets.only(top: 15, bottom: 15),
-                              child: InkWell(
-                                onTap: () {
-                                  dialogChoosePic(context, 'selfie');
-                                  // getImage();
-                                },
-                                child: Text(
-                                  Translations.of(context)
-                                          .text('cmm_form_retake_photo') ??
-                                      '',
-                                  style: TextStyle(
-                                      fontSize: 12, color: Color(0xFF427CEF)),
+                              child: Center(
+                                child: InkWell(
+                                  onTap: () {
+                                    dialogChoosePic(context, 'selfie');
+                                    // getImage();
+                                  },
+                                  child: Text(
+                                    Translations.of(context)
+                                            .text('cmm_form_retake_photo') ??
+                                        '',
+                                    style: TextStyle(
+                                        fontSize: 12, color: Color(0xFF427CEF)),
+                                  ),
                                 ),
                               ),
                             )
@@ -274,6 +289,17 @@ class DashboardCustAddState extends State<DashboardCustAdd> {
                       ),
                     ),
                     onPressed: () {
+                      Uint8List imageUnit8Ktp;
+                      imageUnit8Ktp = _image.readAsBytesSync();
+                      String fileExt = _image.path.split('.').last;
+                      String encodedImage =
+                          'data:image/$fileExt;base64,${base64Encode(imageUnit8Ktp)}';
+                      Uint8List imageUnit8Selfie;
+                      imageUnit8Selfie = _imageSelfie.readAsBytesSync();
+                      String fileExtSelfie = _imageSelfie.path.split('.').last;
+                      String encodedImageSelfie =
+                          'data:image/$fileExtSelfie;base64,${base64Encode(imageUnit8Selfie)}';
+                      createCustId(encodedImage, encodedImageSelfie);
                       // dialogAlertCMMForm(context);
                     },
                   ),
@@ -361,5 +387,107 @@ class DashboardCustAddState extends State<DashboardCustAdd> {
         );
       },
     );
+  }
+
+  void createCustId(String encodedImage, String encodedImageSelfie) async {
+    final storageCache = new FlutterSecureStorage();
+    String accessToken = await storageCache.read(key: 'access_token');
+    String lang = await storageCache.read(key: 'lang');
+    var body = json.encode({
+      'customer_id': custIDCtrl.text,
+      'identity_card_photo': encodedImage,
+      'self_photo': encodedImageSelfie
+    });
+    var responseAddCustId = await http.post(
+      '${UrlCons.mainProdUrl}add_customer_id',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $accessToken',
+        'Accept-Language': lang
+      },
+      body: body,
+    );
+    AddNewCustomerID addNewCustomerID =
+        AddNewCustomerID.fromJson(json.decode(responseAddCustId.body));
+    if (responseAddCustId.statusCode == 200) {
+      allertAddCustomerId(
+          context,
+          addNewCustomerID.dataAddCustomerId.message,
+          addNewCustomerID.dataAddCustomerId.custID,
+          addNewCustomerID.dataAddCustomerId.custName);
+    } else {
+      showToast(addNewCustomerID.message);
+    }
+  }
+
+  Future<bool> allertAddCustomerId(
+      BuildContext context, String message, String custId, String custName) {
+    var alertStyle = AlertStyle(
+      animationType: AnimationType.fromTop,
+      isCloseButton: false,
+      isOverlayTapDismiss: false,
+      descStyle: TextStyle(fontWeight: FontWeight.bold),
+      animationDuration: Duration(milliseconds: 400),
+      alertBorder: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(0.0),
+        side: BorderSide(
+          color: Colors.grey,
+        ),
+      ),
+      titleStyle: TextStyle(color: Colors.green, fontWeight: FontWeight.bold),
+    );
+    return Alert(
+      context: context,
+      style: alertStyle,
+      title: "Info",
+      content: Column(
+        children: <Widget>[
+          SizedBox(height: 5),
+          Text(
+            'Customer ID : $custId',
+            style: TextStyle(
+                color: Color(0xFF707070),
+                fontSize: 17,
+                fontWeight: FontWeight.w400),
+            textAlign: TextAlign.center,
+          ),
+          SizedBox(height: 5),
+          Text(
+            'Customer Name : $custName',
+            style: TextStyle(
+                color: Color(0xFF707070),
+                fontSize: 17,
+                fontWeight: FontWeight.w400),
+            textAlign: TextAlign.center,
+          ),
+          SizedBox(height: 5),
+          Text(
+            message,
+            style: TextStyle(
+                color: Color(0xFF707070),
+                fontSize: 17,
+                fontWeight: FontWeight.w400),
+            textAlign: TextAlign.center,
+          ),
+          SizedBox(height: 10)
+        ],
+      ),
+      buttons: [
+        DialogButton(
+          width: 130,
+          onPressed: () {
+            Navigator.pop(context);
+            Navigator.pop(context);
+            Navigator.pop(context);
+          },
+          color: Colors.green,
+          child: Text(
+            "OK",
+            style: TextStyle(
+                color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
+          ),
+        )
+      ],
+    ).show();
   }
 }

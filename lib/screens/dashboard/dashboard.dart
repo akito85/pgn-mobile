@@ -2374,20 +2374,20 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
                           itemCount: snapshot
                               .data.dashboardCustIdList.listCustomerId.length,
                           itemBuilder: (context, i) {
-                            return InkWell(
-                              onTap: () {
-                                switchCustomerId(snapshot
-                                    .data
-                                    .dashboardCustIdList
-                                    .listCustomerId[i]
-                                    .reqId);
-                              },
-                              child: Padding(
-                                padding: EdgeInsets.only(
-                                    left: 20, right: 20, top: 5, bottom: 10),
-                                child: Row(
-                                  children: [
-                                    Expanded(
+                            return Padding(
+                              padding: EdgeInsets.only(
+                                  left: 20, right: 20, top: 5, bottom: 10),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: InkWell(
+                                      onTap: () {
+                                        switchCustomerId(snapshot
+                                            .data
+                                            .dashboardCustIdList
+                                            .listCustomerId[i]
+                                            .reqId);
+                                      },
                                       child: Column(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
@@ -2399,18 +2399,43 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
                                         ],
                                       ),
                                     ),
-                                    snapshot.data.dashboardCustIdList
-                                                .listCustomerId[i].active ==
-                                            1
-                                        ? FaIcon(
-                                            Icons.check_circle_outline_outlined,
-                                            color: Colors.green)
-                                        : SizedBox(),
-                                  ],
-                                ),
+                                  ),
+                                  snapshot.data.dashboardCustIdList
+                                              .listCustomerId[i].active ==
+                                          0
+                                      ? IconButton(
+                                          icon: FaIcon(Icons.delete),
+                                          onPressed: () {
+                                            deleteCustIdAlert(
+                                                snapshot
+                                                    .data
+                                                    .dashboardCustIdList
+                                                    .listCustomerId[i]
+                                                    .reqId,
+                                                snapshot
+                                                    .data
+                                                    .dashboardCustIdList
+                                                    .listCustomerId[i]
+                                                    .custId,
+                                                snapshot
+                                                    .data
+                                                    .dashboardCustIdList
+                                                    .listCustomerId[i]
+                                                    .nameCust);
+                                          })
+                                      : SizedBox(),
+                                  snapshot.data.dashboardCustIdList
+                                              .listCustomerId[i].active ==
+                                          1
+                                      ? FaIcon(
+                                          Icons.check_circle_outline_outlined,
+                                          color: Colors.green)
+                                      : SizedBox(),
+                                ],
                               ),
                             );
-                          })
+                          },
+                        )
                       : Padding(
                           padding:
                               EdgeInsets.only(left: 20, right: 20, top: 20),
@@ -2478,6 +2503,93 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
     } else {
       showToast(switchCustomerId.message);
     }
+  }
+
+  void deleteCustId(String reqIDCust, String custId, String custName) async {
+    String accessToken = await storageCache.read(key: 'access_token');
+    String lang = await storageCache.read(key: 'lang');
+    var responseDeleteCustId = await http.delete(
+      '${UrlCons.mainProdUrl}delete_customer_id/$reqIDCust',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $accessToken',
+        'Accept-Language': lang
+      },
+    );
+    DeleteCustomerId switchCustomerId =
+        DeleteCustomerId.fromJson(json.decode(responseDeleteCustId.body));
+    if (responseDeleteCustId.statusCode == 200) {
+      showToast(switchCustomerId.dataDeleteCustomerId.message);
+      Navigator.pushReplacement(context,
+          MaterialPageRoute(builder: (BuildContext context) => super.widget));
+    } else {
+      showToast(switchCustomerId.message);
+    }
+  }
+
+  Future<bool> deleteCustIdAlert(
+      String reqIDCust, String custId, String custName) {
+    var alertStyle = AlertStyle(
+      animationType: AnimationType.fromTop,
+      isCloseButton: false,
+      isOverlayTapDismiss: false,
+      descStyle: painting.TextStyle(fontWeight: FontWeight.bold),
+      animationDuration: Duration(milliseconds: 400),
+      alertBorder: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(0.0),
+        side: BorderSide(
+          color: Colors.grey,
+        ),
+      ),
+      titleStyle: painting.TextStyle(
+        color: Colors.black,
+      ),
+    );
+    return Alert(
+      context: context,
+      style: alertStyle,
+      title: "Information !",
+      content: Column(
+        children: <Widget>[
+          SizedBox(height: 5),
+          Text(
+            "${Translations.of(context).text('f_dialog_confirmation_delete_custid')} $custId ($custName)",
+            style: painting.TextStyle(
+                // color: painting.Color.fromRGBO(255, 255, 255, 0),
+                fontSize: 17,
+                fontWeight: FontWeight.w400),
+            textAlign: TextAlign.center,
+          ),
+          SizedBox(height: 10)
+        ],
+      ),
+      buttons: [
+        DialogButton(
+          width: 130,
+          onPressed: () async {
+            Navigator.pop(context);
+          },
+          color: Colors.green,
+          child: Text(
+            "Cancel",
+            style: painting.TextStyle(
+                color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
+          ),
+        ),
+        DialogButton(
+          width: 130,
+          onPressed: () async {
+            deleteCustId(reqIDCust, custId, custName);
+          },
+          color: Colors.red,
+          child: Text(
+            "Delete",
+            style: painting.TextStyle(
+                color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
+          ),
+        )
+      ],
+    ).show();
   }
 
   Future<ChartIdr> getChartIdr(BuildContext context) async {

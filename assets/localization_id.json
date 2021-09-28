@@ -579,6 +579,7 @@
     "f_can_not_select_weekend_warning": "Maaf, pembayaran tidak dapat dilakukan di hari libur.",
     "f_dialog_warning_payment_late": "Rencana pembayaran Anda melewati batasan Jatuh tempo pembayaran (%1$s). Sanksi atas keterlambatan pembayaran dan sanksi lainnya sesuai dengan Ketentuan Umum akan diberlakukan.",
     "f_dialog_confirmation_delete": "Anda yakin ingin menghapus Rencana Pembayaran ini?",
+    "f_dialog_confirmation_delete_custid": "Anda yakin ingin menghapus Id Pelanggan ini",
     "feature_not_available": "Maaf, saat ini fitur belum tersedia.",
     "text_common_proceed": "Lanjut",
     "btn_yes": "Ya",
