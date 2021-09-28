@@ -128,7 +128,7 @@ Widget _buildRow(DataProduct data, BuildContext context) {
                                 alignment: Alignment.topLeft,
                                 margin: EdgeInsets.only(left: 18),
                                 child: Text(
-                                  data.name,
+                                  data.name ?? '',
                                   maxLines: 1,
                                   style: TextStyle(
                                     color: Colors.blue,
@@ -141,7 +141,7 @@ Widget _buildRow(DataProduct data, BuildContext context) {
                                 alignment: Alignment.centerLeft,
                                 margin: EdgeInsets.only(top: 5, left: 18),
                                 child: Text(
-                                  data.description,
+                                  data.description ?? '',
                                   maxLines: 2,
                                   style: TextStyle(
                                     color: Colors.black,
@@ -171,7 +171,7 @@ Widget _buildRow(DataProduct data, BuildContext context) {
                                 margin: EdgeInsets.fromLTRB(15.0, 0.0, 0.0, 0),
                                 child: _setImage(context, data)),
                             SizedBox(width: 18),
-                            Text(data.name,
+                            Text(data.name ?? '',
                                 overflow: TextOverflow.clip,
                                 softWrap: true,
                                 style: TextStyle(
@@ -194,7 +194,7 @@ Widget _buildRow(DataProduct data, BuildContext context) {
                               width: MediaQuery.of(context).size.width,
                               margin: EdgeInsets.symmetric(horizontal: 16),
                               child: Text(
-                                data.description,
+                                data.description ?? '',
                                 textAlign: TextAlign.start,
                                 style: TextStyle(
                                   color: Colors.black,
@@ -240,11 +240,11 @@ Widget _buildRow(DataProduct data, BuildContext context) {
                                         color: Color(0xFF427CEF)),
                                     child: ElevatedButton.icon(
                                         onPressed: () async {
-                                          await sendEmail(data.pic_email);
+                                          await sendEmail(data.pic_email ?? '');
                                         },
                                         icon: Icon(Icons.email_outlined,
                                             color: Colors.white),
-                                        label: Text(data.pic_email))),
+                                        label: Text(data.pic_email ?? ''))),
                                 Container(
                                   alignment: Alignment.center,
                                   margin: EdgeInsets.only(
@@ -264,7 +264,7 @@ Widget _buildRow(DataProduct data, BuildContext context) {
                                                   5,
                                               40)),
                                       onPressed: () async {
-                                        await call(data.pic_phone);
+                                        await call(data.pic_phone ?? '');
                                       },
                                       child: Image.asset(
                                           'assets/ic_phone_outline.png',
