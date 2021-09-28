@@ -8,9 +8,13 @@ import 'package:flutter/painting.dart' as painting;
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:pgn_mobile/models/dashboard_chart_invoice_residential.dart';
+import 'package:pgn_mobile/models/dashboard_customer_model.dart';
 import 'package:pgn_mobile/models/url_cons.dart';
+import 'package:pgn_mobile/screens/dashboard/dashboard_cust_add.dart';
 import 'package:pgn_mobile/screens/gas_point/gas_point.dart';
+import 'package:pgn_mobile/screens/otp/otp.dart';
 import 'package:pgn_mobile/services/app_localizations.dart';
 import 'package:pgn_mobile/widgets/navigation_drawer.dart';
 import 'package:pgn_mobile/screens/dashboard/widgets/dashboard_detail.dart';
@@ -189,7 +193,7 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
   final List<CustReiTabs> _tabsResi = [
     new CustReiTabs(title: 'Dashboard'),
     new CustReiTabs(title: 'Invoice'),
-    new CustReiTabs(title: 'Gas Point'),
+    new CustReiTabs(title: 'Gas Poin'),
     new CustReiTabs(title: 'My Profile'),
   ];
   final List<CustTabs> _tabs = [
@@ -338,6 +342,7 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
         child: Scaffold(
           backgroundColor: Colors.blue[600],
           appBar: AppBar(
+            iconTheme: IconThemeData(color: Colors.black),
             backgroundColor: Colors.white,
             elevation: 0,
             // title: Text(Translations.of(context).text('${_myHandler.title}'),
@@ -465,6 +470,7 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
         length: 4,
         child: Scaffold(
           appBar: AppBar(
+            iconTheme: IconThemeData(color: Colors.black),
             backgroundColor: Colors.white,
             elevation: 0,
             title: Text(
@@ -579,6 +585,7 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
         length: 4,
         child: Scaffold(
           appBar: AppBar(
+            iconTheme: IconThemeData(color: Colors.black),
             backgroundColor: Colors.white,
             elevation: 0,
             title: Text(
@@ -1105,6 +1112,11 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
                               ],
                             ),
                           ),
+                          IconButton(
+                              icon: Icon(Icons.add),
+                              onPressed: () {
+                                _showCustIdModalBottomSheet(context);
+                              })
                         ],
                       ),
                     ),
@@ -2331,6 +2343,143 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
     );
   }
 
+  void _showCustIdModalBottomSheet(context) {
+    showModalBottomSheet(
+      context: context,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+      builder: (BuildContext bc) {
+        return Container(
+          child: FutureBuilder<DashboardCustomerModel>(
+            future: getListCustId(context),
+            builder: (context, snapshot) {
+              if (!snapshot.hasData) {
+                return Padding(
+                  padding: const EdgeInsets.only(left: 18, right: 18),
+                  child: LinearProgressIndicator(),
+                );
+              }
+              return Wrap(
+                children: <Widget>[
+                  Padding(
+                    padding: EdgeInsets.only(left: 20, right: 20, top: 20),
+                    child: Text('Select Customer Id'),
+                  ),
+                  snapshot.data.dashboardCustIdList.listCustomerId.length !=
+                          null
+                      ? ListView.builder(
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          itemCount: snapshot
+                              .data.dashboardCustIdList.listCustomerId.length,
+                          itemBuilder: (context, i) {
+                            return InkWell(
+                              onTap: () {
+                                switchCustomerId(snapshot
+                                    .data
+                                    .dashboardCustIdList
+                                    .listCustomerId[i]
+                                    .reqId);
+                              },
+                              child: Padding(
+                                padding: EdgeInsets.only(
+                                    left: 20, right: 20, top: 5, bottom: 10),
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                              '${snapshot.data.dashboardCustIdList.listCustomerId[i].custId}'),
+                                          Text(
+                                              '${snapshot.data.dashboardCustIdList.listCustomerId[i].nameCust}')
+                                        ],
+                                      ),
+                                    ),
+                                    snapshot.data.dashboardCustIdList
+                                                .listCustomerId[i].active ==
+                                            1
+                                        ? FaIcon(
+                                            Icons.check_circle_outline_outlined,
+                                            color: Colors.green)
+                                        : SizedBox(),
+                                  ],
+                                ),
+                              ),
+                            );
+                          })
+                      : Padding(
+                          padding:
+                              EdgeInsets.only(left: 20, right: 20, top: 20),
+                          child: Row(
+                            children: [
+                              Column(
+                                children: [Text('-')],
+                              ),
+                            ],
+                          ),
+                        ),
+                  Padding(
+                    padding: EdgeInsets.only(
+                        left: 20, right: 20, top: 20, bottom: 20),
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => DashboardCustAdd()));
+                      },
+                      child: Row(
+                        children: [
+                          FaIcon(Icons.add),
+                          Padding(
+                            padding: EdgeInsets.only(left: 20),
+                            child: Text('Add new Customer Id'),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              );
+            },
+          ),
+        );
+      },
+    );
+  }
+
+  void switchCustomerId(String reqIDCust) async {
+    String accessToken = await storageCache.read(key: 'access_token');
+    String lang = await storageCache.read(key: 'lang');
+    var responseSwitchCustId = await http.post(
+      '${UrlCons.mainProdUrl}switch_customer_id/$reqIDCust',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $accessToken',
+        'Accept-Language': lang
+      },
+    );
+    SwitchCustomerId switchCustomerId =
+        SwitchCustomerId.fromJson(json.decode(responseSwitchCustId.body));
+    if (responseSwitchCustId.statusCode == 200) {
+      await storageCache.write(
+          key: 'customer_id',
+          value: switchCustomerId.dataSwitchCustomerId.custID);
+      await storageCache.write(
+          key: 'user_name_cust',
+          value: switchCustomerId.dataSwitchCustomerId.custName);
+      showToast(switchCustomerId.dataSwitchCustomerId.message);
+      Navigator.pushReplacement(context,
+          MaterialPageRoute(builder: (BuildContext context) => super.widget));
+    } else {
+      showToast(switchCustomerId.message);
+    }
+  }
+
   Future<ChartIdr> getChartIdr(BuildContext context) async {
     // SharedPreferences prefs = await SharedPreferences.getInstance();
     String accessToken = await storageCache.read(key: 'access_token');
@@ -2341,6 +2490,7 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
       'Authorization': 'Bearer $accessToken',
       'Accept-Language': lang
     });
+    print('HASIL GET CHART IDR : ${responseGetDataChartIdr.body}');
     ChartIdr _chartIDR =
         ChartIdr.fromJson(json.decode(responseGetDataChartIdr.body));
     if (_chartIDR.message ==
@@ -2364,7 +2514,7 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
       'Authorization': 'Bearer $accessToken',
       'Accept-Language': lang
     });
-
+    print('HASIL GET CHART USD : ${responseGetDataChartIdr.body}');
     ChartUsd _chartIDR =
         ChartUsd.fromJson(json.decode(responseGetDataChartIdr.body));
     if (_chartIDR.message ==
@@ -2471,6 +2621,21 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
       return UsageSumChart.fromJson(json.decode(responseGetDataChartSum.body));
     }
   }
+}
+
+Future<DashboardCustomerModel> getListCustId(BuildContext context) async {
+  final storageCache = FlutterSecureStorage();
+  String accessToken = await storageCache.read(key: 'access_token');
+  String lang = await storageCache.read(key: 'lang');
+  var responseGetListCustomerId =
+      await http.get('${UrlCons.mainDevUrl}list_customer_id', headers: {
+    'Content-Type': 'application/json',
+    'Authorization': 'Bearer $accessToken',
+    'Accept-Language': lang,
+  });
+  print('DATA GET LIST CUST ID : ${responseGetListCustomerId.body}');
+  return DashboardCustomerModel.fromJson(
+      json.decode(responseGetListCustomerId.body));
 }
 
 class SimpleBarChart extends StatefulWidget {

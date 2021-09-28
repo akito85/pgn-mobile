@@ -346,7 +346,11 @@ class LoginScreenState extends State<LoginScreen> {
     } else if (responseTokenBarrer.statusCode == 200) {
       AuthSales _auth =
           AuthSales.fromJson(json.decode(responseTokenBarrer.body));
-      SharedPreferences prefs = await SharedPreferences.getInstance();
+      SchedulerBinding.instance.addPostFrameCallback((_) async {
+        fcmToken = await _getFCMToken();
+      });
+
+      // SharedPreferences prefs = await SharedPreferences.getInstance();
       setState(() {
         numbPhone = _auth.user.userMobilePhone;
       });
@@ -359,10 +363,10 @@ class LoginScreenState extends State<LoginScreen> {
           value: _auth.verificationStatus.nextOtpTypeId);
       await storageCache.write(
           key: 'request_code', value: _auth.verificationStatus.requestCode);
+      await storageCache.write(key: 'access_token', value: _auth.accessToken);
       if (_auth.user.userType == 2 && _auth.user.userGroupId == "11") {
         // print('1. MASUK KE SINI ${_auth.customer.custName}');
 
-        await storageCache.write(key: 'access_token', value: _auth.accessToken);
         await storageCache.write(
             key: 'lang', value: ui.window.locale.languageCode);
         await storageCache.write(key: 'token_type', value: _auth.tokenType);
@@ -418,7 +422,7 @@ class LoginScreenState extends State<LoginScreen> {
             int areaId = _auth.customer.custAreaId ?? 0;
             var body = json.encode({
               'fcm_token': fcmToken,
-              'language': prefs.getString("language").toString(),
+              'language': ui.window.locale.languageCode,
               'customer_id': _auth.customer.custId ?? 0,
               'user_type_id': userType,
               'user_group_id': userGroup,
@@ -471,7 +475,7 @@ class LoginScreenState extends State<LoginScreen> {
               int areaId = _auth.customer.custAreaId ?? 0;
               var body = json.encode({
                 'fcm_token': fcmToken,
-                'language': prefs.getString("language").toString(),
+                'language': ui.window.locale.languageCode,
                 'customer_id': _auth.customer.custId ?? 0,
                 'user_type_id': userType,
                 'user_group_id': userGroup,
@@ -705,7 +709,6 @@ class LoginScreenState extends State<LoginScreen> {
 
   Future<customer.Customer> getCustomerProfile(BuildContext context) async {
     String accessToken = await storageCache.read(key: 'access_token');
-    ;
     print('Access TOKEN GetCustLogin : $accessToken');
     var responseCustomer = await http.get('${UrlCons.mainProdUrl}customers/me',
         headers: {

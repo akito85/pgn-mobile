@@ -530,7 +530,7 @@ class _RewardsGasPointState extends State<RewardsGasPoint> {
             SizedBox(height: 5),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
-                  primary: Color(0xFFD3D3D3),
+                  primary: Color(0xFF427CEF),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(5),
                   )),

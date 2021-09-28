@@ -6,6 +6,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:pgn_mobile/models/gas_point_model.dart';
 import 'package:pgn_mobile/models/url_cons.dart';
 import 'package:http/http.dart' as http;
+import 'package:pgn_mobile/screens/dashboard/dashboard.dart';
 
 class CardGaspoint extends StatefulWidget {
   @override
@@ -13,34 +14,23 @@ class CardGaspoint extends StatefulWidget {
 }
 
 class _CardGasPointState extends State<CardGaspoint> {
-  ScrollController _scrollController = ScrollController();
   List<HistoryGasPoint> returnHistoryGP = [];
-  bool _isLoading = false;
   String nextPage = '';
 
   @override
   void initState() {
     super.initState();
     this.getGasPointHistory(context);
-    _scrollController.addListener(() {
-      if (_scrollController.position.pixels ==
-          _scrollController.position.maxScrollExtent) {
-        _isLoading = true;
-        this.getGasPointHistory(context);
-      }
-    });
   }
 
   @override
   void dispose() {
-    _scrollController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return ListView(
-      controller: _scrollController,
       children: <Widget>[
         SizedBox(height: 20),
         FutureBuilder<VirtualCardGasPoint>(
@@ -209,74 +199,95 @@ class _CardGasPointState extends State<CardGaspoint> {
                   ),
                 ],
               );
-            return ListView.builder(
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              itemCount: returnHistoryGP.length,
-              itemBuilder: (context, i) {
-                DateTime dateFormated =
-                    DateTime.parse(returnHistoryGP[i].dateHistory);
+            return Column(
+              children: [
+                ListView.builder(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemCount:
+                      returnHistoryGP.length >= 5 ? 5 : returnHistoryGP.length,
+                  itemBuilder: (context, i) {
+                    DateTime dateFormated =
+                        DateTime.parse(returnHistoryGP[i].dateHistory);
 
-                return Padding(
-                  padding: EdgeInsets.only(left: 23, right: 23),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.only(bottom: 5),
-                        child: Text(
-                          formatDate(dateFormated, [dd, ' ', MM, ' ', yyyy])
-                              .toUpperCase(),
-                          style: TextStyle(fontSize: 11),
-                        ),
-                      ),
-                      Row(
+                    return Padding(
+                      padding: EdgeInsets.only(left: 23, right: 23),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Expanded(child: Text(returnHistoryGP[i].desc ?? '-')),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.end,
+                          Padding(
+                            padding: EdgeInsets.only(bottom: 5),
+                            child: Text(
+                              formatDate(dateFormated, [dd, ' ', MM, ' ', yyyy])
+                                  .toUpperCase(),
+                              style: TextStyle(fontSize: 11),
+                            ),
+                          ),
+                          Row(
                             children: [
-                              Text(returnHistoryGP[i].type,
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: returnHistoryGP[i].type == 'redeem'
-                                          ? Color(0xFFFAC842)
-                                          : Color(0xFF81C153))),
-                              SizedBox(height: 5),
-                              Text(
-                                '${returnHistoryGP[i].point} Point',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: returnHistoryGP[i].type == 'redeem'
-                                        ? Color(0xFFFAC842)
-                                        : Color(0xFF81C153)),
+                              Expanded(
+                                  child: Text(returnHistoryGP[i].desc ?? '-')),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  Text(returnHistoryGP[i].type,
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: returnHistoryGP[i].type ==
+                                                  'redeem'
+                                              ? Color(0xFFFAC842)
+                                              : Color(0xFF81C153))),
+                                  SizedBox(height: 5),
+                                  Text(
+                                    '${returnHistoryGP[i].point} Point',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color:
+                                            returnHistoryGP[i].type == 'redeem'
+                                                ? Color(0xFFFAC842)
+                                                : Color(0xFF81C153)),
+                                  ),
+                                ],
                               ),
                             ],
                           ),
+                          Padding(
+                            padding: EdgeInsets.only(top: 7, bottom: 7),
+                            child: Divider(
+                              color: Color(0xFFF4F4F4),
+                              thickness: 2,
+                            ),
+                          ),
                         ],
                       ),
-                      Padding(
-                        padding: EdgeInsets.only(top: 7, bottom: 7),
-                        child: Divider(
-                          color: Color(0xFFF4F4F4),
-                          thickness: 2,
-                        ),
-                      ),
-                    ],
+                    );
+                  },
+                ),
+                Container(
+                  height: 45.0,
+                  margin: EdgeInsets.only(bottom: 100, left: 18, right: 18),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(14.0),
+                    color: Color(0xFF427CEF),
                   ),
-                );
-              },
+                  child: MaterialButton(
+                    minWidth: MediaQuery.of(context).size.width,
+                    child: Text(
+                      'Show All Poin History',
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
+                    onPressed: () {
+                      // Navigat
+                      // _tabController.animateTo(1)
+                    },
+                  ),
+                ),
+              ],
             );
           },
         ),
-        SizedBox(height: 50),
-        _isLoading
-            ? Center(
-                child: Padding(
-                padding: EdgeInsets.only(top: 5),
-                child: CircularProgressIndicator(),
-              ))
-            : SizedBox(height: 10),
       ],
     );
   }
@@ -303,14 +314,14 @@ class _CardGasPointState extends State<CardGaspoint> {
         setState(() {
           nextPage = returnGetPointHistory.gasPointPaging.nextPage;
           returnHistoryGP.addAll(returnGetPointHistory.dataGPHistory);
-          _isLoading = false;
         });
-      } else {
-        setState(() {
-          _isLoading = false;
-        });
-      }
+      } else {}
     } else {
+      if (responseGetHistoryGasPoint.statusCode == 401) {
+        print('MASUK 3');
+        accessTokenAlert(context,
+            "Session expired or account changed to other device, please Login again.");
+      }
       throw Exception('Could not get any response');
     }
   }
