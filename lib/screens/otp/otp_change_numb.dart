@@ -273,13 +273,16 @@ class OTPChangeNumbState extends State<OTPChangeNumb> {
         visible = false;
         btnVisible = true;
       });
-      registerNewUserAlert(context, 'Silahkan masuk ke halaman login');
+      String message =
+          Translations.of(context).text('ff_change_number_dialog_success_text');
+
+      registerNewUserAlert(context, message);
     } else {
       setState(() {
         visible = false;
         btnVisible = true;
       });
-      registerNewUserAlert(context, postOTPRegisterResidential.message);
+      showToast(postOTPRegisterResidential.message);
     }
   }
 }
@@ -331,6 +334,7 @@ Future<bool> registerNewUserAlert(BuildContext context, String message) {
       DialogButton(
         width: 130,
         onPressed: () async {
+          Navigator.pop(context);
           Navigator.pop(context);
           Navigator.pop(context);
         },
