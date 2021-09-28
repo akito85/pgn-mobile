@@ -13,23 +13,20 @@ import 'package:pgn_mobile/services/app_localizations.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:flutter/painting.dart' as painting;
 
-class OTPRegisterForm extends StatefulWidget {
-  final String numberPhone, idCust, pass, requestCode, accessToken;
-  OTPRegisterForm(
-      {this.idCust,
-      this.numberPhone,
-      this.pass,
-      this.requestCode,
-      this.accessToken});
+class OTPChangeNumb extends StatefulWidget {
+  final String numberPhone, requestCode;
+  OTPChangeNumb({
+    this.numberPhone,
+    this.requestCode,
+  });
   @override
-  OTPRegisterFormState createState() =>
-      OTPRegisterFormState(numberPhone, idCust, pass, requestCode, accessToken);
+  OTPChangeNumbState createState() =>
+      OTPChangeNumbState(numberPhone, requestCode);
 }
 
-class OTPRegisterFormState extends State<OTPRegisterForm> {
-  final String numberPhone, idCust, pass, requestCode, accessToken;
-  OTPRegisterFormState(this.numberPhone, this.idCust, this.pass,
-      this.requestCode, this.accessToken);
+class OTPChangeNumbState extends State<OTPChangeNumb> {
+  final String numberPhone, requestCode;
+  OTPChangeNumbState(this.numberPhone, this.requestCode);
   String newNumber;
   bool visible = false;
   bool btnVisible = true;
@@ -225,16 +222,13 @@ class OTPRegisterFormState extends State<OTPRegisterForm> {
   }
 
   Future<AuthSales> postResendOtp(BuildContext context) async {
-    // final storageCache = FlutterSecureStorage();
+    final storageCache = FlutterSecureStorage();
 
-    // String accessToken = await storageCache.read(key: 'access_token');
-    print('ACCESS TOKEN : $accessToken');
+    String accessToken = await storageCache.read(key: 'access_token');
     String devicesId = await storageCache.read(key: 'devices_id');
     var bodySentTrans5 = json.encode({
-      "customer_id": idCust,
       "mobile_phone": numberPhone,
-      "password": pass,
-      "transaction_type_id": 5,
+      "transaction_type_id": 4,
     });
 
     var responseSentOTPRegisResidential =
@@ -254,28 +248,23 @@ class OTPRegisterFormState extends State<OTPRegisterForm> {
   Future<Otp> postOtpForm(BuildContext context, String codeotp) async {
     final storageCache = FlutterSecureStorage();
 
-    // String accessToken = await storageCache.read(key: 'access_token');
+    String accessToken = await storageCache.read(key: 'access_token');
     // print('ACCESS TOKEN : $accessToken');
     String devicesId = await storageCache.read(key: 'devices_id');
 
     var body = json.encode({
       "request_code": requestCode,
-      "customer_id": idCust,
       "mobile_phone": numberPhone,
-      "password": pass,
       "code": codeotp,
     });
     var responseSentOTPRegisResidential =
-        await http.post('${UrlCons.mainProdUrl}users/registrations',
+        await http.post('${UrlCons.mainProdUrl}users/phones',
             headers: {
               'Content-Type': 'application/json',
               'Authorization': 'Bearer $accessToken',
               'X-Pgn-Device-Id': devicesId,
             },
             body: body);
-    // print('HASIL OTP : ${responseSentOTPRegisResidential.body}');
-    // print('RE CODE : $requestCode');
-    // print('Dev id : $devicesId');
     PostDataRegisterPGNUser postOTPRegisterResidential =
         PostDataRegisterPGNUser.fromJson(
             json.decode(responseSentOTPRegisResidential.body));
@@ -342,7 +331,6 @@ Future<bool> registerNewUserAlert(BuildContext context, String message) {
       DialogButton(
         width: 130,
         onPressed: () async {
-          Navigator.pop(context);
           Navigator.pop(context);
           Navigator.pop(context);
         },

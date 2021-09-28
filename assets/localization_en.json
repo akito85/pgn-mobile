@@ -377,6 +377,7 @@
     "f_dictionary_search": "Search",
     "ff_change_password_error_confirmation_not_matched": "Confirmation does not match",
     "ff_change_password_dialog_success_text": "Thanks for changing password",
+    "ff_change_number_dialog_success_text": "Thanks for changing phone number",
     "f_home_tv_call_center": "PGN Contact Center %1$s",
     "f_home_tv_website": "www.pgn.co.id",
     "f_notification_tv_empty_desc": "No Notification",

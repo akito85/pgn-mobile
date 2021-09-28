@@ -150,7 +150,7 @@ class OTPFormState extends State<OTPForm> {
               Container(
                   margin: EdgeInsets.fromLTRB(25.0, 55.0, 0.0, 10.0),
                   child: Text(
-                    _lang.verUbahNo,
+                    '',
                     style: TextStyle(
                       fontSize: 12.0,
                       color: Color(0xFF427CEF),

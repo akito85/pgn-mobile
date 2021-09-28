@@ -304,6 +304,7 @@
     "retry_message": "Terjadi kesalahan",
     "ff_change_password_error_confirmation_not_matched": "Password tidak sama",
     "ff_change_password_dialog_success_text": "Terima kasih telah mengganti password",
+    "ff_change_number_dialog_success_text": "Terima kasih telah mengganti nomor telephone ",
     "f_home_tv_call_center": "PGN Contact Center %1$s",
     "f_home_tv_website": "www.pgn.co.id",
     "f_notification_tv_empty_desc": "Tidak ada notifikasi",
