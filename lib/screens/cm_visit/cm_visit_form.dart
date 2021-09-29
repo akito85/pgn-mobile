@@ -1,8 +1,16 @@
+import 'dart:convert';
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:dotted_decoration/dotted_decoration.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'dart:io';
+import 'package:http/http.dart' as http;
+import 'package:pgn_mobile/models/url_cons.dart';
+
+import 'package:pgn_mobile/models/cmm_form_model.dart';
 
 class CMVisitForm extends StatefulWidget {
   @override
@@ -919,7 +927,29 @@ class _CMVisitFormState extends State<CMVisitForm> {
                                     color: Colors.white,
                                     fontWeight: FontWeight.w600)),
                             onPressed: () {
-                              _setValidation();
+                              Uint8List imageUnit8;
+                              imageUnit8 = _image.readAsBytesSync();
+                              String fileExt1 = _image.path.split('.').last;
+                              String fileExt2 = _image2.path.split('.').last;
+                              String encodeImage1 =
+                                  'data:image/$fileExt1;base64,${base64Encode(imageUnit8)}';
+                              String encodeImage2 =
+                                  'data:image/$fileExt2;base64,${base64Encode(imageUnit8)}';
+                              postCmVisit(
+                                  context,
+                                  '2021-09-20',
+                                  visitType.text,
+                                  valueChoose,
+                                  customerName.text,
+                                  customerId.text,
+                                  'cpName',
+                                  address.text,
+                                  '+62{$phoneNumber}',
+                                  emailAddress.text,
+                                  reports.text,
+                                  encodeImage1,
+                                  encodeImage2,
+                                  'foto3');
                             }),
                       ),
                     ],
@@ -1076,81 +1106,81 @@ class _CMVisitFormState extends State<CMVisitForm> {
           );
         });
   }
-}
 
-void _showAlertDialog(BuildContext context) {
-  showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-            content: Container(
-          width: MediaQuery.of(context).size.width,
-          height: 140.0,
-          decoration: BoxDecoration(
-              shape: BoxShape.rectangle,
-              borderRadius: BorderRadius.circular(10.0),
-              color: Colors.white),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Container(
-                margin: EdgeInsets.only(bottom: 20.0),
-                child: Text(
-                  'CM Visit Form Confirmation',
-                  style: TextStyle(
-                      color: Color(0xFF427CEF),
-                      fontSize: 18.0,
-                      fontWeight: FontWeight.w600),
-                ),
-              ),
-              Container(
-                margin: EdgeInsets.only(bottom: 24.0),
-                child: Text(
-                    'Are you sure that the information that you entered is correct?',
+  void _showAlertDialog(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+              content: Container(
+            width: MediaQuery.of(context).size.width,
+            height: 140.0,
+            decoration: BoxDecoration(
+                shape: BoxShape.rectangle,
+                borderRadius: BorderRadius.circular(10.0),
+                color: Colors.white),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Container(
+                  margin: EdgeInsets.only(bottom: 20.0),
+                  child: Text(
+                    'CM Visit Form Confirmation',
                     style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.normal,
-                        fontSize: 14.0)),
-              ),
-              Positioned(
-                  child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Container(
-                    width: 84.0,
-                    height: 40.0,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(5),
-                        color: Color(0xFFD3D3D3)),
-                    child: MaterialButton(
-                        child: Text('Cancel',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w600)),
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        }),
+                        color: Color(0xFF427CEF),
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.w600),
                   ),
-                  Container(
-                      width: 170.0,
+                ),
+                Container(
+                  margin: EdgeInsets.only(bottom: 24.0),
+                  child: Text(
+                      'Are you sure that the information that you entered is correct?',
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.normal,
+                          fontSize: 14.0)),
+                ),
+                Positioned(
+                    child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Container(
+                      width: 84.0,
                       height: 40.0,
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(5),
-                          color: Color(0xFF427CEF)),
+                          color: Color(0xFFD3D3D3)),
                       child: MaterialButton(
-                          child: Text('Save Report',
+                          child: Text('Cancel',
                               style: TextStyle(
                                   color: Colors.white,
                                   fontWeight: FontWeight.w600)),
                           onPressed: () {
                             Navigator.of(context).pop();
-                          }))
-                ],
-              ))
-            ],
-          ),
-        ));
-      });
+                          }),
+                    ),
+                    Container(
+                        width: 170.0,
+                        height: 40.0,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5),
+                            color: Color(0xFF427CEF)),
+                        child: MaterialButton(
+                            child: Text('Save Report',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w600)),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            }))
+                  ],
+                ))
+              ],
+            ),
+          ));
+        });
+  }
 }
 
 void _showDialogSuccessSubmit(BuildContext context) {
@@ -1194,4 +1224,46 @@ void _showDialogSuccessSubmit(BuildContext context) {
           ),
         );
       });
+}
+
+Future<CMMFormModel> postCmVisit(
+    BuildContext context,
+    String visitDate,
+    String visitType,
+    String activityType,
+    String customerName,
+    String customerId,
+    String cpName,
+    String cpAddress,
+    String cpPhone,
+    String cpEmail,
+    String report,
+    String foto1,
+    String foto2,
+    String foto3) async {
+  final storageCache = FlutterSecureStorage();
+  String accessToken = await storageCache.read(key: 'access_token');
+
+  var responsePostCmVisitForm =
+      await http.post('${UrlCons.mainDevUrl}cm-visit', headers: {
+    'Authorization': 'Bearer $accessToken'
+  }, body: {
+    'visit_date': visitDate,
+    'visit_type': visitType,
+    'activity_type': activityType,
+    'customer_name': customerName,
+    'customer_id': customerId,
+    'cp_name': cpName,
+    'cp_address': cpAddress,
+    'cp_phone': cpPhone,
+    'cp_email': cpEmail,
+    'report': report,
+    'images[0]': foto1,
+    'images[1]': foto2
+  });
+  if (responsePostCmVisitForm.statusCode == 200) {
+    CMMFormModel cmmFormModel =
+        CMMFormModel.fromJson(json.decode(responsePostCmVisitForm.body));
+  }
+  return CMMFormModel.fromJson(json.decode(responsePostCmVisitForm.body));
 }

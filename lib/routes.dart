@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:pgn_mobile/screens/cm_visit/cm_visit.dart';
+import 'package:pgn_mobile/screens/cm_visit/cm_visit_form.dart';
 import 'package:pgn_mobile/screens/cmm/cmm.dart';
 import 'package:pgn_mobile/screens/cmm/cmm_form.dart';
 import 'package:pgn_mobile/screens/dashboard/dashboard.dart';
@@ -71,6 +73,8 @@ class _MyFirstState extends State<FirstScreen> {
     '/cmm': (context) => CMM(),
     '/cmmForm': (context) => CMMForm(),
     '/usageDetail': (context) => UsageDetail(),
+    '/cmVisit': (context) => CMVisit(),
+    '/cmVisitForm': (context) => CMVisitForm()
   };
 
   SpecificLocalizationDelegate _localeOverrideDelegate;
