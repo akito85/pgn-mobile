@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'dart:async';
 import 'package:pgn_mobile/screens/login/login.dart';
+import 'package:pgn_mobile/screens/login/login_revamp.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:pgn_mobile/screens/dashboard/dashboard.dart';
 
@@ -25,7 +26,7 @@ class _SplashScreenState extends State<SplashScreen> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => Login(),
+          builder: (context) => LoginRevamp(),
         ),
       );
     } else if (userID == null) {

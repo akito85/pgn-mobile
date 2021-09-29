@@ -13,6 +13,7 @@ import 'package:pgn_mobile/models/dashboard_chart_invoice_residential.dart';
 import 'package:pgn_mobile/models/dashboard_customer_model.dart';
 import 'package:pgn_mobile/models/url_cons.dart';
 import 'package:pgn_mobile/screens/dashboard/dashboard_cust_add.dart';
+import 'package:pgn_mobile/screens/cm_visit/cm_visit.dart';
 import 'package:pgn_mobile/screens/gas_point/gas_point.dart';
 import 'package:pgn_mobile/screens/otp/otp.dart';
 import 'package:pgn_mobile/services/app_localizations.dart';
@@ -507,7 +508,7 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
                       context, _prov.custName.toString() ?? ""),
                   showCustInvoiceCustomerResidential(context,
                       getCustomerInvoiceResidential(context), _prov.custId),
-                  GasPoint(),
+                  CMVisit(),
                   showCustProfileCustomerResidential(
                       context, getCustomerProfileResidential(context))
                 ],
