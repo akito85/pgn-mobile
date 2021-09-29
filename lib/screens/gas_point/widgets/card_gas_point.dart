@@ -161,13 +161,7 @@ class _CardGasPointState extends State<CardGaspoint> {
             ),
           ),
         ),
-        Padding(
-          padding: EdgeInsets.only(left: 18, right: 18, bottom: 7),
-          child: Divider(
-            color: Color(0xFFF4F4F4),
-            thickness: 2,
-          ),
-        ),
+
         FutureBuilder<GasPointHistoryModel>(
           future: getFutureGasPointHistory(context),
           builder: (context, snapshot) {

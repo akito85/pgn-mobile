@@ -6,7 +6,6 @@ class UrlCons {
 
   // static String getTokenBarrer =
   //     'https://api-mobile.pgn.co.id/v2/authentication';
-
   //dev
   static String getSpbgArea = 'https://dev-api-mobile.pgn.co.id/v2/spbg';
   static String getCustProfileCust =

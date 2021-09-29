@@ -187,12 +187,7 @@ class _PointsGasPointState extends State<PointsGasPoint> {
           'Authorization': 'Bearer $accessToken',
           'Accept-Language': lang,
         });
-    // // if (!_isLoading) {
-    // setState(() {
-    //   _isLoading = false;
-    // });
-    // }
-    // if (responseGetHistoryGasPoint.statusCode == 200) {
+    
     GasPointHistoryModel returnGetPointHistory = GasPointHistoryModel.fromJson(
         json.decode(responseGetHistoryGasPoint.body));
 
