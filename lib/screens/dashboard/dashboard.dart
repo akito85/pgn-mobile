@@ -508,7 +508,7 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
                       context, _prov.custName.toString() ?? ""),
                   showCustInvoiceCustomerResidential(context,
                       getCustomerInvoiceResidential(context), _prov.custId),
-                  CMVisit(),
+                  GasPoint(),
                   showCustProfileCustomerResidential(
                       context, getCustomerProfileResidential(context))
                 ],
