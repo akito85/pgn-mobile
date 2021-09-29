@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:intl/intl.dart';
 import 'package:pgn_mobile/models/cm_visit_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:pgn_mobile/models/url_cons.dart';
@@ -79,44 +80,51 @@ Widget _buildContent(BuildContext context, Future<CMVisitList> list) {
 }
 
 Widget _cardState(BuildContext context, CMVisitModel model) {
-  return Card(
-      color: Colors.white,
-      elevation: 2,
-      clipBehavior: Clip.antiAlias,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      margin: EdgeInsets.only(top: 6, left: 18, right: 18, bottom: 8),
-      child: Container(
-        margin: EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Text(
-              model.reportDate,
-              style: TextStyle(
-                  color: Color(0xFF455055),
-                  fontSize: 10,
-                  fontWeight: FontWeight.normal),
-            ),
-            SizedBox(height: 10),
-            Text(
-              model.activityType,
-              style: TextStyle(
-                  color: Color(0xFF427CEF),
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600),
-            ),
-            SizedBox(height: 10),
-            Text(
-              model.contactPersonModel.address,
-              style: TextStyle(
-                  color: Color(0xFF5C727D),
-                  fontSize: 12,
-                  fontWeight: FontWeight.normal),
-            ),
-          ],
-        ),
-      ));
+  DateTime date = DateTime.parse(model.reportDate);
+  return InkWell(
+    onTap: () {
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => CMVisitDetail(id: model.id)));
+    },
+    child: Card(
+        color: Colors.white,
+        elevation: 2,
+        clipBehavior: Clip.antiAlias,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        margin: EdgeInsets.only(top: 6, left: 18, right: 18, bottom: 8),
+        child: Container(
+          margin: EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(
+                DateFormat("d MMMM yyyy").format(date).toString(),
+                style: TextStyle(
+                    color: Color(0xFF455055),
+                    fontSize: 10,
+                    fontWeight: FontWeight.normal),
+              ),
+              SizedBox(height: 10),
+              Text(
+                model.activityType,
+                style: TextStyle(
+                    color: Color(0xFF427CEF),
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600),
+              ),
+              SizedBox(height: 10),
+              Text(
+                model.contactPersonModel.address,
+                style: TextStyle(
+                    color: Color(0xFF5C727D),
+                    fontSize: 12,
+                    fontWeight: FontWeight.normal),
+              ),
+            ],
+          ),
+        )),
+  );
 }
 
 Future<CMVisitList> getCmVisit(BuildContext context) async {
