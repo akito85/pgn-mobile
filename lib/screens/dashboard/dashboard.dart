@@ -1115,6 +1115,7 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
                           IconButton(
                               icon: Icon(Icons.add),
                               onPressed: () {
+                                // switchCustomerIdAlert(context);
                                 _showCustIdModalBottomSheet(context);
                               })
                         ],
@@ -2364,7 +2365,13 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
                 children: <Widget>[
                   Padding(
                     padding: EdgeInsets.only(left: 20, right: 20, top: 20),
-                    child: Text('Select Customer Id'),
+                    child: Text(
+                      'Select Profile',
+                      style: painting.TextStyle(
+                          color: painting.Color(0xFF427CEF),
+                          fontSize: 18,
+                          fontWeight: painting.FontWeight.bold),
+                    ),
                   ),
                   snapshot.data.dashboardCustIdList.listCustomerId.length !=
                           null
@@ -2374,11 +2381,49 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
                           itemCount: snapshot
                               .data.dashboardCustIdList.listCustomerId.length,
                           itemBuilder: (context, i) {
+                            snapshot.data.dashboardCustIdList.listCustomerId
+                                .sort((b, a) => a.active.compareTo(b.active));
                             return Padding(
                               padding: EdgeInsets.only(
-                                  left: 20, right: 20, top: 5, bottom: 10),
+                                  right: 20, top: 20, bottom: 10),
                               child: Row(
                                 children: [
+                                  snapshot.data.dashboardCustIdList
+                                              .listCustomerId[i].active ==
+                                          1
+                                      ? Container(
+                                          height: 40,
+                                          width: 8,
+                                          color: painting.Color(0xFF427CEF),
+                                        )
+                                      : SizedBox(width: 10),
+                                  snapshot.data.dashboardCustIdList
+                                              .listCustomerId[i].imgPath ==
+                                          ""
+                                      ? Padding(
+                                          padding:
+                                              const EdgeInsets.only(left: 15),
+                                          child: CircleAvatar(
+                                            backgroundImage: AssetImage(
+                                                'assets/icon_default_pelanggan.png'),
+                                            backgroundColor: Colors.transparent,
+                                            radius: 21.0,
+                                          ),
+                                        )
+                                      : Padding(
+                                          padding:
+                                              const EdgeInsets.only(left: 15),
+                                          child: CircleAvatar(
+                                            backgroundImage: NetworkImage(
+                                                snapshot
+                                                    .data
+                                                    .dashboardCustIdList
+                                                    .listCustomerId[i]
+                                                    .imgPath),
+                                            backgroundColor: Colors.transparent,
+                                            radius: 21.0,
+                                          ),
+                                        ),
                                   Expanded(
                                     child: InkWell(
                                       onTap: () {
@@ -2388,15 +2433,51 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
                                             .listCustomerId[i]
                                             .reqId);
                                       },
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                              '${snapshot.data.dashboardCustIdList.listCustomerId[i].custId}'),
-                                          Text(
-                                              '${snapshot.data.dashboardCustIdList.listCustomerId[i].nameCust}')
-                                        ],
+                                      child: Padding(
+                                        padding:
+                                            const EdgeInsets.only(left: 15),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              '${snapshot.data.dashboardCustIdList.listCustomerId[i].nameCust}',
+                                              style: painting.TextStyle(
+                                                  fontWeight:
+                                                      painting.FontWeight.w600),
+                                            ),
+                                            SizedBox(height: 5),
+                                            Row(
+                                              children: [
+                                                snapshot
+                                                            .data
+                                                            .dashboardCustIdList
+                                                            .listCustomerId[i]
+                                                            .statusCust ==
+                                                        'Unverified'
+                                                    ? Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .only(right: 8),
+                                                        child: Text(
+                                                          '${snapshot.data.dashboardCustIdList.listCustomerId[i].statusCust}',
+                                                          style: painting
+                                                              .TextStyle(
+                                                            fontSize: 14,
+                                                            color:
+                                                                painting.Color(
+                                                                    0xFF81C153),
+                                                          ),
+                                                        ),
+                                                      )
+                                                    : SizedBox(),
+                                                Text(
+                                                  '${snapshot.data.dashboardCustIdList.listCustomerId[i].custId}',
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -2423,13 +2504,6 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
                                                     .listCustomerId[i]
                                                     .nameCust);
                                           })
-                                      : SizedBox(),
-                                  snapshot.data.dashboardCustIdList
-                                              .listCustomerId[i].active ==
-                                          1
-                                      ? FaIcon(
-                                          Icons.check_circle_outline_outlined,
-                                          color: Colors.green)
                                       : SizedBox(),
                                 ],
                               ),
@@ -2589,6 +2663,141 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
           ),
         )
       ],
+    ).show();
+  }
+
+  Future<bool> switchCustomerIdAlert(BuildContext context) {
+    var alertStyle = AlertStyle(
+      animationType: AnimationType.fromTop,
+      isCloseButton: false,
+      isOverlayTapDismiss: false,
+      descStyle: painting.TextStyle(fontWeight: FontWeight.bold),
+      animationDuration: Duration(milliseconds: 400),
+      alertBorder: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(0.0),
+        side: BorderSide(
+          color: Colors.grey,
+        ),
+      ),
+      titleStyle: painting.TextStyle(
+        color: Colors.black,
+      ),
+    );
+    return Alert(
+      context: context,
+      style: alertStyle,
+      title: "Select Profile !",
+      content: FutureBuilder<DashboardCustomerModel>(
+        future: getListCustId(context),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return Padding(
+              padding: const EdgeInsets.only(left: 18, right: 18),
+              child: LinearProgressIndicator(),
+            );
+          }
+          return Column(
+            children: <Widget>[
+              Padding(
+                padding: EdgeInsets.only(left: 20, right: 20, top: 20),
+                child: Text('Select Customer Id'),
+              ),
+              snapshot.data.dashboardCustIdList.listCustomerId.length != null
+                  ? ListView.builder(
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemCount: snapshot
+                          .data.dashboardCustIdList.listCustomerId.length,
+                      itemBuilder: (context, i) {
+                        snapshot.data.dashboardCustIdList.listCustomerId
+                            .sort((b, a) => a.active.compareTo(b.active));
+                        return Padding(
+                          padding: EdgeInsets.only(
+                              left: 20, right: 20, top: 5, bottom: 10),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: InkWell(
+                                  onTap: () {
+                                    switchCustomerId(snapshot
+                                        .data
+                                        .dashboardCustIdList
+                                        .listCustomerId[i]
+                                        .reqId);
+                                  },
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                          '${snapshot.data.dashboardCustIdList.listCustomerId[i].custId}'),
+                                      Text(
+                                          '${snapshot.data.dashboardCustIdList.listCustomerId[i].nameCust}')
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              snapshot.data.dashboardCustIdList
+                                          .listCustomerId[i].active ==
+                                      0
+                                  ? IconButton(
+                                      icon: FaIcon(Icons.delete),
+                                      onPressed: () {
+                                        deleteCustIdAlert(
+                                            snapshot.data.dashboardCustIdList
+                                                .listCustomerId[i].reqId,
+                                            snapshot.data.dashboardCustIdList
+                                                .listCustomerId[i].custId,
+                                            snapshot.data.dashboardCustIdList
+                                                .listCustomerId[i].nameCust);
+                                      })
+                                  : SizedBox(),
+                              snapshot.data.dashboardCustIdList
+                                          .listCustomerId[i].active ==
+                                      1
+                                  ? FaIcon(Icons.check_circle_outline_outlined,
+                                      color: Colors.green)
+                                  : SizedBox(),
+                            ],
+                          ),
+                        );
+                      },
+                    )
+                  : Padding(
+                      padding: EdgeInsets.only(left: 20, right: 20, top: 20),
+                      child: Row(
+                        children: [
+                          Column(
+                            children: [Text('-')],
+                          ),
+                        ],
+                      ),
+                    ),
+              Padding(
+                padding:
+                    EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 20),
+                child: InkWell(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => DashboardCustAdd()));
+                  },
+                  child: Row(
+                    children: [
+                      FaIcon(Icons.add),
+                      Padding(
+                        padding: EdgeInsets.only(left: 20),
+                        child: Text('Add new Customer Id'),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          );
+        },
+      ),
     ).show();
   }
 

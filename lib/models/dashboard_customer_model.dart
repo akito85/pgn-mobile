@@ -55,6 +55,8 @@ class ListCustomerId {
   int verified;
   int active;
   int deleted;
+  String statusCust;
+  String imgPath;
 
   ListCustomerId(
       {this.active,
@@ -62,7 +64,9 @@ class ListCustomerId {
       this.deleted,
       this.nameCust,
       this.reqId,
-      this.verified});
+      this.verified,
+      this.imgPath,
+      this.statusCust});
 
   factory ListCustomerId.fromJson(Map<String, dynamic> json) {
     return ListCustomerId(
@@ -71,7 +75,9 @@ class ListCustomerId {
         nameCust: json['name'],
         verified: json['verified'],
         active: json['active'],
-        deleted: json['deleted']);
+        deleted: json['deleted'],
+        statusCust: json['status_verified'],
+        imgPath: json['image_path']);
   }
 }
 

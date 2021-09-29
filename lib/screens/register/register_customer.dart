@@ -24,6 +24,7 @@ class RegistCustState extends State<RegisterCustomer> {
   TextEditingController phoneNumb = new TextEditingController();
   TextEditingController idCust = new TextEditingController();
   TextEditingController password = new TextEditingController();
+  TextEditingController emailCust = new TextEditingController();
   final iv = encrypt.IV.fromUtf8('ujfjL9XWfH0ZoAzi');
   final encrypter = encrypt.Encrypter(encrypt.AES(
       encrypt.Key.fromUtf8('zNsW4kAl4t4PTrtC'),
@@ -85,10 +86,10 @@ class RegistCustState extends State<RegisterCustomer> {
           Container(
             padding: EdgeInsets.only(left: 20.0, right: 20.0, top: 15.0),
             child: TextFormField(
-              controller: idCust,
+              controller: emailCust,
               keyboardType: TextInputType.number,
               decoration: InputDecoration(
-                labelText: _lang.idPelanggan,
+                labelText: 'Email',
               ),
             ),
           ),
@@ -182,7 +183,7 @@ class RegistCustState extends State<RegisterCustomer> {
         AuthSalesRegit.fromJson(json.decode(responseTokenBarrer.body));
 
     var bodySentTrans5 = json.encode({
-      "customer_id": "${idCust.text}",
+      // "customer_id": "${idCust.text}",
       "mobile_phone": "62${phoneNumb.text}",
       "password": "$password",
       "transaction_type_id": 5,
