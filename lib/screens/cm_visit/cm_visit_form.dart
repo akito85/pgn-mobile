@@ -8,9 +8,11 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'dart:io';
 import 'package:http/http.dart' as http;
+import 'package:pgn_mobile/models/cm_visit_response.dart';
 import 'package:pgn_mobile/models/url_cons.dart';
 
 import 'package:pgn_mobile/models/cmm_form_model.dart';
+import 'package:progress_dialog/progress_dialog.dart';
 
 class CMVisitForm extends StatefulWidget {
   @override
@@ -18,6 +20,7 @@ class CMVisitForm extends StatefulWidget {
 }
 
 class _CMVisitFormState extends State<CMVisitForm> {
+  ProgressDialog progressDialog;
   String _onDateSelected = '18 November 2020';
   String valueChoose;
   List listVisitTypes = ["1", "2", "3", "4", "5", "6", "7", "8"];
@@ -199,6 +202,7 @@ class _CMVisitFormState extends State<CMVisitForm> {
 
   @override
   Widget build(BuildContext context) {
+    progressDialog = ProgressDialog(context, type: ProgressDialogType.Normal);
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -927,29 +931,7 @@ class _CMVisitFormState extends State<CMVisitForm> {
                                     color: Colors.white,
                                     fontWeight: FontWeight.w600)),
                             onPressed: () {
-                              Uint8List imageUnit8;
-                              imageUnit8 = _image.readAsBytesSync();
-                              String fileExt1 = _image.path.split('.').last;
-                              String fileExt2 = _image2.path.split('.').last;
-                              String encodeImage1 =
-                                  'data:image/$fileExt1;base64,${base64Encode(imageUnit8)}';
-                              String encodeImage2 =
-                                  'data:image/$fileExt2;base64,${base64Encode(imageUnit8)}';
-                              postCmVisit(
-                                  context,
-                                  '2021-09-20',
-                                  visitType.text,
-                                  valueChoose,
-                                  customerName.text,
-                                  customerId.text,
-                                  'cpName',
-                                  address.text,
-                                  '+62{$phoneNumber}',
-                                  emailAddress.text,
-                                  reports.text,
-                                  encodeImage1,
-                                  encodeImage2,
-                                  'foto3');
+                              _setValidation();
                             }),
                       ),
                     ],
@@ -1156,9 +1138,7 @@ class _CMVisitFormState extends State<CMVisitForm> {
                               style: TextStyle(
                                   color: Colors.white,
                                   fontWeight: FontWeight.w600)),
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          }),
+                          onPressed: () {}),
                     ),
                     Container(
                         width: 170.0,
@@ -1173,6 +1153,30 @@ class _CMVisitFormState extends State<CMVisitForm> {
                                     fontWeight: FontWeight.w600)),
                             onPressed: () {
                               Navigator.of(context).pop();
+                              progressDialog.show();
+                              Uint8List imageUnit8;
+                              imageUnit8 = _image.readAsBytesSync();
+                              String fileExt1 = _image.path.split('.').last;
+                              String fileExt2 = _image2.path.split('.').last;
+                              String encodeImage1 =
+                                  'data:image/$fileExt1;base64,${base64Encode(imageUnit8)}';
+                              String encodeImage2 =
+                                  'data:image/$fileExt2;base64,${base64Encode(imageUnit8)}';
+                              postCmVisit(
+                                  context,
+                                  '2021-09-20',
+                                  visitType.text,
+                                  valueChoose,
+                                  customerName.text,
+                                  customerId.text,
+                                  'cpName',
+                                  address.text,
+                                  '+62{$phoneNumber}',
+                                  emailAddress.text,
+                                  reports.text,
+                                  encodeImage1,
+                                  encodeImage2,
+                                  'foto3');
                             }))
                   ],
                 ))
@@ -1180,6 +1184,50 @@ class _CMVisitFormState extends State<CMVisitForm> {
             ),
           ));
         });
+  }
+
+  Future<CmVisitReponse> postCmVisit(
+      BuildContext context,
+      String visitDate,
+      String visitType,
+      String activityType,
+      String customerName,
+      String customerId,
+      String cpName,
+      String cpAddress,
+      String cpPhone,
+      String cpEmail,
+      String report,
+      String foto1,
+      String foto2,
+      String foto3) async {
+    final storageCache = FlutterSecureStorage();
+    String accessToken = await storageCache.read(key: 'access_token');
+
+    var responsePostCmVisitForm =
+        await http.post('${UrlCons.mainDevUrl}cm-visit', headers: {
+      'Authorization': 'Bearer $accessToken'
+    }, body: {
+      'visit_date': visitDate,
+      'visit_type': visitType,
+      'activity_type': activityType,
+      'customer_name': customerName,
+      'customer_id': customerId,
+      'cp_name': cpName,
+      'cp_address': cpAddress,
+      'cp_phone': cpPhone,
+      'cp_email': cpEmail,
+      'report': report,
+      'images[0]': foto1,
+      'images[1]': foto2
+    });
+    if (responsePostCmVisitForm.statusCode == 200) {
+      setState(() {
+        progressDialog.hide();
+        _showDialogSuccessSubmit(context);
+      });
+    }
+    return CmVisitReponse.fromJson(json.decode(responsePostCmVisitForm.body));
   }
 }
 
@@ -1224,46 +1272,4 @@ void _showDialogSuccessSubmit(BuildContext context) {
           ),
         );
       });
-}
-
-Future<CMMFormModel> postCmVisit(
-    BuildContext context,
-    String visitDate,
-    String visitType,
-    String activityType,
-    String customerName,
-    String customerId,
-    String cpName,
-    String cpAddress,
-    String cpPhone,
-    String cpEmail,
-    String report,
-    String foto1,
-    String foto2,
-    String foto3) async {
-  final storageCache = FlutterSecureStorage();
-  String accessToken = await storageCache.read(key: 'access_token');
-
-  var responsePostCmVisitForm =
-      await http.post('${UrlCons.mainDevUrl}cm-visit', headers: {
-    'Authorization': 'Bearer $accessToken'
-  }, body: {
-    'visit_date': visitDate,
-    'visit_type': visitType,
-    'activity_type': activityType,
-    'customer_name': customerName,
-    'customer_id': customerId,
-    'cp_name': cpName,
-    'cp_address': cpAddress,
-    'cp_phone': cpPhone,
-    'cp_email': cpEmail,
-    'report': report,
-    'images[0]': foto1,
-    'images[1]': foto2
-  });
-  if (responsePostCmVisitForm.statusCode == 200) {
-    CMMFormModel cmmFormModel =
-        CMMFormModel.fromJson(json.decode(responsePostCmVisitForm.body));
-  }
-  return CMMFormModel.fromJson(json.decode(responsePostCmVisitForm.body));
 }
