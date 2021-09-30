@@ -159,6 +159,22 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
             contentPadding: EdgeInsets.only(left: 20.0),
             leading: Icon(Icons.exposure),
             title: Text(
+              'Installation Inspection',
+              style: TextStyle(
+                color: Colors.grey[600],
+                fontSize: 17.0,
+                fontWeight: FontWeight.w400,
+              ),
+            ),
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.pushNamed(context, '/installationDetail');
+            },
+          ),
+          ListTile(
+            contentPadding: EdgeInsets.only(left: 20.0),
+            leading: Icon(Icons.exposure),
+            title: Text(
               Translations.of(context).text('a_home_tv_menu_calculator'),
               style: TextStyle(
                 color: Colors.grey[600],

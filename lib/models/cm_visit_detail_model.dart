@@ -22,7 +22,7 @@ class CmVisitModels {
   final String activityDescription;
   final ContactPersonModel contactPersonModel;
   final String report;
-  final List<Images> images;
+  final List<String> images;
 
   CmVisitModels(
       {this.id,
@@ -37,30 +37,21 @@ class CmVisitModels {
 
   factory CmVisitModels.fromJson(Map<String, dynamic> json) {
     return CmVisitModels(
-      id: json['id'],
-      customerCmModel: CustomerCmModel.fromJson(json['customer']),
-      reportDate: json['report_date'],
-      visitType: json['visit_type'],
-      activityType: json['activity_type'],
-      activityDescription: json['activity_description'],
-      contactPersonModel: ContactPersonModel.fromJson(json['contact_person']),
-      report: json['report'],
-      // images: parseDataImages(json['images'])
-    );
+        id: json['id'],
+        customerCmModel: CustomerCmModel.fromJson(json['customer']),
+        reportDate: json['report_date'],
+        visitType: json['visit_type'],
+        activityType: json['activity_type'],
+        activityDescription: json['activity_description'],
+        contactPersonModel: ContactPersonModel.fromJson(json['contact_person']),
+        report: json['report'],
+        images: parseDataImages(json['images']));
   }
 
-  static List<Images> parseDataImages(dataJson) {
-    var list = dataJson as List;
-    List<Images> images = list.map((data) => Images.fromJson(data)).toList();
-    return images;
-  }
-}
-
-class Images {
-  String s;
-  Images({this.s});
-  factory Images.fromJson(Map<String, dynamic> json) {
-    return Images(s: json['']);
+  static List<String> parseDataImages(dataJson) {
+    List<String> dataString =
+        dataJson.map<String>((dataJson) => List.from(dataJson)).toList();
+    return dataString;
   }
 }
 

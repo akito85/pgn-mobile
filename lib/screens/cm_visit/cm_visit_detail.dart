@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -290,9 +291,11 @@ Widget _buildContent(BuildContext context, CmVisitDetailModel model) {
                 height: 100,
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
-                  itemCount: 3,
+                  itemCount: model.data.images.length + 1,
                   itemBuilder: (context, int index) {
-                    return _listPhotos(context);
+                    return index < model.data.images.length
+                        ? _listPhotos(context, model.data.images[index])
+                        : SizedBox(height: 15);
                   },
                 ),
               )
@@ -302,19 +305,17 @@ Widget _buildContent(BuildContext context, CmVisitDetailModel model) {
   );
 }
 
-Widget _listPhotos(BuildContext context) {
+Widget _listPhotos(BuildContext context, String images) {
+  var splitString = images.split(',');
+  Uint8List image = base64.decode(splitString[1]);
   return Container(
-    width: 100,
-    height: 100,
-    margin: EdgeInsets.only(right: 20),
-    decoration: BoxDecoration(
-      color: Colors.black,
-      borderRadius: BorderRadius.circular(5),
-    ),
-    child: Text('Test 1',
-        style: TextStyle(
-            color: Colors.white, fontWeight: FontWeight.bold, fontSize: 12)),
-  );
+      width: 100,
+      height: 100,
+      margin: EdgeInsets.only(right: 20),
+      decoration: BoxDecoration(
+          color: Colors.black,
+          borderRadius: BorderRadius.circular(5),
+          image: DecorationImage(fit: BoxFit.fill, image: MemoryImage(image))));
 }
 
 Future<CmVisitDetailModel> getDetail(BuildContext context, String id) async {
