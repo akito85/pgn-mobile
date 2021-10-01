@@ -52,7 +52,7 @@ Widget _buildContent(
       });
 }
 
-Widget _cardState(BuildContext context, InstallationInspectionModel model) {
+Widget _cardState(BuildContext context, InstallationInspections model) {
   DateTime date = DateTime.parse(model.inspectionDate);
   return InkWell(
     onTap: () {
@@ -83,7 +83,7 @@ Widget _cardState(BuildContext context, InstallationInspectionModel model) {
               ),
               SizedBox(height: 10),
               Text(
-                model.inspectionBy,
+                model.customer.name,
                 style: TextStyle(
                     color: Color(0xFF427CEF),
                     fontSize: 14,
