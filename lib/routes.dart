@@ -5,6 +5,7 @@ import 'package:pgn_mobile/screens/cmm/cmm.dart';
 import 'package:pgn_mobile/screens/cmm/cmm_form.dart';
 import 'package:pgn_mobile/screens/dashboard/dashboard.dart';
 import 'package:pgn_mobile/screens/gas_station/gas_station.dart';
+import 'package:pgn_mobile/screens/installation_inspection/installation_inspection.dart';
 import 'package:pgn_mobile/screens/installation_inspection/installation_inspection_detail.dart';
 import 'package:pgn_mobile/screens/login/login.dart';
 import 'package:pgn_mobile/screens/login/login_revamp.dart';
@@ -76,7 +77,8 @@ class _MyFirstState extends State<FirstScreen> {
     '/usageDetail': (context) => UsageDetail(),
     '/cmVisit': (context) => CMVisit(),
     '/cmVisitForm': (context) => CMVisitForm(),
-    '/installationDetail': (context) => InstallationInspectionDetail()
+    '/installationInspection': (context) => InstallationInspection(),
+    '/installationInspectionDetail': (context) => InstallationInspectionDetail()
   };
 
   SpecificLocalizationDelegate _localeOverrideDelegate;

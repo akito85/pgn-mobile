@@ -168,7 +168,7 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
             ),
             onTap: () {
               Navigator.pop(context);
-              Navigator.pushNamed(context, '/installationDetail');
+              Navigator.pushNamed(context, '/installationInspection');
             },
           ),
           ListTile(

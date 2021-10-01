@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 
 class InstallationInspectionDetail extends StatefulWidget {
-  // InstallationInspectionDetail({this.id});
-  // final String id;
+  InstallationInspectionDetail({this.id});
+  final String id;
   @override
   _InstallationInspectionDetailState createState() =>
-      _InstallationInspectionDetailState();
+      _InstallationInspectionDetailState(id);
 }
 
 class _InstallationInspectionDetailState
     extends State<InstallationInspectionDetail> {
-  // final String id;
-  // InstallationInspectionDetailState(this.id);
+  final String id;
+  _InstallationInspectionDetailState(this.id);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
