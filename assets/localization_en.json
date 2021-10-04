@@ -780,6 +780,8 @@
     "cmm_form_retake_photo": "Re-take Photo",
     "cmm_form_alert_post_failed": "Failed, Data already recorded",
     "cmm_form_alert_post_success": "Successed, Data successfully recorded",
-    "field_input_allert": "All fields must be filled !"
-    
+    "field_input_allert": "All fields must be filled !",
+    "pb_tab_title": "Subscription Progress",
+    "f_dialog_confirmation_delete_form": "Are you sure delete this Form Id",
+    "f_dialog_confirmation_add_form": "Please input your form id"
 }

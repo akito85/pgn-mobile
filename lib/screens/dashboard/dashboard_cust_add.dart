@@ -50,7 +50,7 @@ class DashboardCustAddState extends State<DashboardCustAdd> {
         backgroundColor: Colors.white,
         elevation: 0,
         title: Text(
-          'Add new Customer ID',
+          'Add Profile',
           style: TextStyle(
             color: Colors.black,
           ),
@@ -76,7 +76,7 @@ class DashboardCustAddState extends State<DashboardCustAdd> {
                   padding: EdgeInsets.only(left: 10, right: 10),
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.circular(15.0),
+                    borderRadius: BorderRadius.circular(5.0),
                     boxShadow: [
                       BoxShadow(
                         color: Colors.grey,
@@ -269,6 +269,28 @@ class DashboardCustAddState extends State<DashboardCustAdd> {
                             )
                           : SizedBox(),
                     ],
+                  ),
+                ),
+                Container(
+                  height: 55.0,
+                  margin:
+                      EdgeInsets.only(top: 10, bottom: 30, left: 15, right: 15),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5.0),
+                    // color: Color(0xFFD3D3D3),untuk yang belum cmm
+                    color: Color(0xFF427CEF),
+                  ),
+                  child: MaterialButton(
+                    minWidth: MediaQuery.of(context).size.width,
+                    child: Text(
+                      'Start Verification Process',
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
+                    onPressed: () {
+                      // dialogAlertCMMForm(context);
+                    },
                   ),
                 ),
                 Container(

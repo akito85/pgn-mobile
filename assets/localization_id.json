@@ -759,5 +759,8 @@
     "cmm_form_retake_photo": "Ambil Ulang Foto",
     "cmm_form_alert_post_failed": "Data Pencatatan sudah pernah dilakukan",
     "cmm_form_alert_post_success": "Data Pencatatan Meter berhasil",
-    "field_input_allert": "Semua field harus terisi !"
+    "field_input_allert": "Semua field harus terisi !",
+    "pb_tab_title": "Progress Berlangganan",
+    "f_dialog_confirmation_delete_form": "Anda yakin ingin menghapus Form Id ini", 
+    "f_dialog_confirmation_add_form": "Silahkan masukan form id anda"
 }

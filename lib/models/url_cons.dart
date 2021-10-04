@@ -1,7 +1,8 @@
 class UrlCons {
   static String mainProdUrl = 'https://dev-api-mobile.pgn.co.id/v2/';
   // static String mainProdUrl = 'https://api-mobile.pgn.co.id/v2/';
-  static String prodRelyonUrl = 'https://relyon-api.pgn.co.id/';
+  // static String prodRelyonUrl = 'https://relyon-api.pgn.co.id/';
+  static String prodRelyonUrl = 'https://dev-relyon-api.pgn.co.id/';
   static String mainDevUrl = 'https://dev-api-mobile.pgn.co.id/v2/';
 
   // static String getTokenBarrer =

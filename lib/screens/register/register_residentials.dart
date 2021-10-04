@@ -105,7 +105,10 @@ class RegisterResidentialsState extends State<RegisterResidentials>
         appBar: AppBar(
           backgroundColor: Colors.white,
           elevation: 0,
-          title: Text('Register Residential'),
+          title: Text(
+            'Register Residential',
+            style: TextStyle(color: Colors.black),
+          ),
         ),
         body: Stack(
           children: <Widget>[
