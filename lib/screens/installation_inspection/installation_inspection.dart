@@ -23,7 +23,8 @@ class _InstallationInspection extends State<InstallationInspection> {
         backgroundColor: Colors.white,
         title: const Text(
           'Installation Inspection',
-          style: TextStyle(color: Colors.black),
+          style: TextStyle(
+              color: Colors.black, fontSize: 14, fontWeight: FontWeight.w600),
         ),
         elevation: 0,
       ),
