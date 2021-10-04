@@ -349,6 +349,7 @@ class LoginScreenState extends State<LoginScreen> {
       setState(() {
         numbPhone = _auth.user.userMobilePhone;
       });
+      await storageCache.write(key: 'auth_status', value: 'Login');
       await storageCache.write(key: 'user_name_login', value: username);
       await storageCache.write(key: 'pass_login', value: password);
       await storageCache.write(
@@ -444,7 +445,7 @@ class LoginScreenState extends State<LoginScreen> {
             _auth.user.userGroupId == "10" ||
             _auth.user.userGroupId == "3") {
           if (_auth.user.userType == 2 && _auth.customerId != null) {
-            print('2. MASUK KE SINI ${_auth.customer.custName}');
+            // print('2. MASUK KE SINI ${_auth.customer.custName}');
             await storageCache.write(
                 key: 'user_name_cust', value: _auth.customer.custName);
             // await storageCache.write(
@@ -639,9 +640,11 @@ class LoginScreenState extends State<LoginScreen> {
         // print('PHONE NUMBs : ${_auth.verificationStatus.message}');
         if (_auth.verificationStatus.message ==
             'Anda pernah login melalui device ini') {
+          await storageCache.write(key: 'auth_status', value: 'Login');
           Navigator.pop(context);
           Navigator.pushReplacementNamed(context, '/dashboard');
         } else {
+          await storageCache.write(key: 'auth_status', value: 'Logout');
           Navigator.pushReplacementNamed(
             context,
             '/otp',

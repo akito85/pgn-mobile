@@ -678,16 +678,19 @@ Future<HarianDetailCustDashboard> fetchPost(BuildContext context) async {
   }
   String dateformatCurrent =
       '${currentYear.toString()}${currentMonthS.toString()}';
-  String formatDate =
-      DateFormat("yyyMM").format(DateTime.parse(dateformatCurrent));
+  print('DATE FORMAT CURREN ${dateformatCurrent}');
+  // String formatDate =
+  //     DateFormat("yyyMM").format(DateTime.parse(dateformatCurrent));
+
   var responseHourlyUsage = await http.get(
-    '${UrlCons.mainProdUrl}customers/me/gas-usages/daily-list/$formatDate',
+    '${UrlCons.mainProdUrl}customers/me/gas-usages/daily-list/$dateformatCurrent',
     headers: {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer $accessToken',
       'Accept-Language': lang,
     },
   );
+  print('DATA RESPONSENYA ${responseHourlyUsage.body}');
   return HarianDetailCustDashboard.fromJson(
       json.decode(responseHourlyUsage.body));
 }

@@ -41,6 +41,15 @@ class DashDetailState extends State<DashboardDetail>
     String y = "10";
     String sNull = "0";
     String month3S, month2S, currentMonthS;
+    if (DateTime.now().day >= 5) {
+      currentMonth = DateTime.now().month - 1;
+      month2 = currentMonth - 2;
+      month3 = currentMonth - 3;
+    } else {
+      currentMonth = DateTime.now().month - 2;
+      month2 = currentMonth - 1;
+      month3 = currentMonth - 2;
+    }
 
     if (currentMonth == 2) {
       int currentYears = DateTime.now().year - 1;

@@ -10,6 +10,7 @@ import 'dart:convert';
 import 'package:pgn_mobile/models/otp_model.dart';
 import 'package:pgn_mobile/models/url_cons.dart';
 import 'package:pgn_mobile/services/app_localizations.dart';
+import 'package:pin_code_fields/pin_code_fields.dart' as otp;
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:flutter/painting.dart' as painting;
 
@@ -34,6 +35,10 @@ class OTPRegisterFormState extends State<OTPRegisterForm> {
   bool visible = false;
   bool btnVisible = true;
   TextEditingController otpCtrl = new TextEditingController();
+  //  StreamController<ErrorAnimationType> errorController;
+
+  bool hasError = false;
+  String currentText = "";
   final storageCache = new FlutterSecureStorage();
   final interval = const Duration(seconds: 1);
 
@@ -93,8 +98,9 @@ class OTPRegisterFormState extends State<OTPRegisterForm> {
   Widget build(BuildContext context) {
     // final _lang = Provider.of<Language>(context);
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.blue[550],
+        backgroundColor: Color(0xFF427CEF),
         title: Text(
           Translations.of(context).text('title_bar_otp') ?? '',
           style: TextStyle(
@@ -129,6 +135,62 @@ class OTPRegisterFormState extends State<OTPRegisterForm> {
                 onCompleted: (pin) {
                   otpCtrl.text = pin;
                   print("Completed: " + pin);
+                },
+              ),
+            ),
+          ),
+          Center(
+            child: Padding(
+              padding: const EdgeInsets.only(left: 15, right: 15, top: 20),
+              child: otp.PinCodeTextField(
+                appContext: context,
+                pastedTextStyle: TextStyle(
+                  color: Colors.green.shade600,
+                  fontWeight: FontWeight.bold,
+                ),
+                length: 6,
+                obscureText: false,
+                animationType: otp.AnimationType.fade,
+                // validator: (v) {
+                //   if (v.length < 3) {
+                //     return "I'm from validator";
+                //   } else {
+                //     return null;
+                //   }
+                // },
+                pinTheme: otp.PinTheme(
+                  shape: otp.PinCodeFieldShape.underline,
+                  fieldHeight: 60,
+                  fieldWidth: 50,
+                  activeColor: Colors.white,
+                  inactiveFillColor: Colors.white,
+                  disabledColor: Colors.white,
+                  selectedFillColor: Colors.white,
+                  selectedColor: Colors.white,
+                  activeFillColor: Color(0xFF427CEF),
+                  // activeFillColor: hasError ? Colors.orange : Colors.white,
+                ),
+                cursorColor: Colors.black,
+                textStyle: TextStyle(fontSize: 20, height: 1.6),
+                backgroundColor: Colors.white,
+                enableActiveFill: true,
+                // errorAnimationController: errorController,
+                controller: otpCtrl,
+                keyboardType: TextInputType.number,
+                onCompleted: (v) {
+                  print("Completed");
+                },
+                onChanged: (value) {
+                  print(value);
+                  setState(() {
+                    currentText = value;
+                  });
+                },
+                beforeTextPaste: (text) {
+                  print("Allowing to paste $text");
+                  //if you return true then it will show the paste confirmation dialog. Otherwise if false, then nothing will happen.
+                  //but you can show anything you want here, like your pop up saying wrong paste format or etc
+                  return true;
                 },
               ),
             ),
@@ -209,7 +271,7 @@ class OTPRegisterFormState extends State<OTPRegisterForm> {
                   ),
                   onPressed: () {
                     print('INI PIN NYA ${otpCtrl.text}');
-                    postOtpForm(context, otpCtrl.text);
+                    postOtpForm(context, currentText);
                     setState(() {
                       visible = true;
                       btnVisible = false;

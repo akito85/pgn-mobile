@@ -279,6 +279,7 @@ void _signingOff(BuildContext context) async {
   final storageCache = FlutterSecureStorage();
   await storageCache.write(key: 'user_id', value: 'kosong');
   await storageCache.write(key: 'access_token', value: 'kosong');
+  await storageCache.write(key: 'auth_status', value: 'Logout');
   Navigator.pushNamedAndRemoveUntil(
     context,
     '/login',
