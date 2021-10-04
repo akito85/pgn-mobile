@@ -40,6 +40,7 @@ class _CMVisitFormState extends State<CMVisitForm> {
   TextEditingController activityDescription = new TextEditingController();
   TextEditingController customerName = new TextEditingController();
   TextEditingController customerId = new TextEditingController();
+  TextEditingController contactPerson = new TextEditingController();
   TextEditingController address = new TextEditingController();
   TextEditingController phoneNumber = new TextEditingController();
   TextEditingController emailAddress = new TextEditingController();
@@ -486,6 +487,7 @@ class _CMVisitFormState extends State<CMVisitForm> {
                     child: TextFormField(
                       minLines: 1,
                       maxLines: 10,
+                      controller: contactPerson,
                       autocorrect: true,
                       style: TextStyle(height: 1, fontSize: 14),
                       decoration: InputDecoration(
@@ -1186,7 +1188,7 @@ class _CMVisitFormState extends State<CMVisitForm> {
                                   activityDescription.text,
                                   customerName.text,
                                   customerId.text,
-                                  'cpName',
+                                  contactPerson.text,
                                   address.text,
                                   '+62' + phoneNumber.text,
                                   emailAddress.text,

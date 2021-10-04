@@ -15,6 +15,7 @@ class CMVisit extends StatefulWidget {
 }
 
 class _CMVisitState extends State<CMVisit> {
+  bool isVisibleButton = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,7 +31,7 @@ class _CMVisitState extends State<CMVisit> {
       body: Stack(
         children: <Widget>[
           Container(
-            margin: EdgeInsets.only(top: 12),
+            margin: EdgeInsets.only(top: 12, bottom: 50),
             child: _buildContent(context, getCmVisit(context)),
           ),
           Positioned(
@@ -59,24 +60,24 @@ class _CMVisitState extends State<CMVisit> {
       ),
     );
   }
-}
 
-Widget _buildContent(BuildContext context, Future<CMVisitList> list) {
-  return FutureBuilder<CMVisitList>(
-      future: list,
-      builder: (context, snapsnapshot) {
-        if (!snapsnapshot.hasData) return LinearProgressIndicator();
-        return Container(
-          child: ListView.builder(
-            itemCount: snapsnapshot.data.data.length + 1,
-            itemBuilder: (context, i) {
-              return i < snapsnapshot.data.data.length
-                  ? _cardState(context, snapsnapshot.data.data[i])
-                  : SizedBox(height: 10.0);
-            },
-          ),
-        );
-      });
+  Widget _buildContent(BuildContext context, Future<CMVisitList> list) {
+    return FutureBuilder<CMVisitList>(
+        future: list,
+        builder: (context, snapsnapshot) {
+          if (!snapsnapshot.hasData) return LinearProgressIndicator();
+          return Container(
+            child: ListView.builder(
+              itemCount: snapsnapshot.data.data.length + 1,
+              itemBuilder: (context, i) {
+                return i < snapsnapshot.data.data.length
+                    ? _cardState(context, snapsnapshot.data.data[i])
+                    : SizedBox(height: 10.0);
+              },
+            ),
+          );
+        });
+  }
 }
 
 Widget _cardState(BuildContext context, CMVisitModel model) {

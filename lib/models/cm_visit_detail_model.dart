@@ -49,9 +49,7 @@ class CmVisitModels {
   }
 
   static List<String> parseDataImages(dataJson) {
-    List<String> dataString =
-        dataJson.map<String>((dataJson) => List.from(dataJson));
-    return dataString;
+    return new List<String>.from(dataJson);
   }
 }
 

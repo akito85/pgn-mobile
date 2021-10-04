@@ -290,6 +290,7 @@ Widget _buildContent(BuildContext context, CmVisitDetailModel model) {
               Container(
                 height: 100,
                 child: ListView.builder(
+                  shrinkWrap: true,
                   scrollDirection: Axis.horizontal,
                   itemCount: model.data.images.length + 1,
                   itemBuilder: (context, int index) {
@@ -311,7 +312,7 @@ Widget _listPhotos(BuildContext context, String images) {
   return Container(
       width: 100,
       height: 100,
-      margin: EdgeInsets.only(right: 20),
+      margin: EdgeInsets.only(right: 10, left: 10),
       decoration: BoxDecoration(
           color: Colors.black,
           borderRadius: BorderRadius.circular(5),
