@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
-import 'package:otp_text_field/otp_text_field.dart';
+// import 'package:otp_text_field/otp_text_field.dart';
 import 'package:otp_text_field/style.dart';
 import 'package:pgn_mobile/models/auth_model.dart';
 import 'dart:async';
@@ -14,28 +14,25 @@ import 'package:pin_code_fields/pin_code_fields.dart' as otp;
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:flutter/painting.dart' as painting;
 
-class OTPRegisterForm extends StatefulWidget {
-  final String numberPhone, idCust, pass, requestCode, accessToken;
-  OTPRegisterForm(
-      {this.idCust,
-      this.numberPhone,
-      this.pass,
-      this.requestCode,
-      this.accessToken});
+class OTPChangeNumb extends StatefulWidget {
+  final String numberPhone, requestCode;
+  OTPChangeNumb({
+    this.numberPhone,
+    this.requestCode,
+  });
   @override
-  OTPRegisterFormState createState() =>
-      OTPRegisterFormState(numberPhone, idCust, pass, requestCode, accessToken);
+  OTPChangeNumbState createState() =>
+      OTPChangeNumbState(numberPhone, requestCode);
 }
 
-class OTPRegisterFormState extends State<OTPRegisterForm> {
-  final String numberPhone, idCust, pass, requestCode, accessToken;
-  OTPRegisterFormState(this.numberPhone, this.idCust, this.pass,
-      this.requestCode, this.accessToken);
+class OTPChangeNumbState extends State<OTPChangeNumb> {
+  final String numberPhone, requestCode;
+  OTPChangeNumbState(this.numberPhone, this.requestCode);
   String newNumber;
   bool visible = false;
   bool btnVisible = true;
   TextEditingController otpCtrl = new TextEditingController();
-  //  StreamController<ErrorAnimationType> errorController;
+  // StreamController<ErrorAnimationType> errorController;
 
   bool hasError = false;
   String currentText = "";
@@ -117,28 +114,28 @@ class OTPRegisterFormState extends State<OTPRegisterForm> {
               style: TextStyle(fontSize: 18),
             ),
           ),
-          Center(
-            child: Padding(
-              padding: const EdgeInsets.only(left: 15, right: 15, top: 20),
-              child: OTPTextField(
-                length: 6,
-                width: MediaQuery.of(context).size.width,
-                textFieldAlignment: MainAxisAlignment.spaceAround,
-                fieldWidth: 45,
-                fieldStyle: FieldStyle.underline,
-                outlineBorderRadius: 15,
-                style: TextStyle(fontSize: 17),
-                onChanged: (pin) {
-                  otpCtrl.text = pin;
-                  print("Changed: " + pin);
-                },
-                onCompleted: (pin) {
-                  otpCtrl.text = pin;
-                  print("Completed: " + pin);
-                },
-              ),
-            ),
-          ),
+          // Center(
+          //   child: Padding(
+          //     padding: const EdgeInsets.only(left: 15, right: 15, top: 20),
+          //     child: OTPTextField(
+          //       length: 6,
+          //       width: MediaQuery.of(context).size.width,
+          //       textFieldAlignment: MainAxisAlignment.spaceAround,
+          //       fieldWidth: 45,
+          //       fieldStyle: FieldStyle.underline,
+          //       outlineBorderRadius: 15,
+          //       style: TextStyle(fontSize: 17),
+          //       onChanged: (pin) {
+          //         otpCtrl.text = pin;
+          //         print("Changed: " + pin);
+          //       },
+          //       onCompleted: (pin) {
+          //         otpCtrl.text = pin;
+          //         print("Completed: " + pin);
+          //       },
+          //     ),
+          //   ),
+          // ),
           Center(
             child: Padding(
               padding: const EdgeInsets.only(left: 15, right: 15, top: 20),
@@ -192,6 +189,20 @@ class OTPRegisterFormState extends State<OTPRegisterForm> {
                   //but you can show anything you want here, like your pop up saying wrong paste format or etc
                   return true;
                 },
+              ),
+            ),
+          ),
+          Center(
+            child: Padding(
+              padding: const EdgeInsets.only(top: 15),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    Translations.of(context).text('ff_otp_tv_code_expiration'),
+                  ),
+                  Text(timerText),
+                ],
               ),
             ),
           ),
@@ -287,16 +298,13 @@ class OTPRegisterFormState extends State<OTPRegisterForm> {
   }
 
   Future<AuthSales> postResendOtp(BuildContext context) async {
-    // final storageCache = FlutterSecureStorage();
+    final storageCache = FlutterSecureStorage();
 
-    // String accessToken = await storageCache.read(key: 'access_token');
-    print('ACCESS TOKEN : $accessToken');
+    String accessToken = await storageCache.read(key: 'access_token');
     String devicesId = await storageCache.read(key: 'devices_id');
     var bodySentTrans5 = json.encode({
-      "customer_id": idCust,
       "mobile_phone": numberPhone,
-      "password": pass,
-      "transaction_type_id": 5,
+      "transaction_type_id": 4,
     });
 
     var responseSentOTPRegisResidential =
@@ -316,28 +324,23 @@ class OTPRegisterFormState extends State<OTPRegisterForm> {
   Future<Otp> postOtpForm(BuildContext context, String codeotp) async {
     final storageCache = FlutterSecureStorage();
 
-    // String accessToken = await storageCache.read(key: 'access_token');
+    String accessToken = await storageCache.read(key: 'access_token');
     // print('ACCESS TOKEN : $accessToken');
     String devicesId = await storageCache.read(key: 'devices_id');
 
     var body = json.encode({
       "request_code": requestCode,
-      "customer_id": idCust,
       "mobile_phone": numberPhone,
-      "password": pass,
       "code": codeotp,
     });
     var responseSentOTPRegisResidential =
-        await http.post('${UrlCons.mainProdUrl}users/registrations',
+        await http.post('${UrlCons.mainProdUrl}users/phones',
             headers: {
               'Content-Type': 'application/json',
               'Authorization': 'Bearer $accessToken',
               'X-Pgn-Device-Id': devicesId,
             },
             body: body);
-    // print('HASIL OTP : ${responseSentOTPRegisResidential.body}');
-    // print('RE CODE : $requestCode');
-    // print('Dev id : $devicesId');
     PostDataRegisterPGNUser postOTPRegisterResidential =
         PostDataRegisterPGNUser.fromJson(
             json.decode(responseSentOTPRegisResidential.body));
@@ -346,13 +349,16 @@ class OTPRegisterFormState extends State<OTPRegisterForm> {
         visible = false;
         btnVisible = true;
       });
-      registerNewUserAlert(context, 'Silahkan masuk ke halaman login');
+      String message =
+          Translations.of(context).text('ff_change_number_dialog_success_text');
+
+      registerNewUserAlert(context, message);
     } else {
       setState(() {
         visible = false;
         btnVisible = true;
       });
-      registerNewUserAlert(context, postOTPRegisterResidential.message);
+      showToast(postOTPRegisterResidential.message);
     }
   }
 }

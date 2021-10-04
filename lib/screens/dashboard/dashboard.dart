@@ -16,6 +16,7 @@ import 'package:pgn_mobile/models/url_cons.dart';
 import 'package:pgn_mobile/screens/dashboard/dashboard_cust_add.dart';
 import 'package:pgn_mobile/screens/gas_point/gas_point.dart';
 import 'package:pgn_mobile/screens/otp/otp.dart';
+import 'package:pgn_mobile/screens/invoice_customer_gpik.dart/invoice_customer_gpik.dart';
 import 'package:pgn_mobile/services/app_localizations.dart';
 import 'package:pgn_mobile/widgets/navigation_drawer.dart';
 import 'package:pgn_mobile/screens/dashboard/widgets/dashboard_detail.dart';
@@ -70,6 +71,7 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
   String userType;
   String groupID;
   String customerID;
+  String customerGroupID;
   final storageCache = new FlutterSecureStorage();
   List<SummaryModel> datanyaIdr(List<DataChartIdr> data) {
     final mockedData = List<SummaryModel>();
@@ -292,6 +294,9 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
     String userTypes = await storageCache.read(key: 'user_type') ?? "";
     String groupIDs = await storageCache.read(key: 'usergroup_id') ?? "";
     String customerIDs = await storageCache.read(key: 'customer_id') ?? "";
+    String customerGroupIDs =
+        await storageCache.read(key: 'customer_groupId') ?? "";
+
     print('USRER TYPE GET AUTH : ${await storageCache.read(key: 'user_type')}');
     setState(() {
       titleMng = titleMngs;
@@ -300,6 +305,7 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
       userType = userTypes;
       groupID = groupIDs;
       customerID = customerIDs;
+      customerGroupID = customerGroupIDs;
       print('USRER TYPE GET AUTH : $userType');
       // titleMng = prefs.getString('user_name_cust') ?? "";
       // titleCust = prefs.getString('user_name_cust') ?? "";
@@ -522,8 +528,11 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
                 children: <Widget>[
                   _buildDashboardResidential(
                       context, _prov.custName.toString() ?? ""),
-                  showCustInvoiceCustomerResidential(context,
-                      getCustomerInvoiceResidential(context), _prov.custId),
+                  customerGroupID == '1'
+                      ? showCustInvoiceGPIRnGPIK(context,
+                          getCustomerInvoice(context), _prov.custId, groupID)
+                      : showCustInvoiceCustomerResidential(context,
+                          getCustomerInvoiceResidential(context), _prov.custId),
                   GasPoint(),
                   showCustProfileCustomerResidential(
                       context, getCustomerProfileResidential(context))
@@ -3301,6 +3310,12 @@ Widget showCustInvoiceCustomerResidential(BuildContext context,
   return InvoiceCustResidential(data: _customerInvoice, custID: cust_id);
 }
 
+Widget showCustInvoiceGPIRnGPIK(BuildContext context,
+    Future<CustomerInvoice> _customerInvoice, String cust_id, String userid) {
+  return InvoiceCustGPIRnGPIK(
+      data: _customerInvoice, custID: cust_id, userid: userid);
+}
+
 Future<Customer> getCustomerProfile(BuildContext context) async {
   final storageCache = FlutterSecureStorage();
   String accessToken = await storageCache.read(key: 'access_token');
@@ -3445,11 +3460,13 @@ void _signingOff(BuildContext context, String message) async {
   final storageCache = FlutterSecureStorage();
 
   if (message == 'Device is registered successfully') {
+    await storageCache.write(key: 'auth_status', value: 'Login');
     Navigator.pop(context);
     Navigator.pushReplacementNamed(context, '/dashboard');
   } else {
     await storageCache.write(key: 'user_id', value: 'kosong');
     await storageCache.write(key: 'access_token', value: 'kosong');
+    await storageCache.write(key: 'auth_status', value: 'Logout');
     Navigator.pushNamedAndRemoveUntil(
       context,
       '/login',

@@ -183,23 +183,23 @@ class SettingState extends State<Settings> {
                     MaterialPageRoute(builder: (context) => ChangePassword()));
               },
             ),
-            // Divider(
-            //   color: Colors.black,
-            // ),
-            // InkWell(
-            //   child: Container(
-            //     margin: EdgeInsets.only(top: 10, left: 10, bottom: 10),
-            //     width: MediaQuery.of(context).size.width,
-            //     child: Text(
-            //       Translations.of(context).text('title_bar_change_number'),
-            //       style: TextStyle(fontSize: 16),
-            //     ),
-            //   ),
-            //   onTap: () {
-            //     Navigator.push(context,
-            //         MaterialPageRoute(builder: (context) => ChangeNumb()));
-            //   },
-            // ),
+            Divider(
+              color: Colors.black,
+            ),
+            InkWell(
+              child: Container(
+                margin: EdgeInsets.only(top: 10, left: 10, bottom: 10),
+                width: MediaQuery.of(context).size.width,
+                child: Text(
+                  Translations.of(context).text('title_bar_change_number'),
+                  style: TextStyle(fontSize: 16),
+                ),
+              ),
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => ChangeNumb()));
+              },
+            ),
             Divider(
               color: Colors.black,
             ),
@@ -279,6 +279,7 @@ void _signingOff(BuildContext context) async {
   final storageCache = FlutterSecureStorage();
   await storageCache.write(key: 'user_id', value: 'kosong');
   await storageCache.write(key: 'access_token', value: 'kosong');
+  await storageCache.write(key: 'auth_status', value: 'Logout');
   Navigator.pushNamedAndRemoveUntil(
     context,
     '/login',

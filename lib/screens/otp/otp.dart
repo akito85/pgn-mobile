@@ -13,6 +13,7 @@ import 'package:pgn_mobile/screens/dashboard/dashboard.dart';
 import 'package:pgn_mobile/services/app_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:pgn_mobile/services/language.dart';
+import 'package:pin_code_fields/pin_code_fields.dart';
 
 class OTPForm extends StatefulWidget {
   @override
@@ -25,12 +26,17 @@ class OTPFormState extends State<OTPForm> {
   bool visible = false;
   bool btnVisible = true;
   TextEditingController otpCtrl = new TextEditingController();
+  TextEditingController textEditingController = TextEditingController();
   final storageCache = new FlutterSecureStorage();
   final interval = const Duration(seconds: 1);
 
   final int timerMaxSeconds = 600;
 
   int currentSeconds = 0;
+  StreamController<ErrorAnimationType> errorController;
+
+  bool hasError = false;
+  String currentText = "";
 
   String get timerText =>
       '${((timerMaxSeconds - currentSeconds) ~/ 60).toString().padLeft(2, '0')}: ${((timerMaxSeconds - currentSeconds) % 60).toString().padLeft(2, '0')}';
@@ -84,8 +90,9 @@ class OTPFormState extends State<OTPForm> {
   Widget build(BuildContext context) {
     final _lang = Provider.of<Language>(context);
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.blue[550],
+        backgroundColor: Color(0xFF427CEF),
         title: Text(
           Translations.of(context).text('title_bar_otp') ?? '',
           style: TextStyle(
@@ -109,24 +116,80 @@ class OTPFormState extends State<OTPForm> {
           //   ),
           // ),
 
+          // Center(
+          //   child: Padding(
+          //     padding: const EdgeInsets.only(left: 15, right: 15, top: 20),
+          //     child: OTPTextField(
+          //       length: 6,
+          //       width: MediaQuery.of(context).size.width,
+          //       textFieldAlignment: MainAxisAlignment.spaceAround,
+          //       fieldWidth: 45,
+          //       fieldStyle: FieldStyle.underline,
+          //       outlineBorderRadius: 15,
+          //       style: TextStyle(fontSize: 17),
+          //       onChanged: (pin) {
+          //         otpCtrl.text = pin;
+          //         print("Changed: " + pin);
+          //       },
+          //       // onCompleted: (pin) {
+          //       //   otpCtrl.text = pin;
+          //       //   print("Completed: " + pin);
+          //       // },
+          //     ),
+          //   ),
+          // ),
           Center(
             child: Padding(
               padding: const EdgeInsets.only(left: 15, right: 15, top: 20),
-              child: OTPTextField(
+              child: PinCodeTextField(
+                appContext: context,
+                pastedTextStyle: TextStyle(
+                  color: Colors.green.shade600,
+                  fontWeight: FontWeight.bold,
+                ),
                 length: 6,
-                width: MediaQuery.of(context).size.width,
-                textFieldAlignment: MainAxisAlignment.spaceAround,
-                fieldWidth: 45,
-                fieldStyle: FieldStyle.underline,
-                outlineBorderRadius: 15,
-                style: TextStyle(fontSize: 17),
-                onChanged: (pin) {
-                  otpCtrl.text = pin;
-                  print("Changed: " + pin);
+                obscureText: false,
+                animationType: AnimationType.fade,
+                // validator: (v) {
+                //   if (v.length < 3) {
+                //     return "I'm from validator";
+                //   } else {
+                //     return null;
+                //   }
+                // },
+                pinTheme: PinTheme(
+                  shape: PinCodeFieldShape.underline,
+                  fieldHeight: 60,
+                  fieldWidth: 50,
+                  activeColor: Colors.white,
+                  inactiveFillColor: Colors.white,
+                  disabledColor: Colors.white,
+                  selectedFillColor: Colors.white,
+                  selectedColor: Colors.white,
+                  activeFillColor: Color(0xFF427CEF),
+                  // activeFillColor: hasError ? Colors.orange : Colors.white,
+                ),
+                cursorColor: Colors.black,
+                textStyle: TextStyle(fontSize: 20, height: 1.6),
+                backgroundColor: Colors.white,
+                enableActiveFill: true,
+                errorAnimationController: errorController,
+                controller: textEditingController,
+                keyboardType: TextInputType.number,
+                onCompleted: (v) {
+                  print("Completed");
                 },
-                onCompleted: (pin) {
-                  otpCtrl.text = pin;
-                  print("Completed: " + pin);
+                onChanged: (value) {
+                  print(value);
+                  setState(() {
+                    currentText = value;
+                  });
+                },
+                beforeTextPaste: (text) {
+                  print("Allowing to paste $text");
+                  //if you return true then it will show the paste confirmation dialog. Otherwise if false, then nothing will happen.
+                  //but you can show anything you want here, like your pop up saying wrong paste format or etc
+                  return true;
                 },
               ),
             ),
@@ -150,7 +213,7 @@ class OTPFormState extends State<OTPForm> {
               Container(
                   margin: EdgeInsets.fromLTRB(25.0, 55.0, 0.0, 10.0),
                   child: Text(
-                    _lang.verUbahNo,
+                    '',
                     style: TextStyle(
                       fontSize: 12.0,
                       color: Color(0xFF427CEF),
@@ -211,7 +274,7 @@ class OTPFormState extends State<OTPForm> {
                     visible = true;
                     btnVisible = false;
                   });
-                  postOtpForm(context, otpCtrl.text);
+                  postOtpForm(context, currentText);
 
                   // Navigator.pop(context);
                   // Navigator.pushReplacementNamed(context, '/dashboard');
@@ -312,8 +375,10 @@ class OTPFormState extends State<OTPForm> {
     });
     Otp _otp = Otp.fromJson(json.decode(responseOtpForm.body));
     if (_otp.status == true) {
+      await storageCache.write(key: 'auth_status', value: 'Login');
       Navigator.pushReplacementNamed(context, '/dashboard');
     } else if (_otp.status == 'Device is registered successfully') {
+      await storageCache.write(key: 'auth_status', value: 'Login');
       Navigator.pushReplacementNamed(context, '/dashboard');
     } else {
       accessTokenAlert(context, _otp.message);
