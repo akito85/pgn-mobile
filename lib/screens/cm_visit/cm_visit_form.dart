@@ -219,736 +219,763 @@ class _CMVisitFormState extends State<CMVisitForm> {
         elevation: 0,
       ),
       body: SingleChildScrollView(
+          scrollDirection: Axis.vertical,
           child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          Container(
-            margin: EdgeInsets.only(top: 12, left: 18, right: 18),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Container(
-                  margin: EdgeInsets.only(bottom: 4),
-                  child: Text('Date of Visit',
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600)),
-                ),
-                Container(
-                  width: MediaQuery.of(context).size.width,
-                  child: InkWell(
-                    child: TextFormField(
-                      controller: controllers,
-                      enabled: false,
-                      autocorrect: true,
-                      style: TextStyle(height: 1, fontSize: 14),
-                      decoration: InputDecoration(
-                        hintText: _onDateSelected,
-                        hintStyle: TextStyle(color: Color(0xFF455055)),
-                        suffixIcon: Icon(
-                          Icons.calendar_today_outlined,
-                          color: Colors.black87,
+            mainAxisSize: MainAxisSize.max,
+            children: <Widget>[
+              Container(
+                margin: EdgeInsets.only(top: 12, left: 18, right: 18),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Container(
+                      margin: EdgeInsets.only(bottom: 4),
+                      child: Text('Date of Visit',
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600)),
+                    ),
+                    Container(
+                      width: MediaQuery.of(context).size.width,
+                      child: InkWell(
+                        child: TextFormField(
+                          controller: controllers,
+                          enabled: false,
+                          autocorrect: true,
+                          style: TextStyle(height: 1, fontSize: 14),
+                          decoration: InputDecoration(
+                            hintText: _onDateSelected,
+                            hintStyle: TextStyle(color: Color(0xFF455055)),
+                            suffixIcon: Icon(
+                              Icons.calendar_today_outlined,
+                              color: Colors.black87,
+                            ),
+                            filled: true,
+                            fillColor: Colors.white70,
+                            disabledBorder: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(5)),
+                                borderSide: BorderSide(
+                                    color: Color(0xFFD3D3D3), width: 2)),
+                            focusedBorder: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(5)),
+                                borderSide: BorderSide(
+                                    color: Colors.black38, width: 2)),
+                          ),
                         ),
-                        filled: true,
-                        fillColor: Colors.white70,
-                        disabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(5)),
-                            borderSide:
-                                BorderSide(color: Color(0xFFD3D3D3), width: 2)),
-                        focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(5)),
-                            borderSide:
-                                BorderSide(color: Colors.black38, width: 2)),
+                        onTap: () {
+                          _selectDate(context);
+                        },
                       ),
                     ),
-                    onTap: () {
-                      _selectDate(context);
-                    },
-                  ),
-                ),
-                Visibility(
-                  visible: isVisibleDate,
-                  child: Container(
-                    margin: EdgeInsets.only(top: 2, left: 8),
-                    child: Text('Date cannot be empty',
-                        style: TextStyle(
-                            color: Color(0xFFDD1818),
-                            fontSize: 10,
-                            fontWeight: FontWeight.normal)),
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.only(bottom: 4, top: 20),
-                  child: Text('Visit Type',
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600)),
-                ),
-                Container(
-                    width: MediaQuery.of(context).size.width,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(5),
-                        border: Border.all(color: Color(0xFFD3D3D3), width: 2)),
-                    child: Padding(
-                        padding: EdgeInsets.only(left: 10, right: 8),
-                        child: DropdownButton(
-                            hint: Text('Site/Business Visit',
+                    Visibility(
+                      visible: isVisibleDate,
+                      child: Container(
+                        margin: EdgeInsets.only(top: 2, left: 8),
+                        child: Text('Date cannot be empty',
+                            style: TextStyle(
+                                color: Color(0xFFDD1818),
+                                fontSize: 10,
+                                fontWeight: FontWeight.normal)),
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(bottom: 4, top: 20),
+                      child: Text('Visit Type',
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600)),
+                    ),
+                    Container(
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5),
+                            border:
+                                Border.all(color: Color(0xFFD3D3D3), width: 2)),
+                        child: Padding(
+                            padding: EdgeInsets.only(left: 10, right: 8),
+                            child: DropdownButton(
+                                hint: Text('Site/Business Visit',
+                                    style: TextStyle(
+                                        color: Color(0xFF455055),
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.normal)),
+                                dropdownColor: Colors.white,
+                                icon: Icon(Icons.keyboard_arrow_down,
+                                    color: Color(0xFF455055)),
+                                isExpanded: true,
+                                underline: SizedBox(),
                                 style: TextStyle(
                                     color: Color(0xFF455055),
                                     fontSize: 14,
-                                    fontWeight: FontWeight.normal)),
-                            dropdownColor: Colors.white,
-                            icon: Icon(Icons.keyboard_arrow_down,
-                                color: Color(0xFF455055)),
-                            isExpanded: true,
-                            underline: SizedBox(),
-                            style: TextStyle(
-                                color: Color(0xFF455055),
-                                fontSize: 14,
-                                fontWeight: FontWeight.normal),
-                            value: valueChoose,
-                            onChanged: (newValue) {
-                              setState(() {
-                                valueChoose = newValue;
-                              });
-                            },
-                            items: listVisitTypes.map((valueItem) {
-                              return DropdownMenuItem(
-                                  value: valueItem, child: Text(valueItem));
-                            }).toList()))),
-                Container(
-                  margin: EdgeInsets.only(bottom: 4, top: 20),
-                  child: Text('Activity',
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600)),
-                ),
-                Container(
-                    width: MediaQuery.of(context).size.width,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(5),
-                        border: Border.all(color: Color(0xFFD3D3D3), width: 2)),
-                    child: Padding(
-                        padding: EdgeInsets.only(left: 10, right: 8),
-                        child: DropdownButton(
-                            hint: Text('Customer Complaint Handling',
+                                    fontWeight: FontWeight.normal),
+                                value: valueChoose,
+                                onChanged: (newValue) {
+                                  setState(() {
+                                    valueChoose = newValue;
+                                  });
+                                },
+                                items: listVisitTypes.map((valueItem) {
+                                  return DropdownMenuItem(
+                                      value: valueItem, child: Text(valueItem));
+                                }).toList()))),
+                    Container(
+                      margin: EdgeInsets.only(bottom: 4, top: 20),
+                      child: Text('Activity',
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600)),
+                    ),
+                    Container(
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5),
+                            border:
+                                Border.all(color: Color(0xFFD3D3D3), width: 2)),
+                        child: Padding(
+                            padding: EdgeInsets.only(left: 10, right: 8),
+                            child: DropdownButton(
+                                hint: Text('Customer Complaint Handling',
+                                    style: TextStyle(
+                                        color: Color(0xFF455055),
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.normal)),
+                                dropdownColor: Colors.white,
+                                icon: Icon(Icons.keyboard_arrow_down,
+                                    color: Color(0xFF455055)),
+                                isExpanded: true,
+                                underline: SizedBox(),
                                 style: TextStyle(
                                     color: Color(0xFF455055),
                                     fontSize: 14,
-                                    fontWeight: FontWeight.normal)),
-                            dropdownColor: Colors.white,
-                            icon: Icon(Icons.keyboard_arrow_down,
-                                color: Color(0xFF455055)),
-                            isExpanded: true,
-                            underline: SizedBox(),
+                                    fontWeight: FontWeight.normal),
+                                value: valueChoose,
+                                onChanged: (newValue) {
+                                  setState(() {
+                                    valueChoose = newValue;
+                                  });
+                                },
+                                items: listVisitTypes.map((valueItem) {
+                                  return DropdownMenuItem(
+                                      value: valueItem, child: Text(valueItem));
+                                }).toList()))),
+                    Container(
+                      margin: EdgeInsets.only(bottom: 4, top: 20),
+                      child: Text('Activity Description',
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600)),
+                    ),
+                    Container(
+                        width: MediaQuery.of(context).size.width,
+                        child: TextFormField(
+                          controller: activityDescription,
+                          minLines: 6,
+                          maxLines: 10,
+                          autocorrect: true,
+                          style: TextStyle(height: 1, fontSize: 14),
+                          decoration: InputDecoration(
+                            hintText: 'Auto expanding text area',
+                            filled: true,
+                            fillColor: Colors.white70,
+                            enabledBorder: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(5)),
+                                borderSide: BorderSide(
+                                    color: Color(0xFFD3D3D3), width: 2)),
+                            focusedBorder: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(5)),
+                                borderSide: BorderSide(
+                                    color: Colors.black38, width: 2)),
+                          ),
+                        )),
+                    Visibility(
+                      visible: isVisibleActivityDescription,
+                      child: Container(
+                        margin: EdgeInsets.only(top: 2, left: 8),
+                        child: Text('Activity description cannot be empty',
                             style: TextStyle(
-                                color: Color(0xFF455055),
-                                fontSize: 14,
-                                fontWeight: FontWeight.normal),
-                            value: valueChoose,
-                            onChanged: (newValue) {
-                              setState(() {
-                                valueChoose = newValue;
-                              });
-                            },
-                            items: listVisitTypes.map((valueItem) {
-                              return DropdownMenuItem(
-                                  value: valueItem, child: Text(valueItem));
-                            }).toList()))),
-                Container(
-                  margin: EdgeInsets.only(bottom: 4, top: 20),
-                  child: Text('Activity Description',
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600)),
-                ),
-                Container(
-                    width: MediaQuery.of(context).size.width,
-                    child: TextFormField(
-                      controller: activityDescription,
-                      minLines: 6,
-                      maxLines: 10,
-                      autocorrect: true,
-                      style: TextStyle(height: 1, fontSize: 14),
-                      decoration: InputDecoration(
-                        hintText: 'Auto expanding text area',
-                        filled: true,
-                        fillColor: Colors.white70,
-                        enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(5)),
-                            borderSide:
-                                BorderSide(color: Color(0xFFD3D3D3), width: 2)),
-                        focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(5)),
-                            borderSide:
-                                BorderSide(color: Colors.black38, width: 2)),
+                                color: Color(0xFFDD1818),
+                                fontSize: 10,
+                                fontWeight: FontWeight.normal)),
                       ),
-                    )),
-                Visibility(
-                  visible: isVisibleActivityDescription,
-                  child: Container(
-                    margin: EdgeInsets.only(top: 2, left: 8),
-                    child: Text('Activity description cannot be empty',
-                        style: TextStyle(
-                            color: Color(0xFFDD1818),
-                            fontSize: 10,
-                            fontWeight: FontWeight.normal)),
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.only(top: 16, right: 18, left: 18),
-                  child: Divider(color: Color(0xFFF4F4F4)),
-                ),
-                Container(
-                  margin: EdgeInsets.only(bottom: 4, top: 20),
-                  child: Text('Customer Name',
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600)),
-                ),
-                Container(
-                    width: MediaQuery.of(context).size.width,
-                    child: TextFormField(
-                      minLines: 1,
-                      maxLines: 10,
-                      autocorrect: true,
-                      controller: customerName,
-                      style: TextStyle(height: 1, fontSize: 14),
-                      decoration: InputDecoration(
-                        hintText: 'Enter customer name',
-                        filled: true,
-                        fillColor: Colors.white70,
-                        enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(5)),
-                            borderSide:
-                                BorderSide(color: Color(0xFFD3D3D3), width: 2)),
-                        focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(5)),
-                            borderSide:
-                                BorderSide(color: Colors.black38, width: 2)),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(top: 16, right: 18, left: 18),
+                      child: Divider(color: Color(0xFFF4F4F4)),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(bottom: 4, top: 20),
+                      child: Text('Customer Name',
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600)),
+                    ),
+                    Container(
+                        width: MediaQuery.of(context).size.width,
+                        child: TextFormField(
+                          minLines: 1,
+                          maxLines: 10,
+                          autocorrect: true,
+                          controller: customerName,
+                          style: TextStyle(height: 1, fontSize: 14),
+                          decoration: InputDecoration(
+                            hintText: 'Enter customer name',
+                            filled: true,
+                            fillColor: Colors.white70,
+                            enabledBorder: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(5)),
+                                borderSide: BorderSide(
+                                    color: Color(0xFFD3D3D3), width: 2)),
+                            focusedBorder: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(5)),
+                                borderSide: BorderSide(
+                                    color: Colors.black38, width: 2)),
+                          ),
+                        )),
+                    Container(
+                      margin: EdgeInsets.only(bottom: 4, top: 20),
+                      child: Text('Customer ID',
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600)),
+                    ),
+                    Container(
+                        width: MediaQuery.of(context).size.width,
+                        child: TextFormField(
+                          minLines: 1,
+                          maxLines: 10,
+                          controller: customerId,
+                          autocorrect: true,
+                          style: TextStyle(height: 1, fontSize: 14),
+                          decoration: InputDecoration(
+                            hintText: 'Customer ID',
+                            filled: true,
+                            fillColor: Colors.white70,
+                            enabledBorder: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(5)),
+                                borderSide: BorderSide(
+                                    color: Color(0xFFD3D3D3), width: 2)),
+                            focusedBorder: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(5)),
+                                borderSide: BorderSide(
+                                    color: Colors.black38, width: 2)),
+                          ),
+                        )),
+                    Visibility(
+                      visible: isVisibleCustomerId,
+                      child: Container(
+                        margin: EdgeInsets.only(top: 2, left: 8),
+                        child: Text('Costumer ID cannot be empty',
+                            style: TextStyle(
+                                color: Color(0xFFDD1818),
+                                fontSize: 10,
+                                fontWeight: FontWeight.normal)),
                       ),
-                    )),
-                Container(
-                  margin: EdgeInsets.only(bottom: 4, top: 20),
-                  child: Text('Customer ID',
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600)),
-                ),
-                Container(
-                    width: MediaQuery.of(context).size.width,
-                    child: TextFormField(
-                      minLines: 1,
-                      maxLines: 10,
-                      controller: customerId,
-                      autocorrect: true,
-                      style: TextStyle(height: 1, fontSize: 14),
-                      decoration: InputDecoration(
-                        hintText: 'Customer ID',
-                        filled: true,
-                        fillColor: Colors.white70,
-                        enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(5)),
-                            borderSide:
-                                BorderSide(color: Color(0xFFD3D3D3), width: 2)),
-                        focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(5)),
-                            borderSide:
-                                BorderSide(color: Colors.black38, width: 2)),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(bottom: 4, top: 20),
+                      child: Text('Contact Person',
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600)),
+                    ),
+                    Container(
+                        width: MediaQuery.of(context).size.width,
+                        child: TextFormField(
+                          minLines: 1,
+                          maxLines: 10,
+                          controller: contactPerson,
+                          autocorrect: true,
+                          style: TextStyle(height: 1, fontSize: 14),
+                          decoration: InputDecoration(
+                            hintText: 'Contact person name',
+                            filled: true,
+                            fillColor: Colors.white70,
+                            enabledBorder: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(5)),
+                                borderSide: BorderSide(
+                                    color: Color(0xFFD3D3D3), width: 2)),
+                            focusedBorder: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(5)),
+                                borderSide: BorderSide(
+                                    color: Colors.black38, width: 2)),
+                          ),
+                        )),
+                    Container(
+                      margin: EdgeInsets.only(bottom: 4, top: 20),
+                      child: Text('Address',
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600)),
+                    ),
+                    Container(
+                        width: MediaQuery.of(context).size.width,
+                        child: TextFormField(
+                          minLines: 1,
+                          maxLines: 10,
+                          controller: address,
+                          autocorrect: true,
+                          style: TextStyle(height: 1, fontSize: 14),
+                          decoration: InputDecoration(
+                            hintText: 'Enter Your Address',
+                            filled: true,
+                            fillColor: Colors.white70,
+                            enabledBorder: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(5)),
+                                borderSide: BorderSide(
+                                    color: Color(0xFFD3D3D3), width: 2)),
+                            focusedBorder: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(5)),
+                                borderSide: BorderSide(
+                                    color: Colors.black38, width: 2)),
+                          ),
+                        )),
+                    Visibility(
+                      visible: isVisibleAddress,
+                      child: Container(
+                        margin: EdgeInsets.only(top: 2, left: 8),
+                        child: Text('Address cannot be empty',
+                            style: TextStyle(
+                                color: Color(0xFFDD1818),
+                                fontSize: 10,
+                                fontWeight: FontWeight.normal)),
                       ),
-                    )),
-                Visibility(
-                  visible: isVisibleCustomerId,
-                  child: Container(
-                    margin: EdgeInsets.only(top: 2, left: 8),
-                    child: Text('Costumer ID cannot be empty',
-                        style: TextStyle(
-                            color: Color(0xFFDD1818),
-                            fontSize: 10,
-                            fontWeight: FontWeight.normal)),
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.only(bottom: 4, top: 20),
-                  child: Text('Contact Person',
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600)),
-                ),
-                Container(
-                    width: MediaQuery.of(context).size.width,
-                    child: TextFormField(
-                      minLines: 1,
-                      maxLines: 10,
-                      controller: contactPerson,
-                      autocorrect: true,
-                      style: TextStyle(height: 1, fontSize: 14),
-                      decoration: InputDecoration(
-                        hintText: 'Contact person name',
-                        filled: true,
-                        fillColor: Colors.white70,
-                        enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(5)),
-                            borderSide:
-                                BorderSide(color: Color(0xFFD3D3D3), width: 2)),
-                        focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(5)),
-                            borderSide:
-                                BorderSide(color: Colors.black38, width: 2)),
+                    ),
+                    //phoneNumber
+                    Container(
+                      margin: EdgeInsets.only(bottom: 4, top: 20),
+                      child: Text('Phone Number',
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600)),
+                    ),
+                    Container(
+                        width: MediaQuery.of(context).size.width,
+                        child: TextFormField(
+                          keyboardType: TextInputType.number,
+                          minLines: 1,
+                          maxLines: 10,
+                          controller: phoneNumber,
+                          autocorrect: true,
+                          style: TextStyle(height: 1, fontSize: 14),
+                          decoration: InputDecoration(
+                            hintText: 'Contact person number',
+                            filled: true,
+                            fillColor: Colors.white70,
+                            prefixIcon: Padding(
+                              padding:
+                                  EdgeInsets.only(right: 16, top: 14, left: 16),
+                              child: Text('+62',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.normal,
+                                      fontSize: 14)),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(5)),
+                                borderSide: BorderSide(
+                                    color: Color(0xFFD3D3D3), width: 2)),
+                            focusedBorder: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(5)),
+                                borderSide: BorderSide(
+                                    color: Colors.black38, width: 2)),
+                          ),
+                        )),
+                    Visibility(
+                      visible: isVisiblePhoneNumber,
+                      child: Container(
+                        margin: EdgeInsets.only(top: 2, left: 8),
+                        child: Text('Incorect Phone Number',
+                            style: TextStyle(
+                                color: Color(0xFFDD1818),
+                                fontSize: 10,
+                                fontWeight: FontWeight.normal)),
                       ),
-                    )),
-                Container(
-                  margin: EdgeInsets.only(bottom: 4, top: 20),
-                  child: Text('Address',
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600)),
-                ),
-                Container(
-                    width: MediaQuery.of(context).size.width,
-                    child: TextFormField(
-                      minLines: 1,
-                      maxLines: 10,
-                      controller: address,
-                      autocorrect: true,
-                      style: TextStyle(height: 1, fontSize: 14),
-                      decoration: InputDecoration(
-                        hintText: 'Enter Your Address',
-                        filled: true,
-                        fillColor: Colors.white70,
-                        enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(5)),
-                            borderSide:
-                                BorderSide(color: Color(0xFFD3D3D3), width: 2)),
-                        focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(5)),
-                            borderSide:
-                                BorderSide(color: Colors.black38, width: 2)),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(bottom: 4, top: 20),
+                      child: Text('Email Address',
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600)),
+                    ),
+                    Container(
+                        width: MediaQuery.of(context).size.width,
+                        child: TextFormField(
+                          keyboardType: TextInputType.emailAddress,
+                          minLines: 1,
+                          maxLines: 10,
+                          controller: emailAddress,
+                          autocorrect: true,
+                          style: TextStyle(height: 1, fontSize: 14),
+                          decoration: InputDecoration(
+                            hintText: 'Email Address',
+                            filled: true,
+                            fillColor: Colors.white70,
+                            enabledBorder: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(5)),
+                                borderSide: BorderSide(
+                                    color: Color(0xFFD3D3D3), width: 2)),
+                            focusedBorder: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(5)),
+                                borderSide: BorderSide(
+                                    color: Colors.black38, width: 2)),
+                          ),
+                        )),
+                    Visibility(
+                      visible: isVisibleCustomerEmail,
+                      child: Container(
+                        margin: EdgeInsets.only(top: 2, left: 8),
+                        child: Text('Incorect Email Address',
+                            style: TextStyle(
+                                color: Color(0xFFDD1818),
+                                fontSize: 10,
+                                fontWeight: FontWeight.normal)),
                       ),
-                    )),
-                Visibility(
-                  visible: isVisibleAddress,
-                  child: Container(
-                    margin: EdgeInsets.only(top: 2, left: 8),
-                    child: Text('Address cannot be empty',
-                        style: TextStyle(
-                            color: Color(0xFFDD1818),
-                            fontSize: 10,
-                            fontWeight: FontWeight.normal)),
-                  ),
-                ),
-                //phoneNumber
-                Container(
-                  margin: EdgeInsets.only(bottom: 4, top: 20),
-                  child: Text('Phone Number',
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600)),
-                ),
-                Container(
-                    width: MediaQuery.of(context).size.width,
-                    child: TextFormField(
-                      keyboardType: TextInputType.number,
-                      minLines: 1,
-                      maxLines: 10,
-                      controller: phoneNumber,
-                      autocorrect: true,
-                      style: TextStyle(height: 1, fontSize: 14),
-                      decoration: InputDecoration(
-                        hintText: 'Contact person number',
-                        filled: true,
-                        fillColor: Colors.white70,
-                        prefixIcon: Padding(
-                          padding:
-                              EdgeInsets.only(right: 16, top: 14, left: 16),
-                          child: Text('+62',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.normal,
-                                  fontSize: 14)),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(5)),
-                            borderSide:
-                                BorderSide(color: Color(0xFFD3D3D3), width: 2)),
-                        focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(5)),
-                            borderSide:
-                                BorderSide(color: Colors.black38, width: 2)),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(top: 16, right: 18, left: 18),
+                      child: Divider(color: Color(0xFFF4F4F4)),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(bottom: 4, top: 20),
+                      child: Text('Reports',
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600)),
+                    ),
+                    Container(
+                        width: MediaQuery.of(context).size.width,
+                        child: TextFormField(
+                          minLines: 5,
+                          maxLines: 10,
+                          controller: reports,
+                          autocorrect: true,
+                          style: TextStyle(height: 1, fontSize: 14),
+                          decoration: InputDecoration(
+                            hintText: 'Auto expanding text area',
+                            filled: true,
+                            fillColor: Colors.white70,
+                            enabledBorder: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(5)),
+                                borderSide: BorderSide(
+                                    color: Color(0xFFD3D3D3), width: 2)),
+                            focusedBorder: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(5)),
+                                borderSide: BorderSide(
+                                    color: Colors.black38, width: 2)),
+                          ),
+                        )),
+                    Visibility(
+                      visible: isVisibleReports,
+                      child: Container(
+                        margin: EdgeInsets.only(top: 2, left: 8),
+                        child: Text('Reports cannot be empty',
+                            style: TextStyle(
+                                color: Color(0xFFDD1818),
+                                fontSize: 10,
+                                fontWeight: FontWeight.normal)),
                       ),
-                    )),
-                Visibility(
-                  visible: isVisiblePhoneNumber,
-                  child: Container(
-                    margin: EdgeInsets.only(top: 2, left: 8),
-                    child: Text('Incorect Phone Number',
-                        style: TextStyle(
-                            color: Color(0xFFDD1818),
-                            fontSize: 10,
-                            fontWeight: FontWeight.normal)),
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.only(bottom: 4, top: 20),
-                  child: Text('Email Address',
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600)),
-                ),
-                Container(
-                    width: MediaQuery.of(context).size.width,
-                    child: TextFormField(
-                      keyboardType: TextInputType.emailAddress,
-                      minLines: 1,
-                      maxLines: 10,
-                      controller: emailAddress,
-                      autocorrect: true,
-                      style: TextStyle(height: 1, fontSize: 14),
-                      decoration: InputDecoration(
-                        hintText: 'Email Address',
-                        filled: true,
-                        fillColor: Colors.white70,
-                        enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(5)),
-                            borderSide:
-                                BorderSide(color: Color(0xFFD3D3D3), width: 2)),
-                        focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(5)),
-                            borderSide:
-                                BorderSide(color: Colors.black38, width: 2)),
-                      ),
-                    )),
-                Visibility(
-                  visible: isVisibleCustomerEmail,
-                  child: Container(
-                    margin: EdgeInsets.only(top: 2, left: 8),
-                    child: Text('Incorect Email Address',
-                        style: TextStyle(
-                            color: Color(0xFFDD1818),
-                            fontSize: 10,
-                            fontWeight: FontWeight.normal)),
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.only(top: 16, right: 18, left: 18),
-                  child: Divider(color: Color(0xFFF4F4F4)),
-                ),
-                Container(
-                  margin: EdgeInsets.only(bottom: 4, top: 20),
-                  child: Text('Reports',
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600)),
-                ),
-                Container(
-                    width: MediaQuery.of(context).size.width,
-                    child: TextFormField(
-                      minLines: 5,
-                      maxLines: 10,
-                      controller: reports,
-                      autocorrect: true,
-                      style: TextStyle(height: 1, fontSize: 14),
-                      decoration: InputDecoration(
-                        hintText: 'Auto expanding text area',
-                        filled: true,
-                        fillColor: Colors.white70,
-                        enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(5)),
-                            borderSide:
-                                BorderSide(color: Color(0xFFD3D3D3), width: 2)),
-                        focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(5)),
-                            borderSide:
-                                BorderSide(color: Colors.black38, width: 2)),
-                      ),
-                    )),
-                Visibility(
-                  visible: isVisibleReports,
-                  child: Container(
-                    margin: EdgeInsets.only(top: 2, left: 8),
-                    child: Text('Reports cannot be empty',
-                        style: TextStyle(
-                            color: Color(0xFFDD1818),
-                            fontSize: 10,
-                            fontWeight: FontWeight.normal)),
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.only(bottom: 8, top: 20),
-                  child: Text('Documentation',
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600)),
-                ),
-                Container(
-                  width: MediaQuery.of(context).size.width,
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(bottom: 8, top: 20),
+                      child: Text('Documentation',
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600)),
+                    ),
+                    Container(
+                      width: MediaQuery.of(context).size.width,
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
-                          _image != null
-                              ? Container(
-                                  alignment: Alignment.center,
-                                  padding: EdgeInsets.all(40.0),
-                                  decoration: BoxDecoration(
-                                      shape: BoxShape.rectangle,
-                                      borderRadius: BorderRadius.circular(5),
-                                      image: DecorationImage(
-                                          image: FileImage(_image),
-                                          fit: BoxFit.fill)),
-                                  child: Container(
-                                      width: 20,
-                                      height: 20,
-                                      child: FloatingActionButton(
-                                        backgroundColor:
-                                            Colors.black.withOpacity(0.5),
-                                        onPressed: () {
-                                          _showialogDeleteImage(context);
-                                        },
-                                        elevation: 0,
-                                        child: Icon(Icons.delete_outlined,
-                                            color: Colors.white, size: 20),
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(3)),
-                                      )))
-                              : Container(
-                                  alignment: Alignment.center,
-                                  padding: EdgeInsets.all(40.0),
-                                  decoration: DottedDecoration(
-                                      shape: Shape.box,
-                                      color: Color(0xFF427CEF),
-                                      dash: <int>[3, 3],
-                                      borderRadius: BorderRadius.circular(3)),
-                                  child: Container(
-                                      width: 20,
-                                      height: 20,
-                                      child: FloatingActionButton(
-                                        onPressed: () {
-                                          dialogChoosePic(context, '1');
-                                        },
-                                        elevation: 0,
-                                        child: Icon(Icons.add,
-                                            color: Colors.white, size: 20),
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(3)),
-                                      ))),
-                          SizedBox(height: 8),
-                          _image != null
-                              ? Container(
-                                  width: 110.0,
-                                  child: Text(_image.path,
-                                      maxLines: 1,
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              _image != null
+                                  ? Container(
+                                      alignment: Alignment.center,
+                                      padding: EdgeInsets.all(40.0),
+                                      decoration: BoxDecoration(
+                                          shape: BoxShape.rectangle,
+                                          borderRadius:
+                                              BorderRadius.circular(5),
+                                          image: DecorationImage(
+                                              image: FileImage(_image),
+                                              fit: BoxFit.fill)),
+                                      child: Container(
+                                          width: 20,
+                                          height: 20,
+                                          child: new FloatingActionButton(
+                                            backgroundColor:
+                                                Colors.black.withOpacity(0.5),
+                                            onPressed: () {
+                                              _showialogDeleteImage(context);
+                                            },
+                                            elevation: 0,
+                                            child: Icon(Icons.delete_outlined,
+                                                color: Colors.white, size: 20),
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(3)),
+                                          )))
+                                  : Container(
+                                      alignment: Alignment.center,
+                                      padding: EdgeInsets.all(40.0),
+                                      decoration: DottedDecoration(
+                                          shape: Shape.box,
+                                          color: Color(0xFF427CEF),
+                                          dash: <int>[3, 3],
+                                          borderRadius:
+                                              BorderRadius.circular(3)),
+                                      child: Container(
+                                          width: 20,
+                                          height: 20,
+                                          child: new FloatingActionButton(
+                                            onPressed: () {
+                                              dialogChoosePic(context, '1');
+                                            },
+                                            elevation: 0,
+                                            child: Icon(Icons.add,
+                                                color: Colors.white, size: 20),
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(3)),
+                                          ))),
+                              SizedBox(height: 8),
+                              _image != null
+                                  ? Container(
+                                      width: 110.0,
+                                      child: Text(_image.path,
+                                          maxLines: 1,
+                                          style: TextStyle(
+                                              color: Color(0xFF427CEF),
+                                              fontWeight: FontWeight.normal,
+                                              fontSize: 12)))
+                                  : Text('Add Image',
                                       style: TextStyle(
                                           color: Color(0xFF427CEF),
                                           fontWeight: FontWeight.normal,
-                                          fontSize: 12)))
-                              : Text('Add Image',
-                                  style: TextStyle(
-                                      color: Color(0xFF427CEF),
-                                      fontWeight: FontWeight.normal,
-                                      fontSize: 12))
-                        ],
-                      ),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          _image2 != null
-                              ? Container(
-                                  alignment: Alignment.center,
-                                  padding: EdgeInsets.all(40.0),
-                                  decoration: BoxDecoration(
-                                      shape: BoxShape.rectangle,
-                                      borderRadius: BorderRadius.circular(5),
-                                      image: DecorationImage(
-                                          image: FileImage(_image2),
-                                          fit: BoxFit.fill)),
-                                  child: Container(
-                                      width: 20,
-                                      height: 20,
-                                      child: FloatingActionButton(
-                                        backgroundColor:
-                                            Colors.black.withOpacity(0.5),
-                                        onPressed: () {
-                                          _showialogDeleteImage(context);
-                                        },
-                                        elevation: 0,
-                                        child: Icon(Icons.delete_outlined,
-                                            color: Colors.white, size: 20),
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(3)),
-                                      )))
-                              : Container(
-                                  alignment: Alignment.center,
-                                  padding: EdgeInsets.all(40.0),
-                                  decoration: DottedDecoration(
-                                      shape: Shape.box,
-                                      color: Color(0xFF427CEF),
-                                      dash: <int>[3, 3],
-                                      borderRadius: BorderRadius.circular(3)),
-                                  child: Container(
-                                      width: 20,
-                                      height: 20,
-                                      child: FloatingActionButton(
-                                        onPressed: () {
-                                          dialogChoosePic(context, '2');
-                                        },
-                                        elevation: 0,
-                                        child: Icon(Icons.add,
-                                            color: Colors.white, size: 20),
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(3)),
-                                      ))),
-                          SizedBox(height: 8),
-                          _image2 != null
-                              ? Container(
-                                  width: 110.0,
-                                  child: Text(_image2.path,
-                                      maxLines: 1,
+                                          fontSize: 12))
+                            ],
+                          ),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              _image2 != null
+                                  ? Container(
+                                      alignment: Alignment.center,
+                                      padding: EdgeInsets.all(40.0),
+                                      decoration: BoxDecoration(
+                                          shape: BoxShape.rectangle,
+                                          borderRadius:
+                                              BorderRadius.circular(5),
+                                          image: DecorationImage(
+                                              image: FileImage(_image2),
+                                              fit: BoxFit.fill)),
+                                      child: Container(
+                                          width: 20,
+                                          height: 20,
+                                          child: new FloatingActionButton(
+                                            backgroundColor:
+                                                Colors.black.withOpacity(0.5),
+                                            onPressed: () {
+                                              _showialogDeleteImage(context);
+                                            },
+                                            elevation: 0,
+                                            child: Icon(Icons.delete_outlined,
+                                                color: Colors.white, size: 20),
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(3)),
+                                          )))
+                                  : Container(
+                                      alignment: Alignment.center,
+                                      padding: EdgeInsets.all(40.0),
+                                      decoration: DottedDecoration(
+                                          shape: Shape.box,
+                                          color: Color(0xFF427CEF),
+                                          dash: <int>[3, 3],
+                                          borderRadius:
+                                              BorderRadius.circular(3)),
+                                      child: Container(
+                                          width: 20,
+                                          height: 20,
+                                          child: new FloatingActionButton(
+                                            onPressed: () {
+                                              dialogChoosePic(context, '2');
+                                            },
+                                            elevation: 0,
+                                            child: Icon(Icons.add,
+                                                color: Colors.white, size: 20),
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(3)),
+                                          ))),
+                              SizedBox(height: 8),
+                              _image2 != null
+                                  ? Container(
+                                      width: 110.0,
+                                      child: Text(_image2.path,
+                                          maxLines: 1,
+                                          style: TextStyle(
+                                              color: Color(0xFF427CEF),
+                                              fontWeight: FontWeight.normal,
+                                              fontSize: 12)))
+                                  : Text('Add Image',
                                       style: TextStyle(
                                           color: Color(0xFF427CEF),
                                           fontWeight: FontWeight.normal,
-                                          fontSize: 12)))
-                              : Text('Add Image',
-                                  style: TextStyle(
-                                      color: Color(0xFF427CEF),
-                                      fontWeight: FontWeight.normal,
-                                      fontSize: 12))
-                        ],
-                      ),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          _image3 != null
-                              ? Container(
-                                  alignment: Alignment.center,
-                                  padding: EdgeInsets.all(40.0),
-                                  decoration: BoxDecoration(
-                                      shape: BoxShape.rectangle,
-                                      borderRadius: BorderRadius.circular(5),
-                                      image: DecorationImage(
-                                          image: FileImage(_image3),
-                                          fit: BoxFit.fill)),
-                                  child: Container(
-                                      width: 20,
-                                      height: 20,
-                                      child: FloatingActionButton(
-                                        backgroundColor:
-                                            Colors.black.withOpacity(0.5),
-                                        onPressed: () {
-                                          _showialogDeleteImage(context);
-                                        },
-                                        elevation: 0,
-                                        child: Icon(Icons.delete_outlined,
-                                            color: Colors.white, size: 20),
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(3)),
-                                      )))
-                              : Container(
-                                  alignment: Alignment.center,
-                                  padding: EdgeInsets.all(40.0),
-                                  decoration: DottedDecoration(
-                                      shape: Shape.box,
-                                      color: Color(0xFF427CEF),
-                                      dash: <int>[3, 3],
-                                      borderRadius: BorderRadius.circular(3)),
-                                  child: Container(
-                                      width: 20,
-                                      height: 20,
-                                      child: FloatingActionButton(
-                                        onPressed: () {
-                                          dialogChoosePic(context, '3');
-                                        },
-                                        elevation: 0,
-                                        child: Icon(Icons.add,
-                                            color: Colors.white, size: 20),
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(3)),
-                                      ))),
-                          SizedBox(height: 8),
-                          _image3 != null
-                              ? Container(
-                                  width: 110.0,
-                                  child: Text(_image3.path,
-                                      maxLines: 1,
+                                          fontSize: 12))
+                            ],
+                          ),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              _image3 != null
+                                  ? Container(
+                                      alignment: Alignment.center,
+                                      padding: EdgeInsets.all(40.0),
+                                      decoration: BoxDecoration(
+                                          shape: BoxShape.rectangle,
+                                          borderRadius:
+                                              BorderRadius.circular(5),
+                                          image: DecorationImage(
+                                              image: FileImage(_image3),
+                                              fit: BoxFit.fill)),
+                                      child: Container(
+                                          width: 20,
+                                          height: 20,
+                                          child: new FloatingActionButton(
+                                            backgroundColor:
+                                                Colors.black.withOpacity(0.5),
+                                            onPressed: () {
+                                              _showialogDeleteImage(context);
+                                            },
+                                            elevation: 0,
+                                            child: Icon(Icons.delete_outlined,
+                                                color: Colors.white, size: 20),
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(3)),
+                                          )))
+                                  : Container(
+                                      alignment: Alignment.center,
+                                      padding: EdgeInsets.all(40.0),
+                                      decoration: DottedDecoration(
+                                          shape: Shape.box,
+                                          color: Color(0xFF427CEF),
+                                          dash: <int>[3, 3],
+                                          borderRadius:
+                                              BorderRadius.circular(3)),
+                                      child: Container(
+                                          width: 20,
+                                          height: 20,
+                                          child: new FloatingActionButton(
+                                            onPressed: () {
+                                              dialogChoosePic(context, '3');
+                                            },
+                                            elevation: 0,
+                                            child: Icon(Icons.add,
+                                                color: Colors.white, size: 20),
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(3)),
+                                          ))),
+                              SizedBox(height: 8),
+                              _image3 != null
+                                  ? Container(
+                                      width: 110.0,
+                                      child: Text(_image3.path,
+                                          maxLines: 1,
+                                          style: TextStyle(
+                                              color: Color(0xFF427CEF),
+                                              fontWeight: FontWeight.normal,
+                                              fontSize: 12)))
+                                  : Text('Add Image',
                                       style: TextStyle(
                                           color: Color(0xFF427CEF),
                                           fontWeight: FontWeight.normal,
-                                          fontSize: 12)))
-                              : Text('Add Image',
-                                  style: TextStyle(
-                                      color: Color(0xFF427CEF),
-                                      fontWeight: FontWeight.normal,
-                                      fontSize: 12))
+                                          fontSize: 12))
+                            ],
+                          ),
                         ],
                       ),
-                    ],
-                  ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(top: 34, bottom: 14),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Container(
+                            width: 120.0,
+                            height: 40.0,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5),
+                                color: Color(0xFFD3D3D3)),
+                            child: MaterialButton(
+                                child: Text('Cancel',
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w600)),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                }),
+                          ),
+                          Container(
+                            width: 228.0,
+                            height: 40.0,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5),
+                                color: Color(0xFF427CEF)),
+                            child: MaterialButton(
+                                child: Text('Save Report',
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w600)),
+                                onPressed: () {
+                                  _setValidation();
+                                }),
+                          ),
+                        ],
+                      ),
+                    )
+                  ],
                 ),
-                Container(
-                  margin: EdgeInsets.only(top: 34, bottom: 14),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Container(
-                        width: 120.0,
-                        height: 40.0,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(5),
-                            color: Color(0xFFD3D3D3)),
-                        child: MaterialButton(
-                            child: Text('Cancel',
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w600)),
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            }),
-                      ),
-                      Container(
-                        width: 228.0,
-                        height: 40.0,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(5),
-                            color: Color(0xFF427CEF)),
-                        child: MaterialButton(
-                            child: Text('Save Report',
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w600)),
-                            onPressed: () {
-                              _setValidation();
-                            }),
-                      ),
-                    ],
-                  ),
-                )
-              ],
-            ),
-          ),
-        ],
-      )),
+              ),
+            ],
+          )),
     );
   }
 

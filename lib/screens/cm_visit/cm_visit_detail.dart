@@ -51,6 +51,7 @@ Widget _buildContent(BuildContext context, CmVisitDetailModel model) {
   DateTime date = DateTime.parse(model.data.reportDate);
   String ids = model.data.customerCmModel.id;
   return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
     children: <Widget>[
       Container(
         margin: EdgeInsets.only(top: 12, left: 16, right: 16),
@@ -270,37 +271,29 @@ Widget _buildContent(BuildContext context, CmVisitDetailModel model) {
         ),
       ),
       Container(
-        width: MediaQuery.of(context).size.width,
-        margin: EdgeInsets.only(top: 20, left: 16, right: 16, bottom: 40),
-        child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Container(
-                margin: EdgeInsets.only(bottom: 12),
-                alignment: Alignment.topLeft,
-                child: Text(
-                  'Documentation',
-                  style: TextStyle(
-                      color: const Color(0xFF427CEF),
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600),
-                ),
-              ),
-              Container(
-                height: 100,
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  scrollDirection: Axis.horizontal,
-                  itemCount: model.data.images.length + 1,
-                  itemBuilder: (context, int index) {
-                    return index < model.data.images.length
-                        ? _listPhotos(context, model.data.images[index])
-                        : SizedBox(height: 15);
-                  },
-                ),
-              )
-            ]),
+          width: MediaQuery.of(context).size.width,
+          alignment: Alignment.topLeft,
+          margin: EdgeInsets.only(top: 20, left: 16, right: 16),
+          child: Text(
+            'Documentation',
+            style: TextStyle(
+                color: const Color(0xFF427CEF),
+                fontSize: 14,
+                fontWeight: FontWeight.w600),
+          )),
+      Container(
+        height: 100,
+        margin: EdgeInsets.only(top: 14, bottom: 32),
+        child: ListView.builder(
+          shrinkWrap: true,
+          scrollDirection: Axis.horizontal,
+          itemCount: model.data.images.length + 1,
+          itemBuilder: (context, int index) {
+            return index < model.data.images.length
+                ? _listPhotos(context, model.data.images[index])
+                : SizedBox(height: 15);
+          },
+        ),
       )
     ],
   );
@@ -312,7 +305,7 @@ Widget _listPhotos(BuildContext context, String images) {
   return Container(
       width: 100,
       height: 100,
-      margin: EdgeInsets.only(right: 10, left: 10),
+      margin: EdgeInsets.only(right: 15, left: 15),
       decoration: BoxDecoration(
           color: Colors.black,
           borderRadius: BorderRadius.circular(5),
