@@ -45,6 +45,8 @@ class _CMVisitFormState extends State<CMVisitForm> {
   TextEditingController emailAddress = new TextEditingController();
   TextEditingController reports = new TextEditingController();
 
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
   File _image;
   File _image2;
   File _image3;
@@ -202,8 +204,10 @@ class _CMVisitFormState extends State<CMVisitForm> {
 
   @override
   Widget build(BuildContext context) {
-    progressDialog = ProgressDialog(context, type: ProgressDialogType.Normal);
+    progressDialog = ProgressDialog(context,
+        type: ProgressDialogType.Normal, isDismissible: false);
     return Scaffold(
+      key: _scaffoldKey,
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -412,6 +416,7 @@ class _CMVisitFormState extends State<CMVisitForm> {
                       minLines: 1,
                       maxLines: 10,
                       autocorrect: true,
+                      controller: customerName,
                       style: TextStyle(height: 1, fontSize: 14),
                       decoration: InputDecoration(
                         hintText: 'Enter customer name',
@@ -1091,7 +1096,7 @@ class _CMVisitFormState extends State<CMVisitForm> {
 
   void _showAlertDialog(BuildContext context) {
     showDialog(
-        context: context,
+        context: _scaffoldKey.currentContext,
         builder: (BuildContext context) {
           return AlertDialog(
               content: Container(
@@ -1155,28 +1160,40 @@ class _CMVisitFormState extends State<CMVisitForm> {
                               Navigator.of(context).pop();
                               progressDialog.show();
                               Uint8List imageUnit8;
+                              Uint8List imageUnit82;
+                              Uint8List imageUnit83;
                               imageUnit8 = _image.readAsBytesSync();
+                              imageUnit82 = _image2.readAsBytesSync();
+                              imageUnit83 = _image3.readAsBytesSync();
                               String fileExt1 = _image.path.split('.').last;
                               String fileExt2 = _image2.path.split('.').last;
+                              String fileExt3 = _image3.path.split('.').last;
                               String encodeImage1 =
                                   'data:image/$fileExt1;base64,${base64Encode(imageUnit8)}';
                               String encodeImage2 =
-                                  'data:image/$fileExt2;base64,${base64Encode(imageUnit8)}';
+                                  'data:image/$fileExt2;base64,${base64Encode(imageUnit82)}';
+                              String encodeImage3 =
+                                  'data:image/$fileExt3;base64,${base64Encode(imageUnit83)}';
+                              var date = DateFormat("d MMMM yyyy")
+                                  .parse(_onDateSelected);
+                              var finalDate =
+                                  DateFormat("yyyy-MM-dd").format(date);
                               postCmVisit(
                                   context,
-                                  '2021-09-20',
-                                  visitType.text,
+                                  finalDate,
                                   valueChoose,
+                                  valueChoose,
+                                  activityDescription.text,
                                   customerName.text,
                                   customerId.text,
                                   'cpName',
                                   address.text,
-                                  '+62{$phoneNumber}',
+                                  '+62' + phoneNumber.text,
                                   emailAddress.text,
                                   reports.text,
                                   encodeImage1,
                                   encodeImage2,
-                                  'foto3');
+                                  encodeImage3);
                             }))
                   ],
                 ))
@@ -1191,6 +1208,7 @@ class _CMVisitFormState extends State<CMVisitForm> {
       String visitDate,
       String visitType,
       String activityType,
+      String activityDesc,
       String customerName,
       String customerId,
       String cpName,
@@ -1213,63 +1231,71 @@ class _CMVisitFormState extends State<CMVisitForm> {
       'activity_type': activityType,
       'customer_name': customerName,
       'customer_id': customerId,
+      'activity_description': activityDesc,
       'cp_name': cpName,
       'cp_address': cpAddress,
       'cp_phone': cpPhone,
       'cp_email': cpEmail,
       'report': report,
       'images[0]': foto1,
-      'images[1]': foto2
+      'images[1]': foto2,
+      'images[2]': foto3
     });
+    print('status code' + responsePostCmVisitForm.statusCode.toString());
     if (responsePostCmVisitForm.statusCode == 200) {
       setState(() {
         progressDialog.hide();
         _showDialogSuccessSubmit(context);
       });
+    } else {
+      setState(() {
+        progressDialog.hide();
+        print('responsebody' + responsePostCmVisitForm.body.trim().toString());
+      });
     }
     return CmVisitReponse.fromJson(json.decode(responsePostCmVisitForm.body));
   }
-}
 
-void _showDialogSuccessSubmit(BuildContext context) {
-  showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          content: Container(
-            width: MediaQuery.of(context).size.width,
-            height: 70.0,
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Container(
-                  width: 70.0,
-                  height: 70.0,
-                  child: Icon(Icons.check_circle_outline_rounded,
-                      color: Color(0xFF81C153), size: 50),
-                ),
-                Container(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text('Thank You!',
-                          style: TextStyle(
-                              color: Color(0xFF81C153),
-                              fontSize: 18,
-                              fontWeight: FontWeight.w600)),
-                      SizedBox(height: 4),
-                      Text('Your report has been submitted',
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 12,
-                              fontWeight: FontWeight.normal)),
-                    ],
+  void _showDialogSuccessSubmit(BuildContext context) {
+    showDialog(
+        context: _scaffoldKey.currentContext,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            content: Container(
+              width: MediaQuery.of(context).size.width,
+              height: 70.0,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Container(
+                    width: 70.0,
+                    height: 70.0,
+                    child: Icon(Icons.check_circle_outline_rounded,
+                        color: Color(0xFF81C153), size: 50),
                   ),
-                )
-              ],
+                  Container(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text('Thank You!',
+                            style: TextStyle(
+                                color: Color(0xFF81C153),
+                                fontSize: 18,
+                                fontWeight: FontWeight.w600)),
+                        SizedBox(height: 4),
+                        Text('Your report has been submitted',
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 12,
+                                fontWeight: FontWeight.normal)),
+                      ],
+                    ),
+                  )
+                ],
+              ),
             ),
-          ),
-        );
-      });
+          );
+        });
+  }
 }

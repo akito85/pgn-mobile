@@ -10,7 +10,7 @@ class CmVisitReponse {
     if (json['data'] != null) {
       return CmVisitReponse(data: DataModel.fromJson(json['data']));
     } else {
-      return CmVisitReponse(metadata: Meta.fromJson(json['meta']));
+      return CmVisitReponse(metadata: (json['meta']));
     }
   }
 }
