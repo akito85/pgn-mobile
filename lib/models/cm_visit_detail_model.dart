@@ -8,7 +8,7 @@ class CmVisitDetailModel {
     if (json['data'] != null) {
       return CmVisitDetailModel(data: CmVisitModels.fromJson(json['data']));
     } else {
-      return CmVisitDetailModel(meta: Meta.fromJson(json['meta']));
+      return CmVisitDetailModel(meta: (json['meta']));
     }
   }
 }
