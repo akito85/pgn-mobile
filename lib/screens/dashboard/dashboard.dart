@@ -306,7 +306,7 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
       groupID = groupIDs;
       customerID = customerIDs;
       customerGroupID = customerGroupIDs;
-      print('USRER TYPE GET AUTH : $userType');
+      print('USRER TYPE GET AUTH : $customerID');
       // titleMng = prefs.getString('user_name_cust') ?? "";
       // titleCust = prefs.getString('user_name_cust') ?? "";
       // custID = prefs.getString('user_id') ?? "";
@@ -528,11 +528,12 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
                 children: <Widget>[
                   _buildDashboardResidential(
                       context, _prov.custName.toString() ?? ""),
-                  customerGroupID == '1'
-                      ? showCustInvoiceGPIRnGPIK(context,
-                          getCustomerInvoice(context), _prov.custId, groupID)
-                      : showCustInvoiceCustomerResidential(context,
-                          getCustomerInvoiceResidential(context), _prov.custId),
+                  // customerGroupID == '1'
+                  //     ? showCustInvoiceGPIRnGPIK(context,
+                  //         getCustomerInvoice(context), _prov.custId, groupID)
+                  //     :
+                  showCustInvoiceCustomerResidential(context,
+                      getCustomerInvoiceResidential(context), _prov.custId),
                   GasPoint(),
                   showCustProfileCustomerResidential(
                       context, getCustomerProfileResidential(context))
@@ -957,14 +958,61 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
                     fontWeight: FontWeight.bold),
               ),
             ),
-            Container(
-              margin: EdgeInsets.fromLTRB(15.0, 2.0, 15.0, 3.0),
-              child: Text(
-                titleCust ?? "-",
-                style: painting.TextStyle(
-                    fontSize: 16.0,
-                    color: Colors.grey[600],
-                    fontWeight: FontWeight.w400),
+            Card(
+              color: painting.Color(0xFF427CEF),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+              elevation: 5,
+              margin: EdgeInsets.only(left: 16.0, right: 18.0),
+              child: Padding(
+                padding: EdgeInsets.only(left: 12.0, bottom: 12, top: 12),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: <Widget>[
+                    Center(
+                      child: Padding(
+                        padding: EdgeInsets.only(right: 12.0),
+                        child: CircleAvatar(
+                            backgroundColor: painting.Color(0xFFFFFFFF)),
+                      ),
+                    ),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            titleCust ?? "-",
+                            overflow: TextOverflow.ellipsis,
+                            style: painting.TextStyle(
+                                fontSize: 16.0,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.white),
+                          ),
+                          SizedBox(height: 4),
+                          Text(
+                            customerID ?? "-",
+                            style: painting.TextStyle(color: Colors.white),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 16),
+                      child: InkWell(
+                        onTap: () {
+                          // switchCustomerIdAlert(context);
+                          _showCustIdModalBottomSheet(context);
+                        },
+                        child: Image(
+                          image: AssetImage('assets/switchDash.png'),
+                          color: Colors.white,
+                          height: 25,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
             SizedBox(height: 10),
