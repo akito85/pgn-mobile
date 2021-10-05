@@ -11,11 +11,13 @@ import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:pgn_mobile/models/dashboard_chart_invoice_residential.dart';
 import 'package:pgn_mobile/models/dashboard_customer_model.dart';
+import 'package:pgn_mobile/models/gas_point_model.dart' as modelGP;
 import 'package:pgn_mobile/models/url_cons.dart';
 import 'package:pgn_mobile/screens/dashboard/dashboard_cust_add.dart';
 import 'package:pgn_mobile/screens/cm_visit/cm_visit.dart';
 import 'package:pgn_mobile/screens/gas_point/gas_point.dart';
 import 'package:pgn_mobile/screens/otp/otp.dart';
+import 'package:pgn_mobile/screens/invoice_customer_gpik.dart/invoice_customer_gpik.dart';
 import 'package:pgn_mobile/services/app_localizations.dart';
 import 'package:pgn_mobile/widgets/navigation_drawer.dart';
 import 'package:pgn_mobile/screens/dashboard/widgets/dashboard_detail.dart';
@@ -54,6 +56,7 @@ class Dashboard extends StatefulWidget {
 
 class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
   String noValue = ' ';
+  String pointGasPoint = '0';
   bool harianCustVisible = true;
   TabController _tabController;
   String greetings;
@@ -69,6 +72,7 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
   String userType;
   String groupID;
   String customerID;
+  String customerGroupID;
   final storageCache = new FlutterSecureStorage();
   List<SummaryModel> datanyaIdr(List<DataChartIdr> data) {
     final mockedData = List<SummaryModel>();
@@ -212,6 +216,7 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
   void initState() {
     super.initState();
     getTitleCust();
+    getVirtualCardGasPoint(context);
     _firebaseMsgListener();
 
     _controller = new TabController(length: 4, vsync: this);
@@ -290,6 +295,9 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
     String userTypes = await storageCache.read(key: 'user_type') ?? "";
     String groupIDs = await storageCache.read(key: 'usergroup_id') ?? "";
     String customerIDs = await storageCache.read(key: 'customer_id') ?? "";
+    String customerGroupIDs =
+        await storageCache.read(key: 'customer_groupId') ?? "";
+
     print('USRER TYPE GET AUTH : ${await storageCache.read(key: 'user_type')}');
     setState(() {
       titleMng = titleMngs;
@@ -298,6 +306,7 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
       userType = userTypes;
       groupID = groupIDs;
       customerID = customerIDs;
+      customerGroupID = customerGroupIDs;
       print('USRER TYPE GET AUTH : $userType');
       // titleMng = prefs.getString('user_name_cust') ?? "";
       // titleCust = prefs.getString('user_name_cust') ?? "";
@@ -480,12 +489,26 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
               style: painting.TextStyle(color: Colors.black),
             ),
             actions: <Widget>[
-              IconButton(
-                  icon: actionIcon,
-                  onPressed: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => Settings()));
-                  })
+              InkWell(
+                onTap: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => Settings()));
+                },
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 10),
+                  child: Image(
+                    image: AssetImage('assets/setting.png'),
+                    height: 28,
+                    width: 28,
+                  ),
+                ),
+              ),
+              // IconButton(
+              //     icon: actionIcon,
+              //     onPressed: () {
+              //       Navigator.push(context,
+              //           MaterialPageRoute(builder: (context) => Settings()));
+              //     })
             ],
           ),
           drawer: Drawer(
@@ -506,9 +529,18 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
                 children: <Widget>[
                   _buildDashboardResidential(
                       context, _prov.custName.toString() ?? ""),
+
                   showCustInvoiceCustomerResidential(context,
                       getCustomerInvoiceResidential(context), _prov.custId),
                   CMVisit(),
+
+                  customerGroupID == '1'
+                      ? showCustInvoiceGPIRnGPIK(context,
+                          getCustomerInvoice(context), _prov.custId, groupID)
+                      : showCustInvoiceCustomerResidential(context,
+                          getCustomerInvoiceResidential(context), _prov.custId),
+                  GasPoint(),
+
                   showCustProfileCustomerResidential(
                       context, getCustomerProfileResidential(context))
                 ],
@@ -620,8 +652,11 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
                 children: <Widget>[
                   _buildDashboardSales(
                       context, _prov.custName.toString() ?? ""),
-                  showCustInvoiceCustomer(context, getCustomerInvoice(context),
-                      _prov.custId, groupID),
+                  groupID == '9'
+                      ? showCustInvoiceCustomerResidential(context,
+                          getCustomerInvoiceResidential(context), _prov.custId)
+                      : showCustInvoiceCustomer(context,
+                          getCustomerInvoice(context), _prov.custId, groupID),
                   UsageDetailCust(title: titleCust, idCust: custID),
                   showCustProfileCustomer(
                       context, getCustomerProfile(context), custID)
@@ -1067,7 +1102,7 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Container(
-              margin: EdgeInsets.fromLTRB(20.0, 20.0, 0.0, 8.0),
+              margin: EdgeInsets.fromLTRB(20.0, 20.0, 0.0, 15.0),
               child: Text(
                 greetings ?? "",
                 style: painting.TextStyle(
@@ -1076,77 +1111,99 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
                     fontWeight: FontWeight.bold),
               ),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Expanded(
-                  child: Card(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.0),
+            Card(
+              color: painting.Color(0xFF427CEF),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+              elevation: 5,
+              margin: EdgeInsets.only(left: 16.0, right: 18.0),
+              child: Padding(
+                padding: EdgeInsets.only(left: 12.0, bottom: 12, top: 12),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: <Widget>[
+                    Center(
+                      child: Padding(
+                        padding: EdgeInsets.only(right: 12.0),
+                        child: CircleAvatar(
+                            backgroundColor: painting.Color(0xFFFFFFFF)),
+                      ),
                     ),
-                    elevation: 5,
-                    margin: EdgeInsets.only(left: 16.0, right: 18.0),
-                    child: Padding(
-                      padding: EdgeInsets.all(12.0),
-                      child: Row(
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Padding(
-                            padding: EdgeInsets.only(right: 12.0),
-                            child: CircleAvatar(
-                                backgroundColor: painting.Color(0xFF427CEF)),
+                          Text(
+                            titleCust ?? "-",
+                            overflow: TextOverflow.ellipsis,
+                            style: painting.TextStyle(
+                                fontSize: 16.0,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.white),
                           ),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                Text(
-                                  titleCust ?? "-",
-                                  overflow: TextOverflow.ellipsis,
-                                  style: painting.TextStyle(
-                                    fontSize: 16.0,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                                Text(
-                                  customerID ?? "-",
-                                ),
-                              ],
-                            ),
+                          SizedBox(height: 4),
+                          Text(
+                            customerID ?? "-",
+                            style: painting.TextStyle(color: Colors.white),
                           ),
-                          IconButton(
-                              icon: Icon(Icons.add),
-                              onPressed: () {
-                                // switchCustomerIdAlert(context);
-                                _showCustIdModalBottomSheet(context);
-                              })
                         ],
                       ),
                     ),
-                  ),
-                ),
-                Card(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  elevation: 5,
-                  margin: EdgeInsets.only(right: 18.0),
-                  child: Padding(
-                    padding: EdgeInsets.all(13.0),
-                    child: Column(
-                      children: <Widget>[
-                        Text(
-                          '0',
-                          overflow: TextOverflow.ellipsis,
-                          style: painting.TextStyle(
-                            fontSize: 20.0,
-                          ),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 16),
+                      child: InkWell(
+                        onTap: () {
+                          // switchCustomerIdAlert(context);
+                          _showCustIdModalBottomSheet(context);
+                        },
+                        child: Image(
+                          image: AssetImage('assets/switchDash.png'),
+                          color: Colors.white,
+                          height: 25,
                         ),
-                        Text('Gas Point'),
-                      ],
+                      ),
                     ),
-                  ),
+                  ],
                 ),
-              ],
+              ),
+            ),
+            Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+              color: painting.Color(0xFFFAC842),
+              elevation: 5,
+              margin: EdgeInsets.only(left: 16, right: 18.0, top: 12),
+              child: Padding(
+                padding: EdgeInsets.all(15.0),
+                child: Row(
+                  children: <Widget>[
+                    Image(
+                      image: AssetImage('assets/ticket.png'),
+                      height: 28,
+                      color: painting.Color(0xFF7C6400),
+                    ),
+                    SizedBox(width: 16),
+                    Expanded(
+                        child: Text(
+                      'Poin Collected',
+                      style: painting.TextStyle(
+                        color: painting.Color(0xFF455055),
+                      ),
+                    )),
+                    Text(
+                      pointGasPoint,
+                      // overflow: TextOverflow.ellipsis,
+                      style: painting.TextStyle(
+                        fontSize: 20.0,
+                        fontWeight: FontWeight.bold,
+                        color: painting.Color(0xFF455055),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
             Container(
               margin: EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 0.0),
@@ -2365,7 +2422,8 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
               return Wrap(
                 children: <Widget>[
                   Padding(
-                    padding: EdgeInsets.only(left: 20, right: 20, top: 20),
+                    padding: EdgeInsets.only(
+                        left: 20, right: 20, top: 20, bottom: 15),
                     child: Text(
                       'Select Profile',
                       style: painting.TextStyle(
@@ -2386,7 +2444,7 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
                                 .sort((b, a) => a.active.compareTo(b.active));
                             return Padding(
                               padding: EdgeInsets.only(
-                                  right: 20, top: 20, bottom: 10),
+                                  right: 20, top: 5, bottom: 10),
                               child: Row(
                                 children: [
                                   snapshot.data.dashboardCustIdList
@@ -2522,27 +2580,34 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
                             ],
                           ),
                         ),
-                  Padding(
-                    padding: EdgeInsets.only(
-                        left: 20, right: 20, top: 20, bottom: 20),
-                    child: InkWell(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => DashboardCustAdd()));
-                      },
-                      child: Row(
-                        children: [
-                          FaIcon(Icons.add),
-                          Padding(
-                            padding: EdgeInsets.only(left: 20),
-                            child: Text('Add new Customer Id'),
+                  snapshot.data.dashboardCustIdList.listCustomerId.length < 3
+                      ? Padding(
+                          padding:
+                              EdgeInsets.only(left: 25, right: 20, bottom: 20),
+                          child: InkWell(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          DashboardCustAdd()));
+                            },
+                            child: Row(
+                              children: [
+                                FaIcon(
+                                  Icons.add_circle_outline,
+                                  size: 45,
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.only(left: 15),
+                                  child: Text('Add New Profile'),
+                                ),
+                              ],
+                            ),
                           ),
-                        ],
-                      ),
-                    ),
-                  ),
+                        )
+                      : SizedBox(height: 5),
+                  SizedBox(height: 10),
                 ],
               );
             },
@@ -2573,10 +2638,35 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
           key: 'user_name_cust',
           value: switchCustomerId.dataSwitchCustomerId.custName);
       showToast(switchCustomerId.dataSwitchCustomerId.message);
+      Navigator.pop(context);
       Navigator.pushReplacement(context,
           MaterialPageRoute(builder: (BuildContext context) => super.widget));
     } else {
       showToast(switchCustomerId.message);
+    }
+  }
+
+  void getVirtualCardGasPoint(BuildContext context) async {
+    final storageCache = FlutterSecureStorage();
+    String accessToken = await storageCache.read(key: 'access_token');
+
+    var responseGetVCGasPoint =
+        await http.get('${UrlCons.mainDevUrl}virtual_card', headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $accessToken',
+    });
+
+    print('HASILNYA : ${responseGetVCGasPoint.body}');
+    if (responseGetVCGasPoint.statusCode == 200) {
+      modelGP.VirtualCardGasPoint virtualCardGasPoint =
+          modelGP.VirtualCardGasPoint.fromJson(
+              json.decode(responseGetVCGasPoint.body));
+      setState(() {
+        pointGasPoint = virtualCardGasPoint.dataVCGasPoint.pointReward;
+      });
+      print('UPDATE $pointGasPoint');
+    } else {
+      throw Exception('Could not get any response');
     }
   }
 
@@ -2595,6 +2685,7 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
         DeleteCustomerId.fromJson(json.decode(responseDeleteCustId.body));
     if (responseDeleteCustId.statusCode == 200) {
       showToast(switchCustomerId.dataDeleteCustomerId.message);
+      Navigator.pop(context);
       Navigator.pushReplacement(context,
           MaterialPageRoute(builder: (BuildContext context) => super.widget));
     } else {
@@ -3229,6 +3320,12 @@ Widget showCustInvoiceCustomerResidential(BuildContext context,
   return InvoiceCustResidential(data: _customerInvoice, custID: cust_id);
 }
 
+Widget showCustInvoiceGPIRnGPIK(BuildContext context,
+    Future<CustomerInvoice> _customerInvoice, String cust_id, String userid) {
+  return InvoiceCustGPIRnGPIK(
+      data: _customerInvoice, custID: cust_id, userid: userid);
+}
+
 Future<Customer> getCustomerProfile(BuildContext context) async {
   final storageCache = FlutterSecureStorage();
   String accessToken = await storageCache.read(key: 'access_token');
@@ -3373,11 +3470,13 @@ void _signingOff(BuildContext context, String message) async {
   final storageCache = FlutterSecureStorage();
 
   if (message == 'Device is registered successfully') {
+    await storageCache.write(key: 'auth_status', value: 'Login');
     Navigator.pop(context);
     Navigator.pushReplacementNamed(context, '/dashboard');
   } else {
     await storageCache.write(key: 'user_id', value: 'kosong');
     await storageCache.write(key: 'access_token', value: 'kosong');
+    await storageCache.write(key: 'auth_status', value: 'Logout');
     Navigator.pushNamedAndRemoveUntil(
       context,
       '/login',

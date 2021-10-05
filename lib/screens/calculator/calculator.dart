@@ -13,7 +13,10 @@ class Calculator extends StatelessWidget {
       backgroundColor: Colors.white,
       appBar: AppBar(
         elevation: 0,
-        title: Text('Energy Calculator'),
+        title: Text(
+          'Energy Calculator',
+          style: TextStyle(color: Colors.black),
+        ),
         backgroundColor: Colors.white,
       ),
       body: ListView(

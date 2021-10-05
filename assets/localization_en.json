@@ -383,6 +383,7 @@
     "f_dictionary_search": "Search",
     "ff_change_password_error_confirmation_not_matched": "Confirmation does not match",
     "ff_change_password_dialog_success_text": "Thanks for changing password",
+    "ff_change_number_dialog_success_text": "Thanks for changing phone number",
     "f_home_tv_call_center": "PGN Contact Center %1$s",
     "f_home_tv_website": "www.pgn.co.id",
     "f_notification_tv_empty_desc": "No Notification",
@@ -786,6 +787,8 @@
     "cmm_form_retake_photo": "Re-take Photo",
     "cmm_form_alert_post_failed": "Failed, Data already recorded",
     "cmm_form_alert_post_success": "Successed, Data successfully recorded",
-    "field_input_allert": "All fields must be filled !"
-    
+    "field_input_allert": "All fields must be filled !",
+    "pb_tab_title": "Subscription Progress",
+    "f_dialog_confirmation_delete_form": "Are you sure delete this Form Id",
+    "f_dialog_confirmation_add_form": "Please input your form id"
 }

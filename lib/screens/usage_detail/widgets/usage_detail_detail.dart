@@ -45,7 +45,10 @@ class UsageTabDetailState extends State<UsageTabDetail>
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
-        title: Text('Usage Detail'),
+        title: Text(
+          'Usage Detail',
+          style: TextStyle(color: Colors.black),
+        ),
       ),
       body: Stack(
         children: <Widget>[

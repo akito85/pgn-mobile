@@ -9,6 +9,7 @@ import 'package:pgn_mobile/screens/installation_inspection/installation_inspecti
 import 'package:pgn_mobile/screens/installation_inspection/installation_inspection_detail.dart';
 import 'package:pgn_mobile/screens/login/login.dart';
 import 'package:pgn_mobile/screens/login/login_revamp.dart';
+import 'package:pgn_mobile/screens/progress_subscriptions/progress_subscriptions.dart';
 import 'package:pgn_mobile/splash_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:pgn_mobile/services/register_residential.dart';
@@ -30,7 +31,6 @@ import 'package:pgn_mobile/screens/otp/otp.dart';
 import 'package:pgn_mobile/services/user_credientials.dart';
 import 'package:pgn_mobile/services/language.dart';
 import 'package:pgn_mobile/services/usage_detail.dart';
-import 'package:pgn_mobile/services/push_notification.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class Routes {
@@ -79,6 +79,7 @@ class _MyFirstState extends State<FirstScreen> {
     '/cmVisitForm': (context) => CMVisitForm(),
     '/installationInspection': (context) => InstallationInspection(),
     '/installationInspectionDetail': (context) => InstallationInspectionDetail()
+    '/subscriptionProgress': (context) => ProgressSubscriptions(),
   };
 
   SpecificLocalizationDelegate _localeOverrideDelegate;
@@ -105,8 +106,7 @@ class _MyFirstState extends State<FirstScreen> {
         primaryColorDark: Colors.blue[800],
         accentColor: Colors.blue[600],
         appBarTheme: AppBarTheme(
-          elevation: 5.0,
-        ),
+            elevation: 5.0, iconTheme: IconThemeData(color: Colors.black)),
         cardTheme: CardTheme(
           elevation: 3.0,
         ),

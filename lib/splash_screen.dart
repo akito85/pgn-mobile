@@ -21,24 +21,41 @@ class _SplashScreenState extends State<SplashScreen> {
     // SharedPreferences prefs = await SharedPreferences.getInstance();
     // String userID = prefs.getString('user_id');
     final storageCache = FlutterSecureStorage();
-    String userID = await storageCache.read(key: 'user_id');
-    if (userID == "kosong") {
+    String userID = await storageCache.read(key: 'auth_status');
+    if (userID == "Login") {
       Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) => LoginRevamp(),
+          // builder: (context) => Dashboard(),
         ),
       );
-    } else if (userID == null) {
-      Navigator.pushReplacementNamed(context, '/login');
     } else {
+      Navigator.pushReplacementNamed(context, '/login');
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => Dashboard(),
+          builder: (context) => Login(),
         ),
       );
     }
+    // if (userID == "Logout") {
+    //   Navigator.push(
+    //     context,
+    //     MaterialPageRoute(
+    //       builder: (context) => Login(),
+    //     ),
+    //   );
+    // } else if (userID == null) {
+    //   Navigator.pushReplacementNamed(context, '/login');
+    // } else {
+    //   Navigator.push(
+    //     context,
+    //     MaterialPageRoute(
+    //       builder: (context) => Dashboard(),
+    //     ),
+    //   );
+    // }
   }
 
   @override

@@ -68,29 +68,34 @@ class DataCustInvoice {
       this.usagePeriod});
 
   factory DataCustInvoice.fromJson(Map<String, dynamic> json) {
-    return DataCustInvoice(
-      invoiceId: json['id'],
-      custInvoiceId: json['customer_id'],
-      custInvoiceName: json['customer_name'],
-      usagePeriod: UsagePeriod.fromJson(json['usage_period']),
-      invoicePeriod: InvoicePeriod.fromJson(json['invoice_period']),
-      countedEnergy: CountedEnergy.fromJson(json['counted_energy']),
-      countedVolume: CountedVolume.fromJson(json['counted_volume']),
-      billedEnergy: BilledEnergy.fromJson(json['billed_energy']),
-      billedVolume: BilledVolume.fromJson(json['billed_volume']),
-      tBillIdr: TBillIdr.fromJson(json['total_bill_idr']),
-      tBillUsd: TBillUsd.fromJson(json['total_bill_usd']),
-      minUsage: MinUsage.fromJson(json['min_usage']),
-      maxUsage: MaxUsage.fromJson(json['max_usage']),
-      pGuaranteeIdr: PGuaranteeIdr.fromJson(json['payment_guarantee_idr']),
-      pGuaranteeUsd: PGuaranteeUsd.fromJson(json['payment_guarantee_usd']),
-      isPaid: json['is_paid'],
-      type: json['type'],
-      dueDate: DueDate.fromJson(json['due_date']),
-      paidDate: json['paid_date'],
-      paymentStatus: PaymentStatus.fromJson(json['payment_status']),
-      paymentPlanSub: PaymentPlanSub.fromJson(json['payment_plan_submission']),
-    );
+    if (json == null) {
+      return DataCustInvoice();
+    } else {
+      return DataCustInvoice(
+        invoiceId: json['id'],
+        custInvoiceId: json['customer_id'],
+        custInvoiceName: json['customer_name'],
+        usagePeriod: UsagePeriod.fromJson(json['usage_period']),
+        invoicePeriod: InvoicePeriod.fromJson(json['invoice_period']),
+        countedEnergy: CountedEnergy.fromJson(json['counted_energy']),
+        countedVolume: CountedVolume.fromJson(json['counted_volume']),
+        billedEnergy: BilledEnergy.fromJson(json['billed_energy']),
+        billedVolume: BilledVolume.fromJson(json['billed_volume']),
+        tBillIdr: TBillIdr.fromJson(json['total_bill_idr']),
+        tBillUsd: TBillUsd.fromJson(json['total_bill_usd']),
+        minUsage: MinUsage.fromJson(json['min_usage']),
+        maxUsage: MaxUsage.fromJson(json['max_usage']),
+        pGuaranteeIdr: PGuaranteeIdr.fromJson(json['payment_guarantee_idr']),
+        pGuaranteeUsd: PGuaranteeUsd.fromJson(json['payment_guarantee_usd']),
+        isPaid: json['is_paid'],
+        type: json['type'],
+        dueDate: DueDate.fromJson(json['due_date']),
+        paidDate: json['paid_date'],
+        paymentStatus: PaymentStatus.fromJson(json['payment_status']),
+        paymentPlanSub:
+            PaymentPlanSub.fromJson(json['payment_plan_submission']),
+      );
+    }
   }
 }
 

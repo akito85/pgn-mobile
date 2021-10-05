@@ -120,7 +120,10 @@ class RegisterBusinesTabState extends State<RegisterBusinesTab>
         appBar: AppBar(
           backgroundColor: Colors.white,
           elevation: 0,
-          title: Text('KI Registration'),
+          title: Text(
+            'KI Registration',
+            style: TextStyle(color: Colors.black),
+          ),
         ),
         body: Stack(
           children: <Widget>[

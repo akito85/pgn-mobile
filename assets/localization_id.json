@@ -305,6 +305,7 @@
     "retry_message": "Terjadi kesalahan",
     "ff_change_password_error_confirmation_not_matched": "Password tidak sama",
     "ff_change_password_dialog_success_text": "Terima kasih telah mengganti password",
+    "ff_change_number_dialog_success_text": "Terima kasih telah mengganti nomor telephone ",
     "f_home_tv_call_center": "PGN Contact Center %1$s",
     "f_home_tv_website": "www.pgn.co.id",
     "f_notification_tv_empty_desc": "Tidak ada notifikasi",
@@ -766,5 +767,8 @@
     "cmm_form_retake_photo": "Ambil Ulang Foto",
     "cmm_form_alert_post_failed": "Data Pencatatan sudah pernah dilakukan",
     "cmm_form_alert_post_success": "Data Pencatatan Meter berhasil",
-    "field_input_allert": "Semua field harus terisi !"
+    "field_input_allert": "Semua field harus terisi !",
+    "pb_tab_title": "Progress Berlangganan",
+    "f_dialog_confirmation_delete_form": "Anda yakin ingin menghapus Form Id ini", 
+    "f_dialog_confirmation_add_form": "Silahkan masukan form id anda"
 }

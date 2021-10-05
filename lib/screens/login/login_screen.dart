@@ -354,7 +354,9 @@ class LoginScreenState extends State<LoginScreen> {
       setState(() {
         numbPhone = _auth.user.userMobilePhone;
       });
+      await storageCache.write(key: 'auth_status', value: 'Login');
       await storageCache.write(key: 'user_name_login', value: username);
+      await storageCache.write(key: 'user_name', value: _auth.user.userName);
       await storageCache.write(key: 'pass_login', value: password);
       await storageCache.write(
           key: 'next_action', value: _auth.verificationStatus.nextAction);
@@ -635,15 +637,15 @@ class LoginScreenState extends State<LoginScreen> {
         });
 
         String accessToken = await storageCache.read(key: 'access_token');
-        // prefs.getString('access_token');
 
-        // print('Accesss TOKENss : $accessToken');
-        // print('PHONE NUMBs : ${_auth.verificationStatus.message}');
         if (_auth.verificationStatus.message ==
-            'Anda pernah login melalui device ini') {
+                'Anda pernah login melalui device ini' ||
+            usernames.contains('@')) {
+          await storageCache.write(key: 'auth_status', value: 'Login');
           Navigator.pop(context);
           Navigator.pushReplacementNamed(context, '/dashboard');
         } else {
+          await storageCache.write(key: 'auth_status', value: 'Logout');
           Navigator.pushReplacementNamed(
             context,
             '/otp',

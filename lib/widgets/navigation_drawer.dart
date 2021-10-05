@@ -6,7 +6,6 @@ import 'package:http/http.dart' as http;
 import 'package:pgn_mobile/services/applications.dart';
 import 'dart:async';
 import 'dart:convert';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:pgn_mobile/screens/customer_profile/customer_profile.dart';
 import 'package:pgn_mobile/models/cust_profile_model.dart';
 import 'package:pgn_mobile/models/cust_invoice_model.dart';
@@ -44,9 +43,9 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
   @override
   Widget build(BuildContext context) {
     final _prov = Provider.of<UserCred>(context);
-    print('USER GROUP IDNYA : ${_prov.customerGroupId}');
-    print('USER GROUP ID : ${customerGroupId}');
-    print('USER TYPES ID : ${userTypes}');
+    // print('USER GROUP IDNYA : ${_prov.customerGroupId}');
+    // print('USER GROUP ID : ${customerGroupId}');
+    // print('USER TYPES ID : ${userTypes}');
     if (userTypes != '2')
       return Container(
         color: Colors.white,
@@ -239,83 +238,101 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
       );
     return Container(
       color: Colors.white,
-      child: ListView(children: <Widget>[
-        ListTile(
-          contentPadding: EdgeInsets.only(left: 20.0, top: 30),
-          leading: Icon(Icons.dashboard),
-          title: Text(
-            'Dashboard',
-            style: TextStyle(
-              color: Colors.grey[600],
-              fontSize: 17.0,
-              fontWeight: FontWeight.w400,
+      child: ListView(
+        children: <Widget>[
+          ListTile(
+            contentPadding: EdgeInsets.only(left: 20.0, top: 30),
+            leading: Icon(Icons.dashboard),
+            title: Text(
+              'Dashboard',
+              style: TextStyle(
+                color: Colors.grey[600],
+                fontSize: 17.0,
+                fontWeight: FontWeight.w400,
+              ),
             ),
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.pushNamed(context, '/dashboard');
+            },
           ),
-          onTap: () {
-            Navigator.pop(context);
-            Navigator.pushNamed(context, '/dashboard');
-          },
-        ),
-        Container(
-          margin: EdgeInsets.only(left: 15, right: 15),
-          child: Divider(color: Colors.black26),
-        ),
-        ListTile(
-          contentPadding: EdgeInsets.only(left: 20),
-          leading: Image.asset(
-            'assets/logo_head_menu.png',
-            width: 30.0,
-            height: 30.0,
+          Container(
+            margin: EdgeInsets.only(left: 15, right: 15),
+            child: Divider(color: Colors.black26),
           ),
-          title: Text(
-            Translations.of(context).text('title_bar_about'),
-            style: TextStyle(
-              color: Colors.grey[600],
-              fontSize: 17.0,
-              fontWeight: FontWeight.w400,
+          ListTile(
+            contentPadding: EdgeInsets.only(left: 20),
+            leading: Image.asset(
+              'assets/logo_head_menu.png',
+              width: 30.0,
+              height: 30.0,
             ),
-          ),
-          onTap: () {
-            Navigator.pop(context);
-            Navigator.pushNamed(context, '/aboutPgn');
-          },
-        ),
-        ListTile(
-          contentPadding: EdgeInsets.only(left: 20.0),
-          leading: Icon(Icons.ev_station),
-          title: Text(
-            Translations.of(context).text('a_home_tv_menu_spbg'),
-            style: TextStyle(
-              color: Colors.grey[600],
-              fontSize: 17.0,
-              fontWeight: FontWeight.w400,
+            title: Text(
+              Translations.of(context).text('title_bar_about'),
+              style: TextStyle(
+                color: Colors.grey[600],
+                fontSize: 17.0,
+                fontWeight: FontWeight.w400,
+              ),
             ),
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.pushNamed(context, '/aboutPgn');
+            },
           ),
-          onTap: () {
-            Navigator.pop(context);
-            Navigator.pushNamed(context, '/gasStation');
-          },
-        ),
-        customerGroupId == '3'
-            ? ListTile(
-                contentPadding: EdgeInsets.only(left: 20.0),
-                leading: Icon(Icons.receipt_long_outlined),
-                title: Text(
-                  Translations.of(context).text('a_home_tv_menu_cmm'),
-                  style: TextStyle(
-                    color: Colors.grey[600],
-                    fontSize: 17.0,
-                    fontWeight: FontWeight.w400,
+          ListTile(
+            contentPadding: EdgeInsets.only(left: 20.0),
+            leading: Icon(Icons.ev_station),
+            title: Text(
+              Translations.of(context).text('a_home_tv_menu_spbg'),
+              style: TextStyle(
+                color: Colors.grey[600],
+                fontSize: 17.0,
+                fontWeight: FontWeight.w400,
+              ),
+            ),
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.pushNamed(context, '/gasStation');
+            },
+          ),
+          customerGroupId == '3'
+              ? ListTile(
+                  contentPadding: EdgeInsets.only(left: 20.0),
+                  leading: Icon(Icons.receipt_long_outlined),
+                  title: Text(
+                    Translations.of(context).text('a_home_tv_menu_cmm'),
+                    style: TextStyle(
+                      color: Colors.grey[600],
+                      fontSize: 17.0,
+                      fontWeight: FontWeight.w400,
+                    ),
                   ),
-                ),
-                onTap: () {
-                  Navigator.pop(context);
-                  Navigator.pushNamed(context, '/cmm');
-                },
-              )
-            : SizedBox(),
-        Divider(color: Colors.black),
-      ]),
+                  onTap: () {
+                    Navigator.pop(context);
+                    Navigator.pushNamed(context, '/cmm');
+                  },
+                )
+              : SizedBox(),
+          ListTile(
+            contentPadding: EdgeInsets.only(left: 20.0),
+            leading: Icon(Icons.subscriptions_sharp),
+            title: Text(
+              Translations.of(context).text('pb_tab_title'),
+              style: TextStyle(
+                color: Colors.grey[600],
+                fontSize: 17.0,
+                fontWeight: FontWeight.w400,
+              ),
+            ),
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.pushNamed(context, '/subscriptionProgress');
+            },
+          ),
+          Divider(color: Colors.black),
+        ],
+      ),
     );
   }
 
