@@ -62,7 +62,10 @@ class _CMVisitFormState extends State<CMVisitForm> {
     }
     if (images == '1') {
       final pickedFile = await picker.getImage(
-          source: imageSource, maxWidth: 100, maxHeight: 100, imageQuality: 50);
+          source: imageSource,
+          maxWidth: 100,
+          maxHeight: 100,
+          imageQuality: 100);
       setState(() {
         if (pickedFile != null) {
           _image = File(pickedFile.path);
@@ -72,7 +75,10 @@ class _CMVisitFormState extends State<CMVisitForm> {
       });
     } else if (images == '2') {
       final pickedFile = await picker.getImage(
-          source: imageSource, maxWidth: 100, maxHeight: 100, imageQuality: 50);
+          source: imageSource,
+          maxWidth: 100,
+          maxHeight: 100,
+          imageQuality: 100);
       setState(() {
         if (pickedFile != null) {
           _image2 = File(pickedFile.path);
@@ -82,7 +88,10 @@ class _CMVisitFormState extends State<CMVisitForm> {
       });
     } else if (images == '3') {
       final pickedFile = await picker.getImage(
-          source: imageSource, maxWidth: 100, maxHeight: 100, imageQuality: 50);
+          source: imageSource,
+          maxWidth: 100,
+          maxHeight: 100,
+          imageQuality: 100);
       setState(() {
         if (pickedFile != null) {
           _image3 = File(pickedFile.path);
@@ -1220,9 +1229,9 @@ class _CMVisitFormState extends State<CMVisitForm> {
                                   '+62' + phoneNumber.text,
                                   emailAddress.text,
                                   reports.text,
-                                  encodeImage1,
-                                  encodeImage2,
-                                  encodeImage3);
+                                  _image != null ? encodeImage1 : '',
+                                  _image2 != null ? encodeImage2 : '',
+                                  _image3 != null ? encodeImage3 : '');
                             }))
                   ],
                 ))
@@ -1275,6 +1284,11 @@ class _CMVisitFormState extends State<CMVisitForm> {
       setState(() {
         progressDialog.hide();
         _showDialogSuccessSubmit(context);
+        Future.delayed(Duration(seconds: 2), () {
+          Navigator.pop(_scaffoldKey.currentContext);
+          Navigator.pushReplacementNamed(
+              _scaffoldKey.currentContext, '/cmVisit');
+        });
       });
     } else {
       setState(() {
