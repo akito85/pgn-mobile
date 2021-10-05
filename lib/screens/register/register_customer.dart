@@ -40,6 +40,7 @@ class RegistCustState extends State<RegisterCustomer> {
   Widget build(BuildContext context) {
     final _lang = Provider.of<Language>(context);
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.white,

@@ -283,36 +283,36 @@ class OTPFormState extends State<OTPForm> {
             ),
           ),
 
-          Container(
-              height: 50.0,
-              margin: EdgeInsets.fromLTRB(15.0, 5.0, 15.0, 30.0),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(18.0),
-                color: Colors.grey[400],
-              ),
-              child: MaterialButton(
-                // color: color: Color(0xFF427CEF),,
-                minWidth: MediaQuery.of(context).size.width,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Bypass Otp',
-                      style: TextStyle(
-                        color: Colors.black,
-                      ),
-                    ),
-                    Text(
-                      'Tombol ini hanya ada di beta untuk keperluan testing !',
-                      style: TextStyle(color: Colors.black, fontSize: 11),
-                    ),
-                  ],
-                ),
-                onPressed: () {
-                  Navigator.pop(context);
-                  Navigator.pushReplacementNamed(context, '/dashboard');
-                },
-              )),
+          // Container(
+          //     height: 50.0,
+          //     margin: EdgeInsets.fromLTRB(15.0, 5.0, 15.0, 30.0),
+          //     decoration: BoxDecoration(
+          //       borderRadius: BorderRadius.circular(18.0),
+          //       color: Colors.grey[400],
+          //     ),
+          //     child: MaterialButton(
+          //       // color: color: Color(0xFF427CEF),,
+          //       minWidth: MediaQuery.of(context).size.width,
+          //       child: Column(
+          //         mainAxisAlignment: MainAxisAlignment.center,
+          //         children: [
+          //           Text(
+          //             'Bypass Otp',
+          //             style: TextStyle(
+          //               color: Colors.black,
+          //             ),
+          //           ),
+          //           Text(
+          //             'Tombol ini hanya ada di beta untuk keperluan testing !',
+          //             style: TextStyle(color: Colors.black, fontSize: 11),
+          //           ),
+          //         ],
+          //       ),
+          //       onPressed: () {
+          //         Navigator.pop(context);
+          //         Navigator.pushReplacementNamed(context, '/dashboard');
+          //       },
+          //     )),
         ],
       ),
     );

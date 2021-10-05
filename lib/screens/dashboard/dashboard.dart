@@ -505,11 +505,12 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
                 children: <Widget>[
                   _buildDashboardResidential(
                       context, _prov.custName.toString() ?? ""),
-                  customerGroupID == '1'
-                      ? showCustInvoiceGPIRnGPIK(context,
-                          getCustomerInvoice(context), _prov.custId, groupID)
-                      : showCustInvoiceCustomerResidential(context,
-                          getCustomerInvoiceResidential(context), _prov.custId),
+                  // customerGroupID == '1'
+                  //     ? showCustInvoiceGPIRnGPIK(context,
+                  //         getCustomerInvoice(context), _prov.custId, groupID)
+                  //     :
+                  showCustInvoiceCustomerResidential(context,
+                      getCustomerInvoiceResidential(context), _prov.custId),
                   GasPoint(),
                   showCustProfileCustomerResidential(
                       context, getCustomerProfileResidential(context))
