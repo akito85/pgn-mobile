@@ -645,8 +645,11 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
                 children: <Widget>[
                   _buildDashboardSales(
                       context, _prov.custName.toString() ?? ""),
-                  showCustInvoiceCustomer(context, getCustomerInvoice(context),
-                      _prov.custId, groupID),
+                  groupID == '9'
+                      ? showCustInvoiceCustomerResidential(context,
+                          getCustomerInvoiceResidential(context), _prov.custId)
+                      : showCustInvoiceCustomer(context,
+                          getCustomerInvoice(context), _prov.custId, groupID),
                   UsageDetailCust(title: titleCust, idCust: custID),
                   showCustProfileCustomer(
                       context, getCustomerProfile(context), custID)

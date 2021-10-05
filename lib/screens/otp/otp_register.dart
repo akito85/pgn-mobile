@@ -117,28 +117,28 @@ class OTPRegisterFormState extends State<OTPRegisterForm> {
               style: TextStyle(fontSize: 18),
             ),
           ),
-          Center(
-            child: Padding(
-              padding: const EdgeInsets.only(left: 15, right: 15, top: 20),
-              child: OTPTextField(
-                length: 6,
-                width: MediaQuery.of(context).size.width,
-                textFieldAlignment: MainAxisAlignment.spaceAround,
-                fieldWidth: 45,
-                fieldStyle: FieldStyle.underline,
-                outlineBorderRadius: 15,
-                style: TextStyle(fontSize: 17),
-                onChanged: (pin) {
-                  otpCtrl.text = pin;
-                  print("Changed: " + pin);
-                },
-                onCompleted: (pin) {
-                  otpCtrl.text = pin;
-                  print("Completed: " + pin);
-                },
-              ),
-            ),
-          ),
+          // Center(
+          //   child: Padding(
+          //     padding: const EdgeInsets.only(left: 15, right: 15, top: 20),
+          //     child: OTPTextField(
+          //       length: 6,
+          //       width: MediaQuery.of(context).size.width,
+          //       textFieldAlignment: MainAxisAlignment.spaceAround,
+          //       fieldWidth: 45,
+          //       fieldStyle: FieldStyle.underline,
+          //       outlineBorderRadius: 15,
+          //       style: TextStyle(fontSize: 17),
+          //       onChanged: (pin) {
+          //         otpCtrl.text = pin;
+          //         print("Changed: " + pin);
+          //       },
+          //       onCompleted: (pin) {
+          //         otpCtrl.text = pin;
+          //         print("Completed: " + pin);
+          //       },
+          //     ),
+          //   ),
+          // ),
           Center(
             child: Padding(
               padding: const EdgeInsets.only(left: 15, right: 15, top: 20),
