@@ -10,6 +10,8 @@ import 'package:pgn_mobile/models/cm_visit_response.dart';
 import 'package:pgn_mobile/models/url_cons.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 
+import 'cm_visit_form.dart';
+
 class CMVisitDetail extends StatefulWidget {
   CMVisitDetail({this.id});
   final String id;
@@ -330,7 +332,39 @@ class _CMVisitDetailState extends State<CMVisitDetail> {
                     child: Text('Edit Report',
                         style: TextStyle(
                             color: Colors.white, fontWeight: FontWeight.w600)),
-                    onPressed: () {}),
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => CMVisitForm(
+                                  id: model.data.id.toString(),
+                                  date: DateFormat("d MMMM yyyy")
+                                      .format(date)
+                                      .toString(),
+                                  activity: model.data.activityType,
+                                  visitType: model.data.visitType,
+                                  activityDesc: model.data.activityDescription,
+                                  customerName: model.data.customerCmModel.name,
+                                  customerId: model.data.customerCmModel.id,
+                                  contactPerson:
+                                      model.data.contactPersonModel.name,
+                                  address:
+                                      model.data.contactPersonModel.address,
+                                  phoneNumber:
+                                      model.data.contactPersonModel.phone,
+                                  emailAddress:
+                                      model.data.contactPersonModel.email,
+                                  report: model.data.report)));
+                      // photo1: model.data.images[0].isNotEmpty
+                      //     ? model.data.images[0]
+                      //     : "",
+                      // photo2: model.data.images[1].isNotEmpty
+                      //     ? model.data.images[1]
+                      //     : "",
+                      // photo3: model.data.images[2].isNotEmpty
+                      //     ? model.data.images[2]
+                      //     : ""
+                    }),
               ),
             ],
           ),

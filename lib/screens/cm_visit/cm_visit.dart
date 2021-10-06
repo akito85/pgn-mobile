@@ -28,35 +28,38 @@ class _CMVisitState extends State<CMVisit> {
         ),
         elevation: 0,
       ),
-      body: Stack(
-        children: <Widget>[
-          Container(
-            margin: EdgeInsets.only(top: 12, bottom: 50),
-            child: _buildContent(context, getCmVisit(context)),
-          ),
-          Positioned(
-            bottom: 10,
-            left: 18,
-            right: 18,
-            child: Container(
-              height: 50.0,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10.0),
-                  color: Color(0xFF427CEF)),
-              child: ElevatedButton.icon(
-                  onPressed: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => CMVisitForm()));
-                  },
-                  icon: Icon(Icons.add, color: Colors.white),
-                  label: Text('Add New Visit Report',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 14,
-                          fontWeight: FontWeight.normal))),
-            ),
-          )
-        ],
+      body: Container(
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height,
+        child: Stack(
+          children: <Widget>[
+            _buildContent(context, getCmVisit(context)),
+            Positioned(
+              bottom: 10,
+              left: 18,
+              right: 18,
+              child: Container(
+                height: 50.0,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10.0),
+                    color: Color(0xFF427CEF)),
+                child: ElevatedButton.icon(
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => CMVisitForm()));
+                    },
+                    icon: Icon(Icons.add, color: Colors.white),
+                    label: Text('Add New Visit Report',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 14,
+                            fontWeight: FontWeight.normal))),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
@@ -67,6 +70,7 @@ class _CMVisitState extends State<CMVisit> {
         builder: (context, snapsnapshot) {
           if (!snapsnapshot.hasData) return LinearProgressIndicator();
           return Container(
+            margin: EdgeInsets.only(top: 12, bottom: 50),
             child: ListView.builder(
               itemCount: snapsnapshot.data.data.length + 1,
               itemBuilder: (context, i) {

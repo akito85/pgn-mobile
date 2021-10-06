@@ -15,15 +15,97 @@ import 'package:pgn_mobile/models/cmm_form_model.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 
 class CMVisitForm extends StatefulWidget {
+  CMVisitForm(
+      {this.id,
+      this.date,
+      this.activity,
+      this.visitType,
+      this.activityDesc,
+      this.customerName,
+      this.customerId,
+      this.contactPerson,
+      this.address,
+      this.phoneNumber,
+      this.emailAddress,
+      this.report,
+      this.photo1,
+      this.photo2,
+      this.photo3});
+
+  final String id;
+  final String date;
+  final String activity;
+  final String visitType;
+  final String activityDesc;
+  final String customerName;
+  final String customerId;
+  final String contactPerson;
+  final String address;
+  final String phoneNumber;
+  final String emailAddress;
+  final String report;
+  final String photo1;
+  final String photo2;
+  final String photo3;
+
   @override
-  _CMVisitFormState createState() => _CMVisitFormState();
+  _CMVisitFormState createState() => _CMVisitFormState(
+      id,
+      date,
+      activity,
+      visitType,
+      activityDesc,
+      customerName,
+      customerId,
+      contactPerson,
+      address,
+      phoneNumber,
+      emailAddress,
+      report,
+      photo1,
+      photo2,
+      photo3);
 }
 
 class _CMVisitFormState extends State<CMVisitForm> {
   ProgressDialog progressDialog;
+  String id;
+  String date;
+  String activityEdit;
+  String visitTypeEdit;
+  String activityDescEdit;
+  String customerNameEdit;
+  String customerIdEdit;
+  String contactPersonEdit;
+  String addressEdit;
+  String phoneNumberEdit;
+  String emailAddressEdit;
+  String reportEdit;
+  String photo1;
+  String photo2;
+  String photo3;
+  _CMVisitFormState(
+      this.id,
+      this.date,
+      this.activityEdit,
+      this.visitTypeEdit,
+      this.activityDescEdit,
+      this.customerNameEdit,
+      this.customerIdEdit,
+      this.contactPersonEdit,
+      this.addressEdit,
+      this.phoneNumberEdit,
+      this.emailAddressEdit,
+      this.reportEdit,
+      this.photo1,
+      this.photo2,
+      this.photo3);
   String _onDateSelected = '18 November 2020';
   String valueChoose;
+  String activityChoose;
+
   List listVisitTypes = ["1", "2", "3", "4", "5", "6", "7", "8"];
+
   bool isVisibleDate = false;
   bool isVisibleVisitType = false;
   bool isVisibleActivity = false;
@@ -34,6 +116,7 @@ class _CMVisitFormState extends State<CMVisitForm> {
   bool isVisiblePhoneNumber = false;
   bool isVisibleCustomerEmail = false;
   bool isVisibleReports = false;
+
   TextEditingController controllers;
   TextEditingController visitType = new TextEditingController();
   TextEditingController activity = new TextEditingController();
@@ -51,6 +134,54 @@ class _CMVisitFormState extends State<CMVisitForm> {
   File _image;
   File _image2;
   File _image3;
+
+  @override
+  void initState() {
+    if (activityDescEdit != null) {
+      activityDescription.value = new TextEditingController.fromValue(
+              new TextEditingValue(text: activityDescEdit))
+          .value;
+    }
+    if (customerNameEdit != null) {
+      customerName.value = new TextEditingController.fromValue(
+              new TextEditingValue(text: customerNameEdit))
+          .value;
+    }
+    if (customerIdEdit != null) {
+      customerId.value = new TextEditingController.fromValue(
+              new TextEditingValue(text: customerIdEdit))
+          .value;
+    }
+    if (contactPersonEdit != null) {
+      contactPerson.value = new TextEditingController.fromValue(
+              new TextEditingValue(text: contactPersonEdit))
+          .value;
+    }
+    if (addressEdit != null) {
+      address.value = new TextEditingController.fromValue(
+              new TextEditingValue(text: addressEdit))
+          .value;
+    }
+    if (emailAddressEdit != null) {
+      emailAddress.value = new TextEditingController.fromValue(
+              new TextEditingValue(text: emailAddressEdit))
+          .value;
+    }
+    if (phoneNumberEdit != null) {
+      phoneNumber.value = new TextEditingController.fromValue(
+              new TextEditingValue(
+                  text: phoneNumberEdit.startsWith("+62")
+                      ? phoneNumberEdit.substring(3)
+                      : phoneNumberEdit))
+          .value;
+    }
+    if (reportEdit != null) {
+      reports.value = new TextEditingController.fromValue(
+              new TextEditingValue(text: reportEdit))
+          .value;
+    }
+    super.initState();
+  }
 
   final picker = ImagePicker();
   Future getImage(String title, String images) async {
@@ -254,7 +385,7 @@ class _CMVisitFormState extends State<CMVisitForm> {
                           autocorrect: true,
                           style: TextStyle(height: 1, fontSize: 14),
                           decoration: InputDecoration(
-                            hintText: _onDateSelected,
+                            hintText: date != null ? date : _onDateSelected,
                             hintStyle: TextStyle(color: Color(0xFF455055)),
                             suffixIcon: Icon(
                               Icons.calendar_today_outlined,
@@ -307,7 +438,10 @@ class _CMVisitFormState extends State<CMVisitForm> {
                         child: Padding(
                             padding: EdgeInsets.only(left: 10, right: 8),
                             child: DropdownButton(
-                                hint: Text('Site/Business Visit',
+                                hint: Text(
+                                    visitTypeEdit != null
+                                        ? visitTypeEdit
+                                        : 'Site/Business Visit',
                                     style: TextStyle(
                                         color: Color(0xFF455055),
                                         fontSize: 14,
@@ -348,7 +482,10 @@ class _CMVisitFormState extends State<CMVisitForm> {
                         child: Padding(
                             padding: EdgeInsets.only(left: 10, right: 8),
                             child: DropdownButton(
-                                hint: Text('Customer Complaint Handling',
+                                hint: Text(
+                                    activityEdit != null
+                                        ? activityEdit
+                                        : 'Customer Complaint Handling',
                                     style: TextStyle(
                                         color: Color(0xFF455055),
                                         fontSize: 14,
@@ -362,10 +499,10 @@ class _CMVisitFormState extends State<CMVisitForm> {
                                     color: Color(0xFF455055),
                                     fontSize: 14,
                                     fontWeight: FontWeight.normal),
-                                value: valueChoose,
+                                value: activityChoose,
                                 onChanged: (newValue) {
                                   setState(() {
-                                    valueChoose = newValue;
+                                    activityChoose = newValue;
                                   });
                                 },
                                 items: listVisitTypes.map((valueItem) {
@@ -750,7 +887,8 @@ class _CMVisitFormState extends State<CMVisitForm> {
                                             backgroundColor:
                                                 Colors.black.withOpacity(0.5),
                                             onPressed: () {
-                                              _showialogDeleteImage(context);
+                                              _showialogDeleteImage(
+                                                  context, "1");
                                             },
                                             elevation: 0,
                                             child: Icon(Icons.delete_outlined,
@@ -820,7 +958,8 @@ class _CMVisitFormState extends State<CMVisitForm> {
                                             backgroundColor:
                                                 Colors.black.withOpacity(0.5),
                                             onPressed: () {
-                                              _showialogDeleteImage(context);
+                                              _showialogDeleteImage(
+                                                  context, "2");
                                             },
                                             elevation: 0,
                                             child: Icon(Icons.delete_outlined,
@@ -890,7 +1029,8 @@ class _CMVisitFormState extends State<CMVisitForm> {
                                             backgroundColor:
                                                 Colors.black.withOpacity(0.5),
                                             onPressed: () {
-                                              _showialogDeleteImage(context);
+                                              _showialogDeleteImage(
+                                                  context, "3");
                                             },
                                             elevation: 0,
                                             child: Icon(Icons.delete_outlined,
@@ -1065,7 +1205,7 @@ class _CMVisitFormState extends State<CMVisitForm> {
     );
   }
 
-  void _showialogDeleteImage(BuildContext context) {
+  void _showialogDeleteImage(BuildContext context, String images) {
     showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -1121,6 +1261,19 @@ class _CMVisitFormState extends State<CMVisitForm> {
                                     fontWeight: FontWeight.w600)),
                             onPressed: () {
                               Navigator.of(context).pop();
+                              if (images == "1") {
+                                setState(() {
+                                  _image = null;
+                                });
+                              } else if (images == "2") {
+                                setState(() {
+                                  _image2 = null;
+                                });
+                              } else if (images == "3") {
+                                setState(() {
+                                  _image3 = null;
+                                });
+                              }
                             }),
                       ),
                     ],
@@ -1197,14 +1350,18 @@ class _CMVisitFormState extends State<CMVisitForm> {
                             onPressed: () {
                               Navigator.of(context).pop();
                               progressDialog.show();
+                              var date = DateFormat("d MMMM yyyy")
+                                  .parse(_onDateSelected);
+                              var finalDate =
+                                  DateFormat("yyyy-MM-dd").format(date);
                               Uint8List imageUnit8;
                               Uint8List imageUnit82;
                               Uint8List imageUnit83;
                               imageUnit8 = _image.readAsBytesSync();
-                              imageUnit82 = _image2.readAsBytesSync();
-                              imageUnit83 = _image3.readAsBytesSync();
                               String fileExt1 = _image.path.split('.').last;
+                              imageUnit82 = _image2.readAsBytesSync();
                               String fileExt2 = _image2.path.split('.').last;
+                              imageUnit83 = _image3.readAsBytesSync();
                               String fileExt3 = _image3.path.split('.').last;
                               String encodeImage1 =
                                   'data:image/$fileExt1;base64,${base64Encode(imageUnit8)}';
@@ -1212,26 +1369,41 @@ class _CMVisitFormState extends State<CMVisitForm> {
                                   'data:image/$fileExt2;base64,${base64Encode(imageUnit82)}';
                               String encodeImage3 =
                                   'data:image/$fileExt3;base64,${base64Encode(imageUnit83)}';
-                              var date = DateFormat("d MMMM yyyy")
-                                  .parse(_onDateSelected);
-                              var finalDate =
-                                  DateFormat("yyyy-MM-dd").format(date);
-                              postCmVisit(
-                                  context,
-                                  finalDate,
-                                  valueChoose,
-                                  valueChoose,
-                                  activityDescription.text,
-                                  customerName.text,
-                                  customerId.text,
-                                  contactPerson.text,
-                                  address.text,
-                                  '+62' + phoneNumber.text,
-                                  emailAddress.text,
-                                  reports.text,
-                                  _image != null ? encodeImage1 : '',
-                                  _image2 != null ? encodeImage2 : '',
-                                  _image3 != null ? encodeImage3 : '');
+                              if (id != null) {
+                                postCmVisit(
+                                    context,
+                                    finalDate,
+                                    valueChoose,
+                                    activityChoose,
+                                    activityDescription.text,
+                                    customerName.text,
+                                    customerId.text,
+                                    contactPerson.text,
+                                    address.text,
+                                    '+62' + phoneNumber.text,
+                                    emailAddress.text,
+                                    reports.text,
+                                    encodeImage1,
+                                    encodeImage2,
+                                    encodeImage3);
+                              } else {
+                                postCmVisitEdit(
+                                    context,
+                                    finalDate,
+                                    valueChoose,
+                                    activityChoose,
+                                    activityDescription.text,
+                                    customerName.text,
+                                    customerId.text,
+                                    contactPerson.text,
+                                    address.text,
+                                    '+62' + phoneNumber.text,
+                                    emailAddress.text,
+                                    reports.text,
+                                    encodeImage1,
+                                    encodeImage2,
+                                    encodeImage3);
+                              }
                             }))
                   ],
                 ))
@@ -1262,6 +1434,64 @@ class _CMVisitFormState extends State<CMVisitForm> {
 
     var responsePostCmVisitForm =
         await http.post('${UrlCons.mainDevUrl}cm-visit', headers: {
+      'Authorization': 'Bearer $accessToken'
+    }, body: {
+      'visit_date': visitDate,
+      'visit_type': visitType,
+      'activity_type': activityType,
+      'customer_name': customerName,
+      'customer_id': customerId,
+      'activity_description': activityDesc,
+      'cp_name': cpName,
+      'cp_address': cpAddress,
+      'cp_phone': cpPhone,
+      'cp_email': cpEmail,
+      'report': report,
+      'images[0]': foto1,
+      'images[1]': foto2,
+      'images[2]': foto3
+    });
+    print('status code' + responsePostCmVisitForm.statusCode.toString());
+    if (responsePostCmVisitForm.statusCode == 200) {
+      setState(() {
+        progressDialog.hide();
+        _showDialogSuccessSubmit(context);
+        Future.delayed(Duration(seconds: 2), () {
+          Navigator.pop(_scaffoldKey.currentContext);
+          Navigator.pushReplacementNamed(
+              _scaffoldKey.currentContext, '/cmVisit');
+        });
+      });
+    } else {
+      setState(() {
+        progressDialog.hide();
+        print('responsebody' + responsePostCmVisitForm.body.trim().toString());
+      });
+    }
+    return CmVisitReponse.fromJson(json.decode(responsePostCmVisitForm.body));
+  }
+
+  Future<CmVisitReponse> postCmVisitEdit(
+      BuildContext context,
+      String visitDate,
+      String visitType,
+      String activityType,
+      String activityDesc,
+      String customerName,
+      String customerId,
+      String cpName,
+      String cpAddress,
+      String cpPhone,
+      String cpEmail,
+      String report,
+      String foto1,
+      String foto2,
+      String foto3) async {
+    final storageCache = FlutterSecureStorage();
+    String accessToken = await storageCache.read(key: 'access_token');
+
+    var responsePostCmVisitForm =
+        await http.post('${UrlCons.mainDevUrl}cm-visit/{$id}', headers: {
       'Authorization': 'Bearer $accessToken'
     }, body: {
       'visit_date': visitDate,
