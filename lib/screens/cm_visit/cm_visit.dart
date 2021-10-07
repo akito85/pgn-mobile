@@ -43,19 +43,44 @@ class _CMVisitState extends State<CMVisit> {
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10.0),
                     color: Color(0xFF427CEF)),
-                child: ElevatedButton.icon(
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => CMVisitForm()));
-                    },
-                    icon: Icon(Icons.add, color: Colors.white),
-                    label: Text('Add New Visit Report',
+                child: MaterialButton(
+                  minWidth: MediaQuery.of(context).size.width,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Container(
+                          margin: EdgeInsets.only(right: 8.0),
+                          width: 24.0,
+                          height: 24.0,
+                          child: Icon(Icons.add, color: Colors.white)),
+                      Text(
+                        'Add New Visit Report',
                         style: TextStyle(
                             color: Colors.white,
                             fontSize: 14,
-                            fontWeight: FontWeight.normal))),
+                            fontWeight: FontWeight.normal),
+                      ),
+                    ],
+                  ),
+                  onPressed: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => CMVisitForm()));
+                  },
+                ),
+                //   ElevatedButton.icon(
+                //       onPressed: () {
+                //         Navigator.push(
+                //             context,
+                //             MaterialPageRoute(
+                //                 builder: (context) => CMVisitForm()));
+                //       },
+                //       icon: Icon(Icons.add, color: Colors.white),
+                //       label: Text('Add New Visit Report',
+                //           style: TextStyle(
+                //               color: Colors.white,
+                //               fontSize: 14,
+                //               fontWeight: FontWeight.normal))),
               ),
             )
           ],
@@ -88,8 +113,11 @@ Widget _cardState(BuildContext context, CMVisitModel model) {
   DateTime date = DateTime.parse(model.reportDate);
   return InkWell(
     onTap: () {
-      Navigator.push(context,
-          MaterialPageRoute(builder: (context) => CMVisitDetail(id: model.id)));
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => CMVisitDetail(
+                  id: model.id, name: model.customerCmModel.name)));
     },
     child: Card(
         color: Colors.white,

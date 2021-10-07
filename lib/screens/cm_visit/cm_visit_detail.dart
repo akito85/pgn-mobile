@@ -13,16 +13,18 @@ import 'package:progress_dialog/progress_dialog.dart';
 import 'cm_visit_form.dart';
 
 class CMVisitDetail extends StatefulWidget {
-  CMVisitDetail({this.id});
+  CMVisitDetail({this.id, this.name});
   final String id;
+  final String name;
   @override
-  _CMVisitDetailState createState() => _CMVisitDetailState(id);
+  _CMVisitDetailState createState() => _CMVisitDetailState(id, name);
 }
 
 class _CMVisitDetailState extends State<CMVisitDetail> {
   ProgressDialog progressDialog;
   final String id;
-  _CMVisitDetailState(this.id);
+  final String name;
+  _CMVisitDetailState(this.id, this.name);
   @override
   Widget build(BuildContext context) {
     progressDialog = ProgressDialog(context,
@@ -32,8 +34,11 @@ class _CMVisitDetailState extends State<CMVisitDetail> {
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.white,
-        title: Text('NOXUS Ideata Prima PT - Report',
-            style: TextStyle(color: Colors.black)),
+        title: Text('$name - Report',
+            style: TextStyle(
+                color: Colors.black,
+                fontSize: 14,
+                fontWeight: FontWeight.bold)),
       ),
       body: ListView(
         shrinkWrap: true,

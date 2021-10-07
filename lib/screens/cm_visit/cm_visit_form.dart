@@ -269,6 +269,32 @@ class _CMVisitFormState extends State<CMVisitForm> {
         isVisibleCustomerEmail = false;
         isVisibleReports = false;
       });
+    } else if (valueChoose == "") {
+      setState(() {
+        isVisibleVisitType = true;
+        isVisibleDate = false;
+        isVisibleActivity = false;
+        isVisibleActivityDescription = false;
+        isVisibleAddress = false;
+        isVisibleCustomerId = false;
+        isVisibleCustomerName = false;
+        isVisiblePhoneNumber = false;
+        isVisibleCustomerEmail = false;
+        isVisibleReports = false;
+      });
+    } else if (activityChoose == "") {
+      setState(() {
+        isVisibleVisitType = false;
+        isVisibleDate = false;
+        isVisibleActivity = true;
+        isVisibleActivityDescription = false;
+        isVisibleAddress = false;
+        isVisibleCustomerId = false;
+        isVisibleCustomerName = false;
+        isVisiblePhoneNumber = false;
+        isVisibleCustomerEmail = false;
+        isVisibleReports = false;
+      });
     } else if (activityDescription.text == "") {
       setState(() {
         isVisibleVisitType = false;
@@ -474,6 +500,17 @@ class _CMVisitFormState extends State<CMVisitForm> {
                                   return DropdownMenuItem(
                                       value: valueItem, child: Text(valueItem));
                                 }).toList()))),
+                    Visibility(
+                      visible: isVisibleVisitType,
+                      child: Container(
+                        margin: EdgeInsets.only(top: 2, left: 8),
+                        child: Text('Visit Type cannot be empty',
+                            style: TextStyle(
+                                color: Color(0xFFDD1818),
+                                fontSize: 10,
+                                fontWeight: FontWeight.normal)),
+                      ),
+                    ),
                     Container(
                       margin: EdgeInsets.only(bottom: 4, top: 20),
                       child: Text('Activity',
@@ -518,6 +555,17 @@ class _CMVisitFormState extends State<CMVisitForm> {
                                   return DropdownMenuItem(
                                       value: valueItem, child: Text(valueItem));
                                 }).toList()))),
+                    Visibility(
+                      visible: isVisibleActivity,
+                      child: Container(
+                        margin: EdgeInsets.only(top: 2, left: 8),
+                        child: Text('Activity cannot be empty',
+                            style: TextStyle(
+                                color: Color(0xFFDD1818),
+                                fontSize: 10,
+                                fontWeight: FontWeight.normal)),
+                      ),
+                    ),
                     Container(
                       margin: EdgeInsets.only(bottom: 4, top: 20),
                       child: Text('Activity Description',
@@ -1442,9 +1490,39 @@ class _CMVisitFormState extends State<CMVisitForm> {
       },
       onSelected: (DataListCust selection) {
         setState(() {
-          customerName.value = TextEditingController.fromValue(
-                  new TextEditingValue(text: selection.name))
-              .value;
+          selection.name != null || selection.name != ""
+              ? customerName.value = TextEditingController.fromValue(
+                      new TextEditingValue(text: selection.name))
+                  .value
+              : print('selected ${selection.name}');
+          selection.id != null || selection.id != ""
+              ? customerId.value = new TextEditingController.fromValue(
+                      new TextEditingValue(text: selection.id))
+                  .value
+              : print('selected ${selection.id}');
+          selection.cPersonName != null || selection.cPersonName != ""
+              ? contactPerson.value = new TextEditingController.fromValue(
+                      new TextEditingValue(text: selection.cPersonName))
+                  .value
+              : print('selected ${selection.cPersonName}');
+          selection.address != null || selection.address != ""
+              ? address.value = new TextEditingController.fromValue(
+                      new TextEditingValue(text: selection.address))
+                  .value
+              : print('selected ${selection.address}');
+          selection.cPersonMobPhone != null || selection.cPersonMobPhone != ""
+              ? phoneNumber.value = new TextEditingController.fromValue(
+                      new TextEditingValue(
+                          text: selection.cPersonMobPhone.startsWith("+62")
+                              ? selection.cPersonMobPhone.substring(3)
+                              : selection.cPersonMobPhone))
+                  .value
+              : print('selected ${selection.cPersonMobPhone}');
+          selection.cPersonEmail != null || selection.cPersonEmail != ""
+              ? emailAddress.value = new TextEditingController.fromValue(
+                      new TextEditingValue(text: selection.cPersonEmail))
+                  .value
+              : print('selected ${selection.cPersonEmail}');
         });
       },
       optionsViewBuilder: (BuildContext context,
