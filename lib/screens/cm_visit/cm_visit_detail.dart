@@ -338,7 +338,7 @@ class _CMVisitDetailState extends State<CMVisitDetail> {
                           MaterialPageRoute(
                               builder: (context) => CMVisitForm(
                                   id: model.data.id.toString(),
-                                  date: DateFormat("d MMMM yyyy")
+                                  dateEdit: DateFormat("d MMMM yyyy")
                                       .format(date)
                                       .toString(),
                                   activity: model.data.activityType,
@@ -459,5 +459,6 @@ Future<CmVisitDetailModel> getDetail(BuildContext context, String id) async {
     'Authorization': 'Bearer $accessToken',
     'Accept-Language': lang,
   });
+  print('Accsess_token' + accessToken);
   return CmVisitDetailModel.fromJson(json.decode(responseCmVisitDetail.body));
 }

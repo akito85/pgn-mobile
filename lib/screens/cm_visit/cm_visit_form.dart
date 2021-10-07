@@ -9,6 +9,7 @@ import 'package:intl/intl.dart';
 import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:pgn_mobile/models/cm_visit_response.dart';
+import 'package:pgn_mobile/models/cust_list_model.dart';
 import 'package:pgn_mobile/models/url_cons.dart';
 
 import 'package:pgn_mobile/models/cmm_form_model.dart';
@@ -17,7 +18,7 @@ import 'package:progress_dialog/progress_dialog.dart';
 class CMVisitForm extends StatefulWidget {
   CMVisitForm(
       {this.id,
-      this.date,
+      this.dateEdit,
       this.activity,
       this.visitType,
       this.activityDesc,
@@ -33,7 +34,7 @@ class CMVisitForm extends StatefulWidget {
       this.photo3});
 
   final String id;
-  final String date;
+  final String dateEdit;
   final String activity;
   final String visitType;
   final String activityDesc;
@@ -51,7 +52,7 @@ class CMVisitForm extends StatefulWidget {
   @override
   _CMVisitFormState createState() => _CMVisitFormState(
       id,
-      date,
+      dateEdit,
       activity,
       visitType,
       activityDesc,
@@ -70,7 +71,7 @@ class CMVisitForm extends StatefulWidget {
 class _CMVisitFormState extends State<CMVisitForm> {
   ProgressDialog progressDialog;
   String id;
-  String date;
+  String dateEdit;
   String activityEdit;
   String visitTypeEdit;
   String activityDescEdit;
@@ -86,7 +87,7 @@ class _CMVisitFormState extends State<CMVisitForm> {
   String photo3;
   _CMVisitFormState(
       this.id,
-      this.date,
+      this.dateEdit,
       this.activityEdit,
       this.visitTypeEdit,
       this.activityDescEdit,
@@ -117,7 +118,7 @@ class _CMVisitFormState extends State<CMVisitForm> {
   bool isVisibleCustomerEmail = false;
   bool isVisibleReports = false;
 
-  TextEditingController controllers;
+  TextEditingController dateSelected = new TextEditingController();
   TextEditingController visitType = new TextEditingController();
   TextEditingController activity = new TextEditingController();
   TextEditingController activityDescription = new TextEditingController();
@@ -135,8 +136,15 @@ class _CMVisitFormState extends State<CMVisitForm> {
   File _image2;
   File _image3;
 
+  List<DataListCust> list = <DataListCust>[];
+
   @override
   void initState() {
+    if (dateEdit != null) {
+      dateSelected.value = new TextEditingController.fromValue(
+              new TextEditingValue(text: dateEdit))
+          .value;
+    }
     if (activityDescEdit != null) {
       activityDescription.value = new TextEditingController.fromValue(
               new TextEditingValue(text: activityDescEdit))
@@ -180,6 +188,7 @@ class _CMVisitFormState extends State<CMVisitForm> {
               new TextEditingValue(text: reportEdit))
           .value;
     }
+    fetchPost(context);
     super.initState();
   }
 
@@ -242,12 +251,12 @@ class _CMVisitFormState extends State<CMVisitForm> {
     );
     if (d != null)
       setState(() {
-        _onDateSelected = new DateFormat('dd MMMM yyy').format(d);
+        dateSelected.text = new DateFormat('dd MMMM yyy').format(d);
       });
   }
 
   void _setValidation() {
-    if (_onDateSelected == '18 November 2020') {
+    if (dateSelected.text == "") {
       setState(() {
         isVisibleVisitType = false;
         isVisibleDate = true;
@@ -380,12 +389,12 @@ class _CMVisitFormState extends State<CMVisitForm> {
                       width: MediaQuery.of(context).size.width,
                       child: InkWell(
                         child: TextFormField(
-                          controller: controllers,
+                          controller: dateSelected,
                           enabled: false,
                           autocorrect: true,
                           style: TextStyle(height: 1, fontSize: 14),
                           decoration: InputDecoration(
-                            hintText: date != null ? date : _onDateSelected,
+                            hintText: _onDateSelected,
                             hintStyle: TextStyle(color: Color(0xFF455055)),
                             suffixIcon: Icon(
                               Icons.calendar_today_outlined,
@@ -564,30 +573,7 @@ class _CMVisitFormState extends State<CMVisitForm> {
                               fontSize: 14,
                               fontWeight: FontWeight.w600)),
                     ),
-                    Container(
-                        width: MediaQuery.of(context).size.width,
-                        child: TextFormField(
-                          minLines: 1,
-                          maxLines: 10,
-                          autocorrect: true,
-                          controller: customerName,
-                          style: TextStyle(height: 1, fontSize: 14),
-                          decoration: InputDecoration(
-                            hintText: 'Enter customer name',
-                            filled: true,
-                            fillColor: Colors.white70,
-                            enabledBorder: OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(5)),
-                                borderSide: BorderSide(
-                                    color: Color(0xFFD3D3D3), width: 2)),
-                            focusedBorder: OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(5)),
-                                borderSide: BorderSide(
-                                    color: Colors.black38, width: 2)),
-                          ),
-                        )),
+                    _buildAutoComplate(context),
                     Container(
                       margin: EdgeInsets.only(bottom: 4, top: 20),
                       child: Text('Customer ID',
@@ -1334,7 +1320,9 @@ class _CMVisitFormState extends State<CMVisitForm> {
                               style: TextStyle(
                                   color: Colors.white,
                                   fontWeight: FontWeight.w600)),
-                          onPressed: () {}),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          }),
                     ),
                     Container(
                         width: 170.0,
@@ -1351,7 +1339,7 @@ class _CMVisitFormState extends State<CMVisitForm> {
                               Navigator.of(context).pop();
                               progressDialog.show();
                               var date = DateFormat("d MMMM yyyy")
-                                  .parse(_onDateSelected);
+                                  .parse(dateSelected.text);
                               var finalDate =
                                   DateFormat("yyyy-MM-dd").format(date);
                               Uint8List imageUnit8;
@@ -1370,7 +1358,7 @@ class _CMVisitFormState extends State<CMVisitForm> {
                               String encodeImage3 =
                                   'data:image/$fileExt3;base64,${base64Encode(imageUnit83)}';
                               if (id != null) {
-                                postCmVisit(
+                                postCmVisitEdit(
                                     context,
                                     finalDate,
                                     valueChoose,
@@ -1387,7 +1375,7 @@ class _CMVisitFormState extends State<CMVisitForm> {
                                     encodeImage2,
                                     encodeImage3);
                               } else {
-                                postCmVisitEdit(
+                                postCmVisit(
                                     context,
                                     finalDate,
                                     valueChoose,
@@ -1411,6 +1399,87 @@ class _CMVisitFormState extends State<CMVisitForm> {
             ),
           ));
         });
+  }
+
+  Widget _buildAutoComplate(BuildContext context) {
+    return Autocomplete<DataListCust>(
+      optionsBuilder: (TextEditingValue value) {
+        return list
+            .where((DataListCust cust) =>
+                cust.name.toLowerCase().startsWith(value.text.toLowerCase()))
+            .toList();
+      },
+      displayStringForOption: (DataListCust option) => option.name,
+      fieldViewBuilder: (BuildContext context,
+          TextEditingController fieldTextEditingController,
+          FocusNode fieldFocusNode,
+          VoidCallback onFieldSubmitted) {
+        customerNameEdit != null
+            ? fieldTextEditingController.value =
+                TextEditingController.fromValue(
+                        new TextEditingValue(text: customerName.text))
+                    .value
+            : print('selected ${customerName.text}');
+        return TextFormField(
+          minLines: 1,
+          maxLines: 10,
+          autocorrect: true,
+          focusNode: fieldFocusNode,
+          controller: fieldTextEditingController,
+          style: TextStyle(height: 1, fontSize: 14),
+          decoration: InputDecoration(
+            hintText: 'Enter customer name',
+            filled: true,
+            fillColor: Colors.white70,
+            enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(5)),
+                borderSide: BorderSide(color: Color(0xFFD3D3D3), width: 2)),
+            focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(5)),
+                borderSide: BorderSide(color: Colors.black38, width: 2)),
+          ),
+        );
+      },
+      onSelected: (DataListCust selection) {
+        setState(() {
+          customerName.value = TextEditingController.fromValue(
+                  new TextEditingValue(text: selection.name))
+              .value;
+        });
+      },
+      optionsViewBuilder: (BuildContext context,
+          AutocompleteOnSelected<DataListCust> onSelected,
+          Iterable<DataListCust> options) {
+        return Align(
+          alignment: Alignment.topLeft,
+          child: Material(
+            child: Container(
+              width: MediaQuery.of(context).size.width,
+              height: 200,
+              color: Colors.white,
+              child: ListView.builder(
+                padding: EdgeInsets.all(2),
+                itemCount: options.length,
+                itemBuilder: (BuildContext context, int index) {
+                  final DataListCust option = options.elementAt(index);
+                  return GestureDetector(
+                    onTap: () {
+                      onSelected(option);
+                    },
+                    child: ListTile(
+                        title: Text(option.name,
+                            style: const TextStyle(
+                                color: Colors.black,
+                                fontSize: 12,
+                                fontWeight: FontWeight.normal))),
+                  );
+                },
+              ),
+            ),
+          ),
+        );
+      },
+    );
   }
 
   Future<CmVisitReponse> postCmVisit(
@@ -1491,7 +1560,7 @@ class _CMVisitFormState extends State<CMVisitForm> {
     String accessToken = await storageCache.read(key: 'access_token');
 
     var responsePostCmVisitForm =
-        await http.post('${UrlCons.mainDevUrl}cm-visit/{$id}', headers: {
+        await http.post('${UrlCons.mainDevUrl}cm-visit/$id', headers: {
       'Authorization': 'Bearer $accessToken'
     }, body: {
       'visit_date': visitDate,
@@ -1570,5 +1639,22 @@ class _CMVisitFormState extends State<CMVisitForm> {
             ),
           );
         });
+  }
+
+  Future<CustListModel> fetchPost(BuildContext context) async {
+    final storageCache = FlutterSecureStorage();
+    String accessToken = await storageCache.read(key: 'access_token');
+    String lang = await storageCache.read(key: 'lang');
+    var respose = await http.get('${UrlCons.mainProdUrl}customers', headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $accessToken',
+      'Accept-Language': lang
+    });
+    CustListModel getListCust =
+        CustListModel.fromJson(json.decode(respose.body));
+    setState(() {
+      list.addAll(getListCust.data);
+    });
+    return CustListModel.fromJson(json.decode(respose.body));
   }
 }
