@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pgn_mobile/models/url_cons.dart';
+import 'package:pgn_mobile/screens/otp/otp.dart';
 import 'package:pgn_mobile/services/app_localizations.dart';
 import 'package:pgn_mobile/services/applications.dart';
 import 'package:provider/provider.dart';
@@ -18,6 +19,8 @@ class ForgetPasswordState extends State<ForgetPassword> {
   TextEditingController phoneNumberCtrl = new TextEditingController();
   String titleBar, titleButton, titleContent;
   FocusNode myFocusNode;
+  bool btnRegister = true;
+  bool visible = false;
 
   @override
   void initState() {
@@ -103,22 +106,49 @@ class ForgetPasswordState extends State<ForgetPassword> {
               ],
             ),
           ),
-          Container(
-              height: 55.0,
-              margin: EdgeInsets.fromLTRB(20.0, 100.0, 20.0, 0.0),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(5.0),
-                color: Color(0xFF427CEF),
-              ),
-              child: MaterialButton(
-                minWidth: MediaQuery.of(context).size.width,
-                child: new Text(
-                  _lang.send,
-                  style: TextStyle(color: Colors.white, fontSize: 17),
+          Visibility(
+            visible: btnRegister,
+            child: Container(
+                height: 55.0,
+                margin: EdgeInsets.fromLTRB(20.0, 80.0, 20.0, 0.0),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5.0),
+                  color: Color(0xFF427CEF),
                 ),
-                onPressed: () {
-                  fetchPost(context);
-                },
+                child: MaterialButton(
+                  minWidth: MediaQuery.of(context).size.width,
+                  child: new Text(
+                    _lang.send,
+                    style: TextStyle(color: Colors.white, fontSize: 17),
+                  ),
+                  onPressed: () {
+                    if (phoneNumberCtrl.text == '') {
+                      showToast(
+                        Translations.of(context).text('field_input_allert'),
+                      );
+                    } else {
+                      setState(() {
+                        btnRegister = false;
+                        visible = true;
+                      });
+                      fetchPost(context);
+                    }
+                  },
+                )),
+          ),
+          Visibility(
+              maintainSize: true,
+              maintainAnimation: true,
+              maintainState: true,
+              visible: visible,
+              child: Center(
+                child: Column(
+                  children: <Widget>[
+                    Container(
+                        margin: EdgeInsets.only(top: 50, bottom: 30),
+                        child: CircularProgressIndicator())
+                  ],
+                ),
               )),
         ],
       ),
@@ -126,7 +156,6 @@ class ForgetPasswordState extends State<ForgetPassword> {
   }
 
   void fetchPost(BuildContext context) async {
-
     var body = json.encode({'mobile_phone': "62${phoneNumberCtrl.text}"});
     var responseTokenBarrer =
         await http.post('${UrlCons.mainProdUrl}authentication', body: {
@@ -146,8 +175,16 @@ class ForgetPasswordState extends State<ForgetPassword> {
     ResetPass returnResetPass =
         ResetPass.fromJson(json.decode(responseResetPassword.body));
     if (returnResetPass.message == "pgn.phone_number_not_found") {
+      setState(() {
+        btnRegister = true;
+        visible = false;
+      });
       _allertSucces(context, 'Phone number not found');
     } else {
+      setState(() {
+        btnRegister = true;
+        visible = false;
+      });
       _allertSucces(context, returnResetPass.message);
     }
   }
@@ -180,7 +217,6 @@ Widget _allertSucces(BuildContext context, String title) {
               ),
               onTap: () {
                 Navigator.pop(context);
-         
               },
             )
           ],

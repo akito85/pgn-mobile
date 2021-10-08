@@ -3,6 +3,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:pgn_mobile/models/auth_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:pgn_mobile/models/url_cons.dart';
+import 'package:pgn_mobile/screens/otp/otp.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'package:provider/provider.dart';
@@ -252,16 +253,24 @@ class LoginScreenState extends State<LoginScreen> {
                           ),
                           onPressed: () {
                             password = 'corp.PGN';
-                            final encrypted = encrypter
-                                .encrypt(passwordController.text, iv: iv);
-                            print('PASSWORD : ${encrypted.base64}');
-                            setState(() {
-                              visible = true;
-                              btnVisible = false;
-                            });
 
-                            fetchPost(context, encrypted.base64,
-                                usernameController.text);
+                            if (usernameController.text == '' &&
+                                passwordController.text == '') {
+                              showToast(
+                                Translations.of(context)
+                                    .text('field_input_allert'),
+                              );
+                            } else {
+                              final encrypted = encrypter
+                                  .encrypt(passwordController.text, iv: iv);
+                              print('PASSWORD : ${encrypted.base64}');
+                              setState(() {
+                                visible = true;
+                                btnVisible = false;
+                              });
+                              fetchPost(context, encrypted.base64,
+                                  usernameController.text);
+                            }
                           },
                         )),
                   ),
