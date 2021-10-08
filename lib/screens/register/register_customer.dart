@@ -24,6 +24,8 @@ class RegistCustState extends State<RegisterCustomer> {
   TextEditingController phoneNumb = new TextEditingController();
   TextEditingController idCust = new TextEditingController();
   TextEditingController password = new TextEditingController();
+  bool btnRegister = true;
+  bool visible = false;
   final iv = encrypt.IV.fromUtf8('ujfjL9XWfH0ZoAzi');
   final encrypter = encrypt.Encrypter(encrypt.AES(
       encrypt.Key.fromUtf8('zNsW4kAl4t4PTrtC'),
@@ -131,35 +133,55 @@ class RegistCustState extends State<RegisterCustomer> {
               ),
             ),
           ),
-          Container(
-            height: 50.0,
-            margin: EdgeInsets.fromLTRB(20.0, 30.0, 20.0, 0.0),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10.0),
-              color: Color(0xFF427CEF),
-            ),
-            child: MaterialButton(
-              minWidth: MediaQuery.of(context).size.width,
-              child: Text(
-                _lang.register,
-                style: TextStyle(
-                  color: Colors.white,
-                ),
+          Visibility(
+            visible: btnRegister,
+            child: Container(
+              height: 50.0,
+              margin: EdgeInsets.fromLTRB(20.0, 30.0, 20.0, 0.0),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10.0),
+                color: Color(0xFF427CEF),
               ),
-              onPressed: () {
-                if (phoneNumb.text == '' &&
-                    idCust.text == '' &&
-                    password.text == '') {
-                  showToast(
-                    Translations.of(context).text('field_input_allert'),
-                  );
-                } else {
-                  final encrypted = encrypter.encrypt(password.text, iv: iv);
-                  postRegisterNewCust(context, encrypted.base64);
-                }
-              },
+              child: MaterialButton(
+                minWidth: MediaQuery.of(context).size.width,
+                child: Text(
+                  _lang.register,
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
+                onPressed: () {
+                  print('ini pass ny ${password.text}');
+                  if (phoneNumb.text == '' &&
+                      idCust.text == '' &&
+                      password.text == '') {
+                    showToast(
+                      Translations.of(context).text('field_input_allert'),
+                    );
+                  } else {
+                    setState(() {
+                      btnRegister = false;
+                      visible = true;
+                    });
+                    final encrypted = encrypter.encrypt(password.text, iv: iv);
+                    postRegisterNewCust(context, encrypted.base64);
+                  }
+                },
+              ),
             ),
           ),
+          Visibility(
+              maintainSize: true,
+              maintainAnimation: true,
+              maintainState: true,
+              visible: visible,
+              child: Column(
+                children: <Widget>[
+                  Container(
+                      margin: EdgeInsets.only(top: 20, bottom: 30),
+                      child: CircularProgressIndicator())
+                ],
+              )),
         ],
       ),
     );
@@ -181,45 +203,63 @@ class RegistCustState extends State<RegisterCustomer> {
 
     AuthSalesRegit _auth =
         AuthSalesRegit.fromJson(json.decode(responseTokenBarrer.body));
+    if (responseTokenBarrer.statusCode == 200) {
+      var bodySentTrans5 = json.encode({
+        "customer_id": "${idCust.text}",
+        "mobile_phone": "62${phoneNumb.text}",
+        "password": "$password",
+        "transaction_type_id": 5,
+      });
 
-    var bodySentTrans5 = json.encode({
-      "customer_id": "${idCust.text}",
-      "mobile_phone": "62${phoneNumb.text}",
-      "password": "$password",
-      "transaction_type_id": 5,
-    });
+      var responseSentOTPRegisResidential =
+          await http.post('${UrlCons.mainProdUrl}otp',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ${_auth.accessToken}',
+                'X-Pgn-Device-Id': devicesId,
+              },
+              body: bodySentTrans5);
+      print(responseSentOTPRegisResidential.body);
+      RegisteraUserPGN postOTPRegisterResidential = RegisteraUserPGN.fromJson(
+          json.decode(responseSentOTPRegisResidential.body));
 
-    var responseSentOTPRegisResidential =
-        await http.post('${UrlCons.mainProdUrl}otp',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': 'Bearer ${_auth.accessToken}',
-              'X-Pgn-Device-Id': devicesId,
-            },
-            body: bodySentTrans5);
-    print(responseSentOTPRegisResidential.body);
-    RegisteraUserPGN postOTPRegisterResidential = RegisteraUserPGN.fromJson(
-        json.decode(responseSentOTPRegisResidential.body));
-
-    if (responseSentOTPRegisResidential.statusCode == 200) {
-      if (postOTPRegisterResidential.dataRegistUserPGN.otpTransId == '5') {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => OTPRegisterForm(
-                      numberPhone: '62${phoneNumb.text}',
-                      idCust: idCust.text,
-                      pass: password,
-                      requestCode: postOTPRegisterResidential
-                          .dataRegistUserPGN.requestCode,
-                      accessToken: _auth.accessToken,
-                    )));
+      if (responseSentOTPRegisResidential.statusCode == 200) {
+        if (postOTPRegisterResidential.dataRegistUserPGN.otpTransId == '5') {
+          setState(() {
+            visible = false;
+          });
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => OTPRegisterForm(
+                        numberPhone: '62${phoneNumb.text}',
+                        idCust: idCust.text,
+                        pass: password,
+                        requestCode: postOTPRegisterResidential
+                            .dataRegistUserPGN.requestCode,
+                        accessToken: _auth.accessToken,
+                      )));
+        } else {
+          setState(() {
+            btnRegister = true;
+            visible = false;
+          });
+          successAlert(context, postOTPRegisterResidential.message);
+        }
       } else {
+        setState(() {
+          btnRegister = true;
+          visible = false;
+        });
         successAlert(context, postOTPRegisterResidential.message);
       }
     } else {
-      successAlert(context, postOTPRegisterResidential.message);
+      setState(() {
+        visible = false;
+      });
+      successAlert(context, _auth.message);
     }
+
     // return PostRegisterResidential.fromJson(json.decode(responseRegisResidential.body));
   }
 

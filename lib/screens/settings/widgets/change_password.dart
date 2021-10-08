@@ -24,6 +24,8 @@ class ChangePasswordState extends State<ChangePassword> {
   TextEditingController newValidatePassCtrl = new TextEditingController();
   TextEditingController textAlertCtrl = new TextEditingController();
   String _password;
+  bool btnSave = true;
+  bool visible = false;
   bool _obscure = true;
   bool textPassVisible = false;
 
@@ -144,56 +146,99 @@ class ChangePasswordState extends State<ChangePassword> {
                   ),
                 ),
               ),
-              Container(
-                  height: 45.0,
-                  margin: EdgeInsets.fromLTRB(20.0, 20.0, 20.0, 0.0),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(14.0),
-                    color: Color(0xFF427CEF),
-                  ),
-                  child: MaterialButton(
-                    minWidth: MediaQuery.of(context).size.width,
-                    child: Text(
-                      'Save',
-                      style: TextStyle(
-                        color: Colors.white,
-                      ),
+              Visibility(
+                visible: btnSave,
+                child: Container(
+                    height: 45.0,
+                    margin: EdgeInsets.fromLTRB(20.0, 20.0, 20.0, 0.0),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(14.0),
+                      color: Color(0xFF427CEF),
                     ),
-                    onPressed: () {
-                      if (oldPassCtrl.text == "") {
-                        setState(() {
-                          textPassVisible = true;
-                          textAlertCtrl.text =
-                              "Password lama tidak boleh kosong!";
-                        });
-                      } else if (newPassCtrl.text == "") {
-                        setState(() {
-                          textPassVisible = true;
-                          textAlertCtrl.text =
-                              "Password baru tidak boleh kosong!";
-                        });
-                      } else if (newValidatePassCtrl.text == "") {
-                        setState(() {
-                          textPassVisible = true;
-                          textAlertCtrl.text =
-                              "Validasi password tidak boleh kosong!";
-                        });
-                      } else {
-                        final encryptedOldPass =
-                            encrypter.encrypt(oldPassCtrl.text, iv: iv);
-                        final encryptedValidatePass =
-                            encrypter.encrypt(newValidatePassCtrl.text, iv: iv);
-                        print('Pass sekarang: ${encryptedOldPass.base64}');
-                        print('Pas validate ${encryptedValidatePass.base64}');
-                        textPassVisible = false;
-                        changePassword(context, encryptedOldPass.base64,
-                            encryptedValidatePass.base64);
-                      }
-                    },
+                    child: MaterialButton(
+                      minWidth: MediaQuery.of(context).size.width,
+                      child: Text(
+                        'Save',
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+                      onPressed: () {
+                        if (oldPassCtrl.text == "") {
+                          setState(() {
+                            textPassVisible = true;
+                            textAlertCtrl.text =
+                                "Password lama tidak boleh kosong!";
+                          });
+                        } else if (newPassCtrl.text == "") {
+                          setState(() {
+                            textPassVisible = true;
+                            textAlertCtrl.text =
+                                "Password baru tidak boleh kosong!";
+                          });
+                        } else if (newValidatePassCtrl.text == "") {
+                          setState(() {
+                            textPassVisible = true;
+                            textAlertCtrl.text =
+                                "Validasi password tidak boleh kosong!";
+                          });
+                        } else {
+                          final encryptedOldPass =
+                              encrypter.encrypt(oldPassCtrl.text, iv: iv);
+                          final encryptedValidatePass = encrypter
+                              .encrypt(newValidatePassCtrl.text, iv: iv);
+                          print('Pass sekarang: ${encryptedOldPass.base64}');
+                          print('Pas validate ${encryptedValidatePass.base64}');
+                          textPassVisible = false;
+                          setState(() {
+                            btnSave = false;
+                            visible = true;
+                          });
+                          changePassword(context, encryptedOldPass.base64,
+                              encryptedValidatePass.base64);
+                        }
+                      },
+                    )),
+              ),
+              Visibility(
+                  maintainSize: true,
+                  maintainAnimation: true,
+                  maintainState: true,
+                  visible: visible,
+                  child: Column(
+                    children: <Widget>[
+                      Container(
+                          margin: EdgeInsets.only(top: 20, bottom: 30),
+                          child: CircularProgressIndicator())
+                    ],
                   )),
             ],
           ),
         ));
+  }
+
+  Future<ChangePassword> changePassword(
+      BuildContext context, String oldPassword, String validatePass) async {
+    final storageCache = FlutterSecureStorage();
+    String accessToken = await storageCache.read(key: 'access_token');
+    var responseChangePass = await http.post(
+        '${UrlCons.mainProdUrl}change-password',
+        headers: {'Authorization': 'Bearer $accessToken'},
+        body: {'old_password': oldPassword, 'new_password': validatePass});
+    print('STATUS ${responseChangePass.body}');
+    if (responseChangePass.contentLength == 0) {
+      setState(() {
+        btnSave = true;
+        visible = false;
+      });
+      _allertSucces(context, 'Success, Your password has been changed');
+    } else {
+      setState(() {
+        btnSave = true;
+        visible = false;
+      });
+      _allertSucces(context, 'Failed, Your password not match!');
+    }
   }
 }
 
@@ -233,20 +278,4 @@ Widget _allertSucces(BuildContext context, String title) {
       );
     },
   );
-}
-
-Future<ChangePassword> changePassword(
-    BuildContext context, String oldPassword, String validatePass) async {
-
-  final storageCache = FlutterSecureStorage();
-  String accessToken = await storageCache.read(key: 'access_token');
-  var responseChangePass = await http.post(
-      '${UrlCons.mainProdUrl}change-password',
-      headers: {'Authorization': 'Bearer $accessToken'},
-      body: {'old_password': oldPassword, 'new_password': validatePass});
-  if (responseChangePass.contentLength == 0) {
-    _allertSucces(context, 'Success, Your password has been changed');
-  } else {
-    _allertSucces(context, 'Failed, Your password not match!');
-  }
 }

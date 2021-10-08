@@ -52,6 +52,7 @@ class AuthSales {
 }
 
 class AuthSalesRegit {
+  String message;
   String accessToken;
   String tokenType;
   int expiresIn;
@@ -60,14 +61,21 @@ class AuthSalesRegit {
   // Customer customer;
 
   AuthSalesRegit(
-      {this.accessToken,
+    
+      {this.message,
+        this.accessToken,
       this.tokenType,
       this.expiresIn,
       this.refreashToken,
       this.customerId});
 
   factory AuthSalesRegit.fromJson(Map<String, dynamic> json) {
+    if(json['message']  != null)
     return AuthSalesRegit(
+      message: json['message']
+    );
+    else 
+     return AuthSalesRegit(
       accessToken: json['access_token'],
       tokenType: json['token_type'],
       expiresIn: json['expires_in'],
