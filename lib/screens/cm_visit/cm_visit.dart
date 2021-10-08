@@ -68,19 +68,6 @@ class _CMVisitState extends State<CMVisit> {
                         MaterialPageRoute(builder: (context) => CMVisitForm()));
                   },
                 ),
-                //   ElevatedButton.icon(
-                //       onPressed: () {
-                //         Navigator.push(
-                //             context,
-                //             MaterialPageRoute(
-                //                 builder: (context) => CMVisitForm()));
-                //       },
-                //       icon: Icon(Icons.add, color: Colors.white),
-                //       label: Text('Add New Visit Report',
-                //           style: TextStyle(
-                //               color: Colors.white,
-                //               fontSize: 14,
-                //               fontWeight: FontWeight.normal))),
               ),
             )
           ],

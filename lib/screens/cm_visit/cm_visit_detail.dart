@@ -1,9 +1,11 @@
 import 'dart:convert';
+import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:pgn_mobile/models/cm_visit_detail_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:pgn_mobile/models/cm_visit_response.dart';
@@ -25,6 +27,7 @@ class _CMVisitDetailState extends State<CMVisitDetail> {
   final String id;
   final String name;
   _CMVisitDetailState(this.id, this.name);
+  List<String> listPhotos = <String>[];
   @override
   Widget build(BuildContext context) {
     progressDialog = ProgressDialog(context,
@@ -168,7 +171,7 @@ class _CMVisitDetailState extends State<CMVisitDetail> {
                 children: <Widget>[
                   Container(
                     child: Text(
-                      'Contact Person',
+                      'Phone Number',
                       textAlign: TextAlign.start,
                       style: TextStyle(
                           fontSize: 12,
@@ -178,7 +181,7 @@ class _CMVisitDetailState extends State<CMVisitDetail> {
                   ),
                   Container(
                     child: Text(
-                      model.data.contactPersonModel.name,
+                      model.data.contactPersonModel.phone,
                       textAlign: TextAlign.start,
                       style: TextStyle(
                           fontSize: 14,
@@ -338,6 +341,7 @@ class _CMVisitDetailState extends State<CMVisitDetail> {
                         style: TextStyle(
                             color: Colors.white, fontWeight: FontWeight.w600)),
                     onPressed: () {
+                      print('Join ' + model.data.images[0]);
                       Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -359,16 +363,16 @@ class _CMVisitDetailState extends State<CMVisitDetail> {
                                       model.data.contactPersonModel.phone,
                                   emailAddress:
                                       model.data.contactPersonModel.email,
-                                  report: model.data.report)));
-                      // photo1: model.data.images[0].isNotEmpty
-                      //     ? model.data.images[0]
-                      //     : "",
-                      // photo2: model.data.images[1].isNotEmpty
-                      //     ? model.data.images[1]
-                      //     : "",
-                      // photo3: model.data.images[2].isNotEmpty
-                      //     ? model.data.images[2]
-                      //     : ""
+                                  report: model.data.report,
+                                  photo1: model.data.images[0] != null
+                                      ? model.data.images[0].toString()
+                                      : "",
+                                  photo2: model.data.images[1] != null
+                                      ? model.data.images[1].toString()
+                                      : "",
+                                  photo3: model.data.images.length > 2
+                                      ? model.data.images[2].toString()
+                                      : "")));
                     }),
               ),
             ],
@@ -452,18 +456,23 @@ class _CMVisitDetailState extends State<CMVisitDetail> {
     }
     return CmVisitReponse.fromJson(json.decode(response.body));
   }
-}
 
-Future<CmVisitDetailModel> getDetail(BuildContext context, String id) async {
-  final storageCache = FlutterSecureStorage();
-  String accessToken = await storageCache.read(key: 'access_token');
-  String lang = await storageCache.read(key: 'lang');
-  var responseCmVisitDetail =
-      await http.get('${UrlCons.mainProdUrl}cm-visit/$id', headers: {
-    'Content-Type': 'application/json',
-    'Authorization': 'Bearer $accessToken',
-    'Accept-Language': lang,
-  });
-  print('Accsess_token' + accessToken);
-  return CmVisitDetailModel.fromJson(json.decode(responseCmVisitDetail.body));
+  Future<CmVisitDetailModel> getDetail(BuildContext context, String id) async {
+    final storageCache = FlutterSecureStorage();
+    String accessToken = await storageCache.read(key: 'access_token');
+    String lang = await storageCache.read(key: 'lang');
+    var responseCmVisitDetail =
+        await http.get('${UrlCons.mainProdUrl}cm-visit/$id', headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $accessToken',
+      'Accept-Language': lang,
+    });
+    CmVisitDetailModel model =
+        CmVisitDetailModel.fromJson(json.decode(responseCmVisitDetail.body));
+    listPhotos.addAll(model.data.images);
+    print('Accsess_token' + accessToken);
+    return CmVisitDetailModel.fromJson(json.decode(responseCmVisitDetail.body));
+  }
+
+  String getPhotos() {}
 }

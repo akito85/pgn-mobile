@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:typed_data';
 
@@ -11,9 +12,8 @@ import 'package:http/http.dart' as http;
 import 'package:pgn_mobile/models/cm_visit_response.dart';
 import 'package:pgn_mobile/models/cust_list_model.dart';
 import 'package:pgn_mobile/models/url_cons.dart';
-
-import 'package:pgn_mobile/models/cmm_form_model.dart';
 import 'package:progress_dialog/progress_dialog.dart';
+import 'package:path_provider/path_provider.dart';
 
 class CMVisitForm extends StatefulWidget {
   CMVisitForm(
@@ -101,11 +101,27 @@ class _CMVisitFormState extends State<CMVisitForm> {
       this.photo1,
       this.photo2,
       this.photo3);
-  String _onDateSelected = '18 November 2020';
   String valueChoose;
   String activityChoose;
+  String filePath1;
+  String filePath2;
+  String filePath3;
 
-  List listVisitTypes = ["1", "2", "3", "4", "5", "6", "7", "8"];
+  List listVisitTypes = [
+    "Online",
+    "Visit",
+    "WhatsApp",
+  ];
+  List listActivity = [
+    "Penanganan Keluhan Pelanggan",
+    "Perjanjian Jual Beli Gas",
+    "Produk dan Layanan",
+    "Tagihan dan Jaminan Pembayaran",
+    "Pengendalian Pemakaian Gas (Kuota)",
+    "Keinstalasian",
+    "Evaluasi Kapasitas Meter",
+    "Lainnya"
+  ];
 
   bool isVisibleDate = false;
   bool isVisibleVisitType = false;
@@ -144,6 +160,14 @@ class _CMVisitFormState extends State<CMVisitForm> {
       dateSelected.value = new TextEditingController.fromValue(
               new TextEditingValue(text: dateEdit))
           .value;
+    } else {
+      _getTime();
+    }
+    if (activityEdit != null) {
+      activityChoose = activityEdit;
+    }
+    if (visitTypeEdit != null) {
+      valueChoose = visitTypeEdit;
     }
     if (activityDescEdit != null) {
       activityDescription.value = new TextEditingController.fromValue(
@@ -187,6 +211,15 @@ class _CMVisitFormState extends State<CMVisitForm> {
       reports.value = new TextEditingController.fromValue(
               new TextEditingValue(text: reportEdit))
           .value;
+    }
+    if (photo1 != "") {
+      _createFileFromString1(photo1);
+    }
+    if (photo2 != "") {
+      _createFileFromString2(photo2);
+    }
+    if (photo3 != "") {
+      _createFileFromString3(photo3);
     }
     fetchPost(context);
     super.initState();
@@ -253,6 +286,16 @@ class _CMVisitFormState extends State<CMVisitForm> {
       setState(() {
         dateSelected.text = new DateFormat('dd MMMM yyy').format(d);
       });
+  }
+
+  void _getTime() {
+    final String formattedDateTime =
+        DateFormat('dd MMMM yyy').format(DateTime.now()).toString();
+    setState(() {
+      dateSelected.value = new TextEditingController.fromValue(
+              new TextEditingValue(text: formattedDateTime))
+          .value;
+    });
   }
 
   void _setValidation() {
@@ -420,7 +463,6 @@ class _CMVisitFormState extends State<CMVisitForm> {
                           autocorrect: true,
                           style: TextStyle(height: 1, fontSize: 14),
                           decoration: InputDecoration(
-                            hintText: _onDateSelected,
                             hintStyle: TextStyle(color: Color(0xFF455055)),
                             suffixIcon: Icon(
                               Icons.calendar_today_outlined,
@@ -473,10 +515,7 @@ class _CMVisitFormState extends State<CMVisitForm> {
                         child: Padding(
                             padding: EdgeInsets.only(left: 10, right: 8),
                             child: DropdownButton(
-                                hint: Text(
-                                    visitTypeEdit != null
-                                        ? visitTypeEdit
-                                        : 'Site/Business Visit',
+                                hint: Text('Site/Business Visit',
                                     style: TextStyle(
                                         color: Color(0xFF455055),
                                         fontSize: 14,
@@ -528,10 +567,7 @@ class _CMVisitFormState extends State<CMVisitForm> {
                         child: Padding(
                             padding: EdgeInsets.only(left: 10, right: 8),
                             child: DropdownButton(
-                                hint: Text(
-                                    activityEdit != null
-                                        ? activityEdit
-                                        : 'Customer Complaint Handling',
+                                hint: Text('Customer Complaint Handling',
                                     style: TextStyle(
                                         color: Color(0xFF455055),
                                         fontSize: 14,
@@ -551,7 +587,7 @@ class _CMVisitFormState extends State<CMVisitForm> {
                                     activityChoose = newValue;
                                   });
                                 },
-                                items: listVisitTypes.map((valueItem) {
+                                items: listActivity.map((valueItem) {
                                   return DropdownMenuItem(
                                       value: valueItem, child: Text(valueItem));
                                 }).toList()))),
@@ -583,7 +619,7 @@ class _CMVisitFormState extends State<CMVisitForm> {
                           autocorrect: true,
                           style: TextStyle(height: 1, fontSize: 14),
                           decoration: InputDecoration(
-                            hintText: 'Auto expanding text area',
+                            hintText: 'Activity Description',
                             filled: true,
                             fillColor: Colors.white70,
                             enabledBorder: OutlineInputBorder(
@@ -860,7 +896,7 @@ class _CMVisitFormState extends State<CMVisitForm> {
                           autocorrect: true,
                           style: TextStyle(height: 1, fontSize: 14),
                           decoration: InputDecoration(
-                            hintText: 'Auto expanding text area',
+                            hintText: 'Reports',
                             filled: true,
                             fillColor: Colors.white70,
                             enabledBorder: OutlineInputBorder(
@@ -1409,8 +1445,8 @@ class _CMVisitFormState extends State<CMVisitForm> {
                                 postCmVisitEdit(
                                     context,
                                     finalDate,
-                                    valueChoose,
-                                    activityChoose,
+                                    visitTypeChoose(),
+                                    chooseActivity(),
                                     activityDescription.text,
                                     customerName.text,
                                     customerId.text,
@@ -1426,8 +1462,8 @@ class _CMVisitFormState extends State<CMVisitForm> {
                                 postCmVisit(
                                     context,
                                     finalDate,
-                                    valueChoose,
-                                    activityChoose,
+                                    visitTypeChoose(),
+                                    chooseActivity(),
                                     activityDescription.text,
                                     customerName.text,
                                     customerId.text,
@@ -1531,29 +1567,29 @@ class _CMVisitFormState extends State<CMVisitForm> {
         return Align(
           alignment: Alignment.topLeft,
           child: Material(
+            elevation: 2,
             child: Container(
-              width: MediaQuery.of(context).size.width,
-              height: 200,
-              color: Colors.white,
-              child: ListView.builder(
-                padding: EdgeInsets.all(2),
-                itemCount: options.length,
-                itemBuilder: (BuildContext context, int index) {
-                  final DataListCust option = options.elementAt(index);
-                  return GestureDetector(
-                    onTap: () {
-                      onSelected(option);
-                    },
-                    child: ListTile(
-                        title: Text(option.name,
-                            style: const TextStyle(
-                                color: Colors.black,
-                                fontSize: 12,
-                                fontWeight: FontWeight.normal))),
-                  );
-                },
-              ),
-            ),
+                width: MediaQuery.of(context).size.width / 1.1,
+                height: 200,
+                color: Colors.white,
+                child: ListView.builder(
+                  padding: EdgeInsets.all(2),
+                  itemCount: options.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    final DataListCust option = options.elementAt(index);
+                    return GestureDetector(
+                      onTap: () {
+                        onSelected(option);
+                      },
+                      child: ListTile(
+                          title: Text(option.name,
+                              style: const TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.normal))),
+                    );
+                  },
+                )),
           ),
         );
       },
@@ -1734,5 +1770,83 @@ class _CMVisitFormState extends State<CMVisitForm> {
       list.addAll(getListCust.data);
     });
     return CustListModel.fromJson(json.decode(respose.body));
+  }
+
+  String visitTypeChoose() {
+    switch (valueChoose) {
+      case "Online":
+        return "1";
+        break;
+      case "Visit":
+        return "2";
+        break;
+      case "WhatsApp":
+        return "3";
+        break;
+      default:
+        return "";
+    }
+  }
+
+  String chooseActivity() {
+    switch (activityChoose) {
+      case "Penanganan Keluhan Pelanggan":
+        return "1";
+        break;
+      case "Perjanjian Jual Beli Gas":
+        return "2";
+        break;
+      case "Produk dan Layanan":
+        return "3";
+        break;
+      case "Tagihan dan Jaminan Pembayaran":
+        return "4";
+        break;
+      case "Pengendalian Pemakaian Gas (Kuota)":
+        return "5";
+        break;
+      case "Keinstalasian":
+        return "6";
+        break;
+      case "Evaluasi Kapasitas Meter":
+        return "7";
+        break;
+      case " Lainnya":
+        return "8";
+        break;
+    }
+  }
+
+  Future<String> _createFileFromString1(String foto) async {
+    final encodedStr = foto.split(',');
+    Uint8List bytes = base64.decode(encodedStr[1]);
+    String dir = (await getApplicationDocumentsDirectory()).path;
+    File file = File(
+        "$dir/" + DateTime.now().millisecondsSinceEpoch.toString() + ".jpeg");
+    await file.writeAsBytes(bytes);
+    _image = File(file.path);
+    return file.path;
+  }
+
+  Future<String> _createFileFromString2(String foto) async {
+    final encodedStr = foto.split(',');
+    Uint8List bytes = base64.decode(encodedStr[1]);
+    String dir = (await getApplicationDocumentsDirectory()).path;
+    File file = File(
+        "$dir/" + DateTime.now().millisecondsSinceEpoch.toString() + ".jpeg");
+    await file.writeAsBytes(bytes);
+    _image2 = File(file.path);
+    return file.path;
+  }
+
+  Future<String> _createFileFromString3(String foto) async {
+    final encodedStr = foto.split(',');
+    Uint8List bytes = base64.decode(encodedStr[1]);
+    String dir = (await getApplicationDocumentsDirectory()).path;
+    File file = File(
+        "$dir/" + DateTime.now().millisecondsSinceEpoch.toString() + ".jpeg");
+    await file.writeAsBytes(bytes);
+    _image3 = File(file.path);
+    return file.path;
   }
 }
