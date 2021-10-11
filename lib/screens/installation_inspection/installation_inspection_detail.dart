@@ -305,27 +305,11 @@ Widget _buildInspectionList(BuildContext context, InspectionModel model) {
     child: Column(children: <Widget>[
       Container(
           decoration: BoxDecoration(
-              color: model.segment == 'Leaks' ||
-                      model.segment == 'External Corrosion'
+              color: model.item.isNotEmpty || model.item != null
                   ? const Color(0xFFFF0000)
                   : const Color(0xFFF4F4F4),
               borderRadius: BorderRadius.circular(3)),
-          child: Padding(
-              padding: EdgeInsets.symmetric(vertical: 7, horizontal: 16),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Container(
-                    width: 24,
-                    height: 24,
-                    child: _buildSegment(context, model),
-                  ),
-                  SizedBox(width: 8),
-                  Container(
-                      margin: EdgeInsets.only(top: 4),
-                      child: _buildSegmentName(context, model))
-                ],
-              ))),
+          child: _buildSegment(context, model)),
       Container(
           margin: EdgeInsets.symmetric(vertical: 12),
           alignment: Alignment.topLeft,
@@ -375,10 +359,90 @@ Widget _buildInspectionList(BuildContext context, InspectionModel model) {
 }
 
 Widget _buildSegment(BuildContext context, InspectionModel model) {
+  if (model.item.isNotEmpty || model.item != null) {
+    return Padding(
+        padding: EdgeInsets.symmetric(vertical: 7, horizontal: 16),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Container(
+              width: 24,
+              height: 24,
+              child: _buildSegmentWhite(context, model),
+            ),
+            SizedBox(width: 8),
+            Container(
+                margin: EdgeInsets.only(top: 4),
+                child: Text(model.segment,
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold)))
+          ],
+        ));
+  } else {
+    return Padding(
+        padding: EdgeInsets.symmetric(vertical: 7, horizontal: 16),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Container(
+              width: 24,
+              height: 24,
+              child: _buildSegmentBlack(context, model),
+            ),
+            SizedBox(width: 8),
+            Container(
+                margin: EdgeInsets.only(top: 4),
+                child: Text(model.segment,
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold)))
+          ],
+        ));
+  }
+}
+
+Widget _buildSegmentWhite(BuildContext context, InspectionModel model) {
   switch (model.segment) {
     case 'Leaks':
       return ImageIcon(AssetImage('assets/ic_water.png'),
           color: Colors.white, size: 25);
+      break;
+    case 'Misalignment':
+      return ImageIcon(AssetImage('assets/ic_misalignment.png'),
+          color: Colors.white, size: 25);
+      break;
+    case 'Support':
+      return ImageIcon(AssetImage('assets/ic_support.png'),
+          color: Colors.white, size: 25);
+      break;
+    case 'Vibration':
+      return Icon(Icons.waves_outlined, color: Colors.white, size: 24);
+      break;
+    case 'External Corrosion':
+      return ImageIcon(AssetImage('assets/ic_corrosion.png'),
+          color: Colors.white, size: 25);
+      break;
+    case 'Insulation':
+      return ImageIcon(AssetImage('assets/ic_insulation.png'),
+          color: Colors.white, size: 25);
+      break;
+    case 'Other':
+      return ImageIcon(AssetImage('assets/ic_asteriks.png'),
+          color: Colors.white, size: 25);
+      break;
+    default:
+      return SizedBox(height: 10);
+  }
+}
+
+Widget _buildSegmentBlack(BuildContext context, InspectionModel model) {
+  switch (model.segment) {
+    case 'Leaks':
+      return ImageIcon(AssetImage('assets/ic_water.png'),
+          color: Colors.black, size: 25);
       break;
     case 'Misalignment':
       return ImageIcon(AssetImage('assets/ic_misalignment.png'),
@@ -393,7 +457,7 @@ Widget _buildSegment(BuildContext context, InspectionModel model) {
       break;
     case 'External Corrosion':
       return ImageIcon(AssetImage('assets/ic_corrosion.png'),
-          color: Colors.white, size: 25);
+          color: Colors.black, size: 25);
       break;
     case 'Insulation':
       return ImageIcon(AssetImage('assets/ic_insulation.png'),
@@ -405,25 +469,6 @@ Widget _buildSegment(BuildContext context, InspectionModel model) {
       break;
     default:
       return SizedBox(height: 10);
-  }
-}
-
-Widget _buildSegmentName(BuildContext context, InspectionModel model) {
-  switch (model.segment) {
-    case 'Leaks':
-      return Text(model.segment,
-          style: TextStyle(
-              color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold));
-      break;
-    case 'External Corrosion':
-      return Text(model.segment,
-          style: TextStyle(
-              color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold));
-      break;
-    default:
-      return Text(model.segment,
-          style: TextStyle(
-              color: Colors.black, fontSize: 14, fontWeight: FontWeight.bold));
   }
 }
 

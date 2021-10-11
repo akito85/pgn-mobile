@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:dotted_decoration/dotted_decoration.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -14,6 +15,8 @@ import 'package:pgn_mobile/models/cust_list_model.dart';
 import 'package:pgn_mobile/models/url_cons.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:path_provider/path_provider.dart';
+
+import 'cm_visit.dart';
 
 class CMVisitForm extends StatefulWidget {
   CMVisitForm(
@@ -69,7 +72,6 @@ class CMVisitForm extends StatefulWidget {
 }
 
 class _CMVisitFormState extends State<CMVisitForm> {
-  ProgressDialog progressDialog;
   String id;
   String dateEdit;
   String activityEdit;
@@ -423,8 +425,6 @@ class _CMVisitFormState extends State<CMVisitForm> {
 
   @override
   Widget build(BuildContext context) {
-    progressDialog = ProgressDialog(context,
-        type: ProgressDialogType.Normal, isDismissible: false);
     return Scaffold(
       key: _scaffoldKey,
       backgroundColor: Colors.white,
@@ -1421,7 +1421,7 @@ class _CMVisitFormState extends State<CMVisitForm> {
                                     fontWeight: FontWeight.w600)),
                             onPressed: () {
                               Navigator.of(context).pop();
-                              progressDialog.show();
+                              _showLoading(context);
                               var date = DateFormat("d MMMM yyyy")
                                   .parse(dateSelected.text);
                               var finalDate =
@@ -1637,9 +1637,10 @@ class _CMVisitFormState extends State<CMVisitForm> {
     print('status code' + responsePostCmVisitForm.statusCode.toString());
     if (responsePostCmVisitForm.statusCode == 200) {
       setState(() {
-        progressDialog.hide();
         _showDialogSuccessSubmit(context);
         Future.delayed(Duration(seconds: 2), () {
+          Navigator.pop(_scaffoldKey.currentContext);
+          Navigator.pop(_scaffoldKey.currentContext);
           Navigator.pop(_scaffoldKey.currentContext);
           Navigator.pushReplacementNamed(
               _scaffoldKey.currentContext, '/cmVisit');
@@ -1647,7 +1648,6 @@ class _CMVisitFormState extends State<CMVisitForm> {
       });
     } else {
       setState(() {
-        progressDialog.hide();
         print('responsebody' + responsePostCmVisitForm.body.trim().toString());
       });
     }
@@ -1695,9 +1695,10 @@ class _CMVisitFormState extends State<CMVisitForm> {
     print('status code' + responsePostCmVisitForm.statusCode.toString());
     if (responsePostCmVisitForm.statusCode == 200) {
       setState(() {
-        progressDialog.hide();
         _showDialogSuccessSubmit(context);
         Future.delayed(Duration(seconds: 2), () {
+          Navigator.pop(_scaffoldKey.currentContext);
+          Navigator.pop(_scaffoldKey.currentContext);
           Navigator.pop(_scaffoldKey.currentContext);
           Navigator.pushReplacementNamed(
               _scaffoldKey.currentContext, '/cmVisit');
@@ -1705,7 +1706,6 @@ class _CMVisitFormState extends State<CMVisitForm> {
       });
     } else {
       setState(() {
-        progressDialog.hide();
         print('responsebody' + responsePostCmVisitForm.body.trim().toString());
       });
     }
@@ -1814,6 +1814,8 @@ class _CMVisitFormState extends State<CMVisitForm> {
       case " Lainnya":
         return "8";
         break;
+      default:
+        return "";
     }
   }
 
@@ -1848,5 +1850,30 @@ class _CMVisitFormState extends State<CMVisitForm> {
     await file.writeAsBytes(bytes);
     _image3 = File(file.path);
     return file.path;
+  }
+
+  void _showLoading(BuildContext context) {
+    showDialog(
+        barrierColor: Colors.black.withOpacity(0.30),
+        barrierDismissible: false,
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+              elevation: 0,
+              insetPadding: EdgeInsets.zero,
+              contentPadding: EdgeInsets.zero,
+              clipBehavior: Clip.antiAlias,
+              backgroundColor: Colors.transparent,
+              content: Center(
+                child: Container(
+                  alignment: Alignment.center,
+                  width: 30.0,
+                  height: 30.0,
+                  child: Platform.isAndroid
+                      ? CircularProgressIndicator()
+                      : CupertinoActivityIndicator(),
+                ),
+              ));
+        });
   }
 }

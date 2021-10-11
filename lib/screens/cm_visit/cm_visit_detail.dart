@@ -2,15 +2,15 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:pgn_mobile/models/cm_visit_detail_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:pgn_mobile/models/cm_visit_response.dart';
 import 'package:pgn_mobile/models/url_cons.dart';
-import 'package:progress_dialog/progress_dialog.dart';
+import 'package:pgn_mobile/screens/cm_visit/cm_visit.dart';
 
 import 'cm_visit_form.dart';
 
@@ -23,15 +23,11 @@ class CMVisitDetail extends StatefulWidget {
 }
 
 class _CMVisitDetailState extends State<CMVisitDetail> {
-  ProgressDialog progressDialog;
   final String id;
   final String name;
   _CMVisitDetailState(this.id, this.name);
-  List<String> listPhotos = <String>[];
   @override
   Widget build(BuildContext context) {
-    progressDialog = ProgressDialog(context,
-        type: ProgressDialogType.Normal, isDismissible: false);
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -326,7 +322,7 @@ class _CMVisitDetailState extends State<CMVisitDetail> {
                         style: TextStyle(
                             color: Colors.white, fontWeight: FontWeight.w600)),
                     onPressed: () {
-                      progressDialog.show();
+                      _showLoading(context);
                       deleteContent(context, id);
                     }),
               ),
@@ -341,7 +337,6 @@ class _CMVisitDetailState extends State<CMVisitDetail> {
                         style: TextStyle(
                             color: Colors.white, fontWeight: FontWeight.w600)),
                     onPressed: () {
-                      print('Join ' + model.data.images[0]);
                       Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -449,7 +444,7 @@ class _CMVisitDetailState extends State<CMVisitDetail> {
     });
     if (response.statusCode == 200) {
       setState(() {
-        progressDialog.hide();
+        Navigator.pop(context);
         Navigator.pop(context);
         Navigator.pushReplacementNamed(context, '/cmVisit');
       });
@@ -467,12 +462,32 @@ class _CMVisitDetailState extends State<CMVisitDetail> {
       'Authorization': 'Bearer $accessToken',
       'Accept-Language': lang,
     });
-    CmVisitDetailModel model =
-        CmVisitDetailModel.fromJson(json.decode(responseCmVisitDetail.body));
-    listPhotos.addAll(model.data.images);
     print('Accsess_token' + accessToken);
     return CmVisitDetailModel.fromJson(json.decode(responseCmVisitDetail.body));
   }
 
-  String getPhotos() {}
+  void _showLoading(BuildContext context) {
+    showDialog(
+        barrierColor: Colors.white.withOpacity(0.30),
+        barrierDismissible: false,
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+              elevation: 0,
+              insetPadding: EdgeInsets.zero,
+              contentPadding: EdgeInsets.zero,
+              clipBehavior: Clip.antiAlias,
+              backgroundColor: Colors.transparent,
+              content: Center(
+                child: Container(
+                  alignment: Alignment.center,
+                  width: 30.0,
+                  height: 30.0,
+                  child: Platform.isAndroid
+                      ? CircularProgressIndicator()
+                      : CupertinoActivityIndicator(),
+                ),
+              ));
+        });
+  }
 }
