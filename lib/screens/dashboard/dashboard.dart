@@ -2585,7 +2585,9 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
                                               .listCustomerId[i].active ==
                                           0
                                       ? IconButton(
-                                          icon: FaIcon(Icons.delete),
+                                          icon: Image.asset('assets/trash.png',
+                                              color: painting.Color(0xFF455055),
+                                              height: 25),
                                           onPressed: () {
                                             deleteCustIdAlert(
                                                 snapshot
@@ -2627,6 +2629,7 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
                               EdgeInsets.only(left: 25, right: 20, bottom: 20),
                           child: InkWell(
                             onTap: () {
+                              Navigator.pop(context);
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
@@ -2873,9 +2876,8 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
                               snapshot.data.dashboardCustIdList
                                           .listCustomerId[i].active ==
                                       0
-                                  ? IconButton(
-                                      icon: FaIcon(Icons.delete),
-                                      onPressed: () {
+                                  ? InkWell(
+                                      onTap: () {
                                         deleteCustIdAlert(
                                             snapshot.data.dashboardCustIdList
                                                 .listCustomerId[i].reqId,
@@ -2883,7 +2885,9 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
                                                 .listCustomerId[i].custId,
                                             snapshot.data.dashboardCustIdList
                                                 .listCustomerId[i].nameCust);
-                                      })
+                                      },
+                                      child: Image.asset('assets/trash.png'),
+                                    )
                                   : SizedBox(),
                               snapshot.data.dashboardCustIdList
                                           .listCustomerId[i].active ==

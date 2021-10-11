@@ -105,12 +105,7 @@ class _PointsGasPointState extends State<PointsGasPoint> {
               itemBuilder: (context, i) {
                 DateTime dateFormated =
                     DateTime.parse(returnHistoryGP[i].dateHistory);
-                // if (returnHistoryGP.length == i)
-                //   return Center(
-                //       child: Padding(
-                //     padding: EdgeInsets.only(top: 5),
-                //     child: CircularProgressIndicator(),
-                //   ));
+
                 return Padding(
                   padding: EdgeInsets.only(left: 23, right: 23),
                   child: Column(
