@@ -33,17 +33,16 @@ class DataSubscription {
   String status;
   String name;
   String idCardNumber;
-  String address;
-  String kabupaten;
-  String kecamatan;
-  String kelurahan;
+
   String katPelanggan;
   String program;
   String reqType;
   int quotaYear;
   String bookNumb;
-  String katWilayah;
+
   String jenisBangunan;
+  String registerDate;
+  String rejectedDate;
 
   DataSubscription(
       {this.id,
@@ -52,37 +51,24 @@ class DataSubscription {
       this.status,
       this.name,
       this.idCardNumber,
-      this.address,
-      this.kabupaten,
-      this.kecamatan,
-      this.kelurahan,
       this.katPelanggan,
       this.program,
       this.reqType,
       this.quotaYear,
       this.bookNumb,
-      this.katWilayah,
-      this.jenisBangunan});
+      this.registerDate,
+      this.rejectedDate});
   factory DataSubscription.fromJson(Map<String, dynamic> json) {
     return DataSubscription(
-      id: json['id'],
-      userId: json['user_id'],
-      formId: json['form_id'],
-      status: json['status'],
-      name: json['name'],
-      idCardNumber: json['idcard_number'],
-      address: json['address'],
-      kabupaten: json['kota_kabupaten'],
-      kecamatan: json['kecamatan'],
-      kelurahan: json['kelurahan'],
-      katPelanggan: json['kategori_pelanggan'],
-      program: json['program'],
-      reqType: json['jenis_rekening'],
-      quotaYear: json['quota_year'],
-      bookNumb: json['book_number'],
-      katWilayah: json['kategori_wilayah'],
-      jenisBangunan: json['jenis_bangunan'],
-    );
+        id: json['id'],
+        // userId: json['user_id'],
+        // formId: json['form_id'],
+        status: json['status'],
+        name: json['name'],
+        idCardNumber: json['idcard_number'],
+        katPelanggan: json['kelompok_pelanggan'],
+        registerDate: json['registered_date'],
+        rejectedDate: json['rejected_date']);
   }
 }
 

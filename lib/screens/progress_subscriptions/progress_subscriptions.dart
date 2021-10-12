@@ -233,7 +233,7 @@ class _ProgressSubscriptionsState extends State<ProgressSubscriptions> {
                                   child: Container(
                                     margin: EdgeInsets.only(left: 5.0, top: 15),
                                     child: Text(
-                                      returnSubsProg[i].address ?? "-",
+                                      returnSubsProg[i].name ?? "-",
                                       style: TextStyle(
                                           fontSize: 13.0,
                                           fontWeight: FontWeight.w400,
@@ -250,7 +250,7 @@ class _ProgressSubscriptionsState extends State<ProgressSubscriptions> {
                                   margin: EdgeInsets.only(
                                       left: 20.0, top: 15, bottom: 15),
                                   child: Text(
-                                    'Program',
+                                    'Category Customer',
                                     style: TextStyle(
                                         fontSize: 13.0,
                                         fontWeight: FontWeight.w400,
@@ -273,7 +273,7 @@ class _ProgressSubscriptionsState extends State<ProgressSubscriptions> {
                                     margin: EdgeInsets.only(
                                         left: 5.0, top: 15, bottom: 15),
                                     child: Text(
-                                      returnSubsProg[i].program ?? "-",
+                                      returnSubsProg[i].katPelanggan ?? "-",
                                       style: TextStyle(
                                           fontSize: 13.0,
                                           fontWeight: FontWeight.w400,
