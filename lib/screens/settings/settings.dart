@@ -196,8 +196,14 @@ class SettingState extends State<Settings> {
                 ),
               ),
               onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => ChangeNumb()));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ChangeNumb(
+                            desc: Translations.of(context)
+                                .text('ff_change_number_tv_instruction_desc'),
+                            btn: Translations.of(context)
+                                .text('ff_change_number_bt_change'))));
               },
             ),
             Divider(

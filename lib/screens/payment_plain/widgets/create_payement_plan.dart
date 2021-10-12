@@ -263,14 +263,15 @@ class CreatePPState extends State<CreatePaymentPlan> {
       'customer_invoice_id': paymentPlanID,
       'customer_virtual_account_id': noVirtualAccountCtrl.text
     };
-    var responsePutPaymentPlan = await http.post(
-        'http://192.168.105.184/pgn-mobile-api/v2/payment-plans',
-        headers: {
-          'Authorization': 'Bearer aDri8xQJDL6MpFFCUE6lAA4ref5nWb3VGaWyMdgC',
-          'Content-Type': 'applictation/json',
-          'accept': 'applictation/json'
-        },
-        body: jsonEncode(body));
+    var responsePutPaymentPlan =
+        await http.post('${UrlCons.mainProdUrl}payment-plans',
+            headers: {
+              'Authorization':
+                  'Bearer aDri8xQJDL6MpFFCUE6lAA4ref5nWb3VGaWyMdgC',
+              'Content-Type': 'applictation/json',
+              'accept': 'applictation/json'
+            },
+            body: jsonEncode(body));
 
     if (responsePutPaymentPlan.statusCode == 200) {
       successAlert(context, "Payment Plan berhasil dibuat!");

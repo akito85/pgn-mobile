@@ -206,20 +206,6 @@ class OTPChangeNumbState extends State<OTPChangeNumb> {
               ),
             ),
           ),
-          Center(
-            child: Padding(
-              padding: const EdgeInsets.only(top: 15),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    Translations.of(context).text('ff_otp_tv_code_expiration'),
-                  ),
-                  Text(timerText),
-                ],
-              ),
-            ),
-          ),
           Row(
             children: <Widget>[
               Container(

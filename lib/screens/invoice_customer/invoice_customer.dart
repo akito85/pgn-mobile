@@ -1211,10 +1211,37 @@ class BillDetailState extends State<InvoiceCust>
                 )),
             Row(
               children: <Widget>[
+                Expanded(
+                  child: Container(
+                    height: 50.0,
+                    margin: EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 15.0),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10.0),
+                        color: Color(0xFF427CEF)),
+                    child: MaterialButton(
+                      minWidth: MediaQuery.of(context).size.width,
+                      child: Text(
+                        Translations.of(context)
+                            .text('title_bar_invoice_residence_paymentplan'),
+                        style: TextStyle(color: Colors.white, fontSize: 16),
+                      ),
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => CreatePaymentPlan(
+                                    custID: data.invoiceId,
+                                    paymentUSD: data.tBillUsd.value.toString(),
+                                    paymentUSDdisplay: data.tBillUsd.display)));
+                      },
+                    ),
+                  ),
+                ),
+                SizedBox(width: 20),
                 Container(
                     height: 50.0,
-                    width: 170,
-                    margin: EdgeInsets.fromLTRB(0.0, 5.0, 15.0, 15.0),
+                    width: 100,
+                    margin: EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 15.0),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10.0),
                       color: Color(0xFF427CEF),
@@ -1240,29 +1267,6 @@ class BillDetailState extends State<InvoiceCust>
                                 builder: (context) => PaymentPlain()));
                       },
                     )),
-                SizedBox(width: 30),
-                Expanded(
-                  child: Container(
-                    height: 50.0,
-                    margin: EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 15.0),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10.0),
-                        color: Color(0xFF427CEF)),
-                    child: MaterialButton(
-                      minWidth: MediaQuery.of(context).size.width,
-                      child: Icon(Icons.add, color: Colors.white, size: 30),
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => CreatePaymentPlan(
-                                    custID: data.invoiceId,
-                                    paymentUSD: data.tBillUsd.value.toString(),
-                                    paymentUSDdisplay: data.tBillUsd.display)));
-                      },
-                    ),
-                  ),
-                )
               ],
             ),
           ],
