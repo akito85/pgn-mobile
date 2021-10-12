@@ -5,10 +5,11 @@ import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/rendering.dart';
+import 'package:intl/intl.dart';
+import 'package:pgn_mobile/models/payment_plan_model.dart';
 
 import 'package:pgn_mobile/models/url_cons.dart';
 
-import 'package:pgn_mobile/models/spbg_model.dart';
 import 'package:pgn_mobile/screens/payment_plain/widgets/payment_plan_detail.dart';
 import 'package:pgn_mobile/services/app_localizations.dart';
 
@@ -18,6 +19,23 @@ class PaymentPlain extends StatefulWidget {
 }
 
 class PaymentPlainState extends State<PaymentPlain> {
+  ScrollController _scrollController = new ScrollController();
+  String nextPage = "";
+  List<DataPaymentPlan> listDataPaymentPlan = [];
+
+  @override
+  void initState() {
+    // items.addAll(listData);
+    super.initState();
+
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent) {
+        this.loadMore(context);
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,39 +52,52 @@ class PaymentPlainState extends State<PaymentPlain> {
           child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          _buildContent(context, fetchPost(context)),
+          FutureBuilder<PaymentPlan>(
+            future: fetchPost(context),
+            builder: (context, snapshot) {
+              if (!snapshot.hasData) return LinearProgressIndicator();
+              if (snapshot.data.message != null)
+                return Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    SizedBox(height: 100),
+                    Center(
+                      child: Container(
+                        alignment: Alignment.center,
+                        child: Image.asset('assets/penggunaan_gas.png'),
+                      ),
+                    ),
+                    SizedBox(height: 20),
+                    Container(
+                      child: Text(
+                        snapshot.data.message,
+                        style: TextStyle(fontSize: 18),
+                      ),
+                    )
+                  ],
+                );
+              return ListView.builder(
+                shrinkWrap: true,
+                controller: _scrollController,
+                physics: NeverScrollableScrollPhysics(),
+                itemCount: listDataPaymentPlan.length + 1,
+                itemBuilder: (context, i) {
+                  return i < listDataPaymentPlan.length
+                      ? _buildRow(listDataPaymentPlan[i])
+                      : SizedBox(
+                          height: 10.0,
+                        );
+                },
+              );
+            },
+          ),
         ],
       )),
     );
   }
 
-  Widget _buildContent(BuildContext context, Future<GetSpbg> getDetailUsage) {
-    return FutureBuilder<GetSpbg>(
-        future: getDetailUsage,
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) return LinearProgressIndicator();
-          return Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              ListView.builder(
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                itemCount: snapshot.data.data.length + 1,
-                itemBuilder: (context, i) {
-                  return i < snapshot.data.data.length
-                      ? _buildRow(snapshot.data.data[i])
-                      : SizedBox(
-                          height: 10.0,
-                        );
-                },
-              ),
-            ],
-          );
-        });
-  }
-
-  Widget _buildRow(DataSpbg data) {
+  Widget _buildRow(DataPaymentPlan data) {
     return Column(
       children: <Widget>[
         InkWell(
@@ -76,20 +107,69 @@ class PaymentPlainState extends State<PaymentPlain> {
                 context,
                 MaterialPageRoute(
                     builder: (context) =>
-                        PaymentPlanDetail(paymentPlanID: data.id)));
+                        PaymentPlanDetail(paymentPlanID: data.idPP)));
           },
         )
       ],
     );
   }
+
+  void loadMore(BuildContext context) async {
+    final storageCache = FlutterSecureStorage();
+    String accessToken = await storageCache.read(key: 'access_token');
+    var responseGetSpbg = await http.get(
+        '${UrlCons.mainProdUrl}customers/me/payment-plans?cursor=$nextPage',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $accessToken'
+        });
+    print('HASIL GET PAYMENT PLANS: ${responseGetSpbg.body}');
+    PaymentPlan paymentPlan =
+        PaymentPlan.fromJson(json.decode(responseGetSpbg.body));
+
+    if (responseGetSpbg.statusCode == 200) {
+      if (nextPage != paymentPlan.paging.next) {
+        setState(() {
+          listDataPaymentPlan.clear();
+          listDataPaymentPlan.addAll(paymentPlan.data);
+          nextPage = paymentPlan.paging.next;
+        });
+      }
+    }
+  }
+
+  Future<PaymentPlan> fetchPost(BuildContext context) async {
+    final storageCache = FlutterSecureStorage();
+    String accessToken = await storageCache.read(key: 'access_token');
+    var responseGetSpbg = await http
+        .get('${UrlCons.mainProdUrl}customers/me/payment-plans', headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $accessToken'
+    });
+    print('HASIL GET PAYMENT PLANS: ${responseGetSpbg.body}');
+    PaymentPlan paymentPlan =
+        PaymentPlan.fromJson(json.decode(responseGetSpbg.body));
+
+    if (responseGetSpbg.statusCode == 200) {
+      listDataPaymentPlan.clear();
+      listDataPaymentPlan.addAll(paymentPlan.data);
+      nextPage = paymentPlan.paging.next;
+    }
+
+    return paymentPlan;
+  }
 }
 
 class Card1 extends StatelessWidget {
-  final DataSpbg data;
+  final DataPaymentPlan data;
   Card1(this.data);
 
   @override
   Widget build(BuildContext context) {
+    String formatDate =
+        DateFormat("dd MMM yyy").format(DateTime.parse(data.paymentDate));
+    String formatDateUsage = DateFormat("MMMM yyy")
+        .format(DateTime.parse(data.invoicePP.usagePeriod));
     return ExpandableNotifier(
         child: ScrollOnExpand(
       scrollOnExpand: false,
@@ -130,7 +210,7 @@ class Card1 extends StatelessWidget {
                           Container(
                             margin: EdgeInsets.only(top: 5),
                             child: Text(
-                              data.id ?? '-',
+                              formatDate ?? '-',
                               style: TextStyle(fontSize: 15.0),
                             ),
                           )
@@ -169,7 +249,7 @@ class Card1 extends StatelessWidget {
                             child: Container(
                               margin: EdgeInsets.only(left: 5.0, top: 15),
                               child: Text(
-                                data.title ?? '-',
+                                data.invoicePP.idInvoice ?? '-',
                                 style: TextStyle(
                                     fontSize: 13.0,
                                     fontWeight: FontWeight.w400,
@@ -207,7 +287,7 @@ class Card1 extends StatelessWidget {
                             child: Container(
                               margin: EdgeInsets.only(left: 5.0, top: 15),
                               child: Text(
-                                data.title ?? '-',
+                                data.idPP ?? '-',
                                 style: TextStyle(
                                     fontSize: 13.0,
                                     fontWeight: FontWeight.w400,
@@ -253,7 +333,7 @@ class Card1 extends StatelessWidget {
                             child: Container(
                               margin: EdgeInsets.only(left: 5.0, top: 15),
                               child: Text(
-                                data.title ?? '-',
+                                data.invoicePP.idInvoice ?? '-',
                                 style: TextStyle(
                                     fontSize: 13.0,
                                     fontWeight: FontWeight.w400,
@@ -291,7 +371,7 @@ class Card1 extends StatelessWidget {
                             child: Container(
                               margin: EdgeInsets.only(left: 5.0, top: 15),
                               child: Text(
-                                data.title ?? '-',
+                                data.idPP ?? '-',
                                 style: TextStyle(
                                     fontSize: 13.0,
                                     fontWeight: FontWeight.w400,
@@ -329,7 +409,7 @@ class Card1 extends StatelessWidget {
                             child: Container(
                               margin: EdgeInsets.only(left: 5.0, top: 15),
                               child: Text(
-                                data.title ?? '-',
+                                formatDateUsage ?? '-',
                                 style: TextStyle(
                                     fontSize: 13.0,
                                     fontWeight: FontWeight.w400,
@@ -367,7 +447,7 @@ class Card1 extends StatelessWidget {
                             child: Container(
                               margin: EdgeInsets.only(left: 5.0, top: 15),
                               child: Text(
-                                data.title ?? '-',
+                                'USD ${data.invoicePP.totalBilingUSD}' ?? '-',
                                 style: TextStyle(
                                     fontSize: 13.0,
                                     fontWeight: FontWeight.w400,
@@ -405,7 +485,7 @@ class Card1 extends StatelessWidget {
                             child: Container(
                               margin: EdgeInsets.only(left: 5.0, top: 15),
                               child: Text(
-                                data.title ?? '-',
+                                'USD ${data.paymentUSD}' ?? '-',
                                 style: TextStyle(
                                     fontSize: 13.0,
                                     fontWeight: FontWeight.w400,
@@ -436,15 +516,4 @@ class Card1 extends StatelessWidget {
       ),
     ));
   }
-}
-
-Future<GetSpbg> fetchPost(BuildContext context) async {
-  final storageCache = FlutterSecureStorage();
-  String accessToken = await storageCache.read(key: 'access_token');
-  var responseGetSpbg = await http.get(UrlCons.getSpbgArea, headers: {
-    'Content-Type': 'application/json',
-    'Authorization': 'Bearer $accessToken'
-  });
-
-  return GetSpbg.fromJson(json.decode(responseGetSpbg.body));
 }
