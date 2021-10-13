@@ -1,14 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:pgn_mobile/models/cust_profile_model.dart';
 import 'package:pgn_mobile/services/app_localizations.dart';
 
-class CustomersTabDetail extends StatelessWidget {
+class CustomersTabDetail extends StatefulWidget {
   final Customer data;
   final String idCust;
+
   CustomersTabDetail(this.data, this.idCust);
+
+  @override
+  _CustomersTabDetailState createState() =>
+      _CustomersTabDetailState(data, idCust);
+}
+
+class _CustomersTabDetailState extends State<CustomersTabDetail> {
+  final Customer data;
+  final String idCust;
+
+  _CustomersTabDetailState(this.data, this.idCust);
+  String product = '-';
+
   @override
   Widget build(BuildContext context) {
+    getCred(context);
     return ListView(
       children: <Widget>[
         SizedBox(height: 20),
@@ -19,6 +35,7 @@ class CustomersTabDetail extends StatelessWidget {
           margin: EdgeInsets.only(top: 10, left: 10, right: 10),
           elevation: 5,
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Row(
                 children: <Widget>[
@@ -35,14 +52,14 @@ class CustomersTabDetail extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       SizedBox(height: 5),
-                      Text(data.data.name ?? "-",
+                      Text(widget.data.data.name ?? "-",
                           style: TextStyle(
                             color: Colors.black,
                             fontWeight: FontWeight.bold,
                             fontSize: 15.0,
                           )),
                       SizedBox(height: 5),
-                      Text('CM - ${data.data.ae_id} | $idCust',
+                      Text('CM - ${widget.data.data.ae_id} | ${widget.idCust}',
                           style: TextStyle(
                             fontWeight: FontWeight.w500,
                             color: Colors.grey[400],
@@ -53,13 +70,14 @@ class CustomersTabDetail extends StatelessWidget {
                 ],
               ),
               SizedBox(height: 10),
-              if (data.data.imageUrl != "")
+              if (widget.data.data.imageUrl != "")
                 Container(
                   width: MediaQuery.of(context).size.width,
                   height: 200,
-                  child: Image.network(data.data.imageUrl, fit: BoxFit.fill),
+                  child: Image.network(widget.data.data.imageUrl,
+                      fit: BoxFit.fill),
                 ),
-              if (data.data.imageUrl == "")
+              if (widget.data.data.imageUrl == "")
                 Container(
                   width: MediaQuery.of(context).size.width,
                   height: 200,
@@ -73,9 +91,10 @@ class CustomersTabDetail extends StatelessWidget {
                 color: Colors.white,
                 margin: EdgeInsets.only(bottom: 10),
                 padding:
-                    EdgeInsets.only(left: 15, top: 17, bottom: 15, right: 15),
+                    EdgeInsets.only(left: 17, top: 17, bottom: 15, right: 15),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
                     Text(
                         Translations.of(context)
@@ -85,7 +104,7 @@ class CustomersTabDetail extends StatelessWidget {
                             fontSize: 16.0,
                             color: Color(0xFF427CEF))),
                     SizedBox(height: 22),
-                    Text(data.data.address ?? "-",
+                    Text(widget.data.data.address ?? "-",
                         style: TextStyle(
                           fontWeight: FontWeight.w300,
                           color: Colors.black,
@@ -148,7 +167,7 @@ class CustomersTabDetail extends StatelessWidget {
                           child: Container(
                             margin: EdgeInsets.only(left: 5.0, top: 10),
                             child: Text(
-                              data.data.fax ?? '-',
+                              widget.data.data.fax ?? '-',
                               style: TextStyle(
                                   fontSize: 13.0,
                                   fontWeight: FontWeight.w400,
@@ -188,7 +207,7 @@ class CustomersTabDetail extends StatelessWidget {
                             margin:
                                 EdgeInsets.only(left: 5.0, top: 5, bottom: 5),
                             child: Text(
-                              data.data.phone ?? '-',
+                              widget.data.data.phone ?? '-',
                               style: TextStyle(
                                   fontSize: 13.0,
                                   fontWeight: FontWeight.w400,
@@ -228,7 +247,7 @@ class CustomersTabDetail extends StatelessWidget {
                             margin:
                                 EdgeInsets.only(left: 5.0, top: 5, bottom: 5),
                             child: Text(
-                              data.data.personEmail ?? '-',
+                              widget.data.data.personEmail ?? '-',
                               style: TextStyle(
                                   fontSize: 13.0,
                                   fontWeight: FontWeight.w400,
@@ -268,7 +287,7 @@ class CustomersTabDetail extends StatelessWidget {
                             margin:
                                 EdgeInsets.only(left: 5.0, top: 5, bottom: 5),
                             child: Text(
-                              data.data.production ?? '-',
+                              widget.data.data.production ?? '-',
                               style: TextStyle(
                                   fontSize: 13.0,
                                   fontWeight: FontWeight.w400,
@@ -308,7 +327,7 @@ class CustomersTabDetail extends StatelessWidget {
                             margin:
                                 EdgeInsets.only(left: 5.0, top: 5, bottom: 20),
                             child: Text(
-                              data.data.sectorIndustry ?? '-',
+                              widget.data.data.sectorIndustry ?? '-',
                               style: TextStyle(
                                   fontSize: 13.0,
                                   fontWeight: FontWeight.w400,
@@ -328,13 +347,13 @@ class CustomersTabDetail extends StatelessWidget {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10.0),
           ),
-          margin: EdgeInsets.only(top: 10, left: 10, right: 10, bottom: 21),
+          margin: EdgeInsets.only(top: 10, left: 10, right: 10),
           elevation: 5,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Container(
-                margin: EdgeInsets.only(left: 18, right: 30, top: 30),
+                margin: EdgeInsets.only(left: 18, right: 30, top: 20),
                 child: Text(
                     Translations.of(context)
                         .text('f_customer_detail_tv_contact'),
@@ -378,7 +397,7 @@ class CustomersTabDetail extends StatelessWidget {
                           child: Container(
                             margin: EdgeInsets.only(left: 5.0, top: 10),
                             child: Text(
-                              data.data.contactPersonName ?? '-',
+                              widget.data.data.contactPersonName ?? '-',
                               style: TextStyle(
                                   fontSize: 13.0,
                                   fontWeight: FontWeight.w400,
@@ -418,7 +437,77 @@ class CustomersTabDetail extends StatelessWidget {
                             margin:
                                 EdgeInsets.only(left: 5.0, bottom: 5, top: 10),
                             child: Text(
-                              data.data.personNumber ?? '-',
+                              widget.data.data.personNumber ?? '-',
+                              style: TextStyle(
+                                  fontSize: 13.0,
+                                  fontWeight: FontWeight.w400,
+                                  color: Colors.grey[600]),
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  ],
+                ),
+              )
+            ],
+          ),
+        ),
+        Card(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          margin: EdgeInsets.only(top: 10, left: 10, right: 10, bottom: 30),
+          elevation: 5,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Container(
+                margin: EdgeInsets.only(left: 18, right: 30, top: 20),
+                child: Text('Product',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF427CEF),
+                      fontSize: 16.0,
+                    )),
+              ),
+              Container(
+                color: Colors.white,
+                margin:
+                    EdgeInsets.only(left: 0, right: 10, top: 10.0, bottom: 15),
+                child: Column(
+                  children: <Widget>[
+                    Row(
+                      children: <Widget>[
+                        Container(
+                          width: 140,
+                          margin:
+                              EdgeInsets.only(left: 20.0, top: 10, bottom: 10),
+                          child: Text(
+                            Translations.of(context)
+                                .text('ff_customer_profile_et_name'),
+                            style: TextStyle(
+                                fontSize: 13.0,
+                                fontWeight: FontWeight.w400,
+                                color: Colors.grey[600]),
+                          ),
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(top: 10, bottom: 10),
+                          child: Text(
+                            ':',
+                            style: TextStyle(
+                                fontSize: 13.0,
+                                fontWeight: FontWeight.w400,
+                                color: Colors.grey[600]),
+                          ),
+                        ),
+                        Expanded(
+                          child: Container(
+                            margin:
+                                EdgeInsets.only(left: 5.0, top: 10, bottom: 10),
+                            child: Text(
+                              product,
                               style: TextStyle(
                                   fontSize: 13.0,
                                   fontWeight: FontWeight.w400,
@@ -436,5 +525,15 @@ class CustomersTabDetail extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  void getCred(context) async {
+    final storageCache = FlutterSecureStorage();
+
+    String products = await storageCache.read(key: 'products');
+    print('INI PROD $products');
+    setState(() {
+      product = products;
+    });
   }
 }

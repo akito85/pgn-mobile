@@ -16,6 +16,8 @@ class CMVisit extends StatefulWidget {
 
 class _CMVisitState extends State<CMVisit> {
   bool isVisibleButton = false;
+  bool loadingIndicator = false;
+  TextEditingController _searchQuery = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,6 +35,56 @@ class _CMVisitState extends State<CMVisit> {
         height: MediaQuery.of(context).size.height,
         child: Stack(
           children: <Widget>[
+            Container(
+              height: 45,
+              margin: EdgeInsets.fromLTRB(17.0, 10.0, 17.0, 10.0),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+              child: Material(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                elevation: 8,
+                child: TextFormField(
+                  keyboardType: TextInputType.text,
+                  controller: _searchQuery,
+                  decoration: InputDecoration(
+                    labelText: 'Keyword',
+                    labelStyle: TextStyle(
+                        color: Color(0xff427CEF),
+                        fontSize: 15,
+                        fontWeight: FontWeight.w500),
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        Icons.search,
+                        color: Color(0xFF427CEF),
+                      ),
+                      onPressed: () {
+                        if (_searchQuery.text.isNotEmpty) {
+                          getCmVisit(context);
+                          setState(() {
+                            loadingIndicator = true;
+                          });
+                        } else {
+                          setState(() {
+                            loadingIndicator = true;
+                          });
+                          getCmVisit(context);
+                        }
+                      },
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(25),
+                        borderSide: BorderSide(color: Colors.white)),
+                    focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(25),
+                        borderSide: BorderSide(color: Colors.white)),
+                  ),
+                  style: TextStyle(color: Colors.grey, fontSize: 14.0),
+                ),
+              ),
+            ),
             _buildContent(context, getCmVisit(context)),
             Positioned(
               bottom: 10,
@@ -69,7 +121,14 @@ class _CMVisitState extends State<CMVisit> {
                   },
                 ),
               ),
-            )
+            ),
+            Visibility(
+              visible: loadingIndicator,
+              child: Padding(
+                padding: EdgeInsets.only(),
+                child: Center(child: CircularProgressIndicator()),
+              ),
+            ),
           ],
         ),
       ),
@@ -82,7 +141,7 @@ class _CMVisitState extends State<CMVisit> {
         builder: (context, snapsnapshot) {
           if (!snapsnapshot.hasData) return LinearProgressIndicator();
           return Container(
-            margin: EdgeInsets.only(top: 12, bottom: 50),
+            margin: EdgeInsets.only(top: 65, bottom: 50),
             child: ListView.builder(
               itemCount: snapsnapshot.data.data.length + 1,
               itemBuilder: (context, i) {
@@ -93,6 +152,23 @@ class _CMVisitState extends State<CMVisit> {
             ),
           );
         });
+  }
+
+  Future<CMVisitList> getCmVisit(BuildContext context) async {
+    final sotarageCache = FlutterSecureStorage();
+    String accessToken = await sotarageCache.read(key: 'access_token');
+    String lang = await sotarageCache.read(key: 'lang');
+    var cmVisitResponse = await http.get(
+        '${UrlCons.mainDevUrl}cm-visit?search=${_searchQuery.text}',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $accessToken',
+          'Accept-Language': lang
+        });
+    setState(() {
+      loadingIndicator = false;
+    });
+    return CMVisitList.fromJson(json.decode(cmVisitResponse.body));
   }
 }
 
@@ -145,17 +221,4 @@ Widget _cardState(BuildContext context, CMVisitModel model) {
           ),
         )),
   );
-}
-
-Future<CMVisitList> getCmVisit(BuildContext context) async {
-  final sotarageCache = FlutterSecureStorage();
-  String accessToken = await sotarageCache.read(key: 'access_token');
-  String lang = await sotarageCache.read(key: 'lang');
-  var cmVisitResponse =
-      await http.get('${UrlCons.mainDevUrl}cm-visit', headers: {
-    'Content-Type': 'application/json',
-    'Authorization': 'Bearer $accessToken',
-    'Accept-Language': lang
-  });
-  return CMVisitList.fromJson(json.decode(cmVisitResponse.body));
 }

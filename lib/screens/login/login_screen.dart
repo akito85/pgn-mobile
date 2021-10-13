@@ -364,6 +364,9 @@ class LoginScreenState extends State<LoginScreen> {
       await storageCache.write(
           key: 'request_code', value: _auth.verificationStatus.requestCode);
       await storageCache.write(key: 'access_token', value: _auth.accessToken);
+      await storageCache.write(
+          key: 'products',
+          value: _auth.products.length != 0 ? _auth.products[0].name : '-');
       if (_auth.user.userType == 2 && _auth.user.userGroupId == "11") {
         // print('1. MASUK KE SINI ${_auth.customer.custName}');
 

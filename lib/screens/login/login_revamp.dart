@@ -133,7 +133,7 @@ class LoginRevampState extends State<LoginRevamp> {
                                     style: TextStyle(color: Colors.white),
                                   ),
                                   onPressed: () {
-                                    setLang(context, false);
+                                    setLang(context, true);
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(

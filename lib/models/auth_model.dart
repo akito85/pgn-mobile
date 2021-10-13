@@ -8,6 +8,7 @@ class AuthSales {
   String message;
   VerificationStatus verificationStatus;
   Customer customer;
+  List<Products> products;
 
   AuthSales(
       {this.accessToken,
@@ -18,7 +19,8 @@ class AuthSales {
       this.verificationStatus,
       this.user,
       this.customer,
-      this.message});
+      this.message,
+      this.products});
 
   factory AuthSales.fromJson(Map<String, dynamic> json) {
     if (json['customer'] != null) {
@@ -32,7 +34,8 @@ class AuthSales {
           verificationStatus:
               VerificationStatus.fromJson(json['verification_status']),
           customer: Customer.fromJson(json['customer']),
-          user: User.fromJson(json['user']));
+          user: User.fromJson(json['user']),
+          products: parsedJsonProducts(json['products']));
     } else if (json['message'] != null) {
       return AuthSales(message: json['message']);
     } else {
@@ -48,6 +51,21 @@ class AuthSales {
               VerificationStatus.fromJson(json['verification_status']),
           user: User.fromJson(json['user']));
     }
+  }
+  static List<Products> parsedJsonProducts(datasJson) {
+    var list = datasJson as List;
+    List<Products> datasProducts =
+        list.map((data) => Products.fromJson(data)).toList();
+    return datasProducts;
+  }
+}
+
+class Products {
+  String name;
+  Products({this.name});
+
+  factory Products.fromJson(Map<String, dynamic> json) {
+    return Products(name: json['name']);
   }
 }
 
