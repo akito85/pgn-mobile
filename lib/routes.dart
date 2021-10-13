@@ -5,6 +5,7 @@ import 'package:pgn_mobile/screens/dashboard/dashboard.dart';
 import 'package:pgn_mobile/screens/gas_station/gas_station.dart';
 import 'package:pgn_mobile/screens/login/login.dart';
 import 'package:pgn_mobile/screens/progress_subscriptions/progress_subscriptions.dart';
+import 'package:pgn_mobile/screens/login/login_change_numb.dart';
 import 'package:pgn_mobile/splash_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:pgn_mobile/services/register_residential.dart';
@@ -55,6 +56,7 @@ class FirstScreen extends StatefulWidget {
 class _MyFirstState extends State<FirstScreen> {
   var _routes = {
     '/login': (context) => Login(),
+    '/loginchangenumb': (context) => LoginChangeNumb(),
     '/otp': (context) => OTPForm(),
     '/dashboard': (context) => Dashboard(),
     '/gasStation': (context) => GasStation(),
