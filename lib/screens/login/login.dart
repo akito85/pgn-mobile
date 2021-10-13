@@ -163,5 +163,12 @@ void setLang(BuildContext context) {
     changeNumbDesc:
         Translations.of(context).text('ff_change_number_tv_instruction_desc'),
     change: Translations.of(context).text('ff_change_number_bt_change'),
+    titleChangeNumb: Translations.of(context).text('title_bar_register_number'),
+    descChangeNumb:
+        Translations.of(context).text('ff_register_number_tv_instruction_desc'),
+    hintChangeNumb: Translations.of(context)
+        .text('ff_forgot_password_et_hint_phone_number'),
+    btnChangeNumb:
+        Translations.of(context).text('ff_register_number_bt_register'),
   );
 }

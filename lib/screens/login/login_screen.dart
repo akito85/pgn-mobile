@@ -652,6 +652,14 @@ class LoginScreenState extends State<LoginScreen> {
           await storageCache.write(key: 'auth_status', value: 'Login');
           Navigator.pop(context);
           Navigator.pushReplacementNamed(context, '/dashboard');
+        } else if (_auth.verificationStatus.nextAction ==
+            'register_mobile_phone') {
+          await storageCache.write(key: 'auth_status', value: 'Logout');
+          Navigator.pushReplacementNamed(
+            context,
+            '/loginchangenumb',
+            arguments: numbPhone,
+          );
         } else {
           await storageCache.write(key: 'auth_status', value: 'Logout');
           Navigator.pushReplacementNamed(
