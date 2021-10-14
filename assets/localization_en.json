@@ -233,6 +233,7 @@
     "ff_guest_home_tv_or": "Or",
     "ff_guest_home_tv_no_account": "Don\\'t Have an Account?",
     "ff_guest_home_tv_register": "Register",
+    "ff_guest_home_tv_register_new": "Register New Account",
     "ff_otp_bt_change_number": "Change Number",
     "ff_otp_bt_resend": "Resend",
     "ff_otp_tv_instruction_desc": "Enter the code sent via SMS to",
@@ -783,6 +784,10 @@
     "cmm_form_alert_post_success": "Successed, Data successfully recorded",
     "field_input_allert": "All fields must be filled !",
     "pb_tab_title": "Subscription Progress",
+    "pb_tab_phase": "Phase",
     "f_dialog_confirmation_delete_form": "Are you sure delete this Form Id",
-    "f_dialog_confirmation_add_form": "Please input your form id"
+    "f_dialog_confirmation_add_form": "Please input your form id",
+    "f_title_porg_subs_stat_frbg": "FRBG Registration",
+    "f_title_porg_subs_stat_evaluation": "PGN Evaluation",
+    "f_title_porg_subs_stat_construction": "Gas Piping Construction"
 }

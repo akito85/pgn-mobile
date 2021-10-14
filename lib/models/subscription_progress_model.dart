@@ -27,7 +27,7 @@ class SubscriptionsProgressModel {
 }
 
 class DataSubscription {
-  int id;
+  String id;
   int userId;
   String formId;
   String status;
@@ -62,7 +62,7 @@ class DataSubscription {
     return DataSubscription(
         id: json['id'],
         // userId: json['user_id'],
-        // formId: json['form_id'],
+        formId: json['form_id'],
         status: json['status'],
         name: json['name'],
         idCardNumber: json['idcard_number'],
@@ -112,5 +112,93 @@ class DataDeleteFormId {
     return DataDeleteFormId(
       message: json['message'],
     );
+  }
+}
+
+/////////// PROGRESS BERLANGGANAN DETAIL
+
+class SubsProgDetail {
+  List<DataDetailProg> dataDetailProg;
+  String message;
+  int code;
+
+  SubsProgDetail({this.code, this.dataDetailProg, this.message});
+  factory SubsProgDetail.fromJson(Map<String, dynamic> json) {
+    if (json['code'] != null) {
+      return SubsProgDetail(code: json['code'], message: json['message']);
+    } else {
+      return SubsProgDetail(
+          dataDetailProg: parsedDetailDataSubsProg(json['data']));
+    }
+  }
+
+  static List<DataDetailProg> parsedDetailDataSubsProg(dataJson) {
+    var list = dataJson as List;
+    List<DataDetailProg> detailDataSubsProg =
+        list.map((data) => DataDetailProg.fromJson(data)).toList();
+    return detailDataSubsProg;
+  }
+}
+
+class DataDetailProg {
+  String id;
+  String formId;
+  String name;
+  String kelPelanggan;
+  String idCardNumb;
+  String regDate;
+  String verDate;
+  String bbgDate;
+  String jarfasDate;
+  String gasDate;
+  String rejectedDate;
+  String custId;
+  String regBy;
+  String verBy;
+  String jarfasBy;
+  String gasInBy;
+  String rejectedBy;
+  String status;
+
+  DataDetailProg(
+      {this.bbgDate,
+      this.custId,
+      this.formId,
+      this.gasDate,
+      this.gasInBy,
+      this.id,
+      this.idCardNumb,
+      this.jarfasBy,
+      this.jarfasDate,
+      this.kelPelanggan,
+      this.name,
+      this.regBy,
+      this.regDate,
+      this.rejectedBy,
+      this.rejectedDate,
+      this.status,
+      this.verBy,
+      this.verDate});
+
+  factory DataDetailProg.fromJson(Map<String, dynamic> json) {
+    return DataDetailProg(
+        id: json['id'],
+        formId: json['form_id'],
+        name: json['name'],
+        kelPelanggan: json['kelompok_pelanggan'],
+        idCardNumb: json['idcard_number'],
+        regDate: json['registered_date'],
+        verDate: json['verified_date'],
+        bbgDate: json['bbg_issued_date'],
+        jarfasDate: json['jarfas_date'],
+        gasDate: json['gas_in_date'],
+        rejectedDate: json['rejected_date'],
+        custId: json['customer_id'],
+        regBy: json['registered_by'],
+        verBy: json['verified_by'],
+        jarfasBy: json['jarfas_by'],
+        gasInBy: json['gas_in_by'],
+        rejectedBy: json['rejected_by'],
+        status: json['status']);
   }
 }

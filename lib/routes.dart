@@ -6,6 +6,7 @@ import 'package:pgn_mobile/screens/gas_station/gas_station.dart';
 import 'package:pgn_mobile/screens/login/login.dart';
 import 'package:pgn_mobile/screens/progress_subscriptions/progress_subscriptions.dart';
 import 'package:pgn_mobile/screens/login/login_change_numb.dart';
+import 'package:pgn_mobile/screens/progress_subscriptions/widgets/progress_subs_detail.dart';
 import 'package:pgn_mobile/splash_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:pgn_mobile/services/register_residential.dart';
@@ -73,6 +74,7 @@ class _MyFirstState extends State<FirstScreen> {
     '/cmmForm': (context) => CMMForm(),
     '/usageDetail': (context) => UsageDetail(),
     '/subscriptionProgress': (context) => ProgressSubscriptions(),
+    '/subsProgressDetail': (context) => ProgressSubsDetail(),
   };
 
   SpecificLocalizationDelegate _localeOverrideDelegate;

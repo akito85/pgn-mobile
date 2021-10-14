@@ -157,6 +157,7 @@
     "ff_guest_home_tv_or": "Atau",
     "ff_guest_home_tv_no_account": "Belum Punya Akun?",
     "ff_guest_home_tv_register": "Daftar",
+    "ff_guest_home_tv_register_new": "Registrasi Akun Baru",
     "ff_otp_bt_change_number": "Ubah Nomor",
     "ff_otp_bt_resend": "Kirim Ulang",
     "ff_otp_tv_instruction_desc": "Masukkan kode yang dikirim melalui SMS ke",
@@ -762,6 +763,10 @@
     "cmm_form_alert_post_success": "Data Pencatatan Meter berhasil",
     "field_input_allert": "Semua field harus terisi !",
     "pb_tab_title": "Progress Berlangganan",
+    "pb_tab_phase": "Fase",
     "f_dialog_confirmation_delete_form": "Anda yakin ingin menghapus Form Id ini", 
-    "f_dialog_confirmation_add_form": "Silahkan masukan form id anda"
+    "f_dialog_confirmation_add_form": "Silahkan masukan form id anda",
+    "f_title_porg_subs_stat_frbg": "Registrasi FRBG",
+    "f_title_porg_subs_stat_evaluation": "Evaluasi PGN",
+    "f_title_porg_subs_stat_construction": "Konstruksi Jaringan"
 }

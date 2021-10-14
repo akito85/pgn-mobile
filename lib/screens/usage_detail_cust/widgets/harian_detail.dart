@@ -750,9 +750,6 @@ class Card1 extends StatelessWidget {
 
 Future<HarianDetailCustDashboard> fetchPost(
     BuildContext context, String title) async {
-  // SharedPreferences prefs = await SharedPreferences.getInstance();
-  // String accessToken = prefs.getString('access_token');
-  // String lang = prefs.getString('lang');
   final storageCache = FlutterSecureStorage();
   String accessToken = await storageCache.read(key: 'access_token');
   String lang = await storageCache.read(key: 'lang');

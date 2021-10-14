@@ -1,6 +1,4 @@
 import 'dart:convert';
-
-import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -8,6 +6,7 @@ import 'package:pgn_mobile/models/subscription_progress_model.dart';
 import 'package:pgn_mobile/models/url_cons.dart';
 import 'package:http/http.dart' as http;
 import 'package:pgn_mobile/screens/otp/otp.dart';
+import 'package:pgn_mobile/screens/progress_subscriptions/widgets/progress_subs_detail.dart';
 import 'package:pgn_mobile/services/app_localizations.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
@@ -17,7 +16,7 @@ class ProgressSubscriptions extends StatefulWidget {
 }
 
 class _ProgressSubscriptionsState extends State<ProgressSubscriptions> {
-  ScrollController _scrollController = ScrollController();
+  // ScrollController _scrollController = ScrollController();
   List<DataSubscription> returnSubsProg = [];
   String userName = '';
   String userID = '';
@@ -48,14 +47,17 @@ class _ProgressSubscriptionsState extends State<ProgressSubscriptions> {
         children: [
           ListView(
             children: [
-              Card(
+              Container(
+                decoration: BoxDecoration(
+                  color: Color(0xFF427CEF),
+                  borderRadius: BorderRadius.circular(10),
+                ),
                 margin:
                     EdgeInsets.only(left: 18, right: 18, bottom: 11, top: 20),
-                color: Colors.white,
                 child: Padding(
-                  padding: EdgeInsets.only(bottom: 10, top: 10),
+                  padding: EdgeInsets.only(bottom: 16, top: 16),
                   child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Padding(
                         padding: const EdgeInsets.only(left: 15, right: 20),
@@ -66,26 +68,16 @@ class _ProgressSubscriptionsState extends State<ProgressSubscriptions> {
                           radius: 21.0,
                         ),
                       ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text(
-                            userName,
-                            style: TextStyle(
-                                color: Colors.blue[300],
-                                fontSize: 20.0,
-                                fontWeight: FontWeight.w500),
-                            overflow: TextOverflow.ellipsis,
-                            softWrap: true,
-                          ),
-                          Text(
-                            userID,
-                            style: TextStyle(
-                                color: Colors.blue[300],
-                                fontSize: 14.0,
-                                fontWeight: FontWeight.w500),
-                          ),
-                        ],
+                      Expanded(
+                        child: Text(
+                          userName,
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 20.0,
+                              fontWeight: FontWeight.bold),
+                          overflow: TextOverflow.ellipsis,
+                          softWrap: true,
+                        ),
                       ),
                     ],
                   ),
@@ -124,166 +116,184 @@ class _ProgressSubscriptionsState extends State<ProgressSubscriptions> {
                     physics: NeverScrollableScrollPhysics(),
                     itemCount: returnSubsProg.length,
                     itemBuilder: (context, i) {
-                      return Card(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                        margin: EdgeInsets.only(top: 10, left: 18, right: 18),
-                        elevation: 5,
-                        clipBehavior: Clip.antiAlias,
-                        child: Column(
-                          children: <Widget>[
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: Container(
-                                    margin: EdgeInsets.only(
-                                        left: 20, top: 11, right: 14),
-                                    alignment: Alignment.centerLeft,
-                                    child: Text(
-                                      'Form ID : ${returnSubsProg[i].formId}',
-                                      style: TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.bold),
+                      return InkWell(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ProgressSubsDetail(
+                                  formID: returnSubsProg[i].formId),
+                            ),
+                          );
+                        },
+                        child: Card(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5.0),
+                          ),
+                          margin: EdgeInsets.only(top: 10, left: 18, right: 18),
+                          elevation: 5,
+                          clipBehavior: Clip.antiAlias,
+                          child: Column(
+                            children: <Widget>[
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: Container(
+                                      margin: EdgeInsets.only(
+                                          left: 20, top: 5, right: 14),
+                                      alignment: Alignment.centerLeft,
+                                      child: Text(
+                                        'Reg No : ${returnSubsProg[i].formId}',
+                                        style: TextStyle(
+                                            fontSize: 15,
+                                            color: Color(0xFF427CEF),
+                                            fontWeight: FontWeight.bold),
+                                      ),
                                     ),
                                   ),
-                                ),
-                                IconButton(
-                                    icon: FaIcon(Icons.delete),
-                                    onPressed: () {
-                                      deleteFormIdAlert(
-                                          returnSubsProg[i].id,
-                                          returnSubsProg[i].formId,
-                                          returnSubsProg[i].name);
-                                    }),
-                              ],
-                            ),
-                            Container(
-                              margin: EdgeInsets.only(left: 20, top: 5),
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                'Status: ${returnSubsProg[i].status}' ?? '-',
-                                style: TextStyle(
-                                    fontSize: 12,
-                                    color: Color(0xFF5C727D),
-                                    fontWeight: FontWeight.w500),
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 5),
+                                    child: IconButton(
+                                        icon: Image.asset(
+                                          'assets/trash.png',
+                                          height: 25,
+                                          color: Colors.grey,
+                                        ),
+                                        onPressed: () {
+                                          deleteFormIdAlert(
+                                              returnSubsProg[i].id,
+                                              returnSubsProg[i].formId,
+                                              returnSubsProg[i].name);
+                                        }),
+                                  ),
+                                ],
                               ),
-                            ),
-                            Row(
-                              children: <Widget>[
-                                Container(
-                                  width: 105,
-                                  margin: EdgeInsets.only(left: 20.0, top: 15),
-                                  child: Text(
-                                    'Name Customer',
-                                    style: TextStyle(
-                                        fontSize: 13.0,
-                                        fontWeight: FontWeight.w400,
-                                        color: Colors.grey[600]),
-                                  ),
-                                ),
-                                Container(
-                                  margin: EdgeInsets.only(left: 35.0, top: 15),
-                                  child: Text(
-                                    ':',
-                                    style: TextStyle(
-                                        fontSize: 13.0,
-                                        fontWeight: FontWeight.w400,
-                                        color: Colors.grey[600]),
-                                  ),
-                                ),
-                                Expanded(
-                                  child: Container(
-                                    margin: EdgeInsets.only(left: 5.0, top: 15),
+                              Row(
+                                children: <Widget>[
+                                  Container(
+                                    width: 115,
+                                    margin: EdgeInsets.only(left: 20.0),
                                     child: Text(
-                                      returnSubsProg[i].name ?? "-",
+                                      'Name Customer',
                                       style: TextStyle(
                                           fontSize: 13.0,
                                           fontWeight: FontWeight.w400,
                                           color: Colors.grey[600]),
                                     ),
                                   ),
-                                )
-                              ],
-                            ),
-                            Row(
-                              children: <Widget>[
-                                Container(
-                                  width: 105,
-                                  margin: EdgeInsets.only(left: 20.0, top: 15),
-                                  child: Text(
-                                    'Address',
-                                    style: TextStyle(
-                                        fontSize: 13.0,
-                                        fontWeight: FontWeight.w400,
-                                        color: Colors.grey[600]),
-                                  ),
-                                ),
-                                Container(
-                                  margin: EdgeInsets.only(left: 35.0, top: 15),
-                                  child: Text(
-                                    ':',
-                                    style: TextStyle(
-                                        fontSize: 13.0,
-                                        fontWeight: FontWeight.w400,
-                                        color: Colors.grey[600]),
-                                  ),
-                                ),
-                                Expanded(
-                                  child: Container(
-                                    margin: EdgeInsets.only(left: 5.0, top: 15),
+                                  Container(
+                                    margin: EdgeInsets.only(left: 25.0),
                                     child: Text(
-                                      returnSubsProg[i].name ?? "-",
+                                      ':',
                                       style: TextStyle(
                                           fontSize: 13.0,
                                           fontWeight: FontWeight.w400,
                                           color: Colors.grey[600]),
                                     ),
                                   ),
-                                )
-                              ],
-                            ),
-                            Row(
-                              children: <Widget>[
-                                Container(
-                                  width: 105,
-                                  margin: EdgeInsets.only(
-                                      left: 20.0, top: 15, bottom: 15),
-                                  child: Text(
-                                    'Category Customer',
-                                    style: TextStyle(
-                                        fontSize: 13.0,
-                                        fontWeight: FontWeight.w400,
-                                        color: Colors.grey[600]),
+                                  Expanded(
+                                    child: Container(
+                                      margin: EdgeInsets.only(left: 5.0),
+                                      child: Text(
+                                        returnSubsProg[i].name ?? "-",
+                                        style: TextStyle(
+                                            fontSize: 13.0,
+                                            fontWeight: FontWeight.w400,
+                                            color: Colors.grey[600]),
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                              Row(
+                                children: <Widget>[
+                                  Container(
+                                    width: 115,
+                                    margin:
+                                        EdgeInsets.only(left: 20.0, top: 15),
+                                    child: Text(
+                                      'Category Customer',
+                                      style: TextStyle(
+                                          fontSize: 13.0,
+                                          fontWeight: FontWeight.w400,
+                                          color: Colors.grey[600]),
+                                    ),
                                   ),
-                                ),
-                                Container(
-                                  margin: EdgeInsets.only(
-                                      left: 35.0, top: 15, bottom: 15),
-                                  child: Text(
-                                    ':',
-                                    style: TextStyle(
-                                        fontSize: 13.0,
-                                        fontWeight: FontWeight.w400,
-                                        color: Colors.grey[600]),
+                                  Container(
+                                    margin:
+                                        EdgeInsets.only(left: 25.0, top: 15),
+                                    child: Text(
+                                      ':',
+                                      style: TextStyle(
+                                          fontSize: 13.0,
+                                          fontWeight: FontWeight.w400,
+                                          color: Colors.grey[600]),
+                                    ),
                                   ),
-                                ),
-                                Expanded(
-                                  child: Container(
+                                  Expanded(
+                                    child: Container(
+                                      margin:
+                                          EdgeInsets.only(left: 5.0, top: 15),
+                                      child: Text(
+                                        returnSubsProg[i].katPelanggan ?? "-",
+                                        style: TextStyle(
+                                            fontSize: 13.0,
+                                            fontWeight: FontWeight.w400,
+                                            color: Colors.grey[600]),
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Container(
+                                    width: 115,
                                     margin: EdgeInsets.only(
-                                        left: 5.0, top: 15, bottom: 15),
+                                        left: 20.0, top: 15, bottom: 20),
                                     child: Text(
-                                      returnSubsProg[i].katPelanggan ?? "-",
+                                      'Reg Status',
                                       style: TextStyle(
                                           fontSize: 13.0,
                                           fontWeight: FontWeight.w400,
                                           color: Colors.grey[600]),
                                     ),
                                   ),
-                                )
-                              ],
-                            ),
-                          ],
+                                  Container(
+                                    margin: EdgeInsets.only(
+                                        left: 25.0, top: 15, bottom: 20),
+                                    child: Text(
+                                      ':',
+                                      style: TextStyle(
+                                          fontSize: 13.0,
+                                          fontWeight: FontWeight.w400,
+                                          color: Colors.grey[600]),
+                                    ),
+                                  ),
+                                  Container(
+                                    decoration: BoxDecoration(
+                                        color: Color(0xFF427CEF),
+                                        borderRadius: BorderRadius.circular(5)),
+                                    margin: EdgeInsets.only(
+                                        left: 5.0,
+                                        top: 15,
+                                        bottom: 20,
+                                        right: 5),
+                                    padding: EdgeInsets.only(
+                                        left: 15, right: 15, top: 5, bottom: 5),
+                                    child: Text(
+                                      returnSubsProg[i].status ?? "-",
+                                      style: TextStyle(
+                                          fontSize: 13.0,
+                                          fontWeight: FontWeight.w400,
+                                          color: Colors.white),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
                       );
                     },
@@ -300,16 +310,26 @@ class _ProgressSubscriptionsState extends State<ProgressSubscriptions> {
             child: Container(
               height: 50.0,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(14.0),
+                borderRadius: BorderRadius.circular(5.0),
                 color: Color(0xFF427CEF),
               ),
               child: MaterialButton(
                 minWidth: MediaQuery.of(context).size.width,
-                child: Text(
-                  'Add Subsription Progress',
-                  style: TextStyle(
-                    color: Colors.white,
-                  ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      '+',
+                      style: TextStyle(color: Colors.white, fontSize: 20),
+                    ),
+                    Text(
+                      '  Add Subsription Progress',
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
                 ),
                 onPressed: () {
                   addFormIdAlert();
@@ -367,7 +387,7 @@ class _ProgressSubscriptionsState extends State<ProgressSubscriptions> {
         json.decode(responseGetSubsProg.body));
   }
 
-  void deleteFormId(int reqID, String custId, String custName) async {
+  void deleteFormId(String reqID, String custId, String custName) async {
     String accessToken = await storageCache.read(key: 'access_token');
     String lang = await storageCache.read(key: 'lang');
     var responseDeleteCustId = await http.delete(
@@ -392,7 +412,6 @@ class _ProgressSubscriptionsState extends State<ProgressSubscriptions> {
 
   void addFormId() async {
     String accessToken = await storageCache.read(key: 'access_token');
-    String lang = await storageCache.read(key: 'lang');
     var body = json
         .encode({"form_id": formIDCtrl.text, "idcard_number": ktpIDCtrl.text});
     var responseDeleteCustId = await http.post(
@@ -416,7 +435,7 @@ class _ProgressSubscriptionsState extends State<ProgressSubscriptions> {
   }
 
   Future<bool> deleteFormIdAlert(
-      int reqIDCust, String formId, String custName) {
+      String reqIDCust, String formId, String custName) {
     var alertStyle = AlertStyle(
       animationType: AnimationType.fromTop,
       isCloseButton: false,
@@ -502,6 +521,8 @@ class _ProgressSubscriptionsState extends State<ProgressSubscriptions> {
       style: alertStyle,
       title: "Add Form ID",
       content: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
           SizedBox(height: 5),
           Text(
