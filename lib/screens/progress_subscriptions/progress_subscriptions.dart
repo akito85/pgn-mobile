@@ -332,7 +332,11 @@ class _ProgressSubscriptionsState extends State<ProgressSubscriptions> {
                   ],
                 ),
                 onPressed: () {
-                  addFormIdAlert();
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext contec) {
+                        return addFormIdAlert();
+                      });
                 },
               ),
             ),
@@ -499,89 +503,117 @@ class _ProgressSubscriptionsState extends State<ProgressSubscriptions> {
     ).show();
   }
 
-  Future<bool> addFormIdAlert() {
-    var alertStyle = AlertStyle(
-      animationType: AnimationType.fromTop,
-      isCloseButton: false,
-      isOverlayTapDismiss: false,
-      descStyle: TextStyle(fontWeight: FontWeight.bold),
-      animationDuration: Duration(milliseconds: 400),
-      alertBorder: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(0.0),
-        side: BorderSide(
-          color: Colors.grey,
+  Widget addFormIdAlert() {
+    return Dialog(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+      child: Padding(
+        padding:
+            const EdgeInsets.only(left: 16, right: 16, bottom: 20, top: 20),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            Text(
+              "${Translations.of(context).text('f_dialog_confirmation_add_form')} ",
+              style: TextStyle(
+                  // color: painting.Color.fromRGBO(255, 255, 255, 0),
+                  fontSize: 18,
+                  color: Color(0xFF427CEF),
+                  fontWeight: FontWeight.bold),
+              textAlign: TextAlign.center,
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 20),
+              child: Text(
+                'Form ID',
+                style: TextStyle(
+                    color: Color(0xFF455055), fontWeight: FontWeight.bold),
+              ),
+            ),
+            Container(
+              height: 50,
+              margin: EdgeInsets.only(top: 5),
+              child: TextFormField(
+                keyboardType: TextInputType.number,
+                controller: formIDCtrl,
+                decoration: InputDecoration(
+                  hintText: 'Enter your form ID here',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(5),
+                    borderSide: BorderSide(
+                      width: 02,
+                      style: BorderStyle.solid,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 20),
+              child: Text(
+                'Last 6 Digits of Your ID (KTP)',
+                style: TextStyle(
+                    color: Color(0xFF455055), fontWeight: FontWeight.bold),
+              ),
+            ),
+            Container(
+              height: 50,
+              margin: EdgeInsets.only(top: 5),
+              child: TextFormField(
+                keyboardType: TextInputType.number,
+                controller: ktpIDCtrl,
+                decoration: InputDecoration(
+                  hintText: '6 Digits',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(5),
+                    borderSide: BorderSide(
+                      width: 02,
+                      style: BorderStyle.solid,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(height: 36),
+            Row(
+              children: [
+                DialogButton(
+                  width: 100,
+                  onPressed: () async {
+                    Navigator.pop(context);
+                  },
+                  color: Color(0xFFD3D3D3),
+                  child: Text(
+                    "Cancel",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ),
+                SizedBox(width: 12),
+                Expanded(
+                  child: DialogButton(
+                    width: 130,
+                    onPressed: () async {
+                      addFormId();
+                    },
+                    color: Color(0xFF427CEF),
+                    child: Text(
+                      "Add",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                )
+              ],
+            )
+          ],
         ),
-      ),
-      titleStyle: TextStyle(
-        color: Colors.black,
       ),
     );
-    return Alert(
-      context: context,
-      style: alertStyle,
-      title: "Add Form ID",
-      content: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: <Widget>[
-          SizedBox(height: 5),
-          Text(
-            "${Translations.of(context).text('f_dialog_confirmation_add_form')} ",
-            style: TextStyle(
-                // color: painting.Color.fromRGBO(255, 255, 255, 0),
-                fontSize: 17,
-                fontWeight: FontWeight.w400),
-            textAlign: TextAlign.center,
-          ),
-          Container(
-            padding: EdgeInsets.only(left: 20.0, right: 20.0, top: 15.0),
-            child: TextFormField(
-              controller: formIDCtrl,
-              keyboardType: TextInputType.number,
-              decoration: InputDecoration(
-                labelText: 'Form ID',
-              ),
-            ),
-          ),
-          Container(
-            padding: EdgeInsets.only(left: 20.0, right: 20.0, top: 10.0),
-            child: TextFormField(
-              controller: ktpIDCtrl,
-              keyboardType: TextInputType.number,
-              decoration: InputDecoration(
-                labelText: 'Last 6 digit of KTP',
-              ),
-            ),
-          ),
-          SizedBox(height: 10)
-        ],
-      ),
-      buttons: [
-        DialogButton(
-          width: 130,
-          onPressed: () async {
-            Navigator.pop(context);
-          },
-          color: Colors.green,
-          child: Text(
-            "Cancel",
-            style: TextStyle(
-                color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
-          ),
-        ),
-        DialogButton(
-          width: 130,
-          onPressed: () async {
-            addFormId();
-          },
-          color: Colors.green,
-          child: Text(
-            "Add",
-            style: TextStyle(
-                color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
-          ),
-        )
-      ],
-    ).show();
   }
 }
