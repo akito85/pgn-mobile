@@ -20,6 +20,7 @@ class CustomersTabDetail extends StatelessWidget {
           margin: EdgeInsets.only(top: 10, left: 10, right: 10),
           elevation: 5,
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Row(
                 children: <Widget>[
@@ -32,29 +33,29 @@ class CustomersTabDetail extends StatelessWidget {
                     child: Image.asset('assets/icon_default_pelanggan.png'),
                   ),
                   SizedBox(width: 15),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      SizedBox(height: 5),
-                      Center(
-                        child: Text(
+                  Expanded(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        SizedBox(height: 5),
+                        Text(
                           data.name ?? "-",
-                          maxLines: 1,
                           style: TextStyle(
                             color: Colors.black,
                             fontWeight: FontWeight.bold,
                             fontSize: 15.0,
                           ),
                         ),
-                      ),
-                      SizedBox(height: 5),
-                      Text('CM - ${data.aeId} | ${data.id.toString()}',
-                          style: TextStyle(
-                            fontWeight: FontWeight.w500,
-                            color: Colors.grey[400],
-                            fontSize: 12.0,
-                          )),
-                    ],
+                        SizedBox(height: 5),
+                        Text('CM - ${data.aeId} | ${data.id.toString()}',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              color: Colors.grey[400],
+                              fontSize: 12.0,
+                            )),
+                      ],
+                    ),
                   ),
                   if (data.locationCustList != null)
                     Expanded(
@@ -95,7 +96,7 @@ class CustomersTabDetail extends StatelessWidget {
                 color: Colors.white,
                 margin: EdgeInsets.only(bottom: 5),
                 padding:
-                    EdgeInsets.only(left: 20, top: 17, bottom: 15, right: 15),
+                    EdgeInsets.only(left: 15, top: 17, bottom: 15, right: 15),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
@@ -108,6 +109,7 @@ class CustomersTabDetail extends StatelessWidget {
                             color: Color(0xFF427CEF))),
                     SizedBox(height: 18),
                     Text(data.address ?? "-",
+                        textAlign: TextAlign.start,
                         style: TextStyle(
                           fontWeight: FontWeight.w300,
                           color: Colors.black,
@@ -356,7 +358,7 @@ class CustomersTabDetail extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Container(
-                margin: EdgeInsets.only(left: 18, right: 30, top: 30),
+                margin: EdgeInsets.only(left: 18, right: 30, top: 20),
                 child: Text(
                     Translations.of(context)
                         .text('f_customer_detail_tv_contact'),

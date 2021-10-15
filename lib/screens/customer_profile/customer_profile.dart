@@ -45,14 +45,14 @@ class CustomerState extends State<CustomerDetail> {
                   indicator: ShapeDecoration(
                     color: Color(0xFF4578EF),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(25.0),
+                      borderRadius: BorderRadius.circular(15.0),
                       side: BorderSide(color: Color(0xFF4578EF)),
                     ),
                   ),
                   tabs: <Widget>[
                     Tab(
                         child: Padding(
-                      padding: const EdgeInsets.only(left: 10, right: 10),
+                      padding: const EdgeInsets.only(left: 13, right: 13),
                       child: Text(
                         Translations.of(context)
                             .text('title_bar_customer_detail'),
@@ -61,7 +61,7 @@ class CustomerState extends State<CustomerDetail> {
                     )),
                     Tab(
                         child: Padding(
-                      padding: const EdgeInsets.only(left: 10, right: 10),
+                      padding: const EdgeInsets.only(left: 13, right: 13),
                       child: Text(
                         Translations.of(context)
                             .text('f_customer_contracts_title'),
@@ -70,7 +70,7 @@ class CustomerState extends State<CustomerDetail> {
                     )),
                     Tab(
                         child: Padding(
-                      padding: const EdgeInsets.only(left: 10, right: 10),
+                      padding: const EdgeInsets.only(left: 13, right: 13),
                       child: Text(
                         Translations.of(context)
                             .text('f_customer_guarantees_title'),

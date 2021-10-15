@@ -2680,7 +2680,7 @@ Future<CustomerInvoiceResidential> getCustomerInvoiceResidential(
   CustomerInvoiceResidential _customerInvoice =
       CustomerInvoiceResidential.fromJson(
           json.decode(responseCustomerInvoice.body));
-  print('Data Invoice: ${responseCustomerInvoice.body}');
+  print('Data Invoice RES: ${responseCustomerInvoice.body}');
   if (_customerInvoice.message ==
       "Session expired or account changed to other device, please Login again.") {
     accessTokenAlert(context,
@@ -2720,6 +2720,7 @@ Future<Customer> getCustomerProfile(BuildContext context) async {
   Customer _customer = Customer.fromJson(json.decode(responseCustomer.body));
   Customer _customerInvoice =
       Customer.fromJson(json.decode(responseCustomer.body));
+  print('HASIL GET PROFILE :${responseCustomer.body}');
   if (_customerInvoice.message ==
       "Session expired or account changed to other device, please Login again.") {
     accessTokenAlert(context,

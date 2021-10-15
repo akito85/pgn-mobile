@@ -9,7 +9,6 @@ import 'dart:convert';
 import 'package:flutter/rendering.dart';
 import 'package:pgn_mobile/models/url_cons.dart';
 import 'package:pgn_mobile/services/app_localizations.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:pgn_mobile/models/detail_usage_model.dart';
 import 'package:pgn_mobile/screens/usage_detail/widgets/usage_detail_detail.dart';

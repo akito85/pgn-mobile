@@ -7,7 +7,6 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:pgn_mobile/services/app_localizations.dart';
 import 'package:flutter/rendering.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:pgn_mobile/models/dashboard_chart_model.dart';
 import 'package:intl/intl.dart';
 
@@ -24,6 +23,31 @@ class HarianDetailCustChartState extends State<HarianDetailCustChart> {
   final String title;
   final String period;
   HarianDetailCustChartState(this.title, this.period);
+  List<DataHourlyUsage> listHourlyUsage = [];
+  String nextPage = "";
+  String errorStat = "";
+  bool isLoading = false;
+  ScrollController _scrollController = new ScrollController();
+  @override
+  void initState() {
+    super.initState();
+    loadMore();
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent) {
+        isLoading = true;
+
+        this.loadMore();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     print('INI PERIODNYA : $period');
@@ -38,10 +62,12 @@ class HarianDetailCustChartState extends State<HarianDetailCustChart> {
         ),
       ),
       body: SingleChildScrollView(
+        controller: _scrollController,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             _buildContent(context, fetchPost(context, period)),
+            isLoading == true ? CircularProgressIndicator : SizedBox()
           ],
         ),
       ),
@@ -75,10 +101,10 @@ class HarianDetailCustChartState extends State<HarianDetailCustChart> {
           return ListView.builder(
               shrinkWrap: true,
               physics: NeverScrollableScrollPhysics(),
-              itemCount: snapshot.data.data.length + 1,
+              itemCount: listHourlyUsage.length + 1,
               itemBuilder: (context, i) {
-                return i < snapshot.data.data.length
-                    ? _buildRow(snapshot.data.data[i])
+                return i < listHourlyUsage.length
+                    ? _buildRow(listHourlyUsage[i])
                     : SizedBox(
                         height: 10.0,
                       );
@@ -91,6 +117,57 @@ class HarianDetailCustChartState extends State<HarianDetailCustChart> {
       children: <Widget>[Card1(data)],
     );
   }
+
+  void loadMore() async {
+    final storageCache = FlutterSecureStorage();
+    String accessToken = await storageCache.read(key: 'access_token');
+    String lang = await storageCache.read(key: 'lang');
+
+    var responseDailyUsage = await http.get(
+      '${UrlCons.mainProdUrl}customers/me/gas-usages/daily-list/$period?cursor=$nextPage',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $accessToken',
+        'Accept-Language': lang
+      },
+    );
+
+    HarianDetailCustDashboard detailCustDashboard =
+        HarianDetailCustDashboard.fromJson(
+            json.decode(responseDailyUsage.body));
+    if (detailCustDashboard.message != null &&
+        detailCustDashboard.data.length == 0) {
+      setState(() {
+        errorStat = detailCustDashboard.message;
+        isLoading = false;
+      });
+    } else if (detailCustDashboard.data != null) {
+      setState(() {
+        nextPage = detailCustDashboard.paging.next;
+        listHourlyUsage.addAll(detailCustDashboard.data);
+        isLoading = false;
+      });
+    }
+  }
+}
+
+Future<HarianDetailCustDashboard> fetchPost(
+    BuildContext context, String title) async {
+  final storageCache = FlutterSecureStorage();
+  String accessToken = await storageCache.read(key: 'access_token');
+  String lang = await storageCache.read(key: 'lang');
+  var responseDailyUsage = await http.get(
+    '${UrlCons.mainProdUrl}customers/me/gas-usages/daily-list/$title',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $accessToken',
+      'Accept-Language': lang
+    },
+  );
+  HarianDetailCustDashboard detailCustDashboard =
+      HarianDetailCustDashboard.fromJson(json.decode(responseDailyUsage.body));
+
+  return detailCustDashboard;
 }
 
 class Card1 extends StatelessWidget {
@@ -746,25 +823,4 @@ class Card1 extends StatelessWidget {
       ),
     );
   }
-}
-
-Future<HarianDetailCustDashboard> fetchPost(
-    BuildContext context, String title) async {
-  // SharedPreferences prefs = await SharedPreferences.getInstance();
-  // String accessToken = prefs.getString('access_token');
-  // String lang = prefs.getString('lang');
-  final storageCache = FlutterSecureStorage();
-  String accessToken = await storageCache.read(key: 'access_token');
-  String lang = await storageCache.read(key: 'lang');
-  var responseHourlyUsage = await http.get(
-    '${UrlCons.mainProdUrl}customers/me/gas-usages/daily-list/$title',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer $accessToken',
-      'Accept-Language': lang
-    },
-  );
-
-  return HarianDetailCustDashboard.fromJson(
-      json.decode(responseHourlyUsage.body));
 }
