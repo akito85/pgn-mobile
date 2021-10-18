@@ -127,7 +127,7 @@ Widget _cardState(BuildContext context, CMVisitModel model) {
               ),
               SizedBox(height: 10),
               Text(
-                model.activityType,
+                model.customerCmModel.name,
                 style: TextStyle(
                     color: Color(0xFF427CEF),
                     fontSize: 14,

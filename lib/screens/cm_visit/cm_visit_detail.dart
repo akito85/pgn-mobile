@@ -229,7 +229,7 @@ class _CMVisitDetailState extends State<CMVisitDetail> {
               Container(
                 alignment: Alignment.topLeft,
                 child: Text(
-                  'Costumer Complaint Handling',
+                  'Activity Description',
                   style: TextStyle(
                       color: const Color(0xFF427CEF),
                       fontSize: 14,
@@ -241,6 +241,36 @@ class _CMVisitDetailState extends State<CMVisitDetail> {
                 alignment: Alignment.topLeft,
                 child: Text(
                   model.data.activityDescription,
+                  style: TextStyle(
+                      height: 1.5,
+                      color: Colors.black,
+                      fontSize: 14,
+                      fontWeight: FontWeight.normal),
+                ),
+              ),
+            ],
+          ),
+        ),
+        Container(
+          margin: EdgeInsets.only(left: 16, right: 16, top: 20),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              Container(
+                alignment: Alignment.topLeft,
+                child: Text(
+                  'Activity Type',
+                  style: TextStyle(
+                      color: const Color(0xFF427CEF),
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600),
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.only(top: 12),
+                alignment: Alignment.topLeft,
+                child: Text(
+                  model.data.activityType,
                   style: TextStyle(
                       height: 1.5,
                       color: Colors.black,

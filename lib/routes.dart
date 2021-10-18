@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pgn_mobile/screens/about_pgn/pgn_services.dart';
 import 'package:pgn_mobile/screens/cm_visit/cm_visit.dart';
 import 'package:pgn_mobile/screens/cm_visit/cm_visit_form.dart';
 import 'package:pgn_mobile/screens/cmm/cmm.dart';
@@ -77,6 +78,7 @@ class _MyFirstState extends State<FirstScreen> {
     '/usageDetail': (context) => UsageDetail(),
     '/cmVisit': (context) => CMVisit(),
     '/cmVisitForm': (context) => CMVisitForm(),
+    '/pgnServices': (context) => PgnServices(),
     '/installationInspection': (context) => InstallationInspection(),
     '/installationInspectionDetail': (context) => InstallationInspectionDetail()
   };

@@ -179,7 +179,10 @@ class _InstallationInspectionDetailState
               'Date:',
               model.data.acknowledgeDate),
           SizedBox(height: 20),
-          _buildBottomBoxOutlined(context, 'Inspection Remark: FAILED')
+          Visibility(
+              visible: !model.data.remark ? true : false,
+              child:
+                  _buildBottomBoxOutlined(context, 'Inspection Remark: FAILED'))
         ],
       ),
     );
