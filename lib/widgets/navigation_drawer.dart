@@ -282,22 +282,24 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
                   },
                 )
               : SizedBox(),
-          ListTile(
-            contentPadding: EdgeInsets.only(left: 20.0),
-            leading: Icon(Icons.subscriptions_sharp),
-            title: Text(
-              Translations.of(context).text('pb_tab_title'),
-              style: TextStyle(
-                color: Colors.grey[600],
-                fontSize: 17.0,
-                fontWeight: FontWeight.w400,
-              ),
-            ),
-            onTap: () {
-              Navigator.pop(context);
-              Navigator.pushNamed(context, '/subscriptionProgress');
-            },
-          ),
+          customerGroupId == '3'
+              ? ListTile(
+                  contentPadding: EdgeInsets.only(left: 20.0),
+                  leading: Icon(Icons.subscriptions_sharp),
+                  title: Text(
+                    Translations.of(context).text('pb_tab_title'),
+                    style: TextStyle(
+                      color: Colors.grey[600],
+                      fontSize: 17.0,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                  onTap: () {
+                    Navigator.pop(context);
+                    Navigator.pushNamed(context, '/subscriptionProgress');
+                  },
+                )
+              : SizedBox(),
           Divider(color: Colors.black),
         ],
       ),

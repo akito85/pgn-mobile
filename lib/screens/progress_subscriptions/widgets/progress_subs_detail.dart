@@ -70,6 +70,10 @@ class ProgressSubsDetail extends StatelessWidget {
               snapshot.data.dataDetailProg[0].gasDate != null
                   ? DateTime.parse(snapshot.data.dataDetailProg[0].gasDate)
                   : DateTime.parse('2000-01-01 00:00:00');
+          DateTime dateFormatedReject =
+              snapshot.data.dataDetailProg[0].rejectedDate != null
+                  ? DateTime.parse(snapshot.data.dataDetailProg[0].rejectedDate)
+                  : DateTime.parse('2000-01-01 00:00:00');
           return Stack(
             children: [
               Container(
@@ -186,7 +190,9 @@ class ProgressSubsDetail extends StatelessWidget {
                           color: Colors.grey,
                         ),
                         // EVALUASI
-                        snapshot.data.dataDetailProg[0].regBy != null
+                        snapshot.data.dataDetailProg[0].regBy != null &&
+                                snapshot.data.dataDetailProg[0].rejectedBy ==
+                                    null
                             ? Row(
                                 children: [
                                   snapshot.data.dataDetailProg[0].verBy != null
@@ -238,51 +244,96 @@ class ProgressSubsDetail extends StatelessWidget {
                                   )
                                 ],
                               )
-                            : Row(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.only(
-                                        top: 4.0, bottom: 4),
-                                    child: CircleAvatar(
-                                      radius: 21,
-                                      backgroundColor: Colors.grey,
-                                      child: Text(
-                                        '2',
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold),
+                            : snapshot.data.dataDetailProg[0].rejectedBy != null
+                                ? Row(
+                                    children: [
+                                      CircleAvatar(
+                                        radius: 21,
+                                        backgroundColor: Color(0xFFFF0000),
+                                        child: Icon(
+                                          Icons.close,
+                                          size: 25,
+                                          color: Colors.white,
+                                        ),
                                       ),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsets.only(left: 20),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          '-',
-                                          style: TextStyle(
-                                              color: Colors.grey, fontSize: 12),
+                                      Padding(
+                                        padding: EdgeInsets.only(left: 20),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              formatDate(dateFormatedReject,
+                                                  [dd, ' ', MM, ' ', yyyy]),
+                                              style: TextStyle(
+                                                  color: Colors.grey,
+                                                  fontSize: 12),
+                                            ),
+                                            SizedBox(height: 4),
+                                            Text(
+                                              Translations.of(context).text(
+                                                  'f_title_porg_subs_stat_evaluation'),
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 15),
+                                            ),
+                                            SizedBox(height: 4),
+                                            Text(
+                                              snapshot.data.dataDetailProg[0]
+                                                  .rejectedBy,
+                                              style: TextStyle(fontSize: 15),
+                                            )
+                                          ],
                                         ),
-                                        SizedBox(height: 4),
-                                        Text(
-                                          Translations.of(context).text(
-                                              'f_title_porg_subs_stat_evaluation'),
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 15),
-                                        ),
-                                        SizedBox(height: 4),
-                                        Text(
-                                          '-',
-                                          style: TextStyle(fontSize: 15),
-                                        )
-                                      ],
-                                    ),
+                                      )
+                                    ],
                                   )
-                                ],
-                              ),
+                                : Row(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                            top: 4.0, bottom: 4),
+                                        child: CircleAvatar(
+                                          radius: 21,
+                                          backgroundColor: Colors.grey,
+                                          child: Text(
+                                            '2',
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsets.only(left: 20),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              '-',
+                                              style: TextStyle(
+                                                  color: Colors.grey,
+                                                  fontSize: 12),
+                                            ),
+                                            SizedBox(height: 4),
+                                            Text(
+                                              Translations.of(context).text(
+                                                  'f_title_porg_subs_stat_evaluation'),
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 15),
+                                            ),
+                                            SizedBox(height: 4),
+                                            Text(
+                                              '-',
+                                              style: TextStyle(fontSize: 15),
+                                            )
+                                          ],
+                                        ),
+                                      )
+                                    ],
+                                  ),
                         Container(
                           margin: EdgeInsets.only(left: 20, top: 5, bottom: 5),
                           width: 2,
@@ -686,6 +737,7 @@ class ProgressSubsDetail extends StatelessWidget {
           'Authorization': 'Bearer $accessToken',
           'Accept-Language': lang,
         });
+    print('HASILNYA ${responseGetSubsProgDetail.body}');
     return SubsProgDetail.fromJson(json.decode(responseGetSubsProgDetail.body));
   }
 }

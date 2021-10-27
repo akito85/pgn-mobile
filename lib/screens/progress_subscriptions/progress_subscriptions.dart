@@ -16,11 +16,12 @@ class ProgressSubscriptions extends StatefulWidget {
 }
 
 class _ProgressSubscriptionsState extends State<ProgressSubscriptions> {
-  // ScrollController _scrollController = ScrollController();
+  ScrollController _scrollController = ScrollController();
   List<DataSubscription> returnSubsProg = [];
   String userName = '';
   String userID = '';
   String nextPage = '';
+  bool _isLoading = false;
   TextEditingController formIDCtrl = TextEditingController();
   TextEditingController ktpIDCtrl = TextEditingController();
   final storageCache = FlutterSecureStorage();
@@ -29,6 +30,27 @@ class _ProgressSubscriptionsState extends State<ProgressSubscriptions> {
 
     getDataCred();
     this.getSubsProg();
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent) {
+        _isLoading = true;
+        this.getSubsProg();
+
+        Future.delayed(Duration(seconds: 3), _updateStatus);
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _scrollController.dispose();
+  }
+
+  Future _updateStatus() async {
+    setState(() {
+      _isLoading = false;
+    });
   }
 
   @override
@@ -46,6 +68,7 @@ class _ProgressSubscriptionsState extends State<ProgressSubscriptions> {
       body: Stack(
         children: [
           ListView(
+            controller: _scrollController,
             children: [
               Container(
                 decoration: BoxDecoration(
@@ -97,7 +120,7 @@ class _ProgressSubscriptionsState extends State<ProgressSubscriptions> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         Container(
-                          margin: EdgeInsets.only(top: 50),
+                          margin: EdgeInsets.only(top: 150),
                           alignment: Alignment.center,
                           child: Image.asset('assets/penggunaan_gas.png'),
                         ),
@@ -273,7 +296,10 @@ class _ProgressSubscriptionsState extends State<ProgressSubscriptions> {
                                   ),
                                   Container(
                                     decoration: BoxDecoration(
-                                        color: Color(0xFF427CEF),
+                                        color: returnSubsProg[i].rejectedDate !=
+                                                null
+                                            ? Color(0xFFFF0000)
+                                            : Color(0xFF427CEF),
                                         borderRadius: BorderRadius.circular(5)),
                                     margin: EdgeInsets.only(
                                         left: 5.0,
@@ -350,12 +376,13 @@ class _ProgressSubscriptionsState extends State<ProgressSubscriptions> {
     final storageCache = FlutterSecureStorage();
     String accessToken = await storageCache.read(key: 'access_token');
     String lang = await storageCache.read(key: 'lang');
-    var responseGetSubsProg = await http
-        .get('${UrlCons.mainDevUrl}prospective_customer_progress', headers: {
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer $accessToken',
-      'Accept-Language': lang,
-    });
+    var responseGetSubsProg = await http.get(
+        '${UrlCons.mainDevUrl}prospective_customer_progress?cursor=$nextPage',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $accessToken',
+          'Accept-Language': lang,
+        });
     SubscriptionsProgressModel returnGetSubsProg =
         SubscriptionsProgressModel.fromJson(
             json.decode(responseGetSubsProg.body));
