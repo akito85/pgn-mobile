@@ -15,6 +15,7 @@ import 'package:pgn_mobile/models/url_cons.dart';
 import 'package:pgn_mobile/screens/dashboard/dashboard_cust_add.dart';
 import 'package:pgn_mobile/screens/cm_visit/cm_visit.dart';
 import 'package:pgn_mobile/screens/gas_point/gas_point.dart';
+import 'package:pgn_mobile/screens/invoice_customer_residential/invoice_customer_residential_revamp.dart';
 import 'package:pgn_mobile/screens/otp/otp.dart';
 import 'package:pgn_mobile/services/app_localizations.dart';
 import 'package:pgn_mobile/widgets/navigation_drawer.dart';
@@ -506,8 +507,7 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
                 children: <Widget>[
                   _buildDashboardResidential(
                       context, _prov.custName.toString() ?? ""),
-                  showCustInvoiceCustomerResidential(context,
-                      getCustomerInvoiceResidential(context), _prov.custId),
+                  InvoiceCustomerResidentialRevamp(),
                   CMVisit(),
                   showCustProfileCustomerResidential(
                       context, getCustomerProfileResidential(context))
@@ -3017,7 +3017,7 @@ Widget showCustInvoiceCustomer(BuildContext context,
 
 Widget showCustInvoiceCustomerResidential(BuildContext context,
     Future<CustomerInvoiceResidential> _customerInvoice, String cust_id) {
-  return InvoiceCustResidential(data: _customerInvoice, custID: cust_id);
+  return InvoiceCustomerResidentialRevamp();
 }
 
 Future<Customer> getCustomerProfile(BuildContext context) async {
