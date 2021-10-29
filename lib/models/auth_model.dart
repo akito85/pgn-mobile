@@ -35,7 +35,7 @@ class AuthSales {
               VerificationStatus.fromJson(json['verification_status']),
           customer: Customer.fromJson(json['customer']),
           user: User.fromJson(json['user']),
-          products: parsedJsonProducts(json['products']));
+          products: parsedJsonProducts(json['product']));
     } else if (json['message'] != null) {
       return AuthSales(message: json['message']);
     } else {
