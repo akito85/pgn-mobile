@@ -6,25 +6,24 @@ import 'package:intl/intl.dart';
 import 'package:pgn_mobile/models/invoice_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:pgn_mobile/models/url_cons.dart';
+import 'package:pgn_mobile/services/app_localizations.dart';
 
-class InvoiceCustomerResidentialRevamp extends StatefulWidget {
+class Payment extends StatefulWidget {
   @override
-  _InvoiceCustomerResidentialRevamp createState() =>
-      _InvoiceCustomerResidentialRevamp();
+  _PaymentState createState() => _PaymentState();
 }
 
-class _InvoiceCustomerResidentialRevamp
-    extends State<InvoiceCustomerResidentialRevamp>
-    with SingleTickerProviderStateMixin {
+class _PaymentState extends State<Payment> with SingleTickerProviderStateMixin {
   var currentDate = new DateTime.now();
   TabController _tabController;
   List<CustModel> list = <CustModel>[];
 
   @override
   void initState() {
-    _tabController = new TabController(length: 5, vsync: this, initialIndex: 2);
+    _tabController = new TabController(length: 5, vsync: this, initialIndex: 4);
     String strCurrentDate = DateFormat('MMM-yyyy').format(currentDate);
     String endCurrentDate = DateFormat('MMM-yyyy').format(currentDate);
+    getCustomerInvoice(context, "01-MAR-2020", "30-MAR-2020");
     // getCustomerInvoice(context, "01-$strCurrentDate", "30-$endCurrentDate");
     super.initState();
   }
@@ -117,16 +116,25 @@ class _InvoiceCustomerResidentialRevamp
     String formatDate3 =
         DateFormat("yyyMM").format(DateTime.parse(dateformatCurrent3));
     return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+          backgroundColor: Colors.white,
+          elevation: 0,
+          title: Text(
+            Translations.of(context).text('a_payment_title'),
+            style: TextStyle(color: Colors.black, fontSize: 18),
+          )),
       body: Stack(
         children: <Widget>[
           DefaultTabController(
-              length: 3,
+              length: 5,
               child: Scaffold(
                 backgroundColor: Colors.white,
                 appBar: PreferredSize(
                     child: Column(
                       children: <Widget>[
                         Container(
+                          margin: EdgeInsets.only(top: 8),
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(20.0),
                               color: Colors.white),
@@ -220,19 +228,20 @@ class _InvoiceCustomerResidentialRevamp
                                                   dateformatCurrent2)) +
                                           "-" +
                                           currentDate.year.toString());
-                                } else if (index == 4) {
-                                  setState(() {
-                                    list.clear();
-                                  });
-                                  getCustomerInvoice(
-                                      context,
-                                      "01-" +
-                                          DateFormat('MMM-yyyy')
-                                              .format(currentDate),
-                                      "30-" +
-                                          DateFormat('MMM-yyyy')
-                                              .format(currentDate));
                                 }
+                                // else if (index == 4) {
+                                //   setState(() {
+                                //     list.clear();
+                                //   });
+                                //   getCustomerInvoice(
+                                //       context,
+                                //       "01-" +
+                                //           DateFormat('MMM-yyyy')
+                                //               .format(currentDate),
+                                //       "30-" +
+                                //           DateFormat('MMM-yyyy')
+                                //               .format(currentDate));
+                                // }
                               },
                               tabs: [
                                 Tab(
@@ -326,8 +335,8 @@ class _InvoiceCustomerResidentialRevamp
     final storageCache = FlutterSecureStorage();
     String customerIDs = await storageCache.read(key: 'customer_id');
     String accessToken = await storageCache.read(key: 'access_token');
-    print("StartDate $startDate");
-    print("EndDate $endDate");
+    print('StartDate' + startDate);
+    print('EndDate' + endDate);
     var body = json.encode({
       "P_PAY_DATE_FROM": startDate,
       "P_PAY_DATE_TO": endDate,
