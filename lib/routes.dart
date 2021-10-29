@@ -8,6 +8,7 @@ import 'package:pgn_mobile/screens/dashboard/dashboard.dart';
 import 'package:pgn_mobile/screens/gas_station/gas_station.dart';
 import 'package:pgn_mobile/screens/installation_inspection/installation_inspection.dart';
 import 'package:pgn_mobile/screens/installation_inspection/installation_inspection_detail.dart';
+import 'package:pgn_mobile/screens/invoice_customer_residential/payment.dart';
 import 'package:pgn_mobile/screens/login/login.dart';
 import 'package:pgn_mobile/screens/login/login_revamp.dart';
 import 'package:pgn_mobile/splash_screen.dart';
@@ -80,7 +81,9 @@ class _MyFirstState extends State<FirstScreen> {
     '/cmVisitForm': (context) => CMVisitForm(),
     '/pgnServices': (context) => PgnServices(),
     '/installationInspection': (context) => InstallationInspection(),
-    '/installationInspectionDetail': (context) => InstallationInspectionDetail()
+    '/installationInspectionDetail': (context) =>
+        InstallationInspectionDetail(),
+    '/payment': (context) => Payment()
   };
 
   SpecificLocalizationDelegate _localeOverrideDelegate;
