@@ -7,7 +7,6 @@ import 'dart:convert';
 import 'package:flutter/rendering.dart';
 import 'package:pgn_mobile/models/url_cons.dart';
 import 'package:pgn_mobile/services/app_localizations.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:pgn_mobile/models/hourly_usage_detail_model.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';

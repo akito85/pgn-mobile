@@ -766,95 +766,24 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
             margin: EdgeInsets.fromLTRB(15.0, 2.0, 15.0, 15.0),
             //  height: 300.0,
             child: Card(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.0),
-              ),
-              margin: EdgeInsets.only(top: 10),
-              elevation: 5,
-              child: Column(
-                children: <Widget>[
-                  Row(
-                    children: <Widget>[
-                      Expanded(
-                        child: Container(
-                          margin: EdgeInsets.fromLTRB(10.0, 15.0, 0.0, 5.0),
-                          child: Text(
-                            "Revenue Chart",
-                            style: painting.TextStyle(
-                                fontSize: 15.0, fontWeight: FontWeight.w500),
-                          ),
-                        ),
-                      ),
-                      Container(
-                        margin: EdgeInsets.fromLTRB(0.0, 15.0, 10.0, 5.0),
-                        child: Text(
-                          'RP. 48.609,442,975',
-                          style: painting.TextStyle(
-                              fontSize: 16.0,
-                              fontWeight: FontWeight.w500,
-                              color: Colors.blue[400]),
-                        ),
-                      ),
-                    ],
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                margin: EdgeInsets.only(top: 10),
+                elevation: 5,
+                child: Container(
+                  height: 285,
+                  child: Padding(
+                    padding:
+                        EdgeInsets.only(left: 8.0, right: 8, top: 8, bottom: 8),
+                    child: SizedBox(
+                      height: 265.0,
+                      width: 400,
+                      child: _buildContentContract(
+                          context, getChartSumUsageMng(context)),
+                    ),
                   ),
-                  Row(
-                    children: <Widget>[
-                      Expanded(
-                          child: SizedBox(
-                        width: 20,
-                      )),
-                      Container(
-                        margin: EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 5.0),
-                        child: Text(
-                          Translations.of(context)
-                              .text('f_home_tv_chart_last_revenue'),
-                          style: painting.TextStyle(
-                            fontSize: 11.0,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  Container(
-                    height: 140.0,
-                  ),
-                  Row(
-                    children: <Widget>[
-                      Container(
-                        margin: EdgeInsets.fromLTRB(10.0, 5.0, 0.0, 15.0),
-                        child: Text('O'),
-                      ),
-                      Expanded(
-                        child: Container(
-                            margin: EdgeInsets.fromLTRB(10.0, 5.0, 0.0, 15.0),
-                            child: Text('Omset IDR')),
-                      ),
-                      Container(
-                        margin: EdgeInsets.fromLTRB(10.0, 5.0, 0.0, 15.0),
-                        child: Text(
-                          Translations.of(context)
-                              .text('f_customer_gas_usage_detail_bt_detail'),
-                          style: painting.TextStyle(
-                              fontSize: 11.0,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.blue[700]),
-                        ),
-                      ),
-                      InkWell(
-                        child: Container(
-                          margin: EdgeInsets.fromLTRB(0.0, 5.0, 10.0, 15.0),
-                          child: Icon(
-                            Icons.navigate_next,
-                            color: Colors.blue[700],
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                ],
-              ),
-            ),
+                )),
           ),
           Container(
             margin: EdgeInsets.fromLTRB(15.0, 2.0, 15.0, 15.0),
@@ -3075,6 +3004,26 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
       return UsageSumChart.fromJson(json.decode(responseGetDataChartSum.body));
     }
   }
+
+  Future<UsageSumChart> getChartSumUsageMng(BuildContext context) async {
+    String accessToken = await storageCache.read(key: 'access_token');
+    String lang = await storageCache.read(key: 'lang');
+    var responseGetDataChartSum =
+        await http.get('${UrlCons.mainProdUrl}summary/current-usage', headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $accessToken',
+      'Accept-Language': lang
+    });
+    UsageSumChart _chartIDR =
+        UsageSumChart.fromJson(json.decode(responseGetDataChartSum.body));
+    if (_chartIDR.message ==
+        "Session expired or account changed to other device, please Login again.") {
+      accessTokenAlert(context,
+          "Session expired or account changed to other device, please Login again.");
+    } else {
+      return UsageSumChart.fromJson(json.decode(responseGetDataChartSum.body));
+    }
+  }
 }
 
 Future<DashboardCustomerModel> getListCustId(BuildContext context) async {
@@ -3339,7 +3288,7 @@ Future<CustomerInvoiceResidential> getCustomerInvoiceResidential(
   CustomerInvoiceResidential _customerInvoice =
       CustomerInvoiceResidential.fromJson(
           json.decode(responseCustomerInvoice.body));
-  print('Data Invoice: ${responseCustomerInvoice.body}');
+  print('Data Invoice RES: ${responseCustomerInvoice.body}');
   if (_customerInvoice.message ==
       "Session expired or account changed to other device, please Login again.") {
     accessTokenAlert(context,
@@ -3379,6 +3328,7 @@ Future<Customer> getCustomerProfile(BuildContext context) async {
   Customer _customer = Customer.fromJson(json.decode(responseCustomer.body));
   Customer _customerInvoice =
       Customer.fromJson(json.decode(responseCustomer.body));
+  print('HASIL GET PROFILE :${responseCustomer.body}');
   if (_customerInvoice.message ==
       "Session expired or account changed to other device, please Login again.") {
     accessTokenAlert(context,

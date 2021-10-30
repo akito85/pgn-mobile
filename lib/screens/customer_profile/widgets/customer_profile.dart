@@ -31,24 +31,27 @@ class CustomersTabDetail extends StatelessWidget {
                     child: Image.asset('assets/icon_default_pelanggan.png'),
                   ),
                   SizedBox(width: 15),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      SizedBox(height: 5),
-                      Text(data.data.name ?? "-",
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 15.0,
-                          )),
-                      SizedBox(height: 5),
-                      Text('CM - ${data.data.ae_id} | $idCust',
-                          style: TextStyle(
-                            fontWeight: FontWeight.w500,
-                            color: Colors.grey[400],
-                            fontSize: 12.0,
-                          )),
-                    ],
+                  Expanded(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        SizedBox(height: 5),
+                        Text('${data.data.name}' ?? "-",
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 15.0,
+                            )),
+                        SizedBox(height: 5),
+                        Text('CM - ${data.data.ae_id} | ${data.data.custId}',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              color: Colors.grey[400],
+                              fontSize: 12.0,
+                            )),
+                      ],
+                    ),
                   ),
                 ],
               ),
@@ -334,7 +337,7 @@ class CustomersTabDetail extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Container(
-                margin: EdgeInsets.only(left: 18, right: 30, top: 30),
+                margin: EdgeInsets.only(left: 18, right: 30, top: 20),
                 child: Text(
                     Translations.of(context)
                         .text('f_customer_detail_tv_contact'),

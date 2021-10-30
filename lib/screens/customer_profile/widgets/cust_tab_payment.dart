@@ -92,15 +92,15 @@ class PaymentDetailState extends State<PaymentDetailSales> {
           margin: EdgeInsets.only(left: 15, right: 15),
           elevation: 5,
           child: Container(
-            height: 55.0,
-            width: 500,
             margin: EdgeInsets.only(bottom: 20.0, top: 10),
             color: Colors.white,
             child: Column(
+              mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Container(
-                    margin: EdgeInsets.only(top: 10.0, left: 15, right: 15),
+                    margin: EdgeInsets.only(
+                        top: 5.0, left: 15, right: 15, bottom: 5),
                     child: Text(
                       data.data.name,
                       style: TextStyle(
@@ -108,16 +108,15 @@ class PaymentDetailState extends State<PaymentDetailSales> {
                           fontSize: 20.0,
                           fontWeight: FontWeight.w500),
                     )),
-                Expanded(
-                    child: Container(
-                        margin: EdgeInsets.only(left: 15, right: 15),
-                        child: Text(
-                          idCust ?? "-",
-                          style: TextStyle(
-                              color: Colors.blue[300],
-                              fontSize: 14.0,
-                              fontWeight: FontWeight.w500),
-                        )))
+                Container(
+                    margin: EdgeInsets.only(left: 15, right: 15),
+                    child: Text(
+                      data.data.custId ?? "-",
+                      style: TextStyle(
+                          color: Colors.blue[300],
+                          fontSize: 14.0,
+                          fontWeight: FontWeight.w500),
+                    ))
               ],
             ),
           ),

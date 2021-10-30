@@ -24,6 +24,31 @@ class HarianDetailChartState extends State<HarianDetailChart> {
   final String period;
   final String titleApbar;
   HarianDetailChartState(this.idCust, this.period, this.titleApbar);
+  List<DataDailyUsageChart> listDailyUsage = [];
+  String nextPage = "";
+  String errorStat = "";
+  bool isLoading = false;
+  ScrollController _scrollController = new ScrollController();
+  @override
+  void initState() {
+    super.initState();
+    loadMore();
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent) {
+        isLoading = true;
+
+        this.loadMore();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,6 +72,7 @@ class HarianDetailChartState extends State<HarianDetailChart> {
             ),
           ),
           ListView(
+            controller: _scrollController,
             children: <Widget>[
               _buildContent(context, fetchPost(context, idCust, period)),
             ],
@@ -84,10 +110,10 @@ class HarianDetailChartState extends State<HarianDetailChart> {
           return ListView.builder(
               shrinkWrap: true,
               physics: NeverScrollableScrollPhysics(),
-              itemCount: snapshot.data.data.length + 1,
+              itemCount: listDailyUsage.length + 1,
               itemBuilder: (context, i) {
-                return i < snapshot.data.data.length
-                    ? _buildRow(snapshot.data.data[i])
+                return i < listDailyUsage.length
+                    ? _buildRow(listDailyUsage[i])
                     : SizedBox(
                         height: 10.0,
                       );
@@ -99,6 +125,37 @@ class HarianDetailChartState extends State<HarianDetailChart> {
     return Column(
       children: <Widget>[Card1(data)],
     );
+  }
+
+  void loadMore() async {
+    final storageCache = FlutterSecureStorage();
+    String accessToken = await storageCache.read(key: 'access_token');
+    String lang = await storageCache.read(key: 'lang');
+
+    var responseDailyUsage = await http.get(
+      '${UrlCons.mainProdUrl}customers/$idCust/gas-usages/daily-list/$period?cursor=$nextPage',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $accessToken',
+        'Accept-Language': lang
+      },
+    );
+
+    DailyUsageDetailChart dailyUsageDetailChart =
+        DailyUsageDetailChart.fromJson(json.decode(responseDailyUsage.body));
+    if (dailyUsageDetailChart.message != null &&
+        dailyUsageDetailChart.data.length == 0) {
+      setState(() {
+        errorStat = dailyUsageDetailChart.message;
+        isLoading = false;
+      });
+    } else if (dailyUsageDetailChart.data != null) {
+      setState(() {
+        nextPage = dailyUsageDetailChart.paging.next;
+        listDailyUsage.addAll(dailyUsageDetailChart.data);
+        isLoading = false;
+      });
+    }
   }
 }
 

@@ -185,8 +185,6 @@ class HarianTabDetailState extends State<HarianTabDetail>
                           color: Colors.white,
                         ),
                         child: TabBar(
-                          indicatorPadding:
-                              EdgeInsets.only(left: 15, right: 15),
                           controller: _tabController,
                           labelColor: Colors.white,
                           indicatorColor: Colors.black,

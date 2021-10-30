@@ -42,7 +42,7 @@ class CustomerState extends State<CustomersDetail>
             indicator: ShapeDecoration(
                 color: Color(0xff427CEF),
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(25.0),
+                    borderRadius: BorderRadius.circular(10.0),
                     side: BorderSide(
                       color: Color(0xff427CEF),
                     ))),
@@ -131,7 +131,6 @@ class CustomerState extends State<CustomersDetail>
 }
 
 Future<CustomerInvoice> fetchPost(BuildContext context, String id) async {
-
   final storageCache = FlutterSecureStorage();
   String accessToken = await storageCache.read(key: 'access_token');
   String lang = await storageCache.read(key: 'lang');
