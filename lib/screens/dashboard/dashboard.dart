@@ -73,6 +73,7 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
   String groupID;
   String customerID;
   String customerGroupID;
+  List<String> listMenus = [];
   final storageCache = new FlutterSecureStorage();
   List<SummaryModel> datanyaIdr(List<DataChartIdr> data) {
     final mockedData = List<SummaryModel>();
@@ -297,6 +298,7 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
     String customerIDs = await storageCache.read(key: 'customer_id') ?? "";
     String customerGroupIDs =
         await storageCache.read(key: 'customer_groupId') ?? "";
+    String listMenusString = await storageCache.read(key: 'list_menu') ?? "";
 
     print('USRER TYPE GET AUTH : ${await storageCache.read(key: 'user_type')}');
     setState(() {
@@ -307,6 +309,7 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
       groupID = groupIDs;
       customerID = customerIDs;
       customerGroupID = customerGroupIDs;
+      listMenus = listMenusString.split(',');
       print('USRER TYPE GET AUTH : $customerID');
       // titleMng = prefs.getString('user_name_cust') ?? "";
       // titleCust = prefs.getString('user_name_cust') ?? "";
@@ -396,8 +399,6 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
           ),
           bottomNavigationBar: Container(
             decoration: BoxDecoration(
-              // borderRadius: BorderRadius.only(
-              //     topRight: Radius.circular(15), topLeft: Radius.circular(15)),
               color: painting.Color(0xff427CEF),
             ),
             height: 55,
@@ -645,8 +646,7 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
               TabBarView(
                 controller: _controller,
                 children: <Widget>[
-                  _buildDashboardSales(
-                      context, _prov.custName.toString() ?? ""),
+                  _buildDashboardKI(context, _prov.custName.toString() ?? ""),
                   groupID == '9'
                       ? showCustInvoiceCustomerResidential(context,
                           getCustomerInvoiceResidential(context), _prov.custId)
@@ -942,7 +942,7 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
     ));
   }
 
-  Widget _buildDashboardSales(BuildContext context, String title) {
+  Widget _buildDashboardKI(BuildContext context, String title) {
     return Container(
       // color: Colors.white,
       child: SingleChildScrollView(
@@ -996,20 +996,6 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
                             style: painting.TextStyle(color: Colors.white),
                           ),
                         ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(right: 16),
-                      child: InkWell(
-                        onTap: () {
-                          // switchCustomerIdAlert(context);
-                          _showCustIdModalBottomSheet(context);
-                        },
-                        child: Image(
-                          image: AssetImage('assets/switchDash.png'),
-                          color: Colors.white,
-                          height: 25,
-                        ),
                       ),
                     ),
                   ],
@@ -1234,14 +1220,20 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
                         color: painting.Color(0xFF455055),
                       ),
                     )),
-                    Text(
-                      pointGasPoint,
-                      // overflow: TextOverflow.ellipsis,
-                      style: painting.TextStyle(
-                        fontSize: 20.0,
-                        fontWeight: FontWeight.bold,
-                        color: painting.Color(0xFF455055),
-                      ),
+                    FutureBuilder<modelGP.VirtualCardGasPoint>(
+                      future: getVirtualCardGasPoint(context),
+                      builder: (context, snapshot) {
+                        if (!snapshot.hasData) return Text('-');
+                        return Text(
+                          snapshot.data.dataVCGasPoint.pointReward,
+                          // overflow: TextOverflow.ellipsis,
+                          style: painting.TextStyle(
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.bold,
+                            color: painting.Color(0xFF455055),
+                          ),
+                        );
+                      },
                     ),
                   ],
                 ),
@@ -2673,6 +2665,8 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
         'Accept-Language': lang
       },
     );
+    print('KLICK');
+    print('HASIL SWITCH CUST ID ${responseSwitchCustId.body}');
     SwitchCustomerId switchCustomerId =
         SwitchCustomerId.fromJson(json.decode(responseSwitchCustId.body));
     if (responseSwitchCustId.statusCode == 200) {
@@ -2691,7 +2685,8 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
     }
   }
 
-  void getVirtualCardGasPoint(BuildContext context) async {
+  Future<modelGP.VirtualCardGasPoint> getVirtualCardGasPoint(
+      BuildContext context) async {
     final storageCache = FlutterSecureStorage();
     String accessToken = await storageCache.read(key: 'access_token');
 
@@ -2700,19 +2695,19 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer $accessToken',
     });
-
+    modelGP.VirtualCardGasPoint virtualCardGasPoint;
     print('HASILNYA : ${responseGetVCGasPoint.body}');
     if (responseGetVCGasPoint.statusCode == 200) {
-      modelGP.VirtualCardGasPoint virtualCardGasPoint =
-          modelGP.VirtualCardGasPoint.fromJson(
-              json.decode(responseGetVCGasPoint.body));
-      setState(() {
-        pointGasPoint = virtualCardGasPoint.dataVCGasPoint.pointReward;
-      });
+      virtualCardGasPoint = modelGP.VirtualCardGasPoint.fromJson(
+          json.decode(responseGetVCGasPoint.body));
+      // setState(() {
+      //   pointGasPoint = virtualCardGasPoint.dataVCGasPoint.pointReward;
+      // });
       print('UPDATE $pointGasPoint');
     } else {
       throw Exception('Could not get any response');
     }
+    return virtualCardGasPoint;
   }
 
   void deleteCustId(String reqIDCust, String custId, String custName) async {

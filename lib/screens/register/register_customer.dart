@@ -27,6 +27,8 @@ class RegistCustState extends State<RegisterCustomer> {
   TextEditingController emailCust = new TextEditingController();
   bool statBtnEmail = true;
   bool statBtnPhoneNumb = false;
+  bool visible = false;
+  bool btnVisible = true;
   final iv = encrypt.IV.fromUtf8('ujfjL9XWfH0ZoAzi');
   final encrypter = encrypt.Encrypter(encrypt.AES(
       encrypt.Key.fromUtf8('zNsW4kAl4t4PTrtC'),
@@ -220,31 +222,55 @@ class RegistCustState extends State<RegisterCustomer> {
               ),
             ),
           ),
-          Container(
-            height: 50.0,
-            margin: EdgeInsets.fromLTRB(20.0, 30.0, 20.0, 0.0),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10.0),
-              color: Color(0xFF427CEF),
-            ),
-            child: MaterialButton(
-              minWidth: MediaQuery.of(context).size.width,
-              child: Text(
-                _lang.register,
-                style: TextStyle(
-                  color: Colors.white,
-                ),
+          Visibility(
+              maintainAnimation: true,
+              maintainState: true,
+              visible: visible,
+              child: Column(
+                children: <Widget>[
+                  Container(
+                      margin: EdgeInsets.fromLTRB(15.0, 30.0, 15.0, 30.0),
+                      child: CircularProgressIndicator())
+                ],
+              )),
+          Visibility(
+            visible: btnVisible,
+            child: Container(
+              height: 50.0,
+              margin: EdgeInsets.fromLTRB(20.0, 30.0, 20.0, 0.0),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10.0),
+                color: Color(0xFF427CEF),
               ),
-              onPressed: () {
-                if (phoneNumb.text == '' && password.text == '') {
-                  showToast(
-                    Translations.of(context).text('field_input_allert'),
-                  );
-                } else {
-                  final encrypted = encrypter.encrypt(password.text, iv: iv);
-                  postRegisterNewCust(context, encrypted.base64);
-                }
-              },
+              child: MaterialButton(
+                minWidth: MediaQuery.of(context).size.width,
+                child: Text(
+                  _lang.register,
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
+                onPressed: () {
+                  if (phoneNumb.text == '' && password.text == '') {
+                    showToast(
+                      Translations.of(context).text('field_input_allert'),
+                    );
+                  } else {
+                    setState(() {
+                      visible = true;
+                      btnVisible = false;
+                    });
+                    final encrypted = encrypter.encrypt(password.text, iv: iv);
+                    if (emailCust.text.isNotEmpty) {
+                      print('MASUK EMAIL');
+                      postRegisterNewCustEmail(context, encrypted.base64);
+                    } else {
+                      print('MASUK NUMB');
+                      postRegisterNewCustNumber(context, encrypted.base64);
+                    }
+                  }
+                },
+              ),
             ),
           ),
         ],
@@ -252,12 +278,58 @@ class RegistCustState extends State<RegisterCustomer> {
     );
   }
 
-  Future<PostRegisterResidential> postRegisterNewCust(
+  void postRegisterNewCustEmail(BuildContext context, String password) async {
+    final storageCache = FlutterSecureStorage();
+    String devicesId = await storageCache.read(key: 'devices_id');
+    var responseTokenBarrer =
+        await http.post('${UrlCons.mainProdUrl}authentication', body: {
+      'client_id': '0dUIDb81bBUsGDfDsYYHQ9wBujfjL9XWfH0ZoAzi',
+      'client_secret': '0DTuUFYRPtWUFN2UbzSvzqZMzNsW4kAl4t4PTrtC',
+      'grant_type': 'client_credentials'
+    });
+    AuthSalesRegit _auth =
+        AuthSalesRegit.fromJson(json.decode(responseTokenBarrer.body));
+    var body = json.encode({
+      // "request_code": requestCode,
+      // "customer_id": idCust,
+      "email": emailCust.text,
+      "password": password,
+      // "code": codeotp,
+    });
+
+    var responseSentOTPRegisResidential =
+        await http.post('${UrlCons.mainProdUrl}users/registrations',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer ${_auth.accessToken}',
+              'X-Pgn-Device-Id': devicesId,
+            },
+            body: body);
+    PostDataRegisterPGNUser postOTPRegisterResidential =
+        PostDataRegisterPGNUser.fromJson(
+            json.decode(responseSentOTPRegisResidential.body));
+    if (responseSentOTPRegisResidential.statusCode == 200) {
+      setState(() {
+        visible = false;
+        btnVisible = true;
+      });
+      registerNewUserAlert(context, 'Silahkan masuk ke halaman login');
+    } else {
+      setState(() {
+        visible = false;
+        btnVisible = true;
+      });
+      registerNewUserAlert(context, postOTPRegisterResidential.message);
+    }
+  }
+
+  Future<PostRegisterResidential> postRegisterNewCustNumber(
       BuildContext context, String password) async {
     // final _provRegResidential = Provider.of<RegistResidential>(context);
 
     final storageCache = FlutterSecureStorage();
     String devicesId = await storageCache.read(key: 'devices_id');
+
     var responseTokenBarrer =
         await http.post('${UrlCons.mainProdUrl}authentication', body: {
       'client_id': '0dUIDb81bBUsGDfDsYYHQ9wBujfjL9XWfH0ZoAzi',
@@ -294,10 +366,15 @@ class RegistCustState extends State<RegisterCustomer> {
             },
             body: bodySentTrans5);
     print(responseSentOTPRegisResidential.body);
+    print('HASIL OTP NUMB : ${responseSentOTPRegisResidential.body}');
     RegisteraUserPGN postOTPRegisterResidential = RegisteraUserPGN.fromJson(
         json.decode(responseSentOTPRegisResidential.body));
 
     if (responseSentOTPRegisResidential.statusCode == 200) {
+      setState(() {
+        visible = false;
+        btnVisible = true;
+      });
       if (postOTPRegisterResidential.dataRegistUserPGN.otpTransId == '5') {
         Navigator.push(
             context,
@@ -311,9 +388,17 @@ class RegistCustState extends State<RegisterCustomer> {
                       accessToken: _auth.accessToken,
                     )));
       } else {
+        setState(() {
+          visible = false;
+          btnVisible = true;
+        });
         successAlert(context, postOTPRegisterResidential.message);
       }
     } else {
+      setState(() {
+        visible = false;
+        btnVisible = true;
+      });
       successAlert(context, postOTPRegisterResidential.message);
     }
     // return PostRegisterResidential.fromJson(json.decode(responseRegisResidential.body));

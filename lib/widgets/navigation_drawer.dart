@@ -24,6 +24,7 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
   Color enLangSelected = Color(0xFF9B9B9B);
   String userTypes;
   String customerGroupId;
+  List<String> listMenus = [];
   final storageCache = new FlutterSecureStorage();
   @override
   void initState() {
@@ -208,63 +209,160 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
       color: Colors.white,
       child: ListView(
         children: <Widget>[
-          ListTile(
-            contentPadding: EdgeInsets.only(left: 20.0, top: 30),
-            leading: Icon(Icons.dashboard),
-            title: Text(
-              'Dashboard',
-              style: TextStyle(
-                color: Colors.grey[600],
-                fontSize: 17.0,
-                fontWeight: FontWeight.w400,
-              ),
-            ),
-            onTap: () {
-              Navigator.pop(context);
-              Navigator.pushNamed(context, '/dashboard');
-            },
-          ),
+          listMenus.contains('9')
+              ? ListTile(
+                  contentPadding: EdgeInsets.only(left: 20.0, top: 30),
+                  leading: Icon(Icons.dashboard),
+                  title: Text(
+                    'Dashboard',
+                    style: TextStyle(
+                      color: Colors.grey[600],
+                      fontSize: 17.0,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                  onTap: () {
+                    Navigator.pop(context);
+                    Navigator.pushNamed(context, '/dashboard');
+                  },
+                )
+              : SizedBox(),
           Container(
             margin: EdgeInsets.only(left: 15, right: 15),
             child: Divider(color: Colors.black26),
           ),
-          ListTile(
-            contentPadding: EdgeInsets.only(left: 20),
-            leading: Image.asset(
-              'assets/logo_head_menu.png',
-              width: 30.0,
-              height: 30.0,
-            ),
-            title: Text(
-              Translations.of(context).text('title_bar_about'),
-              style: TextStyle(
-                color: Colors.grey[600],
-                fontSize: 17.0,
-                fontWeight: FontWeight.w400,
-              ),
-            ),
-            onTap: () {
-              Navigator.pop(context);
-              Navigator.pushNamed(context, '/aboutPgn');
-            },
-          ),
-          ListTile(
-            contentPadding: EdgeInsets.only(left: 20.0),
-            leading: Icon(Icons.ev_station),
-            title: Text(
-              Translations.of(context).text('a_home_tv_menu_spbg'),
-              style: TextStyle(
-                color: Colors.grey[600],
-                fontSize: 17.0,
-                fontWeight: FontWeight.w400,
-              ),
-            ),
-            onTap: () {
-              Navigator.pop(context);
-              Navigator.pushNamed(context, '/gasStation');
-            },
-          ),
-          customerGroupId == '3'
+          listMenus.contains('1')
+              ? ListTile(
+                  contentPadding: EdgeInsets.only(left: 20),
+                  leading: Image.asset(
+                    'assets/logo_head_menu.png',
+                    width: 30.0,
+                    height: 30.0,
+                  ),
+                  title: Text(
+                    Translations.of(context).text('title_bar_about'),
+                    style: TextStyle(
+                      color: Colors.grey[600],
+                      fontSize: 17.0,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                  onTap: () {
+                    Navigator.pop(context);
+                    Navigator.pushNamed(context, '/aboutPgn');
+                  },
+                )
+              : SizedBox(),
+          listMenus.contains('14')
+              ? ListTile(
+                  contentPadding: EdgeInsets.only(left: 20.0),
+                  leading: Icon(Icons.equalizer),
+                  title: Text(
+                    Translations.of(context).text('a_home_tv_menu_trend'),
+                    style: TextStyle(
+                      color: Colors.grey[600],
+                      fontSize: 17.0,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                  onTap: () {
+                    Navigator.pop(context);
+                    Navigator.pushNamed(context, '/usageTrend');
+                  },
+                )
+              : SizedBox(),
+          listMenus.contains('15')
+              ? ListTile(
+                  contentPadding: EdgeInsets.only(left: 20.0),
+                  leading: Icon(Icons.location_city),
+                  title: Text(
+                    Translations.of(context).text('a_home_tv_menu_summary'),
+                    style: TextStyle(
+                      color: Colors.grey[600],
+                      fontSize: 17.0,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                  onTap: () {
+                    Navigator.pop(context);
+                    Navigator.pushNamed(context, '/sectorIndustry');
+                  },
+                )
+              : SizedBox(),
+          listMenus.contains('16')
+              ? ListTile(
+                  contentPadding: EdgeInsets.only(left: 20.0),
+                  leading: Icon(Icons.domain),
+                  title: Text(
+                    Translations.of(context)
+                        .text('a_home_tv_menu_summary_area'),
+                    style: TextStyle(
+                      color: Colors.grey[600],
+                      fontSize: 17.0,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                  onTap: () {
+                    Navigator.pop(context);
+                    Navigator.pushNamed(context, '/salesArea');
+                  },
+                )
+              : SizedBox(),
+          listMenus.contains('17')
+              ? ListTile(
+                  contentPadding: EdgeInsets.only(left: 20.0),
+                  leading: Icon(Icons.exposure),
+                  title: Text(
+                    Translations.of(context).text('a_home_tv_menu_calculator'),
+                    style: TextStyle(
+                      color: Colors.grey[600],
+                      fontSize: 17.0,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                  onTap: () {
+                    Navigator.pop(context);
+                    Navigator.pushNamed(context, '/calculatorEnergy');
+                  },
+                )
+              : SizedBox(),
+          listMenus.contains('18')
+              ? ListTile(
+                  contentPadding: EdgeInsets.only(left: 20.0),
+                  leading: Icon(Icons.import_contacts),
+                  title: Text(
+                    Translations.of(context).text('title_bar_dictionary'),
+                    style: TextStyle(
+                      color: Colors.grey[600],
+                      fontSize: 17.0,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                  onTap: () {
+                    Navigator.pop(context);
+                    Navigator.pushNamed(context, '/energyDict');
+                  },
+                )
+              : SizedBox(),
+          listMenus.contains('2')
+              ? ListTile(
+                  contentPadding: EdgeInsets.only(left: 20.0),
+                  leading: Icon(Icons.ev_station),
+                  title: Text(
+                    Translations.of(context).text('a_home_tv_menu_spbg'),
+                    style: TextStyle(
+                      color: Colors.grey[600],
+                      fontSize: 17.0,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                  onTap: () {
+                    Navigator.pop(context);
+                    Navigator.pushNamed(context, '/gasStation');
+                  },
+                )
+              : SizedBox(),
+          customerGroupId == '3' && listMenus.contains('8')
               ? ListTile(
                   contentPadding: EdgeInsets.only(left: 20.0),
                   leading: Icon(Icons.receipt_long_outlined),
@@ -282,12 +380,30 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
                   },
                 )
               : SizedBox(),
-          customerGroupId == '3'
+          listMenus.contains('3')
               ? ListTile(
                   contentPadding: EdgeInsets.only(left: 20.0),
                   leading: Icon(Icons.subscriptions_sharp),
                   title: Text(
                     Translations.of(context).text('pb_tab_title'),
+                    style: TextStyle(
+                      color: Colors.grey[600],
+                      fontSize: 17.0,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                  onTap: () {
+                    Navigator.pop(context);
+                    Navigator.pushNamed(context, '/subscriptionProgress');
+                  },
+                )
+              : SizedBox(),
+          listMenus.contains('22')
+              ? ListTile(
+                  contentPadding: EdgeInsets.only(left: 20.0),
+                  leading: Icon(Icons.subscriptions_sharp),
+                  title: Text(
+                    Translations.of(context).text('pc_tab_title'),
                     style: TextStyle(
                       color: Colors.grey[600],
                       fontSize: 17.0,
@@ -309,12 +425,16 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
   getUserType(BuildContext context) async {
     // SharedPreferences prefs = await SharedPreferences.getInstance();
     String useraUserTypes = await storageCache.read(key: 'user_type') ?? "";
+    String listMenusString = await storageCache.read(key: 'list_menu') ?? "";
     String customerGroupds =
         await storageCache.read(key: 'customer_groupId') ?? "";
+
     setState(() {
       userTypes = useraUserTypes;
       customerGroupId = customerGroupds;
+      listMenus = listMenusString.split(',');
     });
+    print('HASIL LIST MENU LENGHT = ${listMenus.length}');
   }
 
   goToCustomerUsadeDetail(BuildContext context) async {

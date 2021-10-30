@@ -359,7 +359,6 @@ class LoginScreenState extends State<LoginScreen> {
         fcmToken = await _getFCMToken();
       });
 
-      // SharedPreferences prefs = await SharedPreferences.getInstance();
       setState(() {
         numbPhone = _auth.user.userMobilePhone;
       });
@@ -375,6 +374,22 @@ class LoginScreenState extends State<LoginScreen> {
       await storageCache.write(
           key: 'request_code', value: _auth.verificationStatus.requestCode);
       await storageCache.write(key: 'access_token', value: _auth.accessToken);
+      if (_auth.product != null) {
+        await storageCache.write(key: 'products', value: _auth.product);
+      } else {
+        await storageCache.write(key: 'products', value: '-');
+      }
+      if (_auth.menus != null) {
+        List<String> _listMenus = [];
+        _auth.menus.forEach((i) {
+          _listMenus.add(i.id.toString());
+        });
+        String listMenuString = _listMenus.join(',');
+        print('HASIL MENU LIST TO STRING $listMenuString');
+        await storageCache.write(key: 'list_menu', value: listMenuString);
+      } else {
+        await storageCache.write(key: 'list_menu', value: '-');
+      }
       if (_auth.user.userType == 2 && _auth.user.userGroupId == "11") {
         // print('1. MASUK KE SINI ${_auth.customer.custName}');
 
