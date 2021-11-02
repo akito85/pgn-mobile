@@ -323,6 +323,7 @@ Future<TopUsageDetail> fetchPost(BuildContext context) async {
   final storageCache = FlutterSecureStorage();
   String accessToken = await storageCache.read(key: 'access_token');
   String lang = await storageCache.read(key: 'lang');
+  print('ACCESS TOKEN 2: $accessToken');
   var responseTopUsage =
       await http.get('${UrlCons.mainProdUrl}report/top-gain-usage', headers: {
     'Content-Type': 'application/json',

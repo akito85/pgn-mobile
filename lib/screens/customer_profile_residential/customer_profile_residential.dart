@@ -15,16 +15,21 @@ class _MyProfileCustResidentialState extends State<MyProfileCustResidential> {
   final TextEditingController addressCtrl = new TextEditingController();
 
   String product = '-';
+  String custGroupId = '';
   List<String> listMenus = [];
   final storageCache = new FlutterSecureStorage();
+  void initState() {
+    super.initState();
+    getCred(context);
+  }
 
+// ID MENU RTPK MY PROFILE 13
   @override
   Widget build(BuildContext context) {
-    getCred(context);
     addressCtrl.text = widget.data.data.address;
     return Scaffold(
       backgroundColor: Colors.white,
-      body: listMenus.contains('13')
+      body: listMenus.contains('13') && custGroupId != '-'
           ? Stack(
               children: <Widget>[
                 Container(
@@ -124,9 +129,12 @@ class _MyProfileCustResidentialState extends State<MyProfileCustResidential> {
     final storageCache = FlutterSecureStorage();
     String products = await storageCache.read(key: 'products');
     String listMenusString = await storageCache.read(key: 'list_menu') ?? "";
+    String custGroupIds = await storageCache.read(key: 'customer_groupId');
     setState(() {
       product = products == "" ? "-" : products;
       listMenus = listMenusString.split(',');
+      custGroupId = custGroupIds;
+      print('ID PROD : $custGroupId');
     });
   }
 }

@@ -10,7 +10,6 @@ import 'package:pgn_mobile/screens/usage_detail/widgets/harian_detail_chart.dart
 import 'package:charts_flutter/flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:pgn_mobile/services/app_localizations.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
@@ -59,76 +58,27 @@ class HarianTabDetailState extends State<HarianTabDetail>
 
   @override
   void initState() {
-    _tabController = new TabController(length: 3, vsync: this, initialIndex: 2);
     super.initState();
+    getPeriod();
+  }
+
+  String periodSelected;
+  List<String> listPeriod = [];
+  String hintPeriod = DateFormat("MMMM yyyy").format(DateTime.now()).toString();
+  void getPeriod() {
+    final now = DateTime.now();
+    final sixMonthAgo = now.subtract(Duration(days: 400));
+    final sixMonthFromNow = DateTime(sixMonthAgo.year, sixMonthAgo.month + 6);
+    DateTime date = sixMonthAgo;
+    hintPeriod = now.toString();
+
+    while (date.isBefore(sixMonthFromNow)) {
+      listPeriod.add(date.toString());
+      date = DateTime(date.year, date.month + 1);
+    }
   }
 
   Widget build(BuildContext context) {
-    int currentYear = DateTime.now().year;
-    int currentMonth = DateTime.now().month;
-    int month2 = currentMonth - 1;
-    int month3 = currentMonth - 2;
-
-    String sNull = "0";
-    String month3S, month2S, currentMonthS;
-    if (currentMonth == 2) {
-      int currentYears = DateTime.now().year - 1;
-      // int y1 = 12;
-      // int y2 = 01;
-      currentMonthS = '02';
-      String cal2 = '${currentYears + 1}01';
-      String cal1 = '${currentYears}12';
-      month2S = cal2;
-      month3S = cal1;
-    } else if (currentMonth == 1) {
-      int currentYears = DateTime.now().year - 1;
-      int y1 = 12;
-      int y2 = 11;
-      String cal2 = '$currentYears$y1';
-      String cal1 = '$currentYears$y2';
-      currentMonthS = '01';
-      month2S = cal2;
-      month3S = cal1;
-    } else {
-      currentYear = DateTime.now().year;
-
-      if (currentMonth < 10) {
-        currentMonthS = '0$currentMonth';
-      } else {
-        currentMonthS = currentMonth.toString();
-      }
-      if (month2 < 10) {
-        month2S = '$currentYear$sNull$month2';
-      } else {
-        month2S = '$currentYear$month2';
-      }
-
-      if (month3 < 10) {
-        month3S = '$currentYear$sNull$month3';
-      } else {
-        month3S = '$currentYear$month3';
-      }
-    }
-
-    String dateformatCurrent =
-        '${currentYear.toString()}${currentMonthS.toString()}10';
-    String dateformatCurrent2 = '${month2S.toString()}10';
-
-    String dateformatCurrent3 = '${month3S.toString()}10';
-
-    String formatDate =
-        DateFormat("yyyMM").format(DateTime.parse(dateformatCurrent));
-    String formatDate2 =
-        DateFormat("yyyMM").format(DateTime.parse(dateformatCurrent2));
-    String formatDate3 =
-        DateFormat("yyyMM").format(DateTime.parse(dateformatCurrent3));
-    // print('Date Format 3: $dateformatCurrent3');
-    // print('Date Format 2: $dateformatCurrent2');
-    // print('Date Format 1: $dateformatCurrent');
-
-    // print("Format Monthnya: $formatDate");
-    // print("Format Monthnya2: $formatDate2");
-    // print("Format Monthnya3: $formatDate3");
     return ListView(
       children: <Widget>[
         Material(
@@ -163,69 +113,59 @@ class HarianTabDetailState extends State<HarianTabDetail>
           ),
         ),
         Container(
+            width: MediaQuery.of(context).size.width,
+            margin: EdgeInsets.only(left: 10, right: 10, top: 30),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                border:
+                    Border.all(color: painting.Color(0xFF427CEF), width: 2)),
+            child: Padding(
+                padding: EdgeInsets.only(left: 10, right: 8),
+                child: DropdownButton(
+                    hint: Text(
+                        DateFormat("MMMM yyyy")
+                            .format(DateTime.now())
+                            .toString(),
+                        style: painting.TextStyle(
+                            color: painting.Color(0xFF455055),
+                            fontSize: 14,
+                            fontWeight: FontWeight.normal)),
+                    dropdownColor: Colors.white,
+                    icon: Icon(Icons.arrow_drop_down_circle_rounded,
+                        color: painting.Color(0xFF427CEF)),
+                    isExpanded: true,
+                    underline: SizedBox(),
+                    style: painting.TextStyle(
+                        color: painting.Color(0xFF455055),
+                        fontSize: 14,
+                        fontWeight: FontWeight.normal),
+                    value: periodSelected,
+                    onChanged: (newValue) {
+                      print('SELECTEDs $newValue');
+                      setState(() {
+                        periodSelected = newValue;
+                      });
+
+                      print('SELECTED $periodSelected');
+                    },
+                    items: listPeriod.map((valueItem) {
+                      DateTime date = DateTime.parse(valueItem);
+                      return DropdownMenuItem(
+                          value: valueItem,
+                          child: Text(
+                              DateFormat("MMMM yyyy").format(date).toString()));
+                    }).toList()))),
+        Container(
           margin: EdgeInsets.only(top: 30, left: 5, right: 5),
-          height: 400,
-          child: DefaultTabController(
-            length: 3,
-            child: Scaffold(
-              backgroundColor: Colors.transparent,
-              appBar: PreferredSize(
-                preferredSize: Size.fromHeight(kToolbarHeight),
-                child: Column(
-                  children: <Widget>[
-                    Card(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      margin: EdgeInsets.symmetric(horizontal: 10, vertical: 0),
-                      elevation: 10,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10.0),
-                          color: Colors.white,
-                        ),
-                        child: TabBar(
-                          controller: _tabController,
-                          labelColor: Colors.white,
-                          indicatorColor: Colors.black,
-                          unselectedLabelColor: painting.Color(0xFF427CEF),
-                          indicator: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: painting.Color(0xFF4578EF),
-                          ),
-                          tabs: [
-                            Tab(
-                                child: Text(
-                                    '${DateFormat("MMMM").format(DateTime.parse(dateformatCurrent3))}')),
-                            Tab(
-                                child: Text(
-                                    '${DateFormat("MMMM").format(DateTime.parse(dateformatCurrent2))}')),
-                            Tab(
-                                child: Text(
-                                    '${DateFormat("MMMM").format(DateTime.parse(dateformatCurrent))}')),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              body: TabBarView(
-                controller: _tabController,
-                children: [
-                  _buildContent(context, formatDate3),
-                  _buildContent(context, formatDate2),
-                  _buildContent(context, formatDate),
-                ],
-              ),
-            ),
-          ),
+          height: 350,
+          child: _buildContent(
+              context, periodSelected != null ? periodSelected : hintPeriod),
         ),
       ],
     );
   }
 
-  Widget _buildContent(BuildContext context, String title) {
+  Widget _buildContent(BuildContext context, String period) {
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),
@@ -234,30 +174,13 @@ class HarianTabDetailState extends State<HarianTabDetail>
       margin: EdgeInsets.only(left: 10.0, right: 10.0, top: 10, bottom: 10),
       child: Column(
         children: <Widget>[
-          Row(
-            children: <Widget>[
-              Expanded(
-                child: Container(
-                  width: 140,
-                  margin: EdgeInsets.only(left: 14.0, top: 18.0),
-                  child: Text(
-                    'Energy (MMBtu)',
-                    style: painting.TextStyle(
-                        fontSize: 13.0,
-                        fontWeight: FontWeight.w400,
-                        color: Colors.grey[600]),
-                  ),
-                ),
-              ),
-            ],
-          ),
           Container(
-            height: 289,
+            height: 320,
             child: Padding(
               padding: EdgeInsets.only(
                   left: 14.0, top: 14.0, right: 14.0, bottom: 5),
               child: _buildCharContent(
-                  context, fetchGetChar(context, title, idCust), title),
+                  context, fetchGetChar(context, period, idCust), period),
             ),
           ),
         ],
@@ -276,17 +199,34 @@ class HarianTabDetailState extends State<HarianTabDetail>
             );
           if (snapshot.data.message != null)
             return Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                SizedBox(height: 5),
+                Padding(
+                  padding: EdgeInsets.only(top: 5, bottom: 30),
+                  child: Text(
+                    DateFormat("MMMM yyyy")
+                        .format(DateTime.parse(period))
+                        .toString(),
+                    textAlign: TextAlign.left,
+                    style: painting.TextStyle(
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.bold,
+                      color: painting.Color(0xFF4578EF),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 30),
                 Container(
                   alignment: Alignment.center,
                   child: Image.asset('assets/penggunaan_gas.png'),
                 ),
                 SizedBox(height: 20),
                 Container(
+                  alignment: Alignment.center,
                   child: Text(
                     snapshot.data.message,
+                    textAlign: TextAlign.center,
                     style: painting.TextStyle(fontSize: 18),
                   ),
                 )
@@ -294,6 +234,23 @@ class HarianTabDetailState extends State<HarianTabDetail>
             );
           return Column(
             children: <Widget>[
+              Row(
+                children: <Widget>[
+                  Expanded(
+                    child: Container(
+                      width: 140,
+                      margin: EdgeInsets.only(left: 0.0, top: 18.0, bottom: 18),
+                      child: Text(
+                        'Energy (MMBtu)',
+                        style: painting.TextStyle(
+                            fontSize: 13.0,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.grey[600]),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
               ListView.builder(
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
@@ -494,22 +451,25 @@ class LinearSales {
 }
 
 Future<ChartUsageDetail> fetchGetChar(
-    BuildContext context, String title, String custID) async {
-  // SharedPreferences prefs = await SharedPreferences.getInstance();
-  // String accessToken = prefs.getString('access_token');
-  // String lang = prefs.getString('lang');
+    BuildContext context, String period, String custID) async {
   final storageCache = FlutterSecureStorage();
   String accessToken = await storageCache.read(key: 'access_token');
   String lang = await storageCache.read(key: 'lang');
 
+  DateTime date = DateTime.parse(period);
+  String periodDate = DateFormat("yyyyMM").format(date).toString();
+
   var responseUsageChar = await http.get(
-      '${UrlCons.mainProdUrl}customers/$custID/gas-usages/daily-chart/$title',
+      '${UrlCons.mainProdUrl}customers/$custID/gas-usages/daily-chart/$periodDate',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $accessToken',
         'Accept-Language': lang,
       });
-
+  print('ACCESS TOKEN : $accessToken');
+  print(
+      'URL :${UrlCons.mainProdUrl}customers/$custID/gas-usages/daily-chart/$periodDate ');
+  print('HASIL USAGE : ${responseUsageChar.body}');
   ChartUsageDetail _getContract =
       ChartUsageDetail.fromJson(json.decode(responseUsageChar.body));
 

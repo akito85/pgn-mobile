@@ -4,11 +4,9 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:pgn_mobile/models/cust_invoice_model.dart';
 import 'package:pgn_mobile/models/url_cons.dart';
 import 'package:pgn_mobile/screens/invoice_customer_residential/widgets/payment_method.dart';
-import 'package:provider/provider.dart';
+
 import 'package:intl/intl.dart';
-import 'package:pgn_mobile/services/user_credientials.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:pgn_mobile/services/app_localizations.dart';
 import 'package:http/http.dart' as http;
@@ -678,6 +676,238 @@ class BillDetailState extends State<InvoiceRTPK>
                         margin: EdgeInsets.only(left: 5.0, top: 10.0),
                         child: Text(
                           "Rp.${data.pGuaranteeIdr ?? "-"}",
+                          style: TextStyle(
+                              fontSize: 15.0,
+                              fontWeight: FontWeight.w400,
+                              color: Colors.grey[600]),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+                Row(
+                  children: <Widget>[
+                    Container(
+                      width: 125,
+                      margin: EdgeInsets.only(left: 20.0, top: 10.0),
+                      child: Text(
+                        Translations.of(context)
+                            .text('f_commercial_invoice_detail_tv_denda'),
+                        style: TextStyle(
+                            fontSize: 15.0,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.grey[600]),
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(top: 10.0, left: 25.0),
+                      child: Text(
+                        ':',
+                        style: TextStyle(
+                            fontSize: 15.0,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.grey[600]),
+                      ),
+                    ),
+                    Expanded(
+                      child: Container(
+                        margin: EdgeInsets.only(left: 5.0, top: 10.0),
+                        child: Text(
+                          data.denda != "" ? data.denda : "-",
+                          style: TextStyle(
+                              fontSize: 15.0,
+                              fontWeight: FontWeight.w400,
+                              color: Colors.grey[600]),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+                Row(
+                  children: <Widget>[
+                    Container(
+                      width: 125,
+                      margin: EdgeInsets.only(left: 20.0, top: 10.0),
+                      child: Text(
+                        Translations.of(context).text(
+                            'f_commercial_invoice_detail_tv_b_pengaliran_kembali'),
+                        style: TextStyle(
+                            fontSize: 15.0,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.grey[600]),
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(top: 10.0, left: 25.0),
+                      child: Text(
+                        ':',
+                        style: TextStyle(
+                            fontSize: 15.0,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.grey[600]),
+                      ),
+                    ),
+                    Expanded(
+                      child: Container(
+                        margin: EdgeInsets.only(left: 5.0, top: 10.0),
+                        child: Text(
+                          data.biayaPengaliran != ""
+                              ? data.biayaPengaliran
+                              : "-",
+                          style: TextStyle(
+                              fontSize: 15.0,
+                              fontWeight: FontWeight.w400,
+                              color: Colors.grey[600]),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+                Row(
+                  children: <Widget>[
+                    Container(
+                      width: 125,
+                      margin: EdgeInsets.only(left: 20.0, top: 10.0),
+                      child: Text(
+                        Translations.of(context).text(
+                            'f_commercial_invoice_detail_tv_b_pemasangan_kembali'),
+                        style: TextStyle(
+                            fontSize: 15.0,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.grey[600]),
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(top: 10.0, left: 25.0),
+                      child: Text(
+                        ':',
+                        style: TextStyle(
+                            fontSize: 15.0,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.grey[600]),
+                      ),
+                    ),
+                    Expanded(
+                      child: Container(
+                        margin: EdgeInsets.only(left: 5.0, top: 10.0),
+                        child: Text(
+                          data.biayaPemasangan != ""
+                              ? data.biayaPemasangan
+                              : "-",
+                          style: TextStyle(
+                              fontSize: 15.0,
+                              fontWeight: FontWeight.w400,
+                              color: Colors.grey[600]),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+                Row(
+                  children: <Widget>[
+                    Container(
+                      width: 125,
+                      margin: EdgeInsets.only(left: 20.0, top: 10.0),
+                      child: Text(
+                        Translations.of(context)
+                            .text('f_commercial_invoice_detail_tv_b_migrasi'),
+                        style: TextStyle(
+                            fontSize: 15.0,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.grey[600]),
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(top: 10.0, left: 25.0),
+                      child: Text(
+                        ':',
+                        style: TextStyle(
+                            fontSize: 15.0,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.grey[600]),
+                      ),
+                    ),
+                    Expanded(
+                      child: Container(
+                        margin: EdgeInsets.only(left: 5.0, top: 10.0),
+                        child: Text(
+                          data.biayaMigrasi != "" ? data.biayaMigrasi : "-",
+                          style: TextStyle(
+                              fontSize: 15.0,
+                              fontWeight: FontWeight.w400,
+                              color: Colors.grey[600]),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+                Row(
+                  children: <Widget>[
+                    Container(
+                      width: 125,
+                      margin: EdgeInsets.only(left: 20.0, top: 10.0),
+                      child: Text(
+                        Translations.of(context)
+                            .text('f_commercial_invoice_detail_tv_b_pelayanan'),
+                        style: TextStyle(
+                            fontSize: 15.0,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.grey[600]),
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(top: 10.0, left: 25.0),
+                      child: Text(
+                        ':',
+                        style: TextStyle(
+                            fontSize: 15.0,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.grey[600]),
+                      ),
+                    ),
+                    Expanded(
+                      child: Container(
+                        margin: EdgeInsets.only(left: 5.0, top: 10.0),
+                        child: Text(
+                          data.biayaPelayanan != "" ? data.biayaPelayanan : "-",
+                          style: TextStyle(
+                              fontSize: 15.0,
+                              fontWeight: FontWeight.w400,
+                              color: Colors.grey[600]),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+                Row(
+                  children: <Widget>[
+                    Container(
+                      width: 125,
+                      margin: EdgeInsets.only(left: 20.0, top: 10.0),
+                      child: Text(
+                        Translations.of(context)
+                            .text('f_commercial_invoice_detail_tv_b_sms'),
+                        style: TextStyle(
+                            fontSize: 15.0,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.grey[600]),
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(top: 10.0, left: 25.0),
+                      child: Text(
+                        ':',
+                        style: TextStyle(
+                            fontSize: 15.0,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.grey[600]),
+                      ),
+                    ),
+                    Expanded(
+                      child: Container(
+                        margin: EdgeInsets.only(left: 5.0, top: 10.0),
+                        child: Text(
+                          data.biayaSms != "" ? data.biayaSms : "-",
                           style: TextStyle(
                               fontSize: 15.0,
                               fontWeight: FontWeight.w400,

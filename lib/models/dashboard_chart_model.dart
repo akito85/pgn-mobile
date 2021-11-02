@@ -497,16 +497,17 @@ class IdrAreaData {
 
 class HarianDetailCustDashboard {
   List<DataHourlyUsage> data;
-  PagingHourlyUsage paging;
+  // PagingHourlyUsage paging;
   String message;
 
-  HarianDetailCustDashboard({this.data, this.paging, this.message});
+  HarianDetailCustDashboard({this.data, this.message});
 
   factory HarianDetailCustDashboard.fromJson(Map<String, dynamic> json) {
     if (json['data'] != null)
       return HarianDetailCustDashboard(
-          data: parseDataHourlyUsage(json['data']),
-          paging: PagingHourlyUsage.fromJson(json['paging']));
+        data: parseDataHourlyUsage(json['data']),
+        // paging: PagingHourlyUsage.fromJson(json['paging'])
+      );
     else
       return HarianDetailCustDashboard(message: json['message']);
   }
@@ -520,7 +521,7 @@ class HarianDetailCustDashboard {
 }
 
 class DataHourlyUsage {
-  int id;
+  // int id;
   DateDaily date;
   String meterId;
   Pressure pressure;
@@ -535,8 +536,7 @@ class DataHourlyUsage {
   String capPer;
 
   DataHourlyUsage(
-      {this.id,
-      this.cFactor,
+      {this.cFactor,
       this.cIndex,
       this.date,
       this.energy,
@@ -551,7 +551,7 @@ class DataHourlyUsage {
 
   factory DataHourlyUsage.fromJson(Map<String, dynamic> json) {
     return DataHourlyUsage(
-      id: json['id'],
+      // id: json['id'],
       date: DateDaily.fromJson(json['date']),
       meterId: json['meter_id'],
       pressure: Pressure.fromJson(json['pressure']),
@@ -694,20 +694,20 @@ class DateDaily {
   }
 }
 
-class PagingHourlyUsage {
-  String current;
-  String prev;
-  String next;
-  int count;
+// class PagingHourlyUsage {
+//   String current;
+//   String prev;
+//   String next;
+//   int count;
 
-  PagingHourlyUsage({this.count, this.current, this.next, this.prev});
+//   PagingHourlyUsage({this.count, this.current, this.next, this.prev});
 
-  factory PagingHourlyUsage.fromJson(Map<String, dynamic> json) {
-    return PagingHourlyUsage(
-      count: json['count'],
-      prev: json['prev'],
-      next: json['next'],
-      current: json['current'],
-    );
-  }
-}
+//   factory PagingHourlyUsage.fromJson(Map<String, dynamic> json) {
+//     return PagingHourlyUsage(
+//       count: json['count'],
+//       prev: json['prev'],
+//       next: json['next'],
+//       current: json['current'],
+//     );
+//   }
+// }

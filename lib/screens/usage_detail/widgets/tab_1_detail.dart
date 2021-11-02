@@ -215,7 +215,7 @@ class FirstTabState extends State<FirstTab> {
     String lang = await storageCache.read(key: 'lang');
 
     var responseGetUsageDetail = await http.get(
-        'https://api-mobile.pgn.co.id/v2/report/gas-usage-list?q=$keywoard',
+        '${UrlCons.mainProdUrl}report/gas-usage-list?q=$keywoard',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $accessToken',

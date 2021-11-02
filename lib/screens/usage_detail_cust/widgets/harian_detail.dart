@@ -7,9 +7,9 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:pgn_mobile/services/app_localizations.dart';
 import 'package:flutter/rendering.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:pgn_mobile/models/dashboard_chart_model.dart';
 import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HarianDetailCustChart extends StatefulWidget {
   HarianDetailCustChart({this.title, this.period});
@@ -41,6 +41,60 @@ class HarianDetailCustChartState extends State<HarianDetailCustChart> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
+            Material(
+              child: Container(
+                color: Colors.white,
+                child: Row(
+                  children: <Widget>[
+                    Container(
+                      height: 45,
+                      margin: EdgeInsets.fromLTRB(20.0, 5.0, 0.0, 0),
+                      decoration: new BoxDecoration(
+                        shape: BoxShape.circle,
+                      ),
+                      child: Image.asset('assets/icon_default_pelanggan.png'),
+                    ),
+                    Expanded(
+                      child: Container(
+                        margin: EdgeInsets.only(
+                            top: 18.0, left: 15, right: 20, bottom: 10),
+                        child: Text(
+                          title,
+                          overflow: TextOverflow.clip,
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 17.0,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ),
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: Container(
+                        height: 50.0,
+                        width: 60,
+                        alignment: Alignment.centerRight,
+                        margin: EdgeInsets.only(right: 15),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10.0),
+                          color: Color(0xFF4578EF),
+                        ),
+                        child: MaterialButton(
+                          minWidth: MediaQuery.of(context).size.width,
+                          child: Icon(
+                            Icons.file_download,
+                            color: Colors.white,
+                          ),
+                          onPressed: () {
+                            _downloadPDF(context, period);
+                          },
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
             _buildContent(context, fetchPost(context, period)),
           ],
         ),
@@ -753,7 +807,7 @@ Future<HarianDetailCustDashboard> fetchPost(
   final storageCache = FlutterSecureStorage();
   String accessToken = await storageCache.read(key: 'access_token');
   String lang = await storageCache.read(key: 'lang');
-  var responseHourlyUsage = await http.get(
+  var responseDailyUsage = await http.get(
     '${UrlCons.mainProdUrl}customers/me/gas-usages/daily-list/$title',
     headers: {
       'Content-Type': 'application/json',
@@ -761,7 +815,34 @@ Future<HarianDetailCustDashboard> fetchPost(
       'Accept-Language': lang
     },
   );
-
+  print('HASIL GET LIST HARIAN : ${responseDailyUsage.body}');
   return HarianDetailCustDashboard.fromJson(
-      json.decode(responseHourlyUsage.body));
+      json.decode(responseDailyUsage.body));
+}
+
+void _downloadPDF(BuildContext context, String period) async {
+  final storageCache = FlutterSecureStorage();
+  String accessToken = await storageCache.read(key: 'access_token');
+  String lang = await storageCache.read(key: 'lang');
+  var responseDailyUsage = await http.get(
+      '${UrlCons.mainProdUrl}customers/me/gas-usages/daily-list/$period',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $accessToken',
+        'Accept-Language': lang
+      });
+  var postPDF = await http.post(
+      'http://pgn-mobile-api-laravel.noxus.co.id/api/export/export_pdf_daily_usage_details',
+      headers: {'Content-Type': 'application/json'},
+      body: responseDailyUsage.body);
+
+  _launchURL(postPDF.body);
+}
+
+_launchURL(String url) async {
+  if (await canLaunch(url)) {
+    await launch(url);
+  } else {
+    throw 'Could not launch $url';
+  }
 }

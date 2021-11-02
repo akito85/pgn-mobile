@@ -5,7 +5,6 @@ import 'package:pgn_mobile/screens/usage_detail_cust/widgets/bulanan.dart';
 import 'package:pgn_mobile/screens/usage_detail_cust/widgets/harian.dart';
 
 import 'package:flutter/rendering.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:pgn_mobile/services/app_localizations.dart';
 
 class UsageDetailCust extends StatefulWidget {
@@ -29,6 +28,7 @@ class UsageTabDetailState extends State<UsageDetailCust>
   final String title, idCust;
   UsageTabDetailState(this.title, this.idCust);
   String titleCust;
+  List<String> listMenus = [];
   dynamic storageCache = new FlutterSecureStorage();
   @override
   void initState() {
@@ -38,10 +38,11 @@ class UsageTabDetailState extends State<UsageDetailCust>
   }
 
   void getTitleCust() async {
-    // SharedPreferences prefs = await SharedPreferences.getInstance();
     String titleCusts = await storageCache.read(key: 'user_name_cust') ?? "";
+    String listMenusString = await storageCache.read(key: 'list_menu') ?? "";
     setState(() {
       titleCust = titleCusts;
+      listMenus = listMenusString.split(',');
     });
   }
 
@@ -51,6 +52,7 @@ class UsageTabDetailState extends State<UsageDetailCust>
     super.dispose();
   }
 
+//ID MENU GAS USAGE KI 25
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -95,14 +97,29 @@ class UsageTabDetailState extends State<UsageDetailCust>
             ],
           ),
         ),
-        body: TabBarView(
-          controller: _tabController,
-          children: <Widget>[
-            Perjam(title: titleCust ?? title, idCust: idCust ?? " "),
-            Harian(title: title ?? titleCust, idCust: idCust ?? " "),
-            BulananCustDetail(titleCust ?? title, idCust),
-          ],
-        ),
+        // ID MENU USAGE DETAIL KI 25
+        body: listMenus.contains('25')
+            ? TabBarView(
+                controller: _tabController,
+                children: <Widget>[
+                  Perjam(title: titleCust ?? title, idCust: idCust ?? " "),
+                  Harian(title: title ?? titleCust, idCust: idCust ?? " "),
+                  BulananCustDetail(titleCust ?? title, idCust),
+                ],
+              )
+            : Stack(
+                children: <Widget>[
+                  Container(
+                    decoration: new BoxDecoration(
+                      image: new DecorationImage(
+                        image: new AssetImage("assets/new_backgound.jpeg"),
+                        fit: BoxFit.fill,
+                      ),
+                    ),
+                  ),
+                  Center(child: Text('SILAHKAN UPGRADE PRODUK ANDA'))
+                ],
+              ),
       ),
     );
   }

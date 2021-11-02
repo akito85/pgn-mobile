@@ -104,14 +104,31 @@ class DataSwitchCustomerId {
   String custID;
   String message;
   String custName;
-  DataSwitchCustomerId({this.custID, this.message, this.custName});
+  List<Menus> menus;
+  DataSwitchCustomerId({this.custID, this.message, this.custName, this.menus});
 
   factory DataSwitchCustomerId.fromJson(Map<String, dynamic> json) {
     return DataSwitchCustomerId(
       custID: json['customer_id'],
       message: json['message'],
       custName: json['customer_name'],
+      menus: parsedJsonMenus(json['menus']),
     );
+  }
+  static List<Menus> parsedJsonMenus(datasJson) {
+    var list = datasJson as List;
+    List<Menus> datasMenus = list.map((data) => Menus.fromJson(data)).toList();
+    return datasMenus;
+  }
+}
+
+class Menus {
+  int id;
+
+  Menus({this.id});
+
+  factory Menus.fromJson(Map<String, dynamic> json) {
+    return Menus(id: json['id']);
   }
 }
 

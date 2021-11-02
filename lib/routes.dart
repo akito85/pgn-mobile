@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:pgn_mobile/screens/cmm/cmm.dart';
 import 'package:pgn_mobile/screens/cmm/cmm_form.dart';
+import 'package:pgn_mobile/screens/customer_payment_confirmation/customer_payment_confirmation.dart';
 import 'package:pgn_mobile/screens/dashboard/dashboard.dart';
 import 'package:pgn_mobile/screens/gas_station/gas_station.dart';
 import 'package:pgn_mobile/screens/login/login.dart';
+import 'package:pgn_mobile/screens/mng_payment_confirmation/mng_payment_confirmation.dart';
 import 'package:pgn_mobile/screens/progress_subscriptions/progress_subscriptions.dart';
 import 'package:pgn_mobile/screens/login/login_change_numb.dart';
 import 'package:pgn_mobile/screens/progress_subscriptions/widgets/progress_subs_detail.dart';
@@ -75,6 +77,8 @@ class _MyFirstState extends State<FirstScreen> {
     '/usageDetail': (context) => UsageDetail(),
     '/subscriptionProgress': (context) => ProgressSubscriptions(),
     '/subsProgressDetail': (context) => ProgressSubsDetail(),
+    '/paymentConfirmation': (context) => CustomerPaymentConfirmation(),
+    '/paymentConfirmationMng': (context) => MngPaymentConf(),
   };
 
   SpecificLocalizationDelegate _localeOverrideDelegate;

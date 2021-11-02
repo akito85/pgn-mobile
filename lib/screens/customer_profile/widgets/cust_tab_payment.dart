@@ -32,15 +32,22 @@ class PaymentDetailState extends State<PaymentDetailSales> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Container(
-                    margin: EdgeInsets.only(top: 10.0, left: 15, right: 15),
-                    child: Text(
-                      data.data.name ?? '-',
-                      style: TextStyle(
-                          color: Colors.blue[300],
-                          fontSize: 20.0,
-                          fontWeight: FontWeight.w500),
-                    )),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Container(
+                          margin:
+                              EdgeInsets.only(top: 10.0, left: 15, right: 15),
+                          child: Text(
+                            data.data.name ?? '-',
+                            style: TextStyle(
+                                color: Colors.blue[300],
+                                fontSize: 20.0,
+                                fontWeight: FontWeight.w500),
+                          )),
+                    ),
+                  ],
+                ),
                 Container(
                     margin: EdgeInsets.only(
                         top: 10.0, left: 15, right: 15, bottom: 10),
@@ -98,16 +105,22 @@ class PaymentDetailState extends State<PaymentDetailSales> {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Container(
-                    margin: EdgeInsets.only(
-                        top: 5.0, left: 15, right: 15, bottom: 5),
-                    child: Text(
-                      data.data.name,
-                      style: TextStyle(
-                          color: Colors.blue[300],
-                          fontSize: 20.0,
-                          fontWeight: FontWeight.w500),
-                    )),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Container(
+                          margin: EdgeInsets.only(
+                              top: 5.0, left: 15, right: 15, bottom: 5),
+                          child: Text(
+                            data.data.name,
+                            style: TextStyle(
+                                color: Colors.blue[300],
+                                fontSize: 20.0,
+                                fontWeight: FontWeight.w500),
+                          )),
+                    ),
+                  ],
+                ),
                 Container(
                     margin: EdgeInsets.only(left: 15, right: 15),
                     child: Text(

@@ -203,6 +203,22 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
               Navigator.pushNamed(context, '/notifications');
             },
           ),
+          ListTile(
+            contentPadding: EdgeInsets.only(left: 20.0),
+            leading: Icon(Icons.subscriptions_sharp),
+            title: Text(
+              Translations.of(context).text('pc_tab_title'),
+              style: TextStyle(
+                color: Colors.grey[600],
+                fontSize: 17.0,
+                fontWeight: FontWeight.w400,
+              ),
+            ),
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.pushNamed(context, '/paymentConfirmationMng');
+            },
+          )
         ]),
       );
     return Container(
@@ -398,6 +414,7 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
                   },
                 )
               : SizedBox(),
+          //  ID MENU KONFRIMASI PEMBAYARAN 22
           listMenus.contains('22')
               ? ListTile(
                   contentPadding: EdgeInsets.only(left: 20.0),
@@ -412,7 +429,7 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
                   ),
                   onTap: () {
                     Navigator.pop(context);
-                    Navigator.pushNamed(context, '/subscriptionProgress');
+                    Navigator.pushNamed(context, '/paymentConfirmation');
                   },
                 )
               : SizedBox(),

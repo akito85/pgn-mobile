@@ -256,6 +256,13 @@
     "f_commercial_invoice_detail_tv_month_value": "Januari",
     "f_commercial_invoice_detail_tv_calc_volume_mmbtu_label": "Energi Terhitung",
     "f_commercial_invoice_detail_tv_calc_volume_label": "Volume Terhitung",
+    "f_commercial_invoice_detail_tv_denda": "Denda",
+    "f_commercial_invoice_detail_tv_j_pembayaran": "Jaminan Pembayaran",
+    "f_commercial_invoice_detail_tv_b_pengaliran_kembali": "Biaya Pengaliran Kembali",
+    "f_commercial_invoice_detail_tv_b_pemasangan_kembali": "Biaya Pemasangan Kembali",
+    "f_commercial_invoice_detail_tv_b_migrasi": "Biaya Migrasi",
+    "f_commercial_invoice_detail_tv_b_pelayanan": "Biaya Pelayanan",
+    "f_commercial_invoice_detail_tv_b_sms": "Biaya SMS",
     "f_commercial_invoice_tv_detail_calc_volume_value": "%1$s m3",
     "f_commercial_invoice_detail_tv_billed_volume_mmbtu_label": "Energi Tertagih",
     "f_commercial_invoice_detail_tv_billed_volume_label": "Volume Tertagih",
@@ -769,5 +776,6 @@
     "f_title_porg_subs_stat_frbg": "Registrasi FRBG",
     "f_title_porg_subs_stat_evaluation": "Evaluasi PGN",
     "f_title_porg_subs_stat_construction": "Konstruksi Jaringan",
-    "pc_tab_title": "Konfirmasi Pembayaran"
+    "pc_tab_title": "Konfirmasi Pembayaran",
+    "pc_tab_title_desc": "Detail Konfirmasi Pembayaran"
 }

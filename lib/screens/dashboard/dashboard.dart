@@ -13,6 +13,7 @@ import 'package:pgn_mobile/models/dashboard_chart_invoice_residential.dart';
 import 'package:pgn_mobile/models/dashboard_customer_model.dart';
 import 'package:pgn_mobile/models/gas_point_model.dart' as modelGP;
 import 'package:pgn_mobile/models/url_cons.dart';
+import 'package:pgn_mobile/screens/customer_profile_residential/customer_profile_pgn_mobile.dart';
 import 'package:pgn_mobile/screens/dashboard/dashboard_cust_add.dart';
 import 'package:pgn_mobile/screens/gas_point/gas_point.dart';
 import 'package:pgn_mobile/screens/otp/otp.dart';
@@ -477,6 +478,7 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
         ),
       );
     } else if (userType == "2" && groupID == "11") {
+      print('ID CUST $customerGroupID');
       return DefaultTabController(
         length: 4,
         child: Scaffold(
@@ -534,11 +536,14 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
                   //     ? showCustInvoiceGPIRnGPIK(context,
                   //         getCustomerInvoice(context), _prov.custId, groupID)
                   //     :
+
                   showCustInvoiceCustomerResidential(context,
                       getCustomerInvoiceResidential(context), _prov.custId),
                   GasPoint(),
-                  showCustProfileCustomerResidential(
-                      context, getCustomerProfileResidential(context))
+                  customerGroupID != "0"
+                      ? showCustProfileCustomerResidential(
+                          context, getCustomerProfileResidential(context))
+                      : MyProfileCustPgnMobile(),
                 ],
               ),
             ],
@@ -647,11 +652,12 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
                 controller: _controller,
                 children: <Widget>[
                   _buildDashboardKI(context, _prov.custName.toString() ?? ""),
-                  groupID == '9'
-                      ? showCustInvoiceCustomerResidential(context,
-                          getCustomerInvoiceResidential(context), _prov.custId)
-                      : showCustInvoiceCustomer(context,
-                          getCustomerInvoice(context), _prov.custId, groupID),
+                  // groupID == '9'
+                  //     ? showCustInvoiceCustomerResidential(context,
+                  //         getCustomerInvoiceResidential(context), _prov.custId)
+                  //     :
+                  showCustInvoiceCustomer(context, getCustomerInvoice(context),
+                      _prov.custId, groupID),
                   UsageDetailCust(title: titleCust, idCust: custID),
                   showCustProfileCustomer(
                       context, getCustomerProfile(context), custID)
@@ -879,7 +885,7 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Container(
-              margin: EdgeInsets.fromLTRB(15.0, 20.0, 15.0, 3.0),
+              margin: EdgeInsets.fromLTRB(15.0, 20.0, 15.0, 15.0),
               child: Text(
                 greetings ?? "",
                 style: painting.TextStyle(
@@ -2605,6 +2611,17 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
       await storageCache.write(
           key: 'user_name_cust',
           value: switchCustomerId.dataSwitchCustomerId.custName);
+      if (switchCustomerId.dataSwitchCustomerId.menus != null) {
+        List<String> _listMenus = [];
+        switchCustomerId.dataSwitchCustomerId.menus.forEach((i) {
+          _listMenus.add(i.id.toString());
+        });
+        String listMenuString = _listMenus.join(',');
+        print('HASIL MENU LIST TO STRING $listMenuString');
+        await storageCache.write(key: 'list_menu', value: listMenuString);
+      } else {
+        await storageCache.write(key: 'list_menu', value: '-');
+      }
       showToast(switchCustomerId.dataSwitchCustomerId.message);
       Navigator.pop(context);
       Navigator.pushReplacement(context,

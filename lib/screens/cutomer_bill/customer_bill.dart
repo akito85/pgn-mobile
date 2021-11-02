@@ -173,13 +173,14 @@ class CustomerBillsState extends State<CustomerBills> {
     print('RETURN BODY : ${responseCustomerInvoice.body}');
     CustomerInvoice _customerInvoice =
         CustomerInvoice.fromJson(json.decode(responseCustomerInvoice.body));
-    print('TIPENYA : ${_customerInvoice.data[0].type}');
+    // print('TIPENYA : ${_customerInvoice.data[0].type}');
     if (responseCustomerInvoice.statusCode != 200) {
       setState(() {
         visible = false;
         btnClick = true;
       });
       successAlert(context, _customerInvoice.message);
+      print('CUST INVOCE ${responseCustomerInvoice.body}');
     } else if (responseCustomerInvoice.statusCode == 200) {
       setState(() {
         visible = false;
