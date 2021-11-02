@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:pgn_mobile/models/cust_profile_model.dart';
 import 'package:pgn_mobile/screens/customer_profile/widgets/customer_profile.dart';
 
@@ -19,7 +20,15 @@ class CustomerState extends State<CustomerDetail> {
   Customer data;
   String idCust;
   CustomerState(this.data, this.idCust);
+  List<String> listMenus = [];
+  final storageCache = new FlutterSecureStorage();
   @override
+  void initState() {
+    super.initState();
+    getCred(context);
+  }
+
+//ID MENU MY PROFILE KI 23
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 3,
@@ -45,14 +54,14 @@ class CustomerState extends State<CustomerDetail> {
                   indicator: ShapeDecoration(
                     color: Color(0xFF4578EF),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(25.0),
+                      borderRadius: BorderRadius.circular(15.0),
                       side: BorderSide(color: Color(0xFF4578EF)),
                     ),
                   ),
                   tabs: <Widget>[
                     Tab(
                         child: Padding(
-                      padding: const EdgeInsets.only(left: 10, right: 10),
+                      padding: const EdgeInsets.only(left: 13, right: 13),
                       child: Text(
                         Translations.of(context)
                             .text('title_bar_customer_detail'),
@@ -61,7 +70,7 @@ class CustomerState extends State<CustomerDetail> {
                     )),
                     Tab(
                         child: Padding(
-                      padding: const EdgeInsets.only(left: 10, right: 10),
+                      padding: const EdgeInsets.only(left: 13, right: 13),
                       child: Text(
                         Translations.of(context)
                             .text('f_customer_contracts_title'),
@@ -70,7 +79,7 @@ class CustomerState extends State<CustomerDetail> {
                     )),
                     Tab(
                         child: Padding(
-                      padding: const EdgeInsets.only(left: 10, right: 10),
+                      padding: const EdgeInsets.only(left: 13, right: 13),
                       child: Text(
                         Translations.of(context)
                             .text('f_customer_guarantees_title'),
@@ -83,26 +92,48 @@ class CustomerState extends State<CustomerDetail> {
             ],
           ),
         ),
-        body: Stack(
-          children: <Widget>[
-            Container(
-              decoration: new BoxDecoration(
-                image: new DecorationImage(
-                  image: new AssetImage("assets/new_backgound.jpeg"),
-                  fit: BoxFit.fill,
-                ),
+        body: listMenus.contains('23')
+            ? Stack(
+                children: <Widget>[
+                  Container(
+                    decoration: new BoxDecoration(
+                      image: new DecorationImage(
+                        image: new AssetImage("assets/new_backgound.jpeg"),
+                        fit: BoxFit.fill,
+                      ),
+                    ),
+                  ),
+                  TabBarView(
+                    children: <Widget>[
+                      CustomersTabDetail(data, idCust),
+                      ContractDetailSales(data: data, idCust: idCust),
+                      PaymentDetailSales(data: data, idCust: idCust)
+                    ],
+                  ),
+                ],
+              )
+            : Stack(
+                children: <Widget>[
+                  Container(
+                    decoration: new BoxDecoration(
+                      image: new DecorationImage(
+                        image: new AssetImage("assets/new_backgound.jpeg"),
+                        fit: BoxFit.fill,
+                      ),
+                    ),
+                  ),
+                  Center(child: Text('SILAHKAN UPGRADE PRODUK ANDA'))
+                ],
               ),
-            ),
-            TabBarView(
-              children: <Widget>[
-                CustomersTabDetail(data, idCust),
-                ContractDetailSales(data: data, idCust: idCust),
-                PaymentDetailSales(data: data, idCust: idCust)
-              ],
-            ),
-          ],
-        ),
       ),
     );
+  }
+
+  getCred(BuildContext context) async {
+    String listMenusString = await storageCache.read(key: 'list_menu') ?? "";
+
+    setState(() {
+      listMenus = listMenusString.split(',');
+    });
   }
 }

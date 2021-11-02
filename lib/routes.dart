@@ -4,6 +4,7 @@ import 'package:pgn_mobile/screens/cm_visit/cm_visit.dart';
 import 'package:pgn_mobile/screens/cm_visit/cm_visit_form.dart';
 import 'package:pgn_mobile/screens/cmm/cmm.dart';
 import 'package:pgn_mobile/screens/cmm/cmm_form.dart';
+import 'package:pgn_mobile/screens/customer_payment_confirmation/customer_payment_confirmation.dart';
 import 'package:pgn_mobile/screens/dashboard/dashboard.dart';
 import 'package:pgn_mobile/screens/gas_station/gas_station.dart';
 import 'package:pgn_mobile/screens/installation_inspection/installation_inspection.dart';
@@ -11,7 +12,10 @@ import 'package:pgn_mobile/screens/installation_inspection/installation_inspecti
 import 'package:pgn_mobile/screens/invoice_customer_residential/payment.dart';
 import 'package:pgn_mobile/screens/login/login.dart';
 import 'package:pgn_mobile/screens/login/login_revamp.dart';
+import 'package:pgn_mobile/screens/mng_payment_confirmation/mng_payment_confirmation.dart';
 import 'package:pgn_mobile/screens/progress_subscriptions/progress_subscriptions.dart';
+import 'package:pgn_mobile/screens/login/login_change_numb.dart';
+import 'package:pgn_mobile/screens/progress_subscriptions/widgets/progress_subs_detail.dart';
 import 'package:pgn_mobile/splash_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:pgn_mobile/services/register_residential.dart';
@@ -62,6 +66,8 @@ class FirstScreen extends StatefulWidget {
 class _MyFirstState extends State<FirstScreen> {
   var _routes = {
     '/login': (context) => LoginRevamp(),
+    '/login': (context) => Login(),
+    '/loginchangenumb': (context) => LoginChangeNumb(),
     '/otp': (context) => OTPForm(),
     '/dashboard': (context) => Dashboard(),
     '/gasStation': (context) => GasStation(),
@@ -84,7 +90,10 @@ class _MyFirstState extends State<FirstScreen> {
     '/subscriptionProgress': (context) => ProgressSubscriptions(),
     '/installationInspectionDetail': (context) =>
         InstallationInspectionDetail(),
-    '/payment': (context) => Payment()
+    '/payment': (context) => Payment(),
+    '/subsProgressDetail': (context) => ProgressSubsDetail(),
+    '/paymentConfirmation': (context) => CustomerPaymentConfirmation(),
+    '/paymentConfirmationMng': (context) => MngPaymentConf(),
   };
 
   SpecificLocalizationDelegate _localeOverrideDelegate;

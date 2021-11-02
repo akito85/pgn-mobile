@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:intl/intl.dart';
+import 'package:pgn_mobile/models/payment_plan_model.dart';
+import 'package:pgn_mobile/models/url_cons.dart';
 import 'package:pgn_mobile/services/app_localizations.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
@@ -24,19 +28,35 @@ class PaymentPlanDetailState extends State<PaymentPlanDetail> {
           backgroundColor: Colors.white,
           elevation: 0.0,
           title: Text(
-            "Payment Plan",
+            "Payment Plan Detail",
             style: TextStyle(
               color: Colors.black,
             ),
           )),
-      body:
-          _buildContent(context, getPaymentPlanDetail(context, paymentPlanID)),
+      body: FutureBuilder<DetaiPaymentPlan>(
+          future: getPaymentPlanDetail(context, paymentPlanID),
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) return LinearProgressIndicator();
+            return ListView.builder(
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              itemCount: 1,
+              itemBuilder: (context, i) {
+                return i < 1
+                    ? _buildRow(snapshot.data.dataDetailPayment)
+                    : SizedBox(
+                        height: 10.0,
+                      );
+              },
+            );
+          }),
+      // _buildContent(context, getPaymentPlanDetail(context, paymentPlanID)),
     );
   }
 
   Widget _buildContent(
-      BuildContext context, Future<CustomerInvoice> getInvoiceData) {
-    return FutureBuilder<CustomerInvoice>(
+      BuildContext context, Future<DetaiPaymentPlan> getInvoiceData) {
+    return FutureBuilder<DetaiPaymentPlan>(
         future: getInvoiceData,
         builder: (context, snapshot) {
           return ListView.builder(
@@ -45,7 +65,7 @@ class PaymentPlanDetailState extends State<PaymentPlanDetail> {
             itemCount: 1,
             itemBuilder: (context, i) {
               return i < 1
-                  ? _buildRow(snapshot.data.data[0])
+                  ? _buildRow(snapshot.data.dataDetailPayment)
                   : SizedBox(
                       height: 10.0,
                     );
@@ -54,7 +74,13 @@ class PaymentPlanDetailState extends State<PaymentPlanDetail> {
         });
   }
 
-  Widget _buildRow(DataCustInvoice data) {
+  Widget _buildRow(DataDetailPayment data) {
+    String formatDatePaymentDate =
+        DateFormat("dd MMMM yyy").format(DateTime.parse(data.paymentDate));
+    String formatDateDueDate = DateFormat("dd MMMM yyy")
+        .format(DateTime.parse(data.invoicePP.dueDate));
+    String formatDateUsagePeriod = DateFormat("MMMM yyy")
+        .format(DateTime.parse(data.invoicePP.usagePeriod));
     return Container(
       margin: EdgeInsets.only(left: 10, right: 10),
       child: Column(
@@ -111,7 +137,7 @@ class PaymentPlanDetailState extends State<PaymentPlanDetail> {
                       child: Container(
                         margin: EdgeInsets.only(left: 5.0, top: 20.0),
                         child: Text(
-                          data.minUsage.display ?? "-",
+                          formatDateUsagePeriod ?? "-",
                           style: TextStyle(
                               fontSize: 15.0,
                               fontWeight: FontWeight.w400,
@@ -149,7 +175,7 @@ class PaymentPlanDetailState extends State<PaymentPlanDetail> {
                       child: Container(
                         margin: EdgeInsets.only(left: 5.0, top: 10.0),
                         child: Text(
-                          data.maxUsage.display ?? "-",
+                          'USD ${data.invoicePP.totalBilingUSD}' ?? "-",
                           style: TextStyle(
                               fontSize: 15.0,
                               fontWeight: FontWeight.w400,
@@ -187,7 +213,7 @@ class PaymentPlanDetailState extends State<PaymentPlanDetail> {
                       child: Container(
                         margin: EdgeInsets.only(left: 5.0, top: 10.0),
                         child: Text(
-                          data.usagePeriod.display ?? "-",
+                          formatDateDueDate ?? "-",
                           style: TextStyle(
                               fontSize: 15.0,
                               fontWeight: FontWeight.w400,
@@ -228,7 +254,7 @@ class PaymentPlanDetailState extends State<PaymentPlanDetail> {
                         margin:
                             EdgeInsets.only(left: 5.0, top: 10.0, bottom: 15),
                         child: Text(
-                          data.invoicePeriod.display ?? "-",
+                          data.invoicePP.idInvoice ?? "-",
                           style: TextStyle(
                               fontSize: 15.0,
                               fontWeight: FontWeight.w400,
@@ -294,7 +320,7 @@ class PaymentPlanDetailState extends State<PaymentPlanDetail> {
                       child: Container(
                         margin: EdgeInsets.only(left: 5.0, top: 20.0),
                         child: Text(
-                          data.minUsage.display ?? "-",
+                          'USD ${data.paymentUsd}' ?? "-",
                           style: TextStyle(
                               fontSize: 15.0,
                               fontWeight: FontWeight.w400,
@@ -332,7 +358,7 @@ class PaymentPlanDetailState extends State<PaymentPlanDetail> {
                       child: Container(
                         margin: EdgeInsets.only(left: 5.0, top: 10.0),
                         child: Text(
-                          data.maxUsage.display ?? "-",
+                          data.dataVirtualAccount.bank.bankName ?? "-",
                           style: TextStyle(
                               fontSize: 15.0,
                               fontWeight: FontWeight.w400,
@@ -370,7 +396,7 @@ class PaymentPlanDetailState extends State<PaymentPlanDetail> {
                       child: Container(
                         margin: EdgeInsets.only(left: 5.0, top: 10.0),
                         child: Text(
-                          data.usagePeriod.display ?? "-",
+                          data.dataVirtualAccount.number ?? "-",
                           style: TextStyle(
                               fontSize: 15.0,
                               fontWeight: FontWeight.w400,
@@ -411,7 +437,7 @@ class PaymentPlanDetailState extends State<PaymentPlanDetail> {
                         margin:
                             EdgeInsets.only(left: 5.0, top: 10.0, bottom: 15),
                         child: Text(
-                          data.invoicePeriod.display ?? "-",
+                          formatDatePaymentDate ?? "-",
                           style: TextStyle(
                               fontSize: 15.0,
                               fontWeight: FontWeight.w400,
@@ -477,7 +503,7 @@ class PaymentPlanDetailState extends State<PaymentPlanDetail> {
                       child: Container(
                         margin: EdgeInsets.only(left: 5.0, top: 20.0),
                         child: Text(
-                          data.minUsage.display ?? "-",
+                          data.picInfo.namePic ?? "-",
                           style: TextStyle(
                               fontSize: 15.0,
                               fontWeight: FontWeight.w400,
@@ -515,7 +541,7 @@ class PaymentPlanDetailState extends State<PaymentPlanDetail> {
                       child: Container(
                         margin: EdgeInsets.only(left: 5.0, top: 10.0),
                         child: Text(
-                          data.maxUsage.display ?? "-",
+                          data.picInfo.emailPic ?? "-",
                           style: TextStyle(
                               fontSize: 15.0,
                               fontWeight: FontWeight.w400,
@@ -556,7 +582,7 @@ class PaymentPlanDetailState extends State<PaymentPlanDetail> {
                         margin:
                             EdgeInsets.only(left: 5.0, top: 10.0, bottom: 15),
                         child: Text(
-                          data.invoicePeriod.display ?? "-",
+                          data.picInfo.phonePic ?? "-",
                           style: TextStyle(
                               fontSize: 15.0,
                               fontWeight: FontWeight.w400,
@@ -575,16 +601,17 @@ class PaymentPlanDetailState extends State<PaymentPlanDetail> {
   }
 }
 
-Future<CustomerInvoice> getPaymentPlanDetail(
+Future<DetaiPaymentPlan> getPaymentPlanDetail(
     BuildContext context, String paymentPlanID) async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  String accessToken = prefs.getString('access_token');
-  var responseCustomerInvoice = await http
-      .get('https://api-mobile.pgn.co.id/v2/customers/me/invoices', headers: {
+  final storageCache = FlutterSecureStorage();
+  String accessToken = await storageCache.read(key: 'access_token');
+  var responseDetailPayment = await http
+      .get('${UrlCons.mainProdUrl}payment-plans/$paymentPlanID', headers: {
     'Content-Type': 'application/json',
     'Authorization': 'Bearer $accessToken'
   });
-  CustomerInvoice _customerInvoice =
-      CustomerInvoice.fromJson(json.decode(responseCustomerInvoice.body));
-  return _customerInvoice;
+  print('DATA DETAIL ${accessToken}');
+  DetaiPaymentPlan _detailPayment =
+      DetaiPaymentPlan.fromJson(json.decode(responseDetailPayment.body));
+  return _detailPayment;
 }

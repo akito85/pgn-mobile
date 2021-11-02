@@ -8,7 +8,6 @@ import 'dart:convert';
 import 'package:flutter/rendering.dart';
 import 'package:pgn_mobile/models/url_cons.dart';
 import 'package:pgn_mobile/services/app_localizations.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:pgn_mobile/models/top_usage_detail_model.dart';
 import 'package:pgn_mobile/screens/usage_detail/widgets/usage_detail_detail.dart';
 
@@ -324,6 +323,7 @@ Future<TopUsageDetail> fetchPost(BuildContext context) async {
   final storageCache = FlutterSecureStorage();
   String accessToken = await storageCache.read(key: 'access_token');
   String lang = await storageCache.read(key: 'lang');
+  print('ACCESS TOKEN 2: $accessToken');
   var responseTopUsage =
       await http.get('${UrlCons.mainProdUrl}report/top-gain-usage', headers: {
     'Content-Type': 'application/json',

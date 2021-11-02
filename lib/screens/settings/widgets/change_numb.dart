@@ -7,23 +7,30 @@ import 'package:pgn_mobile/models/auth_model.dart';
 import 'package:pgn_mobile/models/url_cons.dart';
 import 'package:pgn_mobile/screens/otp/otp_change_numb.dart';
 import 'package:pgn_mobile/services/app_localizations.dart';
-import 'package:provider/provider.dart';
-import 'package:pgn_mobile/services/language.dart';
+
 import 'package:http/http.dart' as http;
 import 'dart:async';
 
 class ChangeNumb extends StatefulWidget {
+  final String desc;
+  final String btn;
+  ChangeNumb({this.btn, this.desc});
   @override
-  ChangeNumbState createState() => ChangeNumbState();
+  ChangeNumbState createState() => ChangeNumbState(btn: btn, desc: desc);
 }
 
 class ChangeNumbState extends State<ChangeNumb> {
+  final String desc;
+  final String btn;
+  ChangeNumbState({this.btn, this.desc});
   TextEditingController initialLoc = TextEditingController();
   TextEditingController phoneNumbCtrl = TextEditingController();
-  @override
+  bool btnChange = true;
+  bool visible = false;
+
   Widget build(BuildContext context) {
-    final _lang = Provider.of<Language>(context);
     initialLoc.text = '+62';
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -42,9 +49,7 @@ class ChangeNumbState extends State<ChangeNumb> {
             Container(
               padding: EdgeInsets.only(left: 20.0, right: 20.0, top: 15.0),
               child: Text(
-                Translations.of(context)
-                        .text('ff_change_number_tv_instruction_desc') ??
-                    '',
+                this.desc,
                 style: TextStyle(fontSize: 22),
                 textAlign: TextAlign.left,
               ),
@@ -82,7 +87,9 @@ class ChangeNumbState extends State<ChangeNumb> {
                 ],
               ),
             ),
-            Container(
+            Visibility(
+              visible: btnChange,
+              child: Container(
                 height: 45.0,
                 margin: EdgeInsets.fromLTRB(20.0, 30.0, 20.0, 0.0),
                 decoration: BoxDecoration(
@@ -92,16 +99,32 @@ class ChangeNumbState extends State<ChangeNumb> {
                 child: MaterialButton(
                   minWidth: MediaQuery.of(context).size.width,
                   child: Text(
-                    Translations.of(context)
-                            .text('ff_change_number_bt_change') ??
-                        '',
+                    this.btn,
                     style: TextStyle(
                       color: Colors.white,
                     ),
                   ),
                   onPressed: () {
+                    setState(() {
+                      btnChange = false;
+                      visible = true;
+                    });
                     chagePhoneNumb(context);
                   },
+                ),
+              ),
+            ),
+            Visibility(
+                maintainSize: true,
+                maintainAnimation: true,
+                maintainState: true,
+                visible: visible,
+                child: Column(
+                  children: <Widget>[
+                    Container(
+                        margin: EdgeInsets.only(top: 20, bottom: 30),
+                        child: CircularProgressIndicator())
+                  ],
                 )),
           ],
         ),
@@ -137,6 +160,10 @@ class ChangeNumbState extends State<ChangeNumb> {
             ),
           ));
     } else {
+      setState(() {
+        btnChange = true;
+        visible = false;
+      });
       showToast(postOTPChangePass.message);
     }
   }

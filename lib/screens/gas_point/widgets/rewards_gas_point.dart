@@ -274,7 +274,7 @@ class _RewardsGasPointState extends State<RewardsGasPoint> {
     return Dialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
       child: Container(
-        height: 375,
+        height: 325,
         padding: EdgeInsets.only(left: 16, right: 16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -430,22 +430,6 @@ class _RewardsGasPointState extends State<RewardsGasPoint> {
               ],
             ),
             SizedBox(height: 20),
-            Center(
-              child: Text(
-                'By clicking submit you are agreeing to the',
-                style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400),
-              ),
-            ),
-            SizedBox(height: 5),
-            Center(
-              child: Text(
-                'Terms and Conditions',
-                style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFF427CEF)),
-              ),
-            ),
           ],
         ),
       ),

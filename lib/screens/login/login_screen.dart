@@ -3,6 +3,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:pgn_mobile/models/auth_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:pgn_mobile/models/url_cons.dart';
+import 'package:pgn_mobile/screens/otp/otp.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'package:provider/provider.dart';
@@ -252,16 +253,24 @@ class LoginScreenState extends State<LoginScreen> {
                           ),
                           onPressed: () {
                             password = 'corp.PGN';
-                            final encrypted = encrypter
-                                .encrypt(passwordController.text, iv: iv);
-                            print('PASSWORD : ${encrypted.base64}');
-                            setState(() {
-                              visible = true;
-                              btnVisible = false;
-                            });
 
-                            fetchPost(context, encrypted.base64,
-                                usernameController.text);
+                            if (usernameController.text == '' &&
+                                passwordController.text == '') {
+                              showToast(
+                                Translations.of(context)
+                                    .text('field_input_allert'),
+                              );
+                            } else {
+                              final encrypted = encrypter
+                                  .encrypt(passwordController.text, iv: iv);
+                              print('PASSWORD : ${encrypted.base64}');
+                              setState(() {
+                                visible = true;
+                                btnVisible = false;
+                              });
+                              fetchPost(context, encrypted.base64,
+                                  usernameController.text);
+                            }
                           },
                         )),
                   ),
@@ -350,7 +359,6 @@ class LoginScreenState extends State<LoginScreen> {
         fcmToken = await _getFCMToken();
       });
 
-      // SharedPreferences prefs = await SharedPreferences.getInstance();
       setState(() {
         numbPhone = _auth.user.userMobilePhone;
       });
@@ -366,12 +374,22 @@ class LoginScreenState extends State<LoginScreen> {
       await storageCache.write(
           key: 'request_code', value: _auth.verificationStatus.requestCode);
       await storageCache.write(key: 'access_token', value: _auth.accessToken);
-      if (_auth.products != null) {
-        await storageCache.write(
-            key: 'products',
-            value: _auth.products.length != 0 ? _auth.products[0].name : '-');
+      if (_auth.product != null) {
+        await storageCache.write(key: 'products', value: _auth.product);
+      } else {
+        await storageCache.write(key: 'products', value: '-');
       }
-
+      if (_auth.menus != null) {
+        List<String> _listMenus = [];
+        _auth.menus.forEach((i) {
+          _listMenus.add(i.id.toString());
+        });
+        String listMenuString = _listMenus.join(',');
+        print('HASIL MENU LIST TO STRING $listMenuString');
+        await storageCache.write(key: 'list_menu', value: listMenuString);
+      } else {
+        await storageCache.write(key: 'list_menu', value: '-');
+      }
       if (_auth.user.userType == 2 && _auth.user.userGroupId == "11") {
         // print('1. MASUK KE SINI ${_auth.customer.custName}');
 
@@ -650,6 +668,14 @@ class LoginScreenState extends State<LoginScreen> {
           await storageCache.write(key: 'auth_status', value: 'Login');
           Navigator.pop(context);
           Navigator.pushReplacementNamed(context, '/dashboard');
+        } else if (_auth.verificationStatus.nextAction ==
+            'register_mobile_phone') {
+          await storageCache.write(key: 'auth_status', value: 'Logout');
+          Navigator.pushReplacementNamed(
+            context,
+            '/loginchangenumb',
+            arguments: numbPhone,
+          );
         } else {
           await storageCache.write(key: 'auth_status', value: 'Logout');
           Navigator.pushReplacementNamed(

@@ -19,9 +19,11 @@ class GasPoint extends StatefulWidget {
 class _GasPointState extends State<GasPoint> with TickerProviderStateMixin {
   TabController _tabController;
   int selectedIndex = 0;
+  List<String> listMenus = [];
+  final storageCache = new FlutterSecureStorage();
   void initState() {
     super.initState();
-
+    getCred(context);
     _tabController = new TabController(vsync: this, length: 5, initialIndex: 0);
     _tabController.addListener(() {
       setState(() {
@@ -30,105 +32,114 @@ class _GasPointState extends State<GasPoint> with TickerProviderStateMixin {
     });
   }
 
+//ID MENU RTPK GAS Point 12
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 5,
-      child: Scaffold(
-        backgroundColor: Colors.white,
-        appBar: PreferredSize(
-          preferredSize: Size.fromHeight(kToolbarHeight),
-          child: Container(
-            margin: EdgeInsets.only(left: 18, right: 18),
-            decoration: BoxDecoration(
-                border: Border(
-                    bottom: BorderSide(color: Color(0xFFF4F4F4), width: 2))),
-            child: TabBar(
-              controller: _tabController,
-              isScrollable: true,
-              labelColor: Color(0xFF4578EF),
-              labelStyle: TextStyle(),
-              indicatorColor: Color(0xFFADADAD),
-              unselectedLabelColor: Color(0xFFADADAD),
-              indicator: UnderlineTabIndicator(
-                borderSide: BorderSide(
-                  width: 3,
-                  color: Color(0xFF4578EF),
-                ),
-                insets: EdgeInsets.only(
-                  left: 0,
-                  right: 25,
-                ),
-              ),
-              labelPadding: EdgeInsets.only(left: 0, right: 25),
-              onTap: (index) {
-                setState(() {
-                  selectedIndex = index;
-                  // _tabController.index = index;
-                });
-              },
-              tabs: <Widget>[
-                Tab(
-                    child: Align(
-                        alignment: Alignment.centerLeft, child: Text('Card'))),
-                Tab(
-                    child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text('Rewards'))),
-                Tab(
-                    child: Align(
-                        alignment: Alignment.centerLeft, child: Text('Point'))),
-                Tab(
-                    child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text('Redeem'))),
-                Tab(
-                    child: Align(
-                        alignment: Alignment.centerLeft, child: Text('T&C'))),
-              ],
-            ),
-          ),
-        ),
-        body: Stack(
-          children: [
-            TabBarView(controller: _tabController, children: [
-              buildCardGasPoint(context),
-              RewardsGasPoint(),
-              PointsGasPoint(),
-              RedeemGasPoint(),
-              TandCGasPoint()
-            ]),
-            selectedIndex == 0
-                ? Positioned(
-                    bottom: 10,
-                    left: 18,
-                    right: 18,
-                    child: Container(
-                      height: 50.0,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(14.0),
-                        color: Color(0xFF427CEF),
+      child: listMenus.contains('12')
+          ? Scaffold(
+              backgroundColor: Colors.white,
+              appBar: PreferredSize(
+                preferredSize: Size.fromHeight(kToolbarHeight),
+                child: Container(
+                  margin: EdgeInsets.only(left: 18, right: 18),
+                  decoration: BoxDecoration(
+                      border: Border(
+                          bottom:
+                              BorderSide(color: Color(0xFFF4F4F4), width: 2))),
+                  child: TabBar(
+                    controller: _tabController,
+                    isScrollable: true,
+                    labelColor: Color(0xFF4578EF),
+                    labelStyle: TextStyle(),
+                    indicatorColor: Color(0xFFADADAD),
+                    unselectedLabelColor: Color(0xFFADADAD),
+                    indicator: UnderlineTabIndicator(
+                      borderSide: BorderSide(
+                        width: 3,
+                        color: Color(0xFF4578EF),
                       ),
-                      child: MaterialButton(
-                        minWidth: MediaQuery.of(context).size.width,
-                        child: Text(
-                          'Redeem Point',
-                          style: TextStyle(
-                            color: Colors.white,
-                          ),
-                        ),
-                        onPressed: () {
-                          setState(() {
-                            _tabController.index = 1;
-                          });
-                        },
+                      insets: EdgeInsets.only(
+                        left: 0,
+                        right: 25,
                       ),
                     ),
-                  )
-                : SizedBox(),
-          ],
-        ),
-      ),
+                    labelPadding: EdgeInsets.only(left: 0, right: 25),
+                    onTap: (index) {
+                      setState(() {
+                        selectedIndex = index;
+                        // _tabController.index = index;
+                      });
+                    },
+                    tabs: <Widget>[
+                      Tab(
+                          child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text('Card'))),
+                      Tab(
+                          child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text('Rewards'))),
+                      Tab(
+                          child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text('Point'))),
+                      Tab(
+                          child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text('Redeem'))),
+                      Tab(
+                          child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text('T&C'))),
+                    ],
+                  ),
+                ),
+              ),
+              body: Stack(
+                children: [
+                  TabBarView(controller: _tabController, children: [
+                    buildCardGasPoint(context),
+                    RewardsGasPoint(),
+                    PointsGasPoint(),
+                    RedeemGasPoint(),
+                    TandCGasPoint()
+                  ]),
+                  selectedIndex == 0
+                      ? Positioned(
+                          bottom: 10,
+                          left: 18,
+                          right: 18,
+                          child: Container(
+                            height: 50.0,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(14.0),
+                              color: Color(0xFF427CEF),
+                            ),
+                            child: MaterialButton(
+                              minWidth: MediaQuery.of(context).size.width,
+                              child: Text(
+                                'Redeem Point',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                ),
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  _tabController.index = 1;
+                                });
+                              },
+                            ),
+                          ),
+                        )
+                      : SizedBox(),
+                ],
+              ),
+            )
+          : Center(
+              child: Text('SILAHKAN UPGRADE PRODUK ANDA'),
+            ),
     );
   }
 
@@ -399,6 +410,14 @@ class _GasPointState extends State<GasPoint> with TickerProviderStateMixin {
         ),
       ],
     );
+  }
+
+  getCred(BuildContext context) async {
+    String listMenusString = await storageCache.read(key: 'list_menu') ?? "";
+
+    setState(() {
+      listMenus = listMenusString.split(',');
+    });
   }
 }
 

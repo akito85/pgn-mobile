@@ -10,7 +10,6 @@ import 'package:intl/intl.dart';
 import 'package:pgn_mobile/models/url_cons.dart';
 import 'package:flutter/painting.dart' as painting;
 import 'package:pgn_mobile/services/app_localizations.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
@@ -416,6 +415,7 @@ Future<ChartUsageDetailMonthly> fetchGetCharMonth(
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $accessToken'
       });
+  print('HASIL CHART MONTHLY : ${responseUsageCharMonth.body}');
   ChartUsageDetailMonthly _getContract = ChartUsageDetailMonthly.fromJson(
       json.decode(responseUsageCharMonth.body));
 

@@ -9,7 +9,6 @@ import 'package:pgn_mobile/models/spbg_model.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:intl/intl.dart';
 import 'package:pgn_mobile/models/url_cons.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
@@ -29,7 +28,6 @@ class HarianTabDetailState extends State<Harian> with TickerProviderStateMixin {
   final String title, idCust;
   DataSpbg data;
   HarianTabDetailState(this.title, this.idCust);
-  TabController _tabController;
   String groupID;
 
   List<LinearSales> inputDataChart(List<UsageDetailChar> data) {
@@ -86,83 +84,35 @@ class HarianTabDetailState extends State<Harian> with TickerProviderStateMixin {
   dynamic storageCache = new FlutterSecureStorage();
   @override
   void initState() {
-    _tabController = new TabController(length: 3, vsync: this, initialIndex: 2);
     getTitleCust();
+    getPeriod();
     super.initState();
   }
 
   void getTitleCust() async {
-    // SharedPreferences prefs = await SharedPreferences.getInstance();
-    // setState(() {
-    //   groupID = prefs.getString('usergroup_id') ?? "";
-    // });
     String titleCusts = await storageCache.read(key: 'usergroup_id') ?? "";
     setState(() {
       groupID = titleCusts;
     });
   }
 
-  Widget build(BuildContext context) {
-    int currentYear = DateTime.now().year;
-    int currentMonth = DateTime.now().month;
-    int month2 = currentMonth - 1;
-    int month3 = currentMonth - 2;
-    String month3S, month2S, currentMonthS;
-    String y = "10";
-    String sNull = "0";
-    if (currentMonth == 2) {
-      int currentYears = DateTime.now().year - 1;
-      // int y1 = 12;
-      // int y2 = 01;
-      currentMonthS = '02';
-      String cal2 = '${currentYears + 1}01';
-      String cal1 = '${currentYears}12';
-      month2S = cal2;
-      month3S = cal1;
-    } else if (currentMonth == 1) {
-      int currentYears = DateTime.now().year - 1;
-      int y1 = 12;
-      int y2 = 11;
-      String cal2 = '$currentYears$y1';
-      String cal1 = '$currentYears$y2';
-      currentMonthS = '01';
-      month2S = cal2;
-      month3S = cal1;
-    } else {
-      currentYear = DateTime.now().year;
+  String periodSelected;
+  List<String> listPeriod = [];
+  String hintPeriod = DateFormat("MMMM yyyy").format(DateTime.now()).toString();
+  void getPeriod() {
+    final now = DateTime.now();
+    final sixMonthAgo = now.subtract(Duration(days: 400));
+    final sixMonthFromNow = DateTime(sixMonthAgo.year, sixMonthAgo.month + 6);
+    DateTime date = sixMonthAgo;
+    hintPeriod = now.toString();
 
-      if (currentMonth < 10) {
-        currentMonthS = '0$currentMonth';
-        print('MASUK SINI KAH : $currentMonthS');
-      } else {
-        currentMonthS = currentMonth.toString();
-      }
-      if (month2 < 10) {
-        month2S = '$currentYear$sNull$month2';
-      } else {
-        month2S = '$currentYear$month2';
-      }
-
-      if (month3 < 10) {
-        month3S = '$currentYear$sNull$month3';
-      } else {
-        month3S = '$currentYear$month3';
-      }
+    while (date.isBefore(sixMonthFromNow)) {
+      listPeriod.add(date.toString());
+      date = DateTime(date.year, date.month + 1);
     }
+  }
 
-    String dateformatCurrent =
-        '${currentYear.toString()}${currentMonthS.toString()}10';
-    String dateformatCurrent2 = '${month2S.toString()}10';
-
-    String dateformatCurrent3 = '${month3S.toString()}10';
-
-    String formatDate =
-        DateFormat("yyyMM").format(DateTime.parse(dateformatCurrent));
-    String formatDate2 =
-        DateFormat("yyyMM").format(DateTime.parse(dateformatCurrent2));
-    String formatDate3 =
-        DateFormat("yyyMM").format(DateTime.parse(dateformatCurrent3));
-    print('INI FORMAT DATE : $formatDate');
+  Widget build(BuildContext context) {
     return ListView(
       children: <Widget>[
         Container(
@@ -195,200 +145,262 @@ class HarianTabDetailState extends State<Harian> with TickerProviderStateMixin {
           ),
         ),
         Container(
-          margin: EdgeInsets.only(top: 30, left: 5, right: 5),
-          height: 400,
-          child: DefaultTabController(
-            length: 3,
-            child: Scaffold(
-              backgroundColor: Colors.white,
-              appBar: PreferredSize(
-                preferredSize: Size.fromHeight(kToolbarHeight),
-                child: Column(
-                  children: <Widget>[
-                    Card(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      margin: EdgeInsets.symmetric(horizontal: 10, vertical: 0),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10.0),
-                          color: Colors.white,
-                        ),
-                        child: TabBar(
-                          controller: _tabController,
-                          labelColor: Colors.white,
-                          indicatorColor: Colors.black,
-                          unselectedLabelColor: Color(0xFF427CEF),
-                          indicator: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: Color(0xFF4578EF),
-                          ),
-                          tabs: [
-                            Tab(
-                                child: Text(
-                                    '${DateFormat("MMMM").format(DateTime.parse(dateformatCurrent3))}')),
-                            Tab(
-                                child: Text(
-                                    '${DateFormat("MMMM").format(DateTime.parse(dateformatCurrent2))}')),
-                            Tab(
-                                child: Text(
-                                    '${DateFormat("MMMM").format(DateTime.parse(dateformatCurrent))}')),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              body: TabBarView(
-                controller: _tabController,
-                children: [
-                  _buildContent(context, formatDate3),
-                  _buildContent(context, formatDate2),
-                  _buildContent(context, formatDate),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildContent(BuildContext context, String title) {
-    return Container(
-      child: Card(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0),
-          ),
-          elevation: 8,
-          margin: EdgeInsets.only(left: 10.0, right: 10.0, top: 10, bottom: 10),
-          child: Column(
-            children: <Widget>[
-              Row(
-                children: <Widget>[
-                  Expanded(
-                    child: Container(
-                      width: 140,
-                      margin: EdgeInsets.only(left: 14.0, top: 18.0),
-                      child: Text(
-                        'Energi (MMBtu)',
+            width: MediaQuery.of(context).size.width,
+            margin: EdgeInsets.only(left: 10, right: 10, top: 30),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(color: Color(0xFF427CEF), width: 2)),
+            child: Padding(
+                padding: EdgeInsets.only(left: 10, right: 8),
+                child: DropdownButton(
+                    hint: Text(
+                        DateFormat("MMMM yyyy")
+                            .format(DateTime.now())
+                            .toString(),
                         style: TextStyle(
-                            fontSize: 13.0,
-                            fontWeight: FontWeight.w400,
-                            color: Colors.grey[600]),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Container(
-                height: 289,
-                child: Padding(
-                  padding: EdgeInsets.only(
-                      left: 14.0, top: 14.0, right: 14.0, bottom: 5),
-                  child: _buildCharContent(
-                      context, fetchGetChar(context, title, idCust), title),
-                ),
-              ),
-            ],
-          )),
+                            color: Color(0xFF455055),
+                            fontSize: 14,
+                            fontWeight: FontWeight.normal)),
+                    dropdownColor: Colors.white,
+                    icon: Icon(Icons.arrow_drop_down_circle_rounded,
+                        color: Color(0xFF427CEF)),
+                    isExpanded: true,
+                    underline: SizedBox(),
+                    style: TextStyle(
+                        color: Color(0xFF455055),
+                        fontSize: 14,
+                        fontWeight: FontWeight.normal),
+                    value: periodSelected,
+                    onChanged: (newValue) {
+                      print('SELECTEDs $newValue');
+                      setState(() {
+                        periodSelected = newValue;
+                      });
+
+                      print('SELECTED $periodSelected');
+                    },
+                    items: listPeriod.map((valueItem) {
+                      DateTime date = DateTime.parse(valueItem);
+                      return DropdownMenuItem(
+                          value: valueItem,
+                          child: Text(
+                              DateFormat("MMMM yyyy").format(date).toString()));
+                    }).toList()))),
+        _buildCharContent(
+            context,
+            fetchGetChar(context,
+                periodSelected != null ? periodSelected : hintPeriod, idCust),
+            periodSelected != null ? periodSelected : hintPeriod),
+      ],
     );
   }
 
   Widget _buildCharContent(BuildContext context,
       Future<ChartUsageDetail> getChartUsageDetail, String period) {
+    print('PERIOD CHANGE $period');
     return FutureBuilder<ChartUsageDetail>(
         future: getChartUsageDetail,
         builder: (context, snapshot) {
           if (!snapshot.hasData)
-            return Column(
-              children: <Widget>[
-                LinearProgressIndicator(),
-              ],
-            );
-          if (snapshot.data.message != null)
-            return Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Container(
-                  alignment: Alignment.center,
-                  child: Image.asset('assets/penggunaan_gas.png'),
-                ),
-                SizedBox(height: 20),
-                Container(
-                  child: Text(
-                    snapshot.data.message,
-                    style: TextStyle(fontSize: 18),
+            return Container(
+              margin: EdgeInsets.only(top: 30, left: 5, right: 5),
+              height: 350,
+              child: Card(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0),
                   ),
-                )
-              ],
-            );
-          return Column(
-            children: <Widget>[
-              ListView.builder(
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                itemCount: 1,
-                itemBuilder: (context, i) {
-                  return i < 1
-                      ? _buildRow(snapshot.data.data)
-                      : SizedBox(
-                          height: 10.0,
-                        );
-                },
-              ),
-              Row(
-                children: <Widget>[
-                  Container(
-                    margin: EdgeInsets.fromLTRB(3.0, 0.0, 0.0, 0.0),
-                    child: CircleAvatar(
-                      radius: 10,
-                      backgroundColor: painting.Color(0xFF4578EF),
-                    ),
-                  ),
-                  Expanded(
-                    child: Container(
-                        margin: EdgeInsets.fromLTRB(5.0, 2.0, 0.0, 0.0),
-                        child: Text(
-                          Translations.of(context)
-                              .text('f_gu_legend_volume_daily'),
-                          style: TextStyle(
-                            fontSize: 10.0,
+                  elevation: 8,
+                  margin: EdgeInsets.only(
+                      left: 10.0, right: 10.0, top: 10, bottom: 10),
+                  child: Column(
+                    children: <Widget>[
+                      Container(
+                        height: 320,
+                        child: Padding(
+                          padding: EdgeInsets.only(
+                              left: 14.0, top: 14.0, right: 14.0, bottom: 5),
+                          child: Column(
+                            children: <Widget>[
+                              LinearProgressIndicator(),
+                            ],
                           ),
-                        )),
+                        ),
+                      ),
+                    ],
+                  )),
+            );
+
+          if (snapshot.data.message != null)
+            return Container(
+              margin: EdgeInsets.only(top: 30, left: 5, right: 5),
+              height: 350,
+              child: Card(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0),
                   ),
-                  InkWell(
-                    child: Container(
-                      height: 30,
-                      width: 80,
-                      alignment: Alignment.center,
-                      margin: EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 0.0),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(15.0),
-                          color: Colors.blue),
-                      child: Text(
-                        Translations.of(context)
-                            .text('f_customer_gas_usage_detail_bt_detail'),
-                        style: TextStyle(
-                            fontSize: 11.0,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white),
+                  elevation: 8,
+                  margin: EdgeInsets.only(
+                      left: 10.0, right: 10.0, top: 10, bottom: 10),
+                  child: Column(
+                    children: <Widget>[
+                      Container(
+                        height: 320,
+                        child: Padding(
+                          padding: EdgeInsets.only(
+                              left: 14.0, top: 14.0, right: 14.0, bottom: 5),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Padding(
+                                padding: EdgeInsets.only(top: 5, bottom: 30),
+                                child: Text(
+                                  DateFormat("MMMM yyyy")
+                                      .format(DateTime.parse(period))
+                                      .toString(),
+                                  textAlign: TextAlign.left,
+                                  style: TextStyle(
+                                    fontSize: 16.0,
+                                    fontWeight: FontWeight.bold,
+                                    color: painting.Color(0xFF4578EF),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(height: 30),
+                              Container(
+                                alignment: Alignment.center,
+                                child: Image.asset('assets/penggunaan_gas.png'),
+                              ),
+                              SizedBox(height: 20),
+                              Container(
+                                alignment: Alignment.center,
+                                child: Text(
+                                  snapshot.data.message,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(fontSize: 18),
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  )),
+            );
+
+          return Container(
+            margin: EdgeInsets.only(top: 30, left: 5, right: 5),
+            height: 350,
+            child: Card(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                elevation: 8,
+                margin: EdgeInsets.only(
+                    left: 10.0, right: 10.0, top: 10, bottom: 10),
+                child: Column(
+                  children: <Widget>[
+                    Container(
+                      height: 320,
+                      child: Padding(
+                        padding: EdgeInsets.only(
+                            left: 14.0, top: 14.0, right: 14.0, bottom: 5),
+                        child: Column(
+                          children: <Widget>[
+                            Row(
+                              children: <Widget>[
+                                Expanded(
+                                  child: Container(
+                                    width: 140,
+                                    margin:
+                                        EdgeInsets.only(left: 14.0, top: 18.0),
+                                    child: Text(
+                                      'Energi (MMBtu)',
+                                      style: TextStyle(
+                                          fontSize: 13.0,
+                                          fontWeight: FontWeight.w400,
+                                          color: Colors.grey[600]),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            ListView.builder(
+                              shrinkWrap: true,
+                              physics: NeverScrollableScrollPhysics(),
+                              itemCount: 1,
+                              itemBuilder: (context, i) {
+                                return i < 1
+                                    ? _buildRow(snapshot.data.data)
+                                    : SizedBox(
+                                        height: 10.0,
+                                      );
+                              },
+                            ),
+                            Row(
+                              children: <Widget>[
+                                Container(
+                                  margin:
+                                      EdgeInsets.fromLTRB(3.0, 0.0, 0.0, 0.0),
+                                  child: CircleAvatar(
+                                    radius: 10,
+                                    backgroundColor: painting.Color(0xFF4578EF),
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Container(
+                                      margin: EdgeInsets.fromLTRB(
+                                          5.0, 2.0, 0.0, 0.0),
+                                      child: Text(
+                                        Translations.of(context)
+                                            .text('f_gu_legend_volume_daily'),
+                                        style: TextStyle(
+                                          fontSize: 10.0,
+                                        ),
+                                      )),
+                                ),
+                                InkWell(
+                                  child: Container(
+                                    height: 30,
+                                    width: 80,
+                                    alignment: Alignment.center,
+                                    margin: EdgeInsets.fromLTRB(
+                                        10.0, 0.0, 0.0, 0.0),
+                                    decoration: BoxDecoration(
+                                        borderRadius:
+                                            BorderRadius.circular(15.0),
+                                        color: Colors.blue),
+                                    child: Text(
+                                      Translations.of(context).text(
+                                          'f_customer_gas_usage_detail_bt_detail'),
+                                      style: TextStyle(
+                                          fontSize: 11.0,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white),
+                                    ),
+                                  ),
+                                  onTap: () {
+                                    print('ini titlenyaaa : $title');
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                HarianDetailCustChart(
+                                                    title: title,
+                                                    period: DateFormat("yyyyMM")
+                                                        .format(DateTime.parse(
+                                                            period))
+                                                        .toString())));
+                                  },
+                                )
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                    onTap: () {
-                      print('ini titlenyaaa : $title');
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => HarianDetailCustChart(
-                                  title: title, period: period)));
-                    },
-                  )
-                ],
-              ),
-            ],
+                  ],
+                )),
           );
         });
   }
@@ -495,22 +507,23 @@ class LinearSalesDateTime {
 }
 
 Future<ChartUsageDetail> fetchGetChar(
-    BuildContext context, String title, String custID) async {
-  // SharedPreferences prefs = await SharedPreferences.getInstance();
-  // String lang = prefs.getString('lang');
-  // String accessToken = prefs.getString('access_token');
+    BuildContext context, String period, String custID) async {
   final storageCache = FlutterSecureStorage();
   String accessToken = await storageCache.read(key: 'access_token');
   String lang = await storageCache.read(key: 'lang');
+  print('PERIOD NYA $period');
+  DateTime date = DateTime.parse(period);
+  String periodDate = DateFormat("yyyyMM").format(date).toString();
   var responseUsageChar = await http.get(
-    '${UrlCons.mainProdUrl}customers/me/gas-usages/daily-chart/$title',
+    '${UrlCons.mainProdUrl}customers/me/gas-usages/daily-chart/$periodDate',
     headers: {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer $accessToken',
       'Accept-Language': lang,
     },
   );
-
+  print('TITLE PERIOD : $period');
+  print('HASIL GET USAGE : ${responseUsageChar.body}');
   ChartUsageDetail _getContract =
       ChartUsageDetail.fromJson(json.decode(responseUsageChar.body));
 

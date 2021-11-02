@@ -27,22 +27,37 @@ class DataCustInvoice {
   String custInvoiceName;
   UsagePeriod usagePeriod;
   InvoicePeriod invoicePeriod;
+  String invoicePeriodS;
+  String usagePeriodS;
   CountedEnergy countedEnergy;
   CountedVolume countedVolume;
   BilledEnergy billedEnergy;
   BilledVolume billedVolume;
   TBillIdr tBillIdr;
+  String tBillIdrS;
   TBillUsd tBillUsd;
   MinUsage minUsage;
   MaxUsage maxUsage;
   PGuaranteeIdr pGuaranteeIdr;
   PGuaranteeUsd pGuaranteeUsd;
+  String pGuaranteeIdrS;
+  String pGuaranteeUsdS;
   int isPaid;
   String type;
   DueDate dueDate;
   String paidDate;
   PaymentStatus paymentStatus;
   PaymentPlanSub paymentPlanSub;
+  String custVolUsage;
+  String arrersIdr;
+  String arrersUsd;
+  String custInvoicePeriod;
+  String denda;
+  String biayaPengaliran;
+  String biayaPemasangan;
+  String biayaMigrasi;
+  String biayaPelayanan;
+  String biayaSms;
 
   DataCustInvoice(
       {this.maxUsage,
@@ -65,36 +80,77 @@ class DataCustInvoice {
       this.tBillIdr,
       this.tBillUsd,
       this.type,
-      this.usagePeriod});
+      this.usagePeriod,
+      this.arrersIdr,
+      this.arrersUsd,
+      this.custInvoicePeriod,
+      this.custVolUsage,
+      this.tBillIdrS,
+      this.invoicePeriodS,
+      this.pGuaranteeIdrS,
+      this.pGuaranteeUsdS,
+      this.usagePeriodS,
+      this.biayaMigrasi,
+      this.biayaPelayanan,
+      this.biayaPemasangan,
+      this.biayaPengaliran,
+      this.biayaSms,
+      this.denda});
 
   factory DataCustInvoice.fromJson(Map<String, dynamic> json) {
-    if (json == null) {
-      return DataCustInvoice();
+    print('INI JSON NYA ${json['type']}');
+    if (json['type'] == 'commercial') {
+      return DataCustInvoice(
+          invoiceId: json['id'],
+          custInvoiceId: json['customer_id'],
+          custInvoiceName: json['customer_name'],
+          usagePeriod: UsagePeriod.fromJson(json['usage_period']),
+          invoicePeriod: InvoicePeriod.fromJson(json['invoice_period']),
+          countedEnergy: CountedEnergy.fromJson(json['counted_energy']),
+          countedVolume: CountedVolume.fromJson(json['counted_volume']),
+          billedEnergy: BilledEnergy.fromJson(json['billed_energy']),
+          billedVolume: BilledVolume.fromJson(json['billed_volume']),
+          tBillIdr: TBillIdr.fromJson(json['total_bill_idr']),
+          tBillUsd: TBillUsd.fromJson(json['total_bill_usd']),
+          minUsage: MinUsage.fromJson(json['min_usage']),
+          maxUsage: MaxUsage.fromJson(json['max_usage']),
+          pGuaranteeIdr: PGuaranteeIdr.fromJson(json['payment_guarantee_idr']),
+          pGuaranteeUsd: PGuaranteeUsd.fromJson(json['payment_guarantee_usd']),
+          isPaid: json['is_paid'],
+          type: json['type'],
+          dueDate: DueDate.fromJson(json['due_date']),
+          paidDate: json['paid_date'],
+          paymentStatus: PaymentStatus.fromJson(json['payment_status']),
+          paymentPlanSub:
+              PaymentPlanSub.fromJson(json['payment_plan_submission']),
+          denda: json['denda'],
+          biayaPengaliran: json['biaya_pengaliran_kembali'],
+          biayaPelayanan: json['biaya_pelayanan'],
+          biayaPemasangan: json['biaya_pemasangan_kembali'],
+          biayaMigrasi: json['biaya_migrasi'],
+          biayaSms: json['biasa_sms']);
     } else {
       return DataCustInvoice(
-        invoiceId: json['id'],
-        custInvoiceId: json['customer_id'],
-        custInvoiceName: json['customer_name'],
-        usagePeriod: UsagePeriod.fromJson(json['usage_period']),
-        invoicePeriod: InvoicePeriod.fromJson(json['invoice_period']),
-        countedEnergy: CountedEnergy.fromJson(json['counted_energy']),
-        countedVolume: CountedVolume.fromJson(json['counted_volume']),
-        billedEnergy: BilledEnergy.fromJson(json['billed_energy']),
-        billedVolume: BilledVolume.fromJson(json['billed_volume']),
-        tBillIdr: TBillIdr.fromJson(json['total_bill_idr']),
-        tBillUsd: TBillUsd.fromJson(json['total_bill_usd']),
-        minUsage: MinUsage.fromJson(json['min_usage']),
-        maxUsage: MaxUsage.fromJson(json['max_usage']),
-        pGuaranteeIdr: PGuaranteeIdr.fromJson(json['payment_guarantee_idr']),
-        pGuaranteeUsd: PGuaranteeUsd.fromJson(json['payment_guarantee_usd']),
-        isPaid: json['is_paid'],
-        type: json['type'],
-        dueDate: DueDate.fromJson(json['due_date']),
-        paidDate: json['paid_date'],
-        paymentStatus: PaymentStatus.fromJson(json['payment_status']),
-        paymentPlanSub:
-            PaymentPlanSub.fromJson(json['payment_plan_submission']),
-      );
+          invoiceId: json['id'],
+          custInvoiceId: json['customer_id'],
+          custInvoiceName: json['customer_name'],
+          custVolUsage: json['volume_usage'],
+          tBillIdrS: json['total_bill_idr'],
+          pGuaranteeIdrS: json['payment_guarantee_idr'],
+          pGuaranteeUsdS: json['payment_guarantee_usd'],
+          arrersIdr: json['arrears_idr'],
+          arrersUsd: json['arrears_usd'],
+          isPaid: json['is_paid'],
+          invoicePeriodS: json['invoice_period'],
+          usagePeriodS: json['usage_period'],
+          custInvoicePeriod: json['custom_invoice_period'],
+          type: json['type'],
+          denda: json['denda'],
+          biayaPengaliran: json['biaya_pengaliran_kembali'],
+          biayaPelayanan: json['biaya_pelayanan'],
+          biayaPemasangan: json['biaya_pemasangan_kembali'],
+          biayaMigrasi: json['biaya_migrasi'],
+          biayaSms: json['biasa_sms']);
     }
   }
 }

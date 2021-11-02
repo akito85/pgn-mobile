@@ -3,10 +3,14 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:pgn_mobile/models/url_cons.dart';
 import 'package:pgn_mobile/screens/cutomer_bill/widgets/bill_detail.dart';
 import 'package:http/http.dart' as http;
+import 'package:pgn_mobile/screens/cutomer_bill/widgets/bill_detail_rtpk.dart';
+import 'package:pgn_mobile/screens/invoice_customer_residential/invoce_customer_residential.dart';
+import 'package:pgn_mobile/screens/otp/otp_register.dart';
 import 'package:pgn_mobile/services/app_localizations.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'dart:async';
 import 'dart:convert';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:pgn_mobile/models/cust_invoice_model.dart';
 import 'package:provider/provider.dart';
 import 'package:pgn_mobile/services/language.dart';
@@ -18,6 +22,8 @@ class CustomerBills extends StatefulWidget {
 
 class CustomerBillsState extends State<CustomerBills> {
   TextEditingController _searchQuery = TextEditingController();
+  bool visible = false;
+  bool btnClick = true;
   @override
   Widget build(BuildContext context) {
     final _lang = Provider.of<Language>(context);
@@ -97,27 +103,55 @@ class CustomerBillsState extends State<CustomerBills> {
                   ),
                 ),
               ),
-              Container(
-                height: 50.0,
-                margin: EdgeInsets.fromLTRB(75.0, 25.0, 75.0, 30.0),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15.0),
-                  color: Color(0xff427CEF),
-                ),
-                child: MaterialButton(
-                  minWidth: MediaQuery.of(context).size.width,
-                  child: Text(
-                    Translations.of(context)
-                        .text('f_household_invoice_form_bt'),
-                    style: TextStyle(
-                      color: Colors.white,
-                    ),
+              Visibility(
+                visible: btnClick,
+                child: Container(
+                  height: 50.0,
+                  margin: EdgeInsets.fromLTRB(75.0, 25.0, 75.0, 30.0),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15.0),
+                    color: Color(0xff427CEF),
                   ),
-                  onPressed: () {
-                    getCustomerInvoice(context, _searchQuery.text);
-                  },
+                  child: MaterialButton(
+                    minWidth: MediaQuery.of(context).size.width,
+                    child: Text(
+                      Translations.of(context)
+                          .text('f_household_invoice_form_bt'),
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        visible = true;
+                        btnClick = false;
+                      });
+                      if (_searchQuery.text.isNotEmpty) {
+                        getCustomerInvoice(context, _searchQuery.text);
+                      } else {
+                        showToast(Translations.of(context)
+                            .text('field_input_allert'));
+                        setState(() {
+                          visible = false;
+                          btnClick = true;
+                        });
+                      }
+                    },
+                  ),
                 ),
               ),
+              Visibility(
+                  maintainSize: true,
+                  maintainAnimation: true,
+                  maintainState: true,
+                  visible: visible,
+                  child: Column(
+                    children: <Widget>[
+                      Container(
+                          margin: EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 30.0),
+                          child: CircularProgressIndicator())
+                    ],
+                  )),
             ],
           ),
         ),
@@ -127,7 +161,6 @@ class CustomerBillsState extends State<CustomerBills> {
 
   Future<CustomerInvoice> getCustomerInvoice(
       BuildContext context, String custID) async {
-
     final storageCache = FlutterSecureStorage();
     String accessToken = await storageCache.read(key: 'access_token');
     String lang = await storageCache.read(key: 'lang');
@@ -140,17 +173,36 @@ class CustomerBillsState extends State<CustomerBills> {
     print('RETURN BODY : ${responseCustomerInvoice.body}');
     CustomerInvoice _customerInvoice =
         CustomerInvoice.fromJson(json.decode(responseCustomerInvoice.body));
-
-    if (_customerInvoice.code == 404) {
-      successAlert(context, "Invoice not found.");
+    // print('TIPENYA : ${_customerInvoice.data[0].type}');
+    if (responseCustomerInvoice.statusCode != 200) {
+      setState(() {
+        visible = false;
+        btnClick = true;
+      });
+      successAlert(context, _customerInvoice.message);
+      print('CUST INVOCE ${responseCustomerInvoice.body}');
     } else if (responseCustomerInvoice.statusCode == 200) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) =>
-              BillDetail(data: _customerInvoice, custID: custID),
-        ),
-      );
+      setState(() {
+        visible = false;
+        btnClick = true;
+      });
+      if (_customerInvoice.data[1].type == 'commercial') {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) =>
+                BillDetail(data: _customerInvoice, custID: custID),
+          ),
+        );
+      } else {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) =>
+                InvoiceRTPK(data: _customerInvoice, custID: custID),
+          ),
+        );
+      }
     }
   }
 

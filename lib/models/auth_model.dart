@@ -8,7 +8,8 @@ class AuthSales {
   String message;
   VerificationStatus verificationStatus;
   Customer customer;
-  List<Products> products;
+  String product;
+  List<Menus> menus;
 
   AuthSales(
       {this.accessToken,
@@ -20,56 +21,63 @@ class AuthSales {
       this.user,
       this.customer,
       this.message,
-      this.products});
+      this.product,
+      this.menus});
 
   factory AuthSales.fromJson(Map<String, dynamic> json) {
     if (json['customer'] != null) {
       print("ISI CUSTOMER DARI MODEL: ${json['customer']}");
       return AuthSales(
-          accessToken: json['access_token'],
-          tokenType: json['token_type'],
-          expiresIn: json['expires_in'],
-          refreashToken: json['refresh_token'],
-          customerId: json['customer_id'],
-          verificationStatus:
-              VerificationStatus.fromJson(json['verification_status']),
-          customer: Customer.fromJson(json['customer']),
-          user: User.fromJson(json['user']),
-          products: parsedJsonProducts(json['product']));
+        accessToken: json['access_token'],
+        tokenType: json['token_type'],
+        expiresIn: json['expires_in'],
+        refreashToken: json['refresh_token'],
+        customerId: json['customer_id'],
+        verificationStatus:
+            VerificationStatus.fromJson(json['verification_status']),
+        customer: Customer.fromJson(json['customer']),
+        user: User.fromJson(json['user']),
+        product: json['product'],
+        menus: parsedJsonMenus(json['menus']),
+      );
     } else if (json['message'] != null) {
       return AuthSales(message: json['message']);
     } else {
       print("Tanpa CUSTOMER");
       print("Customer dari MODEL: ${json['customer']}");
       return AuthSales(
-          accessToken: json['access_token'],
-          tokenType: json['token_type'],
-          expiresIn: json['expires_in'],
-          refreashToken: json['refresh_token'],
-          customerId: json['customer_id'],
-          verificationStatus:
-              VerificationStatus.fromJson(json['verification_status']),
-          user: User.fromJson(json['user']));
+        accessToken: json['access_token'],
+        tokenType: json['token_type'],
+        expiresIn: json['expires_in'],
+        refreashToken: json['refresh_token'],
+        customerId: json['customer_id'],
+        verificationStatus:
+            VerificationStatus.fromJson(json['verification_status']),
+        user: User.fromJson(json['user']),
+        menus: parsedJsonMenus(json['menus']),
+      );
     }
   }
-  static List<Products> parsedJsonProducts(datasJson) {
+
+  static List<Menus> parsedJsonMenus(datasJson) {
     var list = datasJson as List;
-    List<Products> datasProducts =
-        list.map((data) => Products.fromJson(data)).toList();
-    return datasProducts;
+    List<Menus> datasMenus = list.map((data) => Menus.fromJson(data)).toList();
+    return datasMenus;
   }
 }
 
-class Products {
-  String name;
-  Products({this.name});
+class Menus {
+  int id;
 
-  factory Products.fromJson(Map<String, dynamic> json) {
-    return Products(name: json['name']);
+  Menus({this.id});
+
+  factory Menus.fromJson(Map<String, dynamic> json) {
+    return Menus(id: json['id']);
   }
 }
 
 class AuthSalesRegit {
+  String message;
   String accessToken;
   String tokenType;
   int expiresIn;
@@ -78,20 +86,24 @@ class AuthSalesRegit {
   // Customer customer;
 
   AuthSalesRegit(
-      {this.accessToken,
+      {this.message,
+      this.accessToken,
       this.tokenType,
       this.expiresIn,
       this.refreashToken,
       this.customerId});
 
   factory AuthSalesRegit.fromJson(Map<String, dynamic> json) {
-    return AuthSalesRegit(
-      accessToken: json['access_token'],
-      tokenType: json['token_type'],
-      expiresIn: json['expires_in'],
-      refreashToken: json['refresh_token'],
-      customerId: json['customer_id'],
-    );
+    if (json['message'] != null)
+      return AuthSalesRegit(message: json['message']);
+    else
+      return AuthSalesRegit(
+        accessToken: json['access_token'],
+        tokenType: json['token_type'],
+        expiresIn: json['expires_in'],
+        refreashToken: json['refresh_token'],
+        customerId: json['customer_id'],
+      );
   }
 }
 

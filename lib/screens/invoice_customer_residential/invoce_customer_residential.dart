@@ -3,9 +3,7 @@ import 'package:date_format/date_format.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:pgn_mobile/models/url_cons.dart';
 import 'package:pgn_mobile/screens/invoice_customer_residential/widgets/payment_method.dart';
-import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
-import 'package:pgn_mobile/services/user_credientials.dart';
 import 'package:flutter/material.dart';
 
 import 'package:pgn_mobile/services/app_localizations.dart';
@@ -25,15 +23,18 @@ class BillDetailState extends State<InvoiceCustResidential>
     with SingleTickerProviderStateMixin {
   Future<CustomerInvoiceResidential> data;
   String custID;
+
   BillDetailState(this.data, this.custID);
   var prevMonth1, prevMonth2, prevMonth3;
   var currentDate = new DateTime.now();
   TabController _tabController;
-
+  List<String> listMenus = [];
+  final storageCache = new FlutterSecureStorage();
   @override
   void initState() {
     _tabController = new TabController(length: 3, vsync: this, initialIndex: 2);
     super.initState();
+    getCred(context);
   }
 
   Widget build(BuildContext context) {
@@ -113,95 +114,101 @@ class BillDetailState extends State<InvoiceCustResidential>
         DateFormat("yyyMM").format(DateTime.parse(dateformatCurrent2));
     String formatDate3 =
         DateFormat("yyyMM").format(DateTime.parse(dateformatCurrent3));
-
+//ID MENU INOVOICE RTPK 11
     return Scaffold(
-      // backgroundColor: Colors.white,
-      body: Stack(
-        children: <Widget>[
-          DefaultTabController(
-            length: 3,
-            child: Scaffold(
-              backgroundColor: Colors.white,
-              appBar: PreferredSize(
-                preferredSize: Size.fromHeight(kToolbarHeight),
-                child: Column(
-                  children: <Widget>[
-                    Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20.0),
-                        color: Colors.white,
-                      ),
-                      height: 45,
-                      child: TabBar(
-                        controller: _tabController,
-                        isScrollable: true,
-                        indicatorColor: Color(0xff427CEF),
-                        indicatorWeight: 1,
-                        indicatorPadding: EdgeInsets.only(left: 15, right: 15),
-                        labelColor: Colors.white,
-                        unselectedLabelColor: Color(0xff427CEF),
-                        indicator: ShapeDecoration(
-                            color: Color(0xff427CEF),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(15.0),
-                                side: BorderSide(
+      backgroundColor: Colors.white,
+      body: listMenus.contains('11')
+          ? Stack(
+              children: <Widget>[
+                DefaultTabController(
+                  length: 3,
+                  child: Scaffold(
+                    backgroundColor: Colors.white,
+                    appBar: PreferredSize(
+                      preferredSize: Size.fromHeight(kToolbarHeight),
+                      child: Column(
+                        children: <Widget>[
+                          Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20.0),
+                              color: Colors.white,
+                            ),
+                            height: 45,
+                            child: TabBar(
+                              controller: _tabController,
+                              isScrollable: true,
+                              indicatorColor: Color(0xff427CEF),
+                              indicatorWeight: 1,
+                              indicatorPadding:
+                                  EdgeInsets.only(left: 15, right: 15),
+                              labelColor: Colors.white,
+                              unselectedLabelColor: Color(0xff427CEF),
+                              indicator: ShapeDecoration(
                                   color: Color(0xff427CEF),
-                                ))),
-                        tabs: [
-                          Tab(
-                              child: Padding(
-                            padding: const EdgeInsets.all(10.0),
-                            child: Text(
-                              '${DateFormat("MMMM").format(DateTime.parse(dateformatCurrent3))} ${DateFormat("yyy").format(DateTime.parse(dateformatCurrent3))}',
-                              style: TextStyle(fontSize: 15),
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(15.0),
+                                      side: BorderSide(
+                                        color: Color(0xff427CEF),
+                                      ))),
+                              tabs: [
+                                Tab(
+                                    child: Padding(
+                                  padding: const EdgeInsets.all(10.0),
+                                  child: Text(
+                                    '${DateFormat("MMMM").format(DateTime.parse(dateformatCurrent3))} ${DateFormat("yyy").format(DateTime.parse(dateformatCurrent3))}',
+                                    style: TextStyle(fontSize: 15),
+                                  ),
+                                )),
+                                Tab(
+                                    child: Padding(
+                                  padding: const EdgeInsets.all(10.0),
+                                  child: Text(
+                                    '${DateFormat("MMMM").format(DateTime.parse(dateformatCurrent2))} ${DateFormat("yyy").format(DateTime.parse(dateformatCurrent2))}',
+                                    style: TextStyle(fontSize: 15),
+                                  ),
+                                )),
+                                Tab(
+                                    child: Padding(
+                                  padding: const EdgeInsets.all(10.0),
+                                  child: Text(
+                                    '${DateFormat("MMMM").format(DateTime.parse(dateformatCurrent))} ${DateFormat("yyy").format(DateTime.parse(dateformatCurrent))}',
+                                    style: TextStyle(fontSize: 15),
+                                  ),
+                                )),
+                              ],
                             ),
-                          )),
-                          Tab(
-                              child: Padding(
-                            padding: const EdgeInsets.all(10.0),
-                            child: Text(
-                              '${DateFormat("MMMM").format(DateTime.parse(dateformatCurrent2))} ${DateFormat("yyy").format(DateTime.parse(dateformatCurrent2))}',
-                              style: TextStyle(fontSize: 15),
-                            ),
-                          )),
-                          Tab(
-                              child: Padding(
-                            padding: const EdgeInsets.all(10.0),
-                            child: Text(
-                              '${DateFormat("MMMM").format(DateTime.parse(dateformatCurrent))} ${DateFormat("yyy").format(DateTime.parse(dateformatCurrent))}',
-                              style: TextStyle(fontSize: 15),
-                            ),
-                          )),
+                          ),
                         ],
                       ),
                     ),
-                  ],
-                ),
-              ),
-              body: Stack(
-                children: <Widget>[
-                  Container(
-                    decoration: new BoxDecoration(
-                      image: new DecorationImage(
-                        image: new AssetImage("assets/new_backgound.jpeg"),
-                        fit: BoxFit.fill,
-                      ),
+                    body: Stack(
+                      children: <Widget>[
+                        Container(
+                          decoration: new BoxDecoration(
+                            image: new DecorationImage(
+                              image:
+                                  new AssetImage("assets/new_backgound.jpeg"),
+                              fit: BoxFit.fill,
+                            ),
+                          ),
+                        ),
+                        TabBarView(
+                          controller: _tabController,
+                          children: [
+                            _buildContent0(context, formatDate3, custID),
+                            _buildContent1(context, formatDate2, custID),
+                            _buildContent2(context, formatDate, custID),
+                          ],
+                        ),
+                      ],
                     ),
                   ),
-                  TabBarView(
-                    controller: _tabController,
-                    children: [
-                      _buildContent0(context, formatDate3, custID),
-                      _buildContent1(context, formatDate2, custID),
-                      _buildContent2(context, formatDate, custID),
-                    ],
-                  ),
-                ],
-              ),
+                ),
+              ],
+            )
+          : Center(
+              child: Text('SILAHKAN UPGRADE PRODUK ANDA'),
             ),
-          ),
-        ],
-      ),
     );
   }
 
@@ -679,6 +686,238 @@ class BillDetailState extends State<InvoiceCustResidential>
                   children: <Widget>[
                     Container(
                       width: 125,
+                      margin: EdgeInsets.only(left: 20.0, top: 10.0),
+                      child: Text(
+                        Translations.of(context)
+                            .text('f_commercial_invoice_detail_tv_denda'),
+                        style: TextStyle(
+                            fontSize: 15.0,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.grey[600]),
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(top: 10.0, left: 25.0),
+                      child: Text(
+                        ':',
+                        style: TextStyle(
+                            fontSize: 15.0,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.grey[600]),
+                      ),
+                    ),
+                    Expanded(
+                      child: Container(
+                        margin: EdgeInsets.only(left: 5.0, top: 10.0),
+                        child: Text(
+                          data.denda != "" ? data.denda : "-",
+                          style: TextStyle(
+                              fontSize: 15.0,
+                              fontWeight: FontWeight.w400,
+                              color: Colors.grey[600]),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+                Row(
+                  children: <Widget>[
+                    Container(
+                      width: 125,
+                      margin: EdgeInsets.only(left: 20.0, top: 10.0),
+                      child: Text(
+                        Translations.of(context).text(
+                            'f_commercial_invoice_detail_tv_b_pengaliran_kembali'),
+                        style: TextStyle(
+                            fontSize: 15.0,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.grey[600]),
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(top: 10.0, left: 25.0),
+                      child: Text(
+                        ':',
+                        style: TextStyle(
+                            fontSize: 15.0,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.grey[600]),
+                      ),
+                    ),
+                    Expanded(
+                      child: Container(
+                        margin: EdgeInsets.only(left: 5.0, top: 10.0),
+                        child: Text(
+                          data.biayaPengaliran != ""
+                              ? data.biayaPengaliran
+                              : "-",
+                          style: TextStyle(
+                              fontSize: 15.0,
+                              fontWeight: FontWeight.w400,
+                              color: Colors.grey[600]),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+                Row(
+                  children: <Widget>[
+                    Container(
+                      width: 125,
+                      margin: EdgeInsets.only(left: 20.0, top: 10.0),
+                      child: Text(
+                        Translations.of(context).text(
+                            'f_commercial_invoice_detail_tv_b_pemasangan_kembali'),
+                        style: TextStyle(
+                            fontSize: 15.0,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.grey[600]),
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(top: 10.0, left: 25.0),
+                      child: Text(
+                        ':',
+                        style: TextStyle(
+                            fontSize: 15.0,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.grey[600]),
+                      ),
+                    ),
+                    Expanded(
+                      child: Container(
+                        margin: EdgeInsets.only(left: 5.0, top: 10.0),
+                        child: Text(
+                          data.biayaPemasangan != ""
+                              ? data.biayaPemasangan
+                              : "-",
+                          style: TextStyle(
+                              fontSize: 15.0,
+                              fontWeight: FontWeight.w400,
+                              color: Colors.grey[600]),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+                Row(
+                  children: <Widget>[
+                    Container(
+                      width: 125,
+                      margin: EdgeInsets.only(left: 20.0, top: 10.0),
+                      child: Text(
+                        Translations.of(context)
+                            .text('f_commercial_invoice_detail_tv_b_migrasi'),
+                        style: TextStyle(
+                            fontSize: 15.0,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.grey[600]),
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(top: 10.0, left: 25.0),
+                      child: Text(
+                        ':',
+                        style: TextStyle(
+                            fontSize: 15.0,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.grey[600]),
+                      ),
+                    ),
+                    Expanded(
+                      child: Container(
+                        margin: EdgeInsets.only(left: 5.0, top: 10.0),
+                        child: Text(
+                          data.biayaMigrasi != "" ? data.biayaMigrasi : "-",
+                          style: TextStyle(
+                              fontSize: 15.0,
+                              fontWeight: FontWeight.w400,
+                              color: Colors.grey[600]),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+                Row(
+                  children: <Widget>[
+                    Container(
+                      width: 125,
+                      margin: EdgeInsets.only(left: 20.0, top: 10.0),
+                      child: Text(
+                        Translations.of(context)
+                            .text('f_commercial_invoice_detail_tv_b_pelayanan'),
+                        style: TextStyle(
+                            fontSize: 15.0,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.grey[600]),
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(top: 10.0, left: 25.0),
+                      child: Text(
+                        ':',
+                        style: TextStyle(
+                            fontSize: 15.0,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.grey[600]),
+                      ),
+                    ),
+                    Expanded(
+                      child: Container(
+                        margin: EdgeInsets.only(left: 5.0, top: 10.0),
+                        child: Text(
+                          data.biayaPelayanan != "" ? data.biayaPelayanan : "-",
+                          style: TextStyle(
+                              fontSize: 15.0,
+                              fontWeight: FontWeight.w400,
+                              color: Colors.grey[600]),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+                Row(
+                  children: <Widget>[
+                    Container(
+                      width: 125,
+                      margin: EdgeInsets.only(left: 20.0, top: 10.0),
+                      child: Text(
+                        Translations.of(context)
+                            .text('f_commercial_invoice_detail_tv_b_sms'),
+                        style: TextStyle(
+                            fontSize: 15.0,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.grey[600]),
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(top: 10.0, left: 25.0),
+                      child: Text(
+                        ':',
+                        style: TextStyle(
+                            fontSize: 15.0,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.grey[600]),
+                      ),
+                    ),
+                    Expanded(
+                      child: Container(
+                        margin: EdgeInsets.only(left: 5.0, top: 10.0),
+                        child: Text(
+                          data.biayaSms != "" ? data.biayaSms : "-",
+                          style: TextStyle(
+                              fontSize: 15.0,
+                              fontWeight: FontWeight.w400,
+                              color: Colors.grey[600]),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+                Row(
+                  children: <Widget>[
+                    Container(
+                      width: 125,
                       margin:
                           EdgeInsets.only(left: 20.0, top: 10.0, bottom: 20),
                       child: Text(
@@ -931,5 +1170,14 @@ class BillDetailState extends State<InvoiceCustResidential>
         CustomerInvoiceResidential.fromJson(
             json.decode(responseCustomerInvoice.body));
     return _customerInvoice;
+  }
+
+  getCred(BuildContext context) async {
+    String listMenusString = await storageCache.read(key: 'list_menu') ?? "";
+
+    setState(() {
+      listMenus = listMenusString.split(',');
+    });
+    print('HASIL LIST MENU LENGHT = ${listMenus.length}');
   }
 }
