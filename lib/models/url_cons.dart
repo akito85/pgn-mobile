@@ -25,6 +25,8 @@ class UrlCons {
       'https://dev-api-mobile.pgn.co.id/v2/summary/usage-contract-chart/';
   static String getInvoiceResidentialChart =
       "https://dev-api-mobile.pgn.co.id/v2/residence-invoices/";
+  static String getInvoiceRavamp =
+      "https://sandbox.pgn.co.id/api-mobile/PGNCRMCustPaymentRS";
 
   //prod
   // static String getSpbgArea = 'https://api-mobile.pgn.co.id/v2/spbg';

@@ -62,6 +62,7 @@ dependencies:
   # flutter_cupertino_localizations: ^1.0.1
   custom_switch: ^0.0.1
   google_fonts: ^1.1.2
+  path_provider: ^2.0.4
   # webview_flutter: ^0.3.13
 
 dev_dependencies:

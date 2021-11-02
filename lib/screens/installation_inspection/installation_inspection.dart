@@ -5,7 +5,6 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 import 'package:pgn_mobile/models/installation_inspection_list.dart';
-import 'package:pgn_mobile/models/installation_inspection_model.dart';
 import 'package:pgn_mobile/models/url_cons.dart';
 import 'package:pgn_mobile/screens/installation_inspection/installation_inspection_detail.dart';
 
@@ -15,6 +14,8 @@ class InstallationInspection extends StatefulWidget {
 }
 
 class _InstallationInspection extends State<InstallationInspection> {
+  bool loadingIndicator = false;
+  TextEditingController _searchQuery = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,14 +24,92 @@ class _InstallationInspection extends State<InstallationInspection> {
         backgroundColor: Colors.white,
         title: const Text(
           'Installation Inspection',
-          style: TextStyle(color: Colors.black),
+          style: TextStyle(
+              color: Colors.black, fontSize: 14, fontWeight: FontWeight.w600),
         ),
         elevation: 0,
       ),
       body: Stack(
-        children: <Widget>[_buildContent(context, fetchData(context))],
+        children: <Widget>[
+          Container(
+            height: 45,
+            margin: EdgeInsets.fromLTRB(17.0, 10.0, 17.0, 10.0),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            child: Material(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+              elevation: 8,
+              child: TextFormField(
+                keyboardType: TextInputType.text,
+                controller: _searchQuery,
+                decoration: InputDecoration(
+                  labelText: 'Keyword',
+                  labelStyle: TextStyle(
+                      color: Color(0xff427CEF),
+                      fontSize: 15,
+                      fontWeight: FontWeight.w500),
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      Icons.search,
+                      color: Color(0xFF427CEF),
+                    ),
+                    onPressed: () {
+                      if (_searchQuery.text.isNotEmpty) {
+                        fetchData(context);
+                        setState(() {
+                          loadingIndicator = true;
+                        });
+                      } else {
+                        setState(() {
+                          loadingIndicator = true;
+                        });
+                        fetchData(context);
+                      }
+                    },
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(25),
+                      borderSide: BorderSide(color: Colors.white)),
+                  focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(25),
+                      borderSide: BorderSide(color: Colors.white)),
+                ),
+                style: TextStyle(color: Colors.grey, fontSize: 14.0),
+              ),
+            ),
+          ),
+          _buildContent(context, fetchData(context)),
+          Visibility(
+            visible: loadingIndicator,
+            child: Padding(
+              padding: EdgeInsets.only(),
+              child: Center(child: CircularProgressIndicator()),
+            ),
+          ),
+        ],
       ),
     );
+  }
+
+  Future<InstallationInspectionList> fetchData(BuildContext context) async {
+    final storageCache = FlutterSecureStorage();
+    String accessToken = await storageCache.read(key: 'access_token');
+    String lang = await storageCache.read(key: 'lang');
+    var installationInspectionResponse = await http.get(
+        '${UrlCons.mainDevUrl}inspection-installation?search=${_searchQuery.text}',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $accessToken',
+          'Accept-Language': lang
+        });
+    setState(() {
+      loadingIndicator = false;
+    });
+    return InstallationInspectionList.fromJson(
+        json.decode(installationInspectionResponse.body));
   }
 }
 
@@ -41,6 +120,7 @@ Widget _buildContent(
       builder: (context, snapShot) {
         if (!snapShot.hasData) return LinearProgressIndicator();
         return Container(
+          margin: EdgeInsets.only(top: 65),
           child: ListView.builder(
               itemCount: snapShot.data.data.length + 1,
               itemBuilder: (context, int index) {
@@ -109,18 +189,4 @@ Widget _cardState(BuildContext context, InstallationInspections model) {
           ),
         )),
   );
-}
-
-Future<InstallationInspectionList> fetchData(BuildContext context) async {
-  final storageCache = FlutterSecureStorage();
-  String accessToken = await storageCache.read(key: 'access_token');
-  String lang = await storageCache.read(key: 'lang');
-  var installationInspectionResponse =
-      await http.get('${UrlCons.mainDevUrl}inspection-installation', headers: {
-    'Content-Type': 'application/json',
-    'Authorization': 'Bearer $accessToken',
-    'Accept-Language': lang
-  });
-  return InstallationInspectionList.fromJson(
-      json.decode(installationInspectionResponse.body));
 }

@@ -8,7 +8,7 @@ class CmVisitDetailModel {
     if (json['data'] != null) {
       return CmVisitDetailModel(data: CmVisitModels.fromJson(json['data']));
     } else {
-      return CmVisitDetailModel(meta: Meta.fromJson(json['meta']));
+      return CmVisitDetailModel(meta: (json['meta']));
     }
   }
 }
@@ -49,9 +49,7 @@ class CmVisitModels {
   }
 
   static List<String> parseDataImages(dataJson) {
-    List<String> dataString =
-        dataJson.map<String>((dataJson) => List.from(dataJson));
-    return dataString;
+    return new List<String>.from(dataJson);
   }
 }
 

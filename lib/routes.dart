@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pgn_mobile/screens/about_pgn/pgn_services.dart';
 import 'package:pgn_mobile/screens/cm_visit/cm_visit.dart';
 import 'package:pgn_mobile/screens/cm_visit/cm_visit_form.dart';
 import 'package:pgn_mobile/screens/cmm/cmm.dart';
@@ -7,6 +8,7 @@ import 'package:pgn_mobile/screens/dashboard/dashboard.dart';
 import 'package:pgn_mobile/screens/gas_station/gas_station.dart';
 import 'package:pgn_mobile/screens/installation_inspection/installation_inspection.dart';
 import 'package:pgn_mobile/screens/installation_inspection/installation_inspection_detail.dart';
+import 'package:pgn_mobile/screens/invoice_customer_residential/payment.dart';
 import 'package:pgn_mobile/screens/login/login.dart';
 import 'package:pgn_mobile/screens/login/login_revamp.dart';
 import 'package:pgn_mobile/screens/progress_subscriptions/progress_subscriptions.dart';
@@ -77,9 +79,12 @@ class _MyFirstState extends State<FirstScreen> {
     '/usageDetail': (context) => UsageDetail(),
     '/cmVisit': (context) => CMVisit(),
     '/cmVisitForm': (context) => CMVisitForm(),
+    '/pgnServices': (context) => PgnServices(),
     '/installationInspection': (context) => InstallationInspection(),
-    '/installationInspectionDetail': (context) => InstallationInspectionDetail()
     '/subscriptionProgress': (context) => ProgressSubscriptions(),
+    '/installationInspectionDetail': (context) =>
+        InstallationInspectionDetail(),
+    '/payment': (context) => Payment()
   };
 
   SpecificLocalizationDelegate _localeOverrideDelegate;

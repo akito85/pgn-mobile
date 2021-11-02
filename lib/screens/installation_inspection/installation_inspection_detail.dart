@@ -24,22 +24,27 @@ class _InstallationInspectionDetailState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        elevation: 0,
         backgroundColor: Colors.white,
-        title: Text('Installation Inspection',
-            style: TextStyle(
-                color: Colors.black,
-                fontSize: 14,
-                fontWeight: FontWeight.w600)),
-      ),
-      body: SingleChildScrollView(
-        child: Column(children: <Widget>[
-          _fetchData(context, fetchInstallationDetail(context, id))
-        ]),
-      ),
-    );
+        appBar: AppBar(
+          elevation: 0,
+          backgroundColor: Colors.white,
+          title: Text('Installation Inspection',
+              style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600)),
+        ),
+        body: Container(
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height,
+            child: SingleChildScrollView(
+                scrollDirection: Axis.vertical,
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  children: <Widget>[
+                    _fetchData(context, fetchInstallationDetail(context, id))
+                  ],
+                ))));
   }
 
   Widget _fetchData(
@@ -47,13 +52,9 @@ class _InstallationInspectionDetailState
     return FutureBuilder(
         future: model,
         builder: (context, snapshot) {
-          if (!snapshot.hasData) return _buildCircularProgress(context);
+          if (!snapshot.hasData) return LinearProgressIndicator();
           return _buildContent(context, snapshot.data);
         });
-  }
-
-  Widget _buildCircularProgress(BuildContext context) {
-    return Center(child: CircularProgressIndicator());
   }
 
   Widget _buildContent(
@@ -137,7 +138,7 @@ class _InstallationInspectionDetailState
           ),
           _buildDivider(context, 16.0),
           Container(
-            alignment: Alignment.topLeft,
+            margin: EdgeInsets.symmetric(vertical: 20),
             child: Text(
               'General Visual Inspection',
               style: TextStyle(
@@ -147,6 +148,9 @@ class _InstallationInspectionDetailState
             ),
           ),
           ListView.builder(
+              shrinkWrap: true,
+              scrollDirection: Axis.vertical,
+              physics: const NeverScrollableScrollPhysics(),
               itemCount: model.data.inspection.length + 1,
               itemBuilder: (context, i) {
                 return i < model.data.inspection.length
@@ -169,13 +173,16 @@ class _InstallationInspectionDetailState
               context,
               'assets/ic_checkmark.png',
               'Acknowledged by:',
-              model.data.acknowledgeBy,
+              model.data.acknowledgeBy ?? '-',
               'Engineer:',
-              model.data.acknowledgeBy,
+              model.data.acknowledgeBy ?? '-',
               'Date:',
               model.data.acknowledgeDate),
           SizedBox(height: 20),
-          _buildBottomBoxOutlined(context, 'Inspection Remark: FAILED')
+          Visibility(
+              visible: !model.data.remark ? true : false,
+              child:
+                  _buildBottomBoxOutlined(context, 'Inspection Remark: FAILED'))
         ],
       ),
     );
@@ -298,42 +305,17 @@ Widget _buildBottomBoxOutlined(BuildContext context, String title) {
 
 Widget _buildInspectionList(BuildContext context, InspectionModel model) {
   return Container(
-    margin: EdgeInsets.only(top: 20),
     child: Column(children: <Widget>[
       Container(
-          margin: EdgeInsets.only(top: 20),
           decoration: BoxDecoration(
-              color: const Color(0xFFFF0000),
+              color: model.item.isNotEmpty || model.item != null
+                  ? const Color(0xFFFF0000)
+                  : const Color(0xFFF4F4F4),
               borderRadius: BorderRadius.circular(3)),
-          child: Padding(
-              padding: EdgeInsets.symmetric(vertical: 7, horizontal: 16),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Container(
-                    width: 24,
-                    height: 24,
-                    child: _buildSegment(context, model),
-                  ),
-                  SizedBox(width: 8),
-                  Container(
-                      margin: EdgeInsets.only(top: 4),
-                      child: model.segment == 'Leaks' &&
-                              model.segment == 'External Corrosion'
-                          ? Text(model.segment,
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold))
-                          : Text(model.segment,
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold)))
-                ],
-              ))),
+          child: _buildSegment(context, model)),
       Container(
           margin: EdgeInsets.symmetric(vertical: 12),
+          alignment: Alignment.topLeft,
           child: model.item.length != 0
               ? Wrap(
                   spacing: 8,
@@ -380,10 +362,90 @@ Widget _buildInspectionList(BuildContext context, InspectionModel model) {
 }
 
 Widget _buildSegment(BuildContext context, InspectionModel model) {
+  if (model.item.isNotEmpty || model.item != null) {
+    return Padding(
+        padding: EdgeInsets.symmetric(vertical: 7, horizontal: 16),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Container(
+              width: 24,
+              height: 24,
+              child: _buildSegmentWhite(context, model),
+            ),
+            SizedBox(width: 8),
+            Container(
+                margin: EdgeInsets.only(top: 4),
+                child: Text(model.segment,
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold)))
+          ],
+        ));
+  } else {
+    return Padding(
+        padding: EdgeInsets.symmetric(vertical: 7, horizontal: 16),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Container(
+              width: 24,
+              height: 24,
+              child: _buildSegmentBlack(context, model),
+            ),
+            SizedBox(width: 8),
+            Container(
+                margin: EdgeInsets.only(top: 4),
+                child: Text(model.segment,
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold)))
+          ],
+        ));
+  }
+}
+
+Widget _buildSegmentWhite(BuildContext context, InspectionModel model) {
   switch (model.segment) {
     case 'Leaks':
       return ImageIcon(AssetImage('assets/ic_water.png'),
           color: Colors.white, size: 25);
+      break;
+    case 'Misalignment':
+      return ImageIcon(AssetImage('assets/ic_misalignment.png'),
+          color: Colors.white, size: 25);
+      break;
+    case 'Support':
+      return ImageIcon(AssetImage('assets/ic_support.png'),
+          color: Colors.white, size: 25);
+      break;
+    case 'Vibration':
+      return Icon(Icons.waves_outlined, color: Colors.white, size: 24);
+      break;
+    case 'External Corrosion':
+      return ImageIcon(AssetImage('assets/ic_corrosion.png'),
+          color: Colors.white, size: 25);
+      break;
+    case 'Insulation':
+      return ImageIcon(AssetImage('assets/ic_insulation.png'),
+          color: Colors.white, size: 25);
+      break;
+    case 'Other':
+      return ImageIcon(AssetImage('assets/ic_asteriks.png'),
+          color: Colors.white, size: 25);
+      break;
+    default:
+      return SizedBox(height: 10);
+  }
+}
+
+Widget _buildSegmentBlack(BuildContext context, InspectionModel model) {
+  switch (model.segment) {
+    case 'Leaks':
+      return ImageIcon(AssetImage('assets/ic_water.png'),
+          color: Colors.black, size: 25);
       break;
     case 'Misalignment':
       return ImageIcon(AssetImage('assets/ic_misalignment.png'),
@@ -392,6 +454,9 @@ Widget _buildSegment(BuildContext context, InspectionModel model) {
     case 'Support':
       return ImageIcon(AssetImage('assets/ic_support.png'),
           color: Colors.black, size: 25);
+      break;
+    case 'Vibration':
+      return Icon(Icons.waves_outlined, color: Colors.black, size: 24);
       break;
     case 'External Corrosion':
       return ImageIcon(AssetImage('assets/ic_corrosion.png'),
@@ -402,7 +467,7 @@ Widget _buildSegment(BuildContext context, InspectionModel model) {
           color: Colors.black, size: 25);
       break;
     case 'Other':
-      return ImageIcon(AssetImage('assets/ic_other.png'),
+      return ImageIcon(AssetImage('assets/ic_asteriks.png'),
           color: Colors.black, size: 25);
       break;
     default:

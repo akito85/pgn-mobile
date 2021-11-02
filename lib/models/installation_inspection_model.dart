@@ -7,6 +7,7 @@ class InstallationInspectionModel {
   final List<InspectionModel> inspection;
   final String acknowledgeBy;
   final String acknowledgeDate;
+  final bool remark;
 
   InstallationInspectionModel(
       {this.id,
@@ -16,7 +17,8 @@ class InstallationInspectionModel {
       this.summary,
       this.inspection,
       this.acknowledgeBy,
-      this.acknowledgeDate});
+      this.acknowledgeDate,
+      this.remark});
 
   factory InstallationInspectionModel.fromJson(Map<String, dynamic> json) {
     return InstallationInspectionModel(
@@ -27,7 +29,8 @@ class InstallationInspectionModel {
         summary: json['summary'],
         inspection: parseDataJson(json['inspection']),
         acknowledgeBy: json['acknowledge_by'],
-        acknowledgeDate: json['acknowledge_date']);
+        acknowledgeDate: json['acknowledge_date'],
+        remark: json['remark']);
   }
 
   static List<InspectionModel> parseDataJson(data) {

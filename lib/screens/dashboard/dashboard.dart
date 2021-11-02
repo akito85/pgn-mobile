@@ -16,6 +16,7 @@ import 'package:pgn_mobile/models/url_cons.dart';
 import 'package:pgn_mobile/screens/dashboard/dashboard_cust_add.dart';
 import 'package:pgn_mobile/screens/cm_visit/cm_visit.dart';
 import 'package:pgn_mobile/screens/gas_point/gas_point.dart';
+import 'package:pgn_mobile/screens/invoice_customer_residential/payment.dart';
 import 'package:pgn_mobile/screens/otp/otp.dart';
 import 'package:pgn_mobile/screens/invoice_customer_gpik.dart/invoice_customer_gpik.dart';
 import 'package:pgn_mobile/services/app_localizations.dart';
