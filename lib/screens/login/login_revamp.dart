@@ -157,7 +157,7 @@ class LoginRevampState extends State<LoginRevamp> {
                                   ),
                                   onPressed: () {
                                     Provider.of<Language>(context,
-                                            listen: false)
+                                            listen: true)
                                         .lang(
                                       registration: Translations.of(context)
                                           .text('title_bar_register'),

@@ -105,13 +105,16 @@ class DataSwitchCustomerId {
   String message;
   String custName;
   List<Menus> menus;
-  DataSwitchCustomerId({this.custID, this.message, this.custName, this.menus});
+  String product;
+  DataSwitchCustomerId(
+      {this.custID, this.message, this.custName, this.menus, this.product});
 
   factory DataSwitchCustomerId.fromJson(Map<String, dynamic> json) {
     return DataSwitchCustomerId(
       custID: json['customer_id'],
       message: json['message'],
       custName: json['customer_name'],
+      product: json['products'],
       menus: parsedJsonMenus(json['menus']),
     );
   }

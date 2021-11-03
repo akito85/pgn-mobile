@@ -367,12 +367,19 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
               style: painting.TextStyle(color: Colors.black),
             ),
             actions: <Widget>[
-              IconButton(
-                icon: actionIcon,
-                onPressed: () {
+              InkWell(
+                onTap: () {
                   Navigator.push(context,
                       MaterialPageRoute(builder: (context) => Settings()));
                 },
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 10),
+                  child: Image(
+                    image: AssetImage('assets/setting.png'),
+                    height: 28,
+                    width: 28,
+                  ),
+                ),
               ),
             ],
           ),
@@ -629,12 +636,20 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
               style: painting.TextStyle(color: Colors.black),
             ),
             actions: <Widget>[
-              IconButton(
-                  icon: actionIcon,
-                  onPressed: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => Settings()));
-                  }),
+              InkWell(
+                onTap: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => Settings()));
+                },
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 10),
+                  child: Image(
+                    image: AssetImage('assets/setting.png'),
+                    height: 28,
+                    width: 28,
+                  ),
+                ),
+              ),
             ],
           ),
           drawer: Drawer(
@@ -2613,6 +2628,13 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
       await storageCache.write(
           key: 'user_name_cust',
           value: switchCustomerId.dataSwitchCustomerId.custName);
+      if (switchCustomerId.dataSwitchCustomerId.product != null) {
+        await storageCache.write(
+            key: 'products',
+            value: switchCustomerId.dataSwitchCustomerId.product);
+      } else {
+        await storageCache.write(key: 'products', value: '-');
+      }
       if (switchCustomerId.dataSwitchCustomerId.menus != null) {
         List<String> _listMenus = [];
         switchCustomerId.dataSwitchCustomerId.menus.forEach((i) {

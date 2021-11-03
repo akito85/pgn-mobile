@@ -66,7 +66,7 @@ class FirstScreen extends StatefulWidget {
 class _MyFirstState extends State<FirstScreen> {
   var _routes = {
     '/login': (context) => LoginRevamp(),
-    '/login': (context) => Login(),
+    // '/login': (context) => Login(),
     '/loginchangenumb': (context) => LoginChangeNumb(),
     '/otp': (context) => OTPForm(),
     '/dashboard': (context) => Dashboard(),
