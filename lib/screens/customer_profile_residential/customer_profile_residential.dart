@@ -29,7 +29,7 @@ class _MyProfileCustResidentialState extends State<MyProfileCustResidential> {
     addressCtrl.text = widget.data.data.address;
     return Scaffold(
       backgroundColor: Colors.white,
-      body: listMenus.contains('13') && custGroupId != '-'
+      body: custGroupId != '-'
           ? Stack(
               children: <Widget>[
                 Container(

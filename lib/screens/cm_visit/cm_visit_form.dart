@@ -223,7 +223,7 @@ class _CMVisitFormState extends State<CMVisitForm> {
     if (photo3 != "") {
       _createFileFromString3(photo3);
     }
-    fetchPost(context);
+    // fetchPost(context);
     super.initState();
   }
 
@@ -314,111 +314,128 @@ class _CMVisitFormState extends State<CMVisitForm> {
         isVisibleCustomerEmail = false;
         isVisibleReports = false;
       });
-    } else if (valueChoose == "") {
+      print('MASUK SCREEN 1');
+    } else if (valueChoose.isEmpty) {
       setState(() {
         isVisibleVisitType = true;
-        isVisibleDate = false;
-        isVisibleActivity = false;
-        isVisibleActivityDescription = false;
-        isVisibleAddress = false;
-        isVisibleCustomerId = false;
-        isVisibleCustomerName = false;
-        isVisiblePhoneNumber = false;
-        isVisibleCustomerEmail = false;
-        isVisibleReports = false;
+        // isVisibleDate = false;
+        // isVisibleActivity = false;
+        // isVisibleActivityDescription = false;
+        // isVisibleAddress = false;
+        // isVisibleCustomerId = false;
+        // isVisibleCustomerName = false;
+        // isVisiblePhoneNumber = false;
+        // isVisibleCustomerEmail = false;
+        // isVisibleReports = false;
       });
-    } else if (activityChoose == "") {
+      print('MASUK SCREEN 2');
+    } else if (activityChoose.isEmpty) {
       setState(() {
-        isVisibleVisitType = false;
-        isVisibleDate = false;
+        // isVisibleVisitType = false;
+        // isVisibleDate = false;
         isVisibleActivity = true;
-        isVisibleActivityDescription = false;
-        isVisibleAddress = false;
-        isVisibleCustomerId = false;
-        isVisibleCustomerName = false;
-        isVisiblePhoneNumber = false;
-        isVisibleCustomerEmail = false;
-        isVisibleReports = false;
+        // isVisibleActivityDescription = false;
+        // isVisibleAddress = false;
+        // isVisibleCustomerId = false;
+        // isVisibleCustomerName = false;
+        // isVisiblePhoneNumber = false;
+        // isVisibleCustomerEmail = false;
+        // isVisibleReports = false;
       });
-    } else if (activityDescription.text == "") {
+    } else if (activityDescription.text.isEmpty) {
       setState(() {
-        isVisibleVisitType = false;
-        isVisibleDate = false;
-        isVisibleActivity = false;
+        // isVisibleVisitType = false;
+        // isVisibleDate = false;
+        // isVisibleActivity = false;
         isVisibleActivityDescription = true;
-        isVisibleAddress = false;
-        isVisibleCustomerId = false;
-        isVisibleCustomerName = false;
-        isVisiblePhoneNumber = false;
-        isVisibleCustomerEmail = false;
-        isVisibleReports = false;
+        // isVisibleAddress = false;
+        // isVisibleCustomerId = false;
+        // isVisibleCustomerName = false;
+        // isVisiblePhoneNumber = false;
+        // isVisibleCustomerEmail = false;
+        // isVisibleReports = false;
       });
+      print('MASUK SCREEN 3');
     } else if (customerId.text == "") {
       setState(() {
-        isVisibleVisitType = false;
-        isVisibleDate = false;
-        isVisibleActivity = false;
-        isVisibleActivityDescription = false;
-        isVisibleAddress = false;
+        // isVisibleVisitType = false;
+        // isVisibleDate = false;
+        // isVisibleActivity = false;
+        // isVisibleActivityDescription = false;
+        // isVisibleAddress = false;
         isVisibleCustomerId = true;
-        isVisibleCustomerName = false;
-        isVisiblePhoneNumber = false;
-        isVisibleCustomerEmail = false;
-        isVisibleReports = false;
+        // isVisibleCustomerName = false;
+        // isVisiblePhoneNumber = false;
+        // isVisibleCustomerEmail = false;
+        // isVisibleReports = false;
       });
+      print('MASUK SCREEN 4');
     } else if (address.text == "") {
       setState(() {
-        isVisibleVisitType = false;
-        isVisibleDate = false;
-        isVisibleActivity = false;
-        isVisibleActivityDescription = false;
+        // isVisibleVisitType = false;
+        // isVisibleDate = false;
+        // isVisibleActivity = false;
+        // isVisibleActivityDescription = false;
         isVisibleAddress = true;
-        isVisibleCustomerId = false;
-        isVisibleCustomerName = false;
-        isVisiblePhoneNumber = false;
-        isVisibleCustomerEmail = false;
-        isVisibleReports = false;
+        // isVisibleCustomerId = false;
+        // isVisibleCustomerName = false;
+        // isVisiblePhoneNumber = false;
+        // isVisibleCustomerEmail = false;
+        // isVisibleReports = false;
       });
     } else if (phoneNumber.text == "") {
       setState(() {
-        isVisibleVisitType = false;
-        isVisibleDate = false;
-        isVisibleActivity = false;
-        isVisibleActivityDescription = false;
-        isVisibleAddress = false;
-        isVisibleCustomerId = false;
-        isVisibleCustomerName = false;
+        // isVisibleVisitType = false;
+        // isVisibleDate = false;
+        // isVisibleActivity = false;
+        // isVisibleActivityDescription = false;
+        // isVisibleAddress = false;
+        // isVisibleCustomerId = false;
+        // isVisibleCustomerName = false;
         isVisiblePhoneNumber = true;
-        isVisibleCustomerEmail = false;
-        isVisibleReports = false;
+        // isVisibleCustomerEmail = false;
+        // isVisibleReports = false;
       });
+      print('MASUK SCREEN 5');
     } else if (emailAddress.text == "") {
       setState(() {
-        isVisibleVisitType = false;
-        isVisibleDate = false;
-        isVisibleActivity = false;
-        isVisibleActivityDescription = false;
-        isVisibleAddress = false;
-        isVisibleCustomerId = false;
-        isVisibleCustomerName = false;
-        isVisiblePhoneNumber = false;
+        // isVisibleVisitType = false;
+        // isVisibleDate = false;
+        // isVisibleActivity = false;
+        // isVisibleActivityDescription = false;
+        // isVisibleAddress = false;
+        // isVisibleCustomerId = false;
+        // isVisibleCustomerName = false;
+        // isVisiblePhoneNumber = false;
         isVisibleCustomerEmail = true;
-        isVisibleReports = false;
+        // isVisibleReports = false;
       });
     } else if (reports.text == "") {
+      print('MASUK SCREEN 6');
       setState(() {
-        isVisibleVisitType = false;
-        isVisibleDate = false;
-        isVisibleActivity = false;
-        isVisibleActivityDescription = false;
-        isVisibleAddress = false;
-        isVisibleCustomerId = false;
-        isVisibleCustomerName = false;
-        isVisiblePhoneNumber = false;
-        isVisibleCustomerEmail = false;
+        // isVisibleVisitType = false;
+        // isVisibleDate = false;
+        // isVisibleActivity = false;
+        // isVisibleActivityDescription = false;
+        // isVisibleAddress = false;
+        // isVisibleCustomerId = false;
+        // isVisibleCustomerName = false;
+        // isVisiblePhoneNumber = false;
+        // isVisibleCustomerEmail = false;
         isVisibleReports = true;
       });
     } else {
+      isVisibleVisitType = false;
+      isVisibleDate = false;
+      isVisibleActivity = false;
+      isVisibleActivityDescription = false;
+      isVisibleAddress = false;
+      isVisibleCustomerId = false;
+      isVisibleCustomerName = false;
+      isVisiblePhoneNumber = false;
+      isVisibleCustomerEmail = false;
+      isVisibleReports = false;
+      print('MASUK SCREEN');
       _showAlertDialog(context);
     }
   }
@@ -591,17 +608,18 @@ class _CMVisitFormState extends State<CMVisitForm> {
                                   return DropdownMenuItem(
                                       value: valueItem, child: Text(valueItem));
                                 }).toList()))),
-                    Visibility(
-                      visible: isVisibleActivity,
-                      child: Container(
-                        margin: EdgeInsets.only(top: 2, left: 8),
-                        child: Text('Activity cannot be empty',
-                            style: TextStyle(
-                                color: Color(0xFFDD1818),
-                                fontSize: 10,
-                                fontWeight: FontWeight.normal)),
-                      ),
-                    ),
+
+                    isVisibleActivity == true
+                        ? Container(
+                            margin: EdgeInsets.only(top: 2, left: 8),
+                            child: Text('Activity cannot be empty',
+                                style: TextStyle(
+                                    color: Color(0xFFDD1818),
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.normal)),
+                          )
+                        : SizedBox(),
+
                     Container(
                       margin: EdgeInsets.only(bottom: 4, top: 20),
                       child: Text('Activity Description',
@@ -1184,6 +1202,7 @@ class _CMVisitFormState extends State<CMVisitForm> {
                                         color: Colors.white,
                                         fontWeight: FontWeight.w600)),
                                 onPressed: () {
+                                  print('VISIT TYPE : $visitTypeChoose');
                                   _setValidation();
                                 }),
                           ),
@@ -1357,21 +1376,20 @@ class _CMVisitFormState extends State<CMVisitForm> {
 
   void _showAlertDialog(BuildContext context) {
     showDialog(
-        context: _scaffoldKey.currentContext,
-        builder: (BuildContext context) {
-          return AlertDialog(
-              content: Container(
-            width: MediaQuery.of(context).size.width,
-            height: 140.0,
-            decoration: BoxDecoration(
-                shape: BoxShape.rectangle,
-                borderRadius: BorderRadius.circular(10.0),
-                color: Colors.white),
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+          child: Container(
+            padding: EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 16),
+            // height: 140.0,
             child: Column(
+              mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Container(
-                  margin: EdgeInsets.only(bottom: 20.0),
+                Padding(
+                  padding: EdgeInsets.only(bottom: 20.0),
                   child: Text(
                     'CM Visit Form Confirmation',
                     style: TextStyle(
@@ -1380,8 +1398,8 @@ class _CMVisitFormState extends State<CMVisitForm> {
                         fontWeight: FontWeight.w600),
                   ),
                 ),
-                Container(
-                  margin: EdgeInsets.only(bottom: 24.0),
+                Padding(
+                  padding: EdgeInsets.only(bottom: 24.0),
                   child: Text(
                       'Are you sure that the information that you entered is correct?',
                       style: TextStyle(
@@ -1389,9 +1407,7 @@ class _CMVisitFormState extends State<CMVisitForm> {
                           fontWeight: FontWeight.normal,
                           fontSize: 14.0)),
                 ),
-                Positioned(
-                    child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                Row(
                   children: <Widget>[
                     Container(
                       width: 84.0,
@@ -1400,6 +1416,7 @@ class _CMVisitFormState extends State<CMVisitForm> {
                           borderRadius: BorderRadius.circular(5),
                           color: Color(0xFFD3D3D3)),
                       child: MaterialButton(
+                          minWidth: MediaQuery.of(context).size.width,
                           child: Text('Cancel',
                               style: TextStyle(
                                   color: Colors.white,
@@ -1408,81 +1425,105 @@ class _CMVisitFormState extends State<CMVisitForm> {
                             Navigator.of(context).pop();
                           }),
                     ),
-                    Container(
-                        width: 170.0,
+                    Expanded(
+                      child: Container(
+                        margin: EdgeInsets.only(left: 10),
                         height: 40.0,
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(5),
                             color: Color(0xFF427CEF)),
                         child: MaterialButton(
-                            child: Text('Save Report',
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w600)),
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                              _showLoading(context);
-                              var date = DateFormat("d MMMM yyyy")
-                                  .parse(dateSelected.text);
-                              var finalDate =
-                                  DateFormat("yyyy-MM-dd").format(date);
-                              Uint8List imageUnit8;
-                              Uint8List imageUnit82;
-                              Uint8List imageUnit83;
-                              imageUnit8 = _image.readAsBytesSync();
-                              String fileExt1 = _image.path.split('.').last;
-                              imageUnit82 = _image2.readAsBytesSync();
-                              String fileExt2 = _image2.path.split('.').last;
-                              imageUnit83 = _image3.readAsBytesSync();
-                              String fileExt3 = _image3.path.split('.').last;
-                              String encodeImage1 =
-                                  'data:image/$fileExt1;base64,${base64Encode(imageUnit8)}';
-                              String encodeImage2 =
-                                  'data:image/$fileExt2;base64,${base64Encode(imageUnit82)}';
-                              String encodeImage3 =
-                                  'data:image/$fileExt3;base64,${base64Encode(imageUnit83)}';
-                              if (id != null) {
-                                postCmVisitEdit(
-                                    context,
-                                    finalDate,
-                                    visitTypeChoose(),
-                                    chooseActivity(),
-                                    activityDescription.text,
-                                    customerName.text,
-                                    customerId.text,
-                                    contactPerson.text,
-                                    address.text,
-                                    '+62' + phoneNumber.text,
-                                    emailAddress.text,
-                                    reports.text,
-                                    encodeImage1,
-                                    encodeImage2,
-                                    encodeImage3);
-                              } else {
-                                postCmVisit(
-                                    context,
-                                    finalDate,
-                                    visitTypeChoose(),
-                                    chooseActivity(),
-                                    activityDescription.text,
-                                    customerName.text,
-                                    customerId.text,
-                                    contactPerson.text,
-                                    address.text,
-                                    '+62' + phoneNumber.text,
-                                    emailAddress.text,
-                                    reports.text,
-                                    encodeImage1,
-                                    encodeImage2,
-                                    encodeImage3);
-                              }
-                            }))
+                          minWidth: MediaQuery.of(context).size.width,
+                          child: Text('Save Report',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w600)),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                            _showLoading(context);
+                            var date = DateFormat("d MMMM yyyy")
+                                .parse(dateSelected.text);
+                            var finalDate =
+                                DateFormat("yyyy-MM-dd").format(date);
+                            Uint8List imageUnit8;
+                            Uint8List imageUnit82;
+                            Uint8List imageUnit83;
+
+                            _image != null
+                                ? imageUnit8 = _image.readAsBytesSync()
+                                : _image = _image;
+                            print('MAsuk IMage $_image');
+                            String fileExt1 = _image != null
+                                ? _image.path.split('.').last
+                                : '';
+                            _image2 != null
+                                ? imageUnit82 = _image2.readAsBytesSync()
+                                : imageUnit82 = imageUnit82;
+                            String fileExt2 = _image2 != null
+                                ? _image2.path.split('.').last
+                                : '';
+                            _image3 != null
+                                ? imageUnit83 = _image3.readAsBytesSync()
+                                : imageUnit83 = imageUnit83;
+                            String fileExt3 = _image3 != null
+                                ? _image3.path.split('.').last
+                                : '';
+                            String encodeImage1 = _image != null
+                                ? 'data:image/$fileExt1;base64,${base64Encode(imageUnit8)}'
+                                : '';
+                            String encodeImage2 = _image2 != null
+                                ? 'data:image/$fileExt2;base64,${base64Encode(imageUnit82)}'
+                                : '';
+                            String encodeImage3 = _image3 != null
+                                ? 'data:image/$fileExt3;base64,${base64Encode(imageUnit83)}'
+                                : '';
+                            if (id != null) {
+                              postCmVisitEdit(
+                                  context,
+                                  finalDate,
+                                  visitTypeChoose(),
+                                  chooseActivity(),
+                                  activityDescription.text,
+                                  customerName.text,
+                                  customerId.text,
+                                  contactPerson.text,
+                                  address.text,
+                                  '+62' + phoneNumber.text,
+                                  emailAddress.text,
+                                  reports.text,
+                                  encodeImage1,
+                                  encodeImage2,
+                                  encodeImage3);
+                            } else {
+                              postCmVisit(
+                                  context,
+                                  finalDate,
+                                  visitTypeChoose(),
+                                  chooseActivity(),
+                                  activityDescription.text,
+                                  customerName.text,
+                                  customerId.text,
+                                  contactPerson.text,
+                                  address.text,
+                                  '+62' + phoneNumber.text,
+                                  emailAddress.text,
+                                  reports.text,
+                                  encodeImage1,
+                                  encodeImage2,
+                                  encodeImage3);
+                            }
+                          },
+                        ),
+                      ),
+                    )
                   ],
-                ))
+                ),
               ],
             ),
-          ));
-        });
+          ),
+        );
+      },
+    );
   }
 
   Widget _buildAutoComplate(BuildContext context) {
@@ -1504,6 +1545,7 @@ class _CMVisitFormState extends State<CMVisitForm> {
                         new TextEditingValue(text: customerName.text))
                     .value
             : print('selected ${customerName.text}');
+        fetchSearch(context, fieldTextEditingController.text);
         return TextFormField(
           minLines: 1,
           maxLines: 10,
@@ -1614,11 +1656,21 @@ class _CMVisitFormState extends State<CMVisitForm> {
       String foto3) async {
     final storageCache = FlutterSecureStorage();
     String accessToken = await storageCache.read(key: 'access_token');
-
-    var responsePostCmVisitForm =
-        await http.post('${UrlCons.mainDevUrl}cm-visit', headers: {
-      'Authorization': 'Bearer $accessToken'
-    }, body: {
+    List<String> listImages = [];
+    print('VisitType $visitType');
+    if (foto1 != '') {
+      print('FOTO 1 $foto1');
+      listImages.add(foto1);
+    }
+    if (foto2 != '') {
+      print('FOTO 2 $foto2');
+      listImages.add(foto2);
+    }
+    if (foto3 != '') {
+      print('FOTO 3 $foto3');
+      listImages.add(foto3);
+    }
+    var body = json.encode({
       'visit_date': visitDate,
       'visit_type': visitType,
       'activity_type': activityType,
@@ -1630,11 +1682,17 @@ class _CMVisitFormState extends State<CMVisitForm> {
       'cp_phone': cpPhone,
       'cp_email': cpEmail,
       'report': report,
-      'images[0]': foto1,
-      'images[1]': foto2,
-      'images[2]': foto3
+      'images': listImages,
     });
-    print('status code' + responsePostCmVisitForm.statusCode.toString());
+
+    var responsePostCmVisitForm =
+        await http.post('${UrlCons.mainDevUrl}cm-visit',
+            headers: {
+              'Authorization': 'Bearer $accessToken',
+              'Content-Type': 'application/json',
+            },
+            body: body);
+    print('status code' + responsePostCmVisitForm.body.toString());
     if (responsePostCmVisitForm.statusCode == 200) {
       setState(() {
         _showDialogSuccessSubmit(context);
@@ -1673,10 +1731,17 @@ class _CMVisitFormState extends State<CMVisitForm> {
     final storageCache = FlutterSecureStorage();
     String accessToken = await storageCache.read(key: 'access_token');
 
-    var responsePostCmVisitForm =
-        await http.post('${UrlCons.mainDevUrl}cm-visit/$id', headers: {
-      'Authorization': 'Bearer $accessToken'
-    }, body: {
+    List<String> listImages = [];
+    if (foto1 != '') {
+      listImages.add(foto1);
+    }
+    if (foto2 != '') {
+      listImages.add(foto2);
+    }
+    if (foto3 != '') {
+      listImages.add(foto3);
+    }
+    var body = json.encode({
       'visit_date': visitDate,
       'visit_type': visitType,
       'activity_type': activityType,
@@ -1688,10 +1753,15 @@ class _CMVisitFormState extends State<CMVisitForm> {
       'cp_phone': cpPhone,
       'cp_email': cpEmail,
       'report': report,
-      'images[0]': foto1,
-      'images[1]': foto2,
-      'images[2]': foto3
+      'images': listImages,
     });
+    var responsePostCmVisitForm =
+        await http.post('${UrlCons.mainDevUrl}cm-visit/$id',
+            headers: {
+              'Authorization': 'Bearer $accessToken',
+              'Content-Type': 'application/json',
+            },
+            body: body);
     print('status code' + responsePostCmVisitForm.statusCode.toString());
     if (responsePostCmVisitForm.statusCode == 200) {
       setState(() {
@@ -1753,6 +1823,27 @@ class _CMVisitFormState extends State<CMVisitForm> {
             ),
           );
         });
+  }
+
+  Future<CustListModel> fetchSearch(BuildContext context, String query) async {
+    final storageCache = FlutterSecureStorage();
+    String accessToken = await storageCache.read(key: 'access_token');
+    String lang = await storageCache.read(key: 'lang');
+    var responseGetCustList =
+        await http.get('${UrlCons.mainProdUrl}customers?q=$query', headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $accessToken',
+      'Accept-Language': lang
+    });
+    print('MASUK QUERY:  $query');
+    print('MASUK GASZ:  ${responseGetCustList.body}');
+    CustListModel getListCust =
+        CustListModel.fromJson(json.decode(responseGetCustList.body));
+    setState(() {
+      list.clear();
+      list.addAll(getListCust.data);
+    });
+    return CustListModel.fromJson(json.decode(responseGetCustList.body));
   }
 
   Future<CustListModel> fetchPost(BuildContext context) async {

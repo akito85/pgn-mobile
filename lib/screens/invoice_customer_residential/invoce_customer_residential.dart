@@ -117,98 +117,92 @@ class BillDetailState extends State<InvoiceCustResidential>
 //ID MENU INOVOICE RTPK 11
     return Scaffold(
       backgroundColor: Colors.white,
-      body: listMenus.contains('11')
-          ? Stack(
-              children: <Widget>[
-                DefaultTabController(
-                  length: 3,
-                  child: Scaffold(
-                    backgroundColor: Colors.white,
-                    appBar: PreferredSize(
-                      preferredSize: Size.fromHeight(kToolbarHeight),
-                      child: Column(
-                        children: <Widget>[
-                          Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20.0),
-                              color: Colors.white,
-                            ),
-                            height: 45,
-                            child: TabBar(
-                              controller: _tabController,
-                              isScrollable: true,
-                              indicatorColor: Color(0xff427CEF),
-                              indicatorWeight: 1,
-                              indicatorPadding:
-                                  EdgeInsets.only(left: 15, right: 15),
-                              labelColor: Colors.white,
-                              unselectedLabelColor: Color(0xff427CEF),
-                              indicator: ShapeDecoration(
+      body: Stack(
+        children: <Widget>[
+          DefaultTabController(
+            length: 3,
+            child: Scaffold(
+              backgroundColor: Colors.white,
+              appBar: PreferredSize(
+                preferredSize: Size.fromHeight(kToolbarHeight),
+                child: Column(
+                  children: <Widget>[
+                    Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20.0),
+                        color: Colors.white,
+                      ),
+                      height: 45,
+                      child: TabBar(
+                        controller: _tabController,
+                        isScrollable: true,
+                        indicatorColor: Color(0xff427CEF),
+                        indicatorWeight: 1,
+                        indicatorPadding: EdgeInsets.only(left: 15, right: 15),
+                        labelColor: Colors.white,
+                        unselectedLabelColor: Color(0xff427CEF),
+                        indicator: ShapeDecoration(
+                            color: Color(0xff427CEF),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15.0),
+                                side: BorderSide(
                                   color: Color(0xff427CEF),
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(15.0),
-                                      side: BorderSide(
-                                        color: Color(0xff427CEF),
-                                      ))),
-                              tabs: [
-                                Tab(
-                                    child: Padding(
-                                  padding: const EdgeInsets.all(10.0),
-                                  child: Text(
-                                    '${DateFormat("MMMM").format(DateTime.parse(dateformatCurrent3))} ${DateFormat("yyy").format(DateTime.parse(dateformatCurrent3))}',
-                                    style: TextStyle(fontSize: 15),
-                                  ),
-                                )),
-                                Tab(
-                                    child: Padding(
-                                  padding: const EdgeInsets.all(10.0),
-                                  child: Text(
-                                    '${DateFormat("MMMM").format(DateTime.parse(dateformatCurrent2))} ${DateFormat("yyy").format(DateTime.parse(dateformatCurrent2))}',
-                                    style: TextStyle(fontSize: 15),
-                                  ),
-                                )),
-                                Tab(
-                                    child: Padding(
-                                  padding: const EdgeInsets.all(10.0),
-                                  child: Text(
-                                    '${DateFormat("MMMM").format(DateTime.parse(dateformatCurrent))} ${DateFormat("yyy").format(DateTime.parse(dateformatCurrent))}',
-                                    style: TextStyle(fontSize: 15),
-                                  ),
-                                )),
-                              ],
+                                ))),
+                        tabs: [
+                          Tab(
+                              child: Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Text(
+                              '${DateFormat("MMMM").format(DateTime.parse(dateformatCurrent3))} ${DateFormat("yyy").format(DateTime.parse(dateformatCurrent3))}',
+                              style: TextStyle(fontSize: 15),
                             ),
-                          ),
+                          )),
+                          Tab(
+                              child: Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Text(
+                              '${DateFormat("MMMM").format(DateTime.parse(dateformatCurrent2))} ${DateFormat("yyy").format(DateTime.parse(dateformatCurrent2))}',
+                              style: TextStyle(fontSize: 15),
+                            ),
+                          )),
+                          Tab(
+                              child: Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Text(
+                              '${DateFormat("MMMM").format(DateTime.parse(dateformatCurrent))} ${DateFormat("yyy").format(DateTime.parse(dateformatCurrent))}',
+                              style: TextStyle(fontSize: 15),
+                            ),
+                          )),
                         ],
                       ),
                     ),
-                    body: Stack(
-                      children: <Widget>[
-                        Container(
-                          decoration: new BoxDecoration(
-                            image: new DecorationImage(
-                              image:
-                                  new AssetImage("assets/new_backgound.jpeg"),
-                              fit: BoxFit.fill,
-                            ),
-                          ),
-                        ),
-                        TabBarView(
-                          controller: _tabController,
-                          children: [
-                            _buildContent0(context, formatDate3, custID),
-                            _buildContent1(context, formatDate2, custID),
-                            _buildContent2(context, formatDate, custID),
-                          ],
-                        ),
-                      ],
+                  ],
+                ),
+              ),
+              body: Stack(
+                children: <Widget>[
+                  Container(
+                    decoration: new BoxDecoration(
+                      image: new DecorationImage(
+                        image: new AssetImage("assets/new_backgound.jpeg"),
+                        fit: BoxFit.fill,
+                      ),
                     ),
                   ),
-                ),
-              ],
-            )
-          : Center(
-              child: Text('SILAHKAN UPGRADE PRODUK ANDA'),
+                  TabBarView(
+                    controller: _tabController,
+                    children: [
+                      _buildContent0(context, formatDate3, custID),
+                      _buildContent1(context, formatDate2, custID),
+                      _buildContent2(context, formatDate, custID),
+                    ],
+                  ),
+                ],
+              ),
             ),
+          ),
+        ],
+      ),
     );
   }
 

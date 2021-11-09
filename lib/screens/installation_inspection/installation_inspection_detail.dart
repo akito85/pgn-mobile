@@ -179,10 +179,11 @@ class _InstallationInspectionDetailState
               'Date:',
               model.data.acknowledgeDate),
           SizedBox(height: 20),
-          Visibility(
-              visible: !model.data.remark ? true : false,
-              child:
-                  _buildBottomBoxOutlined(context, 'Inspection Remark: FAILED'))
+          model.data.remark == true
+              ? _buildBottomBoxOutlined(
+                  context, 'Inspection Remark: SUCCESS', model.data.remark)
+              : _buildBottomBoxOutlined(
+                  context, 'Inspection Remark: FAILED', model.data.remark),
         ],
       ),
     );
@@ -284,20 +285,27 @@ Widget _buildBottomBoxContainer(BuildContext context, String icon, String title,
   );
 }
 
-Widget _buildBottomBoxOutlined(BuildContext context, String title) {
+Widget _buildBottomBoxOutlined(
+    BuildContext context, String title, bool statusRemark) {
   return Container(
       alignment: Alignment.center,
       width: MediaQuery.of(context).size.width,
       decoration: BoxDecoration(
           color: Colors.transparent,
-          border: Border.all(width: 1, color: const Color(0xFFFF0000)),
+          border: Border.all(
+            width: 1,
+            color:
+                statusRemark == false ? Color(0xFFFF0000) : Color(0xFF81C153),
+          ),
           borderRadius: BorderRadius.circular(5)),
       child: Padding(
           padding: EdgeInsets.symmetric(vertical: 15),
           child: Text(
             title,
             style: TextStyle(
-                color: Color(0xFFFF0000),
+                color: statusRemark == false
+                    ? Color(0xFFFF0000)
+                    : Color(0xFF81C153),
                 fontSize: 14,
                 fontWeight: FontWeight.bold),
           )));

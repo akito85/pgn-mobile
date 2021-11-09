@@ -77,12 +77,19 @@ class VirtualCardGasPoint {
       {this.dataVCGasPoint, this.metaVCGasPoint, this.code, this.message});
 
   factory VirtualCardGasPoint.fromJson(Map<String, dynamic> json) {
-    return VirtualCardGasPoint(
-      dataVCGasPoint: DataVCGasPoint.fromJson(json['data']),
-      metaVCGasPoint: MetaVCGasPoint.fromJson(json['meta']),
-      message: json['message'],
-      code: json['code'],
-    );
+    if (json['message'] == null) {
+      return VirtualCardGasPoint(
+        dataVCGasPoint: DataVCGasPoint.fromJson(json['data']),
+        metaVCGasPoint: MetaVCGasPoint.fromJson(json['meta']),
+        message: json['message'],
+        code: '200',
+      );
+    } else {
+      return VirtualCardGasPoint(
+        message: json['message'],
+        code: json['code'],
+      );
+    }
   }
 }
 

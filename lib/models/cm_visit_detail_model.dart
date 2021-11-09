@@ -45,7 +45,7 @@ class CmVisitModels {
         activityDescription: json['activity_description'],
         contactPersonModel: ContactPersonModel.fromJson(json['contact_person']),
         report: json['report'],
-        images: parseDataImages(json['images']));
+        images: json['images'] != null ? parseDataImages(json['images']) : []);
   }
 
   static List<String> parseDataImages(dataJson) {

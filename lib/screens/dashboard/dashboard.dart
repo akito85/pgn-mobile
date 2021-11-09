@@ -1175,16 +1175,21 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
                     FutureBuilder<modelGP.VirtualCardGasPoint>(
                       future: getVirtualCardGasPoint(context),
                       builder: (context, snapshot) {
-                        if (!snapshot.hasData) return Text('-');
-                        return Text(
-                          snapshot.data.dataVCGasPoint.pointReward,
-                          // overflow: TextOverflow.ellipsis,
-                          style: painting.TextStyle(
-                            fontSize: 20.0,
-                            fontWeight: FontWeight.bold,
-                            color: painting.Color(0xFF455055),
-                          ),
-                        );
+                        if (!snapshot.hasData)
+                          return Text('-');
+                        else if (snapshot.data.dataVCGasPoint.pointReward !=
+                            null) {
+                          return Text(
+                            snapshot.data.dataVCGasPoint.pointReward,
+                            // overflow: TextOverflow.ellipsis,
+                            style: painting.TextStyle(
+                              fontSize: 20.0,
+                              fontWeight: FontWeight.bold,
+                              color: painting.Color(0xFF455055),
+                            ),
+                          );
+                        }
+                        return Container();
                       },
                     ),
                   ],
@@ -1253,7 +1258,7 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
       builder: (context, snapshot) {
         if (!snapshot.hasData)
           return Column(
-            children: <Widget>[CircularProgressIndicator()],
+            children: <Widget>[LinearProgressIndicator()],
           );
         if (snapshot.data.message != null)
           return Column(
@@ -1490,7 +1495,7 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
       builder: (context, snapshot) {
         if (!snapshot.hasData)
           return Column(
-            children: <Widget>[CircularProgressIndicator()],
+            children: <Widget>[LinearProgressIndicator()],
           );
         if (snapshot.data.message != null)
           return Column(
@@ -1582,7 +1587,7 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
         if (!snapshot.hasData)
           return Column(
             children: <Widget>[
-              CircularProgressIndicator(),
+              LinearProgressIndicator(),
             ],
           );
         if (snapshot.data.message == null)
@@ -1614,7 +1619,7 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
         if (!snapshot.hasData)
           return Column(
             children: <Widget>[
-              CircularProgressIndicator(),
+              LinearProgressIndicator(),
             ],
           );
         if (snapshot.data.message != null)
@@ -1662,7 +1667,7 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
         if (!snapshot.hasData)
           return Column(
             children: <Widget>[
-              CircularProgressIndicator(),
+              LinearProgressIndicator(),
             ],
           );
         if (snapshot.data.message != null)
@@ -2389,219 +2394,250 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
   }
 
   void _showCustIdModalBottomSheet(context) {
+    bool loadingSwitchAcc = false;
     showModalBottomSheet(
       context: context,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),
       ),
       builder: (BuildContext bc) {
-        return Container(
-          child: FutureBuilder<DashboardCustomerModel>(
-            future: getListCustId(context),
-            builder: (context, snapshot) {
-              if (!snapshot.hasData) {
-                return Padding(
-                  padding: const EdgeInsets.only(left: 18, right: 18),
-                  child: LinearProgressIndicator(),
-                );
-              }
-              return Wrap(
-                children: <Widget>[
-                  Padding(
-                    padding: EdgeInsets.only(
-                        left: 20, right: 20, top: 20, bottom: 15),
-                    child: Text(
-                      'Select Profile',
-                      style: painting.TextStyle(
-                          color: painting.Color(0xFF427CEF),
-                          fontSize: 18,
-                          fontWeight: painting.FontWeight.bold),
+        return StatefulBuilder(builder: (context, stateDialoge) {
+          return Container(
+            child: FutureBuilder<DashboardCustomerModel>(
+              future: getListCustId(context),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) {
+                  return Padding(
+                    padding: const EdgeInsets.only(left: 18, right: 18),
+                    child: LinearProgressIndicator(),
+                  );
+                }
+                return Wrap(
+                  children: <Widget>[
+                    Padding(
+                      padding: EdgeInsets.only(
+                          left: 20, right: 20, top: 20, bottom: 15),
+                      child: Text(
+                        'Select Profile',
+                        style: painting.TextStyle(
+                            color: painting.Color(0xFF427CEF),
+                            fontSize: 18,
+                            fontWeight: painting.FontWeight.bold),
+                      ),
                     ),
-                  ),
-                  snapshot.data.dashboardCustIdList.listCustomerId.length !=
-                          null
-                      ? ListView.builder(
-                          shrinkWrap: true,
-                          physics: NeverScrollableScrollPhysics(),
-                          itemCount: snapshot
-                              .data.dashboardCustIdList.listCustomerId.length,
-                          itemBuilder: (context, i) {
-                            snapshot.data.dashboardCustIdList.listCustomerId
-                                .sort((b, a) => a.active.compareTo(b.active));
-                            return Padding(
-                              padding: EdgeInsets.only(
-                                  right: 20, top: 5, bottom: 10),
+                    loadingSwitchAcc == true
+                        ? Column(
+                            children: [
+                              Center(
+                                  child: Padding(
+                                padding:
+                                    const EdgeInsets.only(top: 10, bottom: 15),
+                                child: CircularProgressIndicator(),
+                              )),
+                            ],
+                          )
+                        : snapshot.data.dashboardCustIdList.listCustomerId
+                                    .length !=
+                                null
+                            ? ListView.builder(
+                                shrinkWrap: true,
+                                physics: NeverScrollableScrollPhysics(),
+                                itemCount: snapshot.data.dashboardCustIdList
+                                    .listCustomerId.length,
+                                itemBuilder: (context, i) {
+                                  snapshot
+                                      .data.dashboardCustIdList.listCustomerId
+                                      .sort((b, a) =>
+                                          a.active.compareTo(b.active));
+                                  return Padding(
+                                    padding: EdgeInsets.only(
+                                        right: 20, top: 5, bottom: 10),
+                                    child: Row(
+                                      children: [
+                                        snapshot.data.dashboardCustIdList
+                                                    .listCustomerId[i].active ==
+                                                1
+                                            ? Container(
+                                                height: 40,
+                                                width: 8,
+                                                color:
+                                                    painting.Color(0xFF427CEF),
+                                              )
+                                            : SizedBox(width: 10),
+                                        snapshot
+                                                    .data
+                                                    .dashboardCustIdList
+                                                    .listCustomerId[i]
+                                                    .imgPath ==
+                                                ""
+                                            ? Padding(
+                                                padding: const EdgeInsets.only(
+                                                    left: 15),
+                                                child: CircleAvatar(
+                                                  backgroundImage: AssetImage(
+                                                      'assets/icon_default_pelanggan.png'),
+                                                  backgroundColor:
+                                                      Colors.transparent,
+                                                  radius: 21.0,
+                                                ),
+                                              )
+                                            : Padding(
+                                                padding: const EdgeInsets.only(
+                                                    left: 15),
+                                                child: CircleAvatar(
+                                                  backgroundImage: NetworkImage(
+                                                      snapshot
+                                                          .data
+                                                          .dashboardCustIdList
+                                                          .listCustomerId[i]
+                                                          .imgPath),
+                                                  backgroundColor:
+                                                      Colors.transparent,
+                                                  radius: 21.0,
+                                                ),
+                                              ),
+                                        Expanded(
+                                          child: InkWell(
+                                            onTap: () {
+                                              stateDialoge(() {
+                                                loadingSwitchAcc = true;
+                                              });
+
+                                              switchCustomerId(snapshot
+                                                  .data
+                                                  .dashboardCustIdList
+                                                  .listCustomerId[i]
+                                                  .reqId);
+                                            },
+                                            child: Padding(
+                                              padding: const EdgeInsets.only(
+                                                  left: 15),
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    '${snapshot.data.dashboardCustIdList.listCustomerId[i].nameCust}',
+                                                    style: painting.TextStyle(
+                                                        fontWeight: painting
+                                                            .FontWeight.w600),
+                                                  ),
+                                                  SizedBox(height: 5),
+                                                  Row(
+                                                    children: [
+                                                      snapshot
+                                                                  .data
+                                                                  .dashboardCustIdList
+                                                                  .listCustomerId[
+                                                                      i]
+                                                                  .statusCust ==
+                                                              'Unverified'
+                                                          ? Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                          .only(
+                                                                      right: 8),
+                                                              child: Text(
+                                                                '${snapshot.data.dashboardCustIdList.listCustomerId[i].statusCust}',
+                                                                style: painting
+                                                                    .TextStyle(
+                                                                  fontSize: 14,
+                                                                  color: painting
+                                                                      .Color(
+                                                                          0xFF81C153),
+                                                                ),
+                                                              ),
+                                                            )
+                                                          : SizedBox(),
+                                                      Text(
+                                                        '${snapshot.data.dashboardCustIdList.listCustomerId[i].custId}',
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        snapshot.data.dashboardCustIdList
+                                                    .listCustomerId[i].active ==
+                                                0
+                                            ? IconButton(
+                                                icon: Image.asset(
+                                                    'assets/trash.png',
+                                                    color: painting.Color(
+                                                        0xFF455055),
+                                                    height: 25),
+                                                onPressed: () {
+                                                  deleteCustIdAlert(
+                                                      snapshot
+                                                          .data
+                                                          .dashboardCustIdList
+                                                          .listCustomerId[i]
+                                                          .reqId,
+                                                      snapshot
+                                                          .data
+                                                          .dashboardCustIdList
+                                                          .listCustomerId[i]
+                                                          .custId,
+                                                      snapshot
+                                                          .data
+                                                          .dashboardCustIdList
+                                                          .listCustomerId[i]
+                                                          .nameCust);
+                                                })
+                                            : SizedBox(),
+                                      ],
+                                    ),
+                                  );
+                                },
+                              )
+                            : Padding(
+                                padding: EdgeInsets.only(
+                                    left: 20, right: 20, top: 20),
+                                child: Row(
+                                  children: [
+                                    Column(
+                                      children: [Text('-')],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                    snapshot.data.dashboardCustIdList.listCustomerId.length < 3
+                        ? Padding(
+                            padding: EdgeInsets.only(
+                                left: 25, right: 20, bottom: 20),
+                            child: InkWell(
+                              onTap: () {
+                                Navigator.pop(context);
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            DashboardCustAdd()));
+                              },
                               child: Row(
                                 children: [
-                                  snapshot.data.dashboardCustIdList
-                                              .listCustomerId[i].active ==
-                                          1
-                                      ? Container(
-                                          height: 40,
-                                          width: 8,
-                                          color: painting.Color(0xFF427CEF),
-                                        )
-                                      : SizedBox(width: 10),
-                                  snapshot.data.dashboardCustIdList
-                                              .listCustomerId[i].imgPath ==
-                                          ""
-                                      ? Padding(
-                                          padding:
-                                              const EdgeInsets.only(left: 15),
-                                          child: CircleAvatar(
-                                            backgroundImage: AssetImage(
-                                                'assets/icon_default_pelanggan.png'),
-                                            backgroundColor: Colors.transparent,
-                                            radius: 21.0,
-                                          ),
-                                        )
-                                      : Padding(
-                                          padding:
-                                              const EdgeInsets.only(left: 15),
-                                          child: CircleAvatar(
-                                            backgroundImage: NetworkImage(
-                                                snapshot
-                                                    .data
-                                                    .dashboardCustIdList
-                                                    .listCustomerId[i]
-                                                    .imgPath),
-                                            backgroundColor: Colors.transparent,
-                                            radius: 21.0,
-                                          ),
-                                        ),
-                                  Expanded(
-                                    child: InkWell(
-                                      onTap: () {
-                                        switchCustomerId(snapshot
-                                            .data
-                                            .dashboardCustIdList
-                                            .listCustomerId[i]
-                                            .reqId);
-                                      },
-                                      child: Padding(
-                                        padding:
-                                            const EdgeInsets.only(left: 15),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              '${snapshot.data.dashboardCustIdList.listCustomerId[i].nameCust}',
-                                              style: painting.TextStyle(
-                                                  fontWeight:
-                                                      painting.FontWeight.w600),
-                                            ),
-                                            SizedBox(height: 5),
-                                            Row(
-                                              children: [
-                                                snapshot
-                                                            .data
-                                                            .dashboardCustIdList
-                                                            .listCustomerId[i]
-                                                            .statusCust ==
-                                                        'Unverified'
-                                                    ? Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .only(right: 8),
-                                                        child: Text(
-                                                          '${snapshot.data.dashboardCustIdList.listCustomerId[i].statusCust}',
-                                                          style: painting
-                                                              .TextStyle(
-                                                            fontSize: 14,
-                                                            color:
-                                                                painting.Color(
-                                                                    0xFF81C153),
-                                                          ),
-                                                        ),
-                                                      )
-                                                    : SizedBox(),
-                                                Text(
-                                                  '${snapshot.data.dashboardCustIdList.listCustomerId[i].custId}',
-                                                ),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
+                                  FaIcon(
+                                    Icons.add_circle_outline,
+                                    size: 45,
                                   ),
-                                  snapshot.data.dashboardCustIdList
-                                              .listCustomerId[i].active ==
-                                          0
-                                      ? IconButton(
-                                          icon: Image.asset('assets/trash.png',
-                                              color: painting.Color(0xFF455055),
-                                              height: 25),
-                                          onPressed: () {
-                                            deleteCustIdAlert(
-                                                snapshot
-                                                    .data
-                                                    .dashboardCustIdList
-                                                    .listCustomerId[i]
-                                                    .reqId,
-                                                snapshot
-                                                    .data
-                                                    .dashboardCustIdList
-                                                    .listCustomerId[i]
-                                                    .custId,
-                                                snapshot
-                                                    .data
-                                                    .dashboardCustIdList
-                                                    .listCustomerId[i]
-                                                    .nameCust);
-                                          })
-                                      : SizedBox(),
+                                  Padding(
+                                    padding: EdgeInsets.only(left: 15),
+                                    child: Text('Add New Profile'),
+                                  ),
                                 ],
                               ),
-                            );
-                          },
-                        )
-                      : Padding(
-                          padding:
-                              EdgeInsets.only(left: 20, right: 20, top: 20),
-                          child: Row(
-                            children: [
-                              Column(
-                                children: [Text('-')],
-                              ),
-                            ],
-                          ),
-                        ),
-                  snapshot.data.dashboardCustIdList.listCustomerId.length < 3
-                      ? Padding(
-                          padding:
-                              EdgeInsets.only(left: 25, right: 20, bottom: 20),
-                          child: InkWell(
-                            onTap: () {
-                              Navigator.pop(context);
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          DashboardCustAdd()));
-                            },
-                            child: Row(
-                              children: [
-                                FaIcon(
-                                  Icons.add_circle_outline,
-                                  size: 45,
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.only(left: 15),
-                                  child: Text('Add New Profile'),
-                                ),
-                              ],
                             ),
-                          ),
-                        )
-                      : SizedBox(height: 5),
-                  SizedBox(height: 10),
-                ],
-              );
-            },
-          ),
-        );
+                          )
+                        : SizedBox(height: 5),
+                    SizedBox(height: 10),
+                  ],
+                );
+              },
+            ),
+          );
+        });
       },
     );
   }
@@ -2666,17 +2702,12 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
       'Authorization': 'Bearer $accessToken',
     });
     modelGP.VirtualCardGasPoint virtualCardGasPoint;
-    print('HASILNYA : ${responseGetVCGasPoint.body}');
-    if (responseGetVCGasPoint.statusCode == 200) {
-      virtualCardGasPoint = modelGP.VirtualCardGasPoint.fromJson(
-          json.decode(responseGetVCGasPoint.body));
-      // setState(() {
-      //   pointGasPoint = virtualCardGasPoint.dataVCGasPoint.pointReward;
-      // });
-      print('UPDATE $pointGasPoint');
-    } else {
-      throw Exception('Could not get any response');
-    }
+    print('HASILNYA POIN: ${responseGetVCGasPoint.body}');
+    virtualCardGasPoint = modelGP.VirtualCardGasPoint.fromJson(
+        json.decode(responseGetVCGasPoint.body));
+
+    print('UPDATE $pointGasPoint');
+
     return virtualCardGasPoint;
   }
 

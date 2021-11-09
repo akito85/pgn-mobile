@@ -52,27 +52,29 @@ class Register extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
-                Container(
-                  margin: EdgeInsets.only(left: 20.0, right: 20.0),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5.0),
-                    color: Colors.white,
-                  ),
-                  height: 50,
-                  width: 160,
-                  child: RaisedButton(
-                    elevation: 0.0,
-                    color: Colors.white,
-                    child: Text(
-                      'YES',
-                      style: TextStyle(color: Colors.blue[300]),
+                Expanded(
+                  child: Container(
+                    margin: EdgeInsets.only(left: 20.0, right: 20.0),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(5.0),
+                      color: Colors.white,
                     ),
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => RegisterCustomer()));
-                    },
+                    height: 50,
+                    width: 160,
+                    child: RaisedButton(
+                      elevation: 0.0,
+                      color: Colors.white,
+                      child: Text(
+                        'YES',
+                        style: TextStyle(color: Colors.blue[300]),
+                      ),
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => RegisterCustomer()));
+                      },
+                    ),
                   ),
                 ),
                 Expanded(

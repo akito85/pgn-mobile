@@ -62,7 +62,7 @@ class LoginScreenState extends State<LoginScreen> {
       String userGroupID, String areaID) async {
     String fcmTokens;
     //on for testing firebase
-    // _firebaseMessaging.subscribeToTopic('tester_popup');
+    _firebaseMessaging.subscribeToTopic('mobile_uat');
     ///////////////////////////////////////////
     _firebaseMessaging.subscribeToTopic('daily_usage');
     _firebaseMessaging.subscribeToTopic('daily_payment');
@@ -83,6 +83,7 @@ class LoginScreenState extends State<LoginScreen> {
     await _firebaseMessaging.getToken().then((token) {
       setState(() {
         fcmTokens = token;
+        print('INI FCM TOKEN $fcmTokens');
       });
       fcmTokens = token;
       return token;
@@ -234,6 +235,7 @@ class LoginScreenState extends State<LoginScreen> {
                           ),
                         )),
                   ),
+
                   Visibility(
                     visible: btnVisible,
                     child: Container(
@@ -282,10 +284,29 @@ class LoginScreenState extends State<LoginScreen> {
                       child: Column(
                         children: <Widget>[
                           Container(
-                              margin: EdgeInsets.only(top: 15, bottom: 30),
+                              margin: EdgeInsets.only(top: 15, bottom: 10),
                               child: CircularProgressIndicator())
                         ],
                       )),
+                  // Container(
+                  //     height: 50.0,
+                  //     margin: EdgeInsets.fromLTRB(30.0, 5.0, 30.0, 0.0),
+                  //     decoration: BoxDecoration(
+                  //       borderRadius: BorderRadius.circular(18.0),
+                  //       color: Color(0xFF427CEF),
+                  //     ),
+                  //     child: MaterialButton(
+                  //       minWidth: MediaQuery.of(context).size.width,
+                  //       child: Text(
+                  //         'Register',
+                  //         style: TextStyle(
+                  //           color: Colors.white,
+                  //         ),
+                  //       ),
+                  //       onPressed: () {
+                  //         Navigator.pop(context);
+                  //       },
+                  //     )),
                   // InkWell(
                   //   onTap: () {
                   //     // deviceID();

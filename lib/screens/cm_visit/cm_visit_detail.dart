@@ -75,7 +75,7 @@ class _CMVisitDetailState extends State<CMVisitDetail> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Text(
-                  'Site/Business Visit',
+                  model.data.visitType,
                   style: TextStyle(
                       color: const Color(0xFF5C727D),
                       fontSize: 12,
@@ -389,15 +389,21 @@ class _CMVisitDetailState extends State<CMVisitDetail> {
                                   emailAddress:
                                       model.data.contactPersonModel.email,
                                   report: model.data.report,
-                                  photo1: model.data.images[0] != null
-                                      ? model.data.images[0].toString()
-                                      : "",
-                                  photo2: model.data.images[1] != null
-                                      ? model.data.images[1].toString()
-                                      : "",
+                                  photo1: model.data.images.length > 0
+                                      ? model.data.images[0] != null
+                                          ? model.data.images[0].toString()
+                                          : ""
+                                      : '',
+                                  photo2: model.data.images.length > 1
+                                      ? model.data.images[1] != null
+                                          ? model.data.images[1].toString()
+                                          : ""
+                                      : '',
                                   photo3: model.data.images.length > 2
-                                      ? model.data.images[2].toString()
-                                      : "")));
+                                      ? model.data.images[2] != null
+                                          ? model.data.images[2].toString()
+                                          : ""
+                                      : '')));
                     }),
               ),
             ],
