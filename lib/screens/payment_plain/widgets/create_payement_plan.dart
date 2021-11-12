@@ -266,8 +266,7 @@ class CreatePPState extends State<CreatePaymentPlan> {
     var responsePutPaymentPlan =
         await http.post('${UrlCons.mainProdUrl}payment-plans',
             headers: {
-              'Authorization':
-                  'Bearer aDri8xQJDL6MpFFCUE6lAA4ref5nWb3VGaWyMdgC',
+              'Authorization': 'Bearer $accessToken',
               'Content-Type': 'applictation/json',
               'accept': 'applictation/json'
             },

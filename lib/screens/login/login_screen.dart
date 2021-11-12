@@ -9,7 +9,6 @@ import 'dart:convert';
 import 'package:provider/provider.dart';
 import 'package:pgn_mobile/services/app_localizations.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:pgn_mobile/screens/forget_password/forget_password.dart';
 import 'package:device_info/device_info.dart';
 import 'package:pgn_mobile/services/user_credientials.dart';
@@ -94,244 +93,219 @@ class LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     final _lang = Provider.of<Language>(context);
     return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage("assets/bg-image-01@2x.png"),
-            fit: BoxFit.cover,
-          ),
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        title: Text(
+          'Sign in',
+          style: TextStyle(color: Color(0xFF455055)),
         ),
-        child: Stack(
-          children: <Widget>[
-            Positioned(
-              child: Container(
-                alignment: Alignment.center,
-                margin: EdgeInsets.only(top: 30.0),
-                height: 120,
-                child: Image.asset('assets/icon_launch.png'),
+      ),
+      body: ListView(
+        children: <Widget>[
+          Container(
+            height: 90,
+            child: Image.asset('assets/icon_launch.png'),
+          ),
+          Container(
+            alignment: Alignment.center,
+            margin: EdgeInsets.only(top: 15.0),
+            height: 50,
+            width: 50,
+            child: Image.asset('assets/logo_head.png'),
+          ),
+          Container(
+              alignment: Alignment.center,
+              margin: EdgeInsets.only(top: 15),
+              child: Text('Welcome to PGN Mobile' ?? '',
+                  style: TextStyle(
+                    fontSize: 21,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF427CEF),
+                  ))),
+          Container(
+              alignment: Alignment.center,
+              margin: EdgeInsets.only(top: 10, left: 30, right: 30),
+              child: Text(
+                'Check your activities, contract, financial solutions and profile.' ??
+                    '',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.grey[500]),
+              )),
+          Container(
+            margin: EdgeInsets.only(left: 30.0, right: 30.0, top: 50.0),
+            child: Material(
+              elevation: 8,
+              shadowColor: Colors.grey[50],
+              borderRadius: BorderRadius.circular(15),
+              child: TextField(
+                onTap: () {
+                  setState(() {
+                    _lang.btnForgotPass;
+                  });
+                },
+                controller: usernameController,
+                decoration: InputDecoration(
+                  hintText: 'Email / Full Number',
+                  hintStyle: TextStyle(color: Colors.grey[500]),
+                  contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(15),
+                    borderSide: BorderSide(color: Colors.grey[50], width: 2.0),
+                  ),
+                ),
               ),
             ),
-            Card(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.only(
-                    topRight: Radius.circular(15),
-                    topLeft: Radius.circular(15)),
+          ),
+          Container(
+            margin: EdgeInsets.only(left: 30.0, right: 30.0, top: 10),
+            child: Material(
+              elevation: 8,
+              shadowColor: Colors.grey[50],
+              borderRadius: BorderRadius.circular(15),
+              child: TextFormField(
+                controller: passwordController,
+                obscureText: _obscurePass,
+                decoration: InputDecoration(
+                  hintText: 'Password',
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      _obscurePass ? Icons.visibility_off : Icons.visibility,
+                    ),
+                    onPressed: () {
+                      setState(() => _obscurePass = !_obscurePass);
+                    },
+                  ),
+                  hintStyle: TextStyle(color: Colors.grey[500]),
+                  contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(15),
+                    borderSide: BorderSide(color: Colors.grey[50], width: 2.0),
+                  ),
+                ),
               ),
-              margin: EdgeInsets.only(top: 180),
-              elevation: 5,
-              child: ListView(
+            ),
+          ),
+          InkWell(
+            onTap: () {
+              deviceID();
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => ForgetPassword()));
+            },
+            child: Container(
+                alignment: Alignment.topRight,
+                margin: EdgeInsets.only(right: 30, top: 10),
+                child: Text(
+                  _lang.btnForgotPass ?? '',
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                    color: Color(0xFF427CEF),
+                  ),
+                )),
+          ),
+
+          Visibility(
+            visible: btnVisible,
+            child: Container(
+                height: 50.0,
+                margin: EdgeInsets.fromLTRB(30.0, 25.0, 30.0, 0.0),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(18.0),
+                  color: Color(0xFF427CEF),
+                ),
+                child: MaterialButton(
+                  minWidth: MediaQuery.of(context).size.width,
+                  child: Text(
+                    'SIGN IN',
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
+                  onPressed: () {
+                    password = 'corp.PGN';
+
+                    if (usernameController.text == '' &&
+                        passwordController.text == '') {
+                      showToast(
+                        Translations.of(context).text('field_input_allert'),
+                      );
+                    } else {
+                      final encrypted =
+                          encrypter.encrypt(passwordController.text, iv: iv);
+                      print('PASSWORD : ${encrypted.base64}');
+                      setState(() {
+                        visible = true;
+                        btnVisible = false;
+                      });
+                      fetchPost(
+                          context, encrypted.base64, usernameController.text);
+                    }
+                  },
+                )),
+          ),
+          Visibility(
+              maintainSize: true,
+              maintainAnimation: true,
+              maintainState: true,
+              visible: visible,
+              child: Column(
                 children: <Widget>[
                   Container(
-                    alignment: Alignment.center,
-                    margin: EdgeInsets.only(top: 15.0),
-                    height: 50,
-                    width: 50,
-                    child: Image.asset('assets/logo_head.png'),
-                  ),
-                  Container(
-                      alignment: Alignment.center,
-                      margin: EdgeInsets.only(top: 15),
-                      child: Text('Welcome to PGN Mobile' ?? '',
-                          style: TextStyle(
-                            fontSize: 21,
-                            fontWeight: FontWeight.bold,
-                            color: Color(0xFF427CEF),
-                          ))),
-                  Container(
-                      alignment: Alignment.center,
-                      margin: EdgeInsets.only(top: 10, left: 30, right: 30),
-                      child: Text(
-                        'Check your activities, contract, financial solutions and profile.' ??
-                            '',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w500,
-                            color: Colors.grey[500]),
-                      )),
-                  Container(
-                    margin: EdgeInsets.only(left: 30.0, right: 30.0, top: 50.0),
-                    child: Material(
-                      elevation: 8,
-                      shadowColor: Colors.grey[50],
-                      borderRadius: BorderRadius.circular(15),
-                      child: TextField(
-                        onTap: () {
-                          setState(() {
-                            _lang.btnForgotPass;
-                          });
-                        },
-                        controller: usernameController,
-                        decoration: InputDecoration(
-                          hintText: 'Email / Full Number',
-                          hintStyle: TextStyle(color: Colors.grey[500]),
-                          contentPadding:
-                              EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(15),
-                            borderSide:
-                                BorderSide(color: Colors.grey[50], width: 2.0),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(left: 30.0, right: 30.0, top: 10),
-                    child: Material(
-                      elevation: 8,
-                      shadowColor: Colors.grey[50],
-                      borderRadius: BorderRadius.circular(15),
-                      child: TextFormField(
-                        controller: passwordController,
-                        obscureText: _obscurePass,
-                        decoration: InputDecoration(
-                          hintText: 'Password',
-                          suffixIcon: IconButton(
-                            icon: Icon(
-                              _obscurePass
-                                  ? Icons.visibility_off
-                                  : Icons.visibility,
-                            ),
-                            onPressed: () {
-                              setState(() => _obscurePass = !_obscurePass);
-                            },
-                          ),
-                          hintStyle: TextStyle(color: Colors.grey[500]),
-                          contentPadding:
-                              EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(15),
-                            borderSide:
-                                BorderSide(color: Colors.grey[50], width: 2.0),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  InkWell(
-                    onTap: () {
-                      deviceID();
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => ForgetPassword()));
-                    },
-                    child: Container(
-                        alignment: Alignment.topRight,
-                        margin: EdgeInsets.only(right: 30, top: 10),
-                        child: Text(
-                          _lang.btnForgotPass ?? '',
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w500,
-                            color: Color(0xFF427CEF),
-                          ),
-                        )),
-                  ),
-
-                  Visibility(
-                    visible: btnVisible,
-                    child: Container(
-                        height: 50.0,
-                        margin: EdgeInsets.fromLTRB(30.0, 25.0, 30.0, 0.0),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(18.0),
-                          color: Color(0xFF427CEF),
-                        ),
-                        child: MaterialButton(
-                          minWidth: MediaQuery.of(context).size.width,
-                          child: Text(
-                            'SIGN IN',
-                            style: TextStyle(
-                              color: Colors.white,
-                            ),
-                          ),
-                          onPressed: () {
-                            password = 'corp.PGN';
-
-                            if (usernameController.text == '' &&
-                                passwordController.text == '') {
-                              showToast(
-                                Translations.of(context)
-                                    .text('field_input_allert'),
-                              );
-                            } else {
-                              final encrypted = encrypter
-                                  .encrypt(passwordController.text, iv: iv);
-                              print('PASSWORD : ${encrypted.base64}');
-                              setState(() {
-                                visible = true;
-                                btnVisible = false;
-                              });
-                              fetchPost(context, encrypted.base64,
-                                  usernameController.text);
-                            }
-                          },
-                        )),
-                  ),
-                  Visibility(
-                      maintainSize: true,
-                      maintainAnimation: true,
-                      maintainState: true,
-                      visible: visible,
-                      child: Column(
-                        children: <Widget>[
-                          Container(
-                              margin: EdgeInsets.only(top: 15, bottom: 10),
-                              child: CircularProgressIndicator())
-                        ],
-                      )),
-                  // Container(
-                  //     height: 50.0,
-                  //     margin: EdgeInsets.fromLTRB(30.0, 5.0, 30.0, 0.0),
-                  //     decoration: BoxDecoration(
-                  //       borderRadius: BorderRadius.circular(18.0),
-                  //       color: Color(0xFF427CEF),
-                  //     ),
-                  //     child: MaterialButton(
-                  //       minWidth: MediaQuery.of(context).size.width,
-                  //       child: Text(
-                  //         'Register',
-                  //         style: TextStyle(
-                  //           color: Colors.white,
-                  //         ),
-                  //       ),
-                  //       onPressed: () {
-                  //         Navigator.pop(context);
-                  //       },
-                  //     )),
-                  // InkWell(
-                  //   onTap: () {
-                  //     // deviceID();
-                  //     // Navigator.push(
-                  //     //     context,
-                  //     //     MaterialPageRoute(
-                  //     //         builder: (context) => ForgetPassword()));
-                  //   },
-                  //   child: Container(
-                  //       alignment: Alignment.center,
-                  //       margin: EdgeInsets.only(top: 35),
-                  //       child: Text(
-                  //         'Terms & Conditions' ?? '',
-                  //         style: TextStyle(
-                  //           fontSize: 14,
-                  //           fontWeight: FontWeight.w500,
-                  //           color: Color(0xFF427CEF),
-                  //         ),
-                  //       )),
-                  // ),
+                      margin: EdgeInsets.only(top: 15, bottom: 10),
+                      child: CircularProgressIndicator())
                 ],
-              ),
-            ),
-          ],
-        ),
+              )),
+          // Container(
+          //     height: 50.0,
+          //     margin: EdgeInsets.fromLTRB(30.0, 5.0, 30.0, 0.0),
+          //     decoration: BoxDecoration(
+          //       borderRadius: BorderRadius.circular(18.0),
+          //       color: Color(0xFF427CEF),
+          //     ),
+          //     child: MaterialButton(
+          //       minWidth: MediaQuery.of(context).size.width,
+          //       child: Text(
+          //         'Register',
+          //         style: TextStyle(
+          //           color: Colors.white,
+          //         ),
+          //       ),
+          //       onPressed: () {
+          //         Navigator.pop(context);
+          //       },
+          //     )),
+          // InkWell(
+          //   onTap: () {
+          //     // deviceID();
+          //     // Navigator.push(
+          //     //     context,
+          //     //     MaterialPageRoute(
+          //     //         builder: (context) => ForgetPassword()));
+          //   },
+          //   child: Container(
+          //       alignment: Alignment.center,
+          //       margin: EdgeInsets.only(top: 35),
+          //       child: Text(
+          //         'Terms & Conditions' ?? '',
+          //         style: TextStyle(
+          //           fontSize: 14,
+          //           fontWeight: FontWeight.w500,
+          //           color: Color(0xFF427CEF),
+          //         ),
+          //       )),
+          // ),
+        ],
       ),
     );
   }
@@ -476,12 +450,25 @@ class LoginScreenState extends State<LoginScreen> {
               'area_id': areaId.toString(),
               'new_customer_group_id': 1,
               'new_customer_segment_id': 1,
+              'user_id': _auth.user.userID,
+              'device_id': deviceId,
             });
             final responseFCM = await http.post(
                 'http://192.168.105.184/pgn-mobile-api/v2/firebase_manager/store_fcm_token',
                 // 'http://pgn-mobile-api.noxus.co.id/v2/firebase_manager/store_fcm_token',
-                headers: {'Content-Type': 'application/json'},
+                headers: {
+                  'Content-Type': 'application/json',
+                  'Authorization': _auth.accessToken
+                },
                 body: body);
+            final responseFCMNew = await http.post(
+                'https://dev-api-mobile.pgn.co.id/v2/fcm_token',
+                headers: {
+                  'Content-Type': 'application/json',
+                  'Authorization': _auth.accessToken
+                },
+                body: body);
+            print('HASIL RESPONSE FCM ${responseFCMNew.body}');
           });
         } else {
           SchedulerBinding.instance.addPostFrameCallback((_) async {
@@ -512,7 +499,8 @@ class LoginScreenState extends State<LoginScreen> {
             await storageCache.write(
                 key: 'request_code',
                 value: _auth.verificationStatus.requestCode);
-
+            await storageCache.write(
+                key: 'customer_id', value: _auth.customer.custId);
             SchedulerBinding.instance.addPostFrameCallback((_) async {
               fcmToken = await _getFCMTokenDailyUsage(
                   _auth.user.userGroupId, _auth.customer.custAreaId ?? "0");
@@ -529,12 +517,22 @@ class LoginScreenState extends State<LoginScreen> {
                 'area_id': areaId.toString(),
                 'new_customer_group_id': 1,
                 'new_customer_segment_id': 1,
+                'user_id': _auth.user.userID,
+                'device_id': deviceId,
               });
               final responseFCM = await http.post(
                   'http://192.168.105.184/pgn-mobile-api/v2/firebase_manager/store_fcm_token',
                   // 'http://pgn-mobile-api.noxus.co.id/v2/firebase_manager/store_fcm_token',
                   headers: {'Content-Type': 'application/json'},
                   body: body);
+              final responseFCMNew = await http.post(
+                  'https://dev-api-mobile.pgn.co.id/v2/fcm_token',
+                  headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': _auth.accessToken
+                  },
+                  body: body);
+              print('HASIL RESPONSE FCM ${responseFCMNew.body}');
             });
           } else if (_auth.user.userType == 2 && _auth.customerId == null) {
             await storageCache.write(

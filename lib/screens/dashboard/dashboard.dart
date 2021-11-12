@@ -235,8 +235,8 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
         onBackgroundMessage: myBackgroundMessageHandler,
         onMessage: (Map<String, dynamic> message) async {
           print("=====>on message $message");
-          // print("ON MESSGAE");
-          // print("INI RETURN ${message['data']['type']}");
+          print("ON MESSGAE");
+          print("INI RETURN ${message['data']['type']}");
           // print("ON");
           if (message['data']['type'] == "promosi") {
             // print("TRUE ITS NOT DAILY USAGE");
@@ -250,6 +250,8 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
           }
         },
         onResume: (Map<String, dynamic> message) async {
+          print("ON RESUME");
+          print("INI RETURN ${message['data']['type']}");
           if (message['data']['type'] == "promosi") {
             showDialog(
                 context: context,
@@ -259,6 +261,8 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
           }
         },
         onLaunch: (Map<String, dynamic> message) async {
+          print("ON LAUNCH");
+          print("INI RETURN ${message['data']['type']}");
           if (message['data']['type'] == "promosi") {
             showDialog(
                 context: context,
@@ -291,8 +295,6 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
   }
 
   void getTitleCust() async {
-    // SharedPreferences prefs = await SharedPreferences.getInstance();
-    //  final storageCache = new FlutterSecureStorage();
     String titleMngs = await storageCache.read(key: 'user_name_cust') ?? "";
     String titleCusts = await storageCache.read(key: 'user_name_cust') ?? "";
     String custIDs = await storageCache.read(key: 'user_id') ?? "";
@@ -313,13 +315,6 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
       customerID = customerIDs;
       customerGroupID = customerGroupIDs;
       listMenus = listMenusString.split(',');
-      print('USRER TYPE GET AUTH : $customerID');
-      // titleMng = prefs.getString('user_name_cust') ?? "";
-      // titleCust = prefs.getString('user_name_cust') ?? "";
-      // custID = prefs.getString('user_id') ?? "";
-      // userType = prefs.getString('user_type') ?? "";
-      // groupID = prefs.getString('usergroup_id') ?? "";
-      // customerID = prefs.getString('customer_id') ?? "";
     });
   }
 
@@ -1177,7 +1172,17 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
                       builder: (context, snapshot) {
                         if (!snapshot.hasData)
                           return Text('-');
-                        else if (snapshot.data.dataVCGasPoint.pointReward !=
+                        else if (snapshot.data.message != null) {
+                          return Text(
+                            '0',
+                            // overflow: TextOverflow.ellipsis,
+                            style: painting.TextStyle(
+                              fontSize: 20.0,
+                              fontWeight: FontWeight.bold,
+                              color: painting.Color(0xFF455055),
+                            ),
+                          );
+                        } else if (snapshot.data.dataVCGasPoint.pointReward !=
                             null) {
                           return Text(
                             snapshot.data.dataVCGasPoint.pointReward,
@@ -2508,6 +2513,9 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
                                                   .dashboardCustIdList
                                                   .listCustomerId[i]
                                                   .reqId);
+                                              // stateDialoge(() {
+                                              //   loadingSwitchAcc = false;
+                                              // });
                                             },
                                             child: Padding(
                                               padding: const EdgeInsets.only(
@@ -2688,6 +2696,9 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
           MaterialPageRoute(builder: (BuildContext context) => super.widget));
     } else {
       showToast(switchCustomerId.message);
+      Navigator.pop(context);
+      // Navigator.pushReplacement(context,
+      //     MaterialPageRoute(builder: (BuildContext context) => super.widget));
     }
   }
 

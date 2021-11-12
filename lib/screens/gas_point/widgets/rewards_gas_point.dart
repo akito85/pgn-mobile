@@ -166,6 +166,8 @@ class _RewardsGasPointState extends State<RewardsGasPoint> {
                         });
                         if (pointGasPoint == '0') {
                           showToast('Gas Point 0');
+                        } else if (int.parse(pointGasPoint) < pointNeeded) {
+                          showToast('Not Enough Points !');
                         } else {
                           // if (remainingPoint <= 0) {
                           //   remainingPoint = 0;

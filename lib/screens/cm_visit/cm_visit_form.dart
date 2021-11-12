@@ -113,6 +113,8 @@ class _CMVisitFormState extends State<CMVisitForm> {
     "Online",
     "Visit",
     "WhatsApp",
+    "Phone",
+    "Email",
   ];
   List listActivity = [
     "Penanganan Keluhan Pelanggan",
@@ -464,6 +466,237 @@ class _CMVisitFormState extends State<CMVisitForm> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Container(
+                      margin: EdgeInsets.only(bottom: 4, top: 20),
+                      child: Text('Customer Name',
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600)),
+                    ),
+                    _buildAutoComplate(context),
+                    Container(
+                      margin: EdgeInsets.only(bottom: 4, top: 20),
+                      child: Text('Customer ID',
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600)),
+                    ),
+                    Container(
+                        width: MediaQuery.of(context).size.width,
+                        child: TextFormField(
+                          minLines: 1,
+                          maxLines: 10,
+                          controller: customerId,
+                          autocorrect: true,
+                          style: TextStyle(height: 1, fontSize: 14),
+                          decoration: InputDecoration(
+                            hintText: 'Customer ID',
+                            filled: true,
+                            fillColor: Colors.white70,
+                            enabledBorder: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(5)),
+                                borderSide: BorderSide(
+                                    color: Color(0xFFD3D3D3), width: 2)),
+                            focusedBorder: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(5)),
+                                borderSide: BorderSide(
+                                    color: Colors.black38, width: 2)),
+                          ),
+                        )),
+                    Visibility(
+                      visible: isVisibleCustomerId,
+                      child: Container(
+                        margin: EdgeInsets.only(top: 2, left: 8),
+                        child: Text('Costumer ID cannot be empty',
+                            style: TextStyle(
+                                color: Color(0xFFDD1818),
+                                fontSize: 10,
+                                fontWeight: FontWeight.normal)),
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(bottom: 4, top: 20),
+                      child: Text('Contact Person',
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600)),
+                    ),
+                    Container(
+                        width: MediaQuery.of(context).size.width,
+                        child: TextFormField(
+                          minLines: 1,
+                          maxLines: 10,
+                          controller: contactPerson,
+                          autocorrect: true,
+                          style: TextStyle(height: 1, fontSize: 14),
+                          decoration: InputDecoration(
+                            hintText: 'Contact person name',
+                            filled: true,
+                            fillColor: Colors.white70,
+                            enabledBorder: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(5)),
+                                borderSide: BorderSide(
+                                    color: Color(0xFFD3D3D3), width: 2)),
+                            focusedBorder: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(5)),
+                                borderSide: BorderSide(
+                                    color: Colors.black38, width: 2)),
+                          ),
+                        )),
+
+                    //phoneNumber
+                    Container(
+                      margin: EdgeInsets.only(bottom: 4, top: 20),
+                      child: Text('Phone Number',
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600)),
+                    ),
+                    Container(
+                        width: MediaQuery.of(context).size.width,
+                        child: TextFormField(
+                          keyboardType: TextInputType.number,
+                          minLines: 1,
+                          maxLines: 10,
+                          controller: phoneNumber,
+                          autocorrect: true,
+                          style: TextStyle(height: 1, fontSize: 14),
+                          decoration: InputDecoration(
+                            hintText: 'Contact person number',
+                            filled: true,
+                            fillColor: Colors.white70,
+                            prefixIcon: Padding(
+                              padding:
+                                  EdgeInsets.only(right: 16, top: 14, left: 16),
+                              child: Text('+62',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.normal,
+                                      fontSize: 14)),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(5)),
+                                borderSide: BorderSide(
+                                    color: Color(0xFFD3D3D3), width: 2)),
+                            focusedBorder: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(5)),
+                                borderSide: BorderSide(
+                                    color: Colors.black38, width: 2)),
+                          ),
+                        )),
+                    Visibility(
+                      visible: isVisiblePhoneNumber,
+                      child: Container(
+                        margin: EdgeInsets.only(top: 2, left: 8),
+                        child: Text('Incorect Phone Number',
+                            style: TextStyle(
+                                color: Color(0xFFDD1818),
+                                fontSize: 10,
+                                fontWeight: FontWeight.normal)),
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(bottom: 4, top: 20),
+                      child: Text('Email Address',
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600)),
+                    ),
+                    Container(
+                        width: MediaQuery.of(context).size.width,
+                        child: TextFormField(
+                          keyboardType: TextInputType.emailAddress,
+                          minLines: 1,
+                          maxLines: 10,
+                          controller: emailAddress,
+                          autocorrect: true,
+                          style: TextStyle(height: 1, fontSize: 14),
+                          decoration: InputDecoration(
+                            hintText: 'Email Address',
+                            filled: true,
+                            fillColor: Colors.white70,
+                            enabledBorder: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(5)),
+                                borderSide: BorderSide(
+                                    color: Color(0xFFD3D3D3), width: 2)),
+                            focusedBorder: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(5)),
+                                borderSide: BorderSide(
+                                    color: Colors.black38, width: 2)),
+                          ),
+                        )),
+                    Visibility(
+                      visible: isVisibleCustomerEmail,
+                      child: Container(
+                        margin: EdgeInsets.only(top: 2, left: 8),
+                        child: Text('Incorect Email Address',
+                            style: TextStyle(
+                                color: Color(0xFFDD1818),
+                                fontSize: 10,
+                                fontWeight: FontWeight.normal)),
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(bottom: 4, top: 20),
+                      child: Text('Address',
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600)),
+                    ),
+                    Container(
+                        width: MediaQuery.of(context).size.width,
+                        child: TextFormField(
+                          minLines: 1,
+                          maxLines: 10,
+                          controller: address,
+                          autocorrect: true,
+                          style: TextStyle(height: 1, fontSize: 14),
+                          decoration: InputDecoration(
+                            hintText: 'Enter Your Address',
+                            filled: true,
+                            fillColor: Colors.white70,
+                            enabledBorder: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(5)),
+                                borderSide: BorderSide(
+                                    color: Color(0xFFD3D3D3), width: 2)),
+                            focusedBorder: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(5)),
+                                borderSide: BorderSide(
+                                    color: Colors.black38, width: 2)),
+                          ),
+                        )),
+                    Visibility(
+                      visible: isVisibleAddress,
+                      child: Container(
+                        margin: EdgeInsets.only(top: 2, left: 8),
+                        child: Text('Address cannot be empty',
+                            style: TextStyle(
+                                color: Color(0xFFDD1818),
+                                fontSize: 10,
+                                fontWeight: FontWeight.normal)),
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(top: 16, right: 18, left: 18),
+                      child: Divider(color: Color(0xFFF4F4F4)),
+                    ),
+                    Container(
                       margin: EdgeInsets.only(bottom: 4),
                       child: Text('Date of Visit',
                           style: TextStyle(
@@ -663,236 +896,7 @@ class _CMVisitFormState extends State<CMVisitForm> {
                                 fontWeight: FontWeight.normal)),
                       ),
                     ),
-                    Container(
-                      margin: EdgeInsets.only(top: 16, right: 18, left: 18),
-                      child: Divider(color: Color(0xFFF4F4F4)),
-                    ),
-                    Container(
-                      margin: EdgeInsets.only(bottom: 4, top: 20),
-                      child: Text('Customer Name',
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600)),
-                    ),
-                    _buildAutoComplate(context),
-                    Container(
-                      margin: EdgeInsets.only(bottom: 4, top: 20),
-                      child: Text('Customer ID',
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600)),
-                    ),
-                    Container(
-                        width: MediaQuery.of(context).size.width,
-                        child: TextFormField(
-                          minLines: 1,
-                          maxLines: 10,
-                          controller: customerId,
-                          autocorrect: true,
-                          style: TextStyle(height: 1, fontSize: 14),
-                          decoration: InputDecoration(
-                            hintText: 'Customer ID',
-                            filled: true,
-                            fillColor: Colors.white70,
-                            enabledBorder: OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(5)),
-                                borderSide: BorderSide(
-                                    color: Color(0xFFD3D3D3), width: 2)),
-                            focusedBorder: OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(5)),
-                                borderSide: BorderSide(
-                                    color: Colors.black38, width: 2)),
-                          ),
-                        )),
-                    Visibility(
-                      visible: isVisibleCustomerId,
-                      child: Container(
-                        margin: EdgeInsets.only(top: 2, left: 8),
-                        child: Text('Costumer ID cannot be empty',
-                            style: TextStyle(
-                                color: Color(0xFFDD1818),
-                                fontSize: 10,
-                                fontWeight: FontWeight.normal)),
-                      ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.only(bottom: 4, top: 20),
-                      child: Text('Contact Person',
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600)),
-                    ),
-                    Container(
-                        width: MediaQuery.of(context).size.width,
-                        child: TextFormField(
-                          minLines: 1,
-                          maxLines: 10,
-                          controller: contactPerson,
-                          autocorrect: true,
-                          style: TextStyle(height: 1, fontSize: 14),
-                          decoration: InputDecoration(
-                            hintText: 'Contact person name',
-                            filled: true,
-                            fillColor: Colors.white70,
-                            enabledBorder: OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(5)),
-                                borderSide: BorderSide(
-                                    color: Color(0xFFD3D3D3), width: 2)),
-                            focusedBorder: OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(5)),
-                                borderSide: BorderSide(
-                                    color: Colors.black38, width: 2)),
-                          ),
-                        )),
-                    Container(
-                      margin: EdgeInsets.only(bottom: 4, top: 20),
-                      child: Text('Address',
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600)),
-                    ),
-                    Container(
-                        width: MediaQuery.of(context).size.width,
-                        child: TextFormField(
-                          minLines: 1,
-                          maxLines: 10,
-                          controller: address,
-                          autocorrect: true,
-                          style: TextStyle(height: 1, fontSize: 14),
-                          decoration: InputDecoration(
-                            hintText: 'Enter Your Address',
-                            filled: true,
-                            fillColor: Colors.white70,
-                            enabledBorder: OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(5)),
-                                borderSide: BorderSide(
-                                    color: Color(0xFFD3D3D3), width: 2)),
-                            focusedBorder: OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(5)),
-                                borderSide: BorderSide(
-                                    color: Colors.black38, width: 2)),
-                          ),
-                        )),
-                    Visibility(
-                      visible: isVisibleAddress,
-                      child: Container(
-                        margin: EdgeInsets.only(top: 2, left: 8),
-                        child: Text('Address cannot be empty',
-                            style: TextStyle(
-                                color: Color(0xFFDD1818),
-                                fontSize: 10,
-                                fontWeight: FontWeight.normal)),
-                      ),
-                    ),
-                    //phoneNumber
-                    Container(
-                      margin: EdgeInsets.only(bottom: 4, top: 20),
-                      child: Text('Phone Number',
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600)),
-                    ),
-                    Container(
-                        width: MediaQuery.of(context).size.width,
-                        child: TextFormField(
-                          keyboardType: TextInputType.number,
-                          minLines: 1,
-                          maxLines: 10,
-                          controller: phoneNumber,
-                          autocorrect: true,
-                          style: TextStyle(height: 1, fontSize: 14),
-                          decoration: InputDecoration(
-                            hintText: 'Contact person number',
-                            filled: true,
-                            fillColor: Colors.white70,
-                            prefixIcon: Padding(
-                              padding:
-                                  EdgeInsets.only(right: 16, top: 14, left: 16),
-                              child: Text('+62',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.normal,
-                                      fontSize: 14)),
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(5)),
-                                borderSide: BorderSide(
-                                    color: Color(0xFFD3D3D3), width: 2)),
-                            focusedBorder: OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(5)),
-                                borderSide: BorderSide(
-                                    color: Colors.black38, width: 2)),
-                          ),
-                        )),
-                    Visibility(
-                      visible: isVisiblePhoneNumber,
-                      child: Container(
-                        margin: EdgeInsets.only(top: 2, left: 8),
-                        child: Text('Incorect Phone Number',
-                            style: TextStyle(
-                                color: Color(0xFFDD1818),
-                                fontSize: 10,
-                                fontWeight: FontWeight.normal)),
-                      ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.only(bottom: 4, top: 20),
-                      child: Text('Email Address',
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600)),
-                    ),
-                    Container(
-                        width: MediaQuery.of(context).size.width,
-                        child: TextFormField(
-                          keyboardType: TextInputType.emailAddress,
-                          minLines: 1,
-                          maxLines: 10,
-                          controller: emailAddress,
-                          autocorrect: true,
-                          style: TextStyle(height: 1, fontSize: 14),
-                          decoration: InputDecoration(
-                            hintText: 'Email Address',
-                            filled: true,
-                            fillColor: Colors.white70,
-                            enabledBorder: OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(5)),
-                                borderSide: BorderSide(
-                                    color: Color(0xFFD3D3D3), width: 2)),
-                            focusedBorder: OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(5)),
-                                borderSide: BorderSide(
-                                    color: Colors.black38, width: 2)),
-                          ),
-                        )),
-                    Visibility(
-                      visible: isVisibleCustomerEmail,
-                      child: Container(
-                        margin: EdgeInsets.only(top: 2, left: 8),
-                        child: Text('Incorect Email Address',
-                            style: TextStyle(
-                                color: Color(0xFFDD1818),
-                                fontSize: 10,
-                                fontWeight: FontWeight.normal)),
-                      ),
-                    ),
+
                     Container(
                       margin: EdgeInsets.only(top: 16, right: 18, left: 18),
                       child: Divider(color: Color(0xFFF4F4F4)),
@@ -1873,6 +1877,12 @@ class _CMVisitFormState extends State<CMVisitForm> {
         break;
       case "WhatsApp":
         return "3";
+        break;
+      case "Phone":
+        return "4";
+        break;
+      case "Email":
+        return "5";
         break;
       default:
         return "";

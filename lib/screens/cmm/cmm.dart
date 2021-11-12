@@ -248,34 +248,27 @@ class CMMState extends State<CMM> with SingleTickerProviderStateMixin {
                 ),
               ),
               //off in
-              Positioned(
-                bottom: 0.1,
-                child: Container(
-                  height: 45.0,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5.0),
-                    color: Color(0xFF427CEF),
-                  ),
-                  child: MaterialButton(
-                    minWidth: MediaQuery.of(context).size.width,
-                    child: Text(
-                      'CATAT METER MANDIRI',
-                      style: TextStyle(
-                        color: Colors.white,
-                      ),
-                    ),
-                    onPressed: () {
-                      Navigator.pushNamed(context, '/cmmForm');
-                    },
-                  ),
+              Container(
+                height: 45.0,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5.0),
+                  color: Color(0xFF427CEF),
                 ),
-              )
+                child: MaterialButton(
+                  minWidth: MediaQuery.of(context).size.width,
+                  child: Text(
+                    'CATAT METER MANDIRI',
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/cmmForm');
+                  },
+                ),
+              ),
             ],
           );
-        print('STATCMM : ${snapshot.data.statusCMM}');
-        print(
-            'INI STATUS CMMMMMMM :${DateFormat("MMMM").format(DateTime.parse(DateTime.now().toString()))}');
-        print('CURRENT MONTH ${snapshot.data.dataListCMM.length}');
         return Stack(
           children: <Widget>[
             Container(
