@@ -74,19 +74,23 @@ class LoginScreenState extends State<LoginScreen> {
       fcmTokens = token;
       return token;
     });
+    await storageCache.write(key: 'fcm_token', value: fcmTokens);
     return fcmTokens;
   }
 
   Future<String> _getFCMToken() async {
-    String fcmTokens;
-    await _firebaseMessaging.getToken().then((token) {
-      setState(() {
-        fcmTokens = token;
-        print('INI FCM TOKEN $fcmTokens');
-      });
-      fcmTokens = token;
+    String fcmTokens = await _firebaseMessaging.getToken().then((token) {
+      // setState(() {
+      //   fcmTokens = token;
+      //   print('INI FCM TOKEN $fcmTokens');
+      // });
+      // fcmTokens = token;
+
+      print('INI TOKEN DARI FCM $token');
+
       return token;
     });
+
     return fcmTokens;
   }
 
@@ -442,7 +446,7 @@ class LoginScreenState extends State<LoginScreen> {
             int userGroup = int.parse(_auth.user.userGroupId);
             int areaId = _auth.customer.custAreaId ?? 0;
             var body = json.encode({
-              'fcm_token': fcmToken,
+              'fcm_token': await _getFCMToken(),
               'language': ui.window.locale.languageCode,
               'customer_id': _auth.customer.custId ?? 0,
               'user_type_id': userType,
@@ -453,14 +457,14 @@ class LoginScreenState extends State<LoginScreen> {
               'user_id': _auth.user.userID,
               'device_id': deviceId,
             });
-            final responseFCM = await http.post(
-                'http://192.168.105.184/pgn-mobile-api/v2/firebase_manager/store_fcm_token',
-                // 'http://pgn-mobile-api.noxus.co.id/v2/firebase_manager/store_fcm_token',
-                headers: {
-                  'Content-Type': 'application/json',
-                  'Authorization': _auth.accessToken
-                },
-                body: body);
+            // final responseFCM = await http.post(
+            //     'http://192.168.105.184/pgn-mobile-api/v2/firebase_manager/store_fcm_token',
+            //     // 'http://pgn-mobile-api.noxus.co.id/v2/firebase_manager/store_fcm_token',
+            //     headers: {
+            //       'Content-Type': 'application/json',
+            //       'Authorization': _auth.accessToken
+            //     },
+            //     body: body);
             final responseFCMNew = await http.post(
                 'https://dev-api-mobile.pgn.co.id/v2/fcm_token',
                 headers: {
@@ -468,6 +472,11 @@ class LoginScreenState extends State<LoginScreen> {
                   'Authorization': _auth.accessToken
                 },
                 body: body);
+            await storageCache.write(
+                key: 'fcm_token', value: await _getFCMToken());
+            await storageCache.write(
+                key: 'message_fcm', value: responseFCMNew.body);
+            print('HASIL BODY FCM $body');
             print('HASIL RESPONSE FCM ${responseFCMNew.body}');
           });
         } else {
@@ -509,7 +518,7 @@ class LoginScreenState extends State<LoginScreen> {
               int userGroup = int.parse(_auth.user.userGroupId);
               int areaId = _auth.customer.custAreaId ?? 0;
               var body = json.encode({
-                'fcm_token': fcmToken,
+                'fcm_token': await _getFCMToken(),
                 'language': ui.window.locale.languageCode,
                 'customer_id': _auth.customer.custId ?? 0,
                 'user_type_id': userType,
@@ -520,11 +529,11 @@ class LoginScreenState extends State<LoginScreen> {
                 'user_id': _auth.user.userID,
                 'device_id': deviceId,
               });
-              final responseFCM = await http.post(
-                  'http://192.168.105.184/pgn-mobile-api/v2/firebase_manager/store_fcm_token',
-                  // 'http://pgn-mobile-api.noxus.co.id/v2/firebase_manager/store_fcm_token',
-                  headers: {'Content-Type': 'application/json'},
-                  body: body);
+              // final responseFCM = await http.post(
+              //     'http://192.168.105.184/pgn-mobile-api/v2/firebase_manager/store_fcm_token',
+              //     // 'http://pgn-mobile-api.noxus.co.id/v2/firebase_manager/store_fcm_token',
+              //     headers: {'Content-Type': 'application/json'},
+              //     body: body);
               final responseFCMNew = await http.post(
                   'https://dev-api-mobile.pgn.co.id/v2/fcm_token',
                   headers: {
@@ -532,6 +541,10 @@ class LoginScreenState extends State<LoginScreen> {
                     'Authorization': _auth.accessToken
                   },
                   body: body);
+              await storageCache.write(
+                  key: 'fcm_token', value: await _getFCMToken());
+              await storageCache.write(
+                  key: 'message_fcm', value: responseFCMNew.body);
               print('HASIL RESPONSE FCM ${responseFCMNew.body}');
             });
           } else if (_auth.user.userType == 2 && _auth.customerId == null) {

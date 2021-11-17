@@ -3,6 +3,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:pgn_mobile/screens/dashboard/dashboard.dart';
 import 'dart:async';
 import 'package:pgn_mobile/screens/login/login_revamp.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -10,16 +11,28 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  final storageCache = FlutterSecureStorage();
   _startTime() async {
     var _duration = new Duration(seconds: 2);
     return Timer(_duration, navigationPage);
   }
 
+  Future<String> getAuth() async {
+    dynamic authStatus = await storageCache.read(key: 'auth_status');
+    return authStatus;
+  }
+
   void navigationPage() async {
-    // SharedPreferences prefs = await SharedPreferences.getInstance();
-    // String userID = prefs.getString('user_id');
-    final storageCache = FlutterSecureStorage();
-    String userID = await storageCache.read(key: 'auth_status');
+    final prefs = await SharedPreferences.getInstance();
+
+    if (prefs.getBool('first_run') ?? true) {
+      await storageCache.deleteAll();
+
+      prefs.setBool('first_run', false);
+    }
+
+    String userID = await getAuth();
+
     if (userID == "Login") {
       Navigator.push(
         context,
@@ -42,6 +55,7 @@ class _SplashScreenState extends State<SplashScreen> {
     //     context,
     //     MaterialPageRoute(
     //       builder: (context) => Login(),
+
     //     ),
     //   );
     // } else if (userID == null) {

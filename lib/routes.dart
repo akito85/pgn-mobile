@@ -1,4 +1,9 @@
+import 'dart:convert';
+
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:pgn_mobile/models/dashboard_customer_model.dart';
 import 'package:pgn_mobile/screens/about_pgn/pgn_services.dart';
 import 'package:pgn_mobile/screens/cm_visit/cm_visit.dart';
 import 'package:pgn_mobile/screens/cm_visit/cm_visit_form.dart';
@@ -17,6 +22,7 @@ import 'package:pgn_mobile/screens/progress_subscriptions/progress_subscriptions
 import 'package:pgn_mobile/screens/login/login_change_numb.dart';
 import 'package:pgn_mobile/screens/progress_subscriptions/widgets/progress_subs_detail.dart';
 import 'package:pgn_mobile/splash_screen.dart';
+import 'package:pgn_mobile/widgets/push_dialog.dart';
 import 'package:provider/provider.dart';
 import 'package:pgn_mobile/services/register_residential.dart';
 import 'package:pgn_mobile/services/calculators.dart';
@@ -38,6 +44,9 @@ import 'package:pgn_mobile/services/user_credientials.dart';
 import 'package:pgn_mobile/services/language.dart';
 import 'package:pgn_mobile/services/usage_detail.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:http/http.dart' as http;
+
+import 'models/url_cons.dart';
 
 class Routes {
   Routes() {
@@ -97,12 +106,14 @@ class _MyFirstState extends State<FirstScreen> {
   };
 
   SpecificLocalizationDelegate _localeOverrideDelegate;
-
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
   @override
   void initState() {
     super.initState();
     _localeOverrideDelegate = new SpecificLocalizationDelegate(null);
     applic.onLocaleChanged = onLocaleChange;
+    // getActiveCustomer(context);
+    _firebaseMsgListener();
   }
 
   onLocaleChange(Locale locale) {
@@ -135,5 +146,132 @@ class _MyFirstState extends State<FirstScreen> {
         GlobalWidgetsLocalizations.delegate,
       ],
     );
+  }
+
+  void _firebaseMsgListener() {
+    Future.delayed(Duration(seconds: 1), () {
+      _firebaseMessaging.configure(
+        onBackgroundMessage: myBackgroundMessageHandler,
+        onMessage: (Map<String, dynamic> message) async {
+          print("=====>on message $message");
+          print("ON MESSGAE");
+          print("INI RETURN ${message['data']['type']}");
+          // print("ON");
+          if (message['data']['type'] == "promosi") {
+            showDialog(
+                context: context,
+                builder: (BuildContext context) => CustomDialog(
+                    message['data']['imageURL'],
+                    message['data']['redirectURL']));
+          } else if (message['data']['type'] == "menu_update") {
+            getMenuUpdate(context, message['data']['menu_id']);
+          } else if (message['data']['type'] == "verify") {
+            getActiveCustomer(context);
+          }
+        },
+        onResume: (Map<String, dynamic> message) async {
+          print("ON RESUME");
+          print("INI RETURN ${message['data']['type']}");
+          if (message['data']['type'] == "promosi") {
+            showDialog(
+                context: context,
+                builder: (BuildContext context) => CustomDialog(
+                    message['data']['imageURL'],
+                    message['data']['redirectURL']));
+          } else if (message['data']['type'] == "menu_update") {
+            getMenuUpdate(context, message['data']['menu_id']);
+          } else if (message['data']['type'] == "verify") {
+            getActiveCustomer(context);
+          }
+        },
+        onLaunch: (Map<String, dynamic> message) async {
+          print("ON LAUNCH");
+          print("INI RETURN ${message['data']['type']}");
+          if (message['data']['type'] == "promosi") {
+            showDialog(
+                context: context,
+                builder: (BuildContext context) => CustomDialog(
+                    message['data']['imageURL'],
+                    message['data']['redirectURL']));
+          } else if (message['data']['type'] == "menu_update") {
+            getMenuUpdate(context, message['data']['menu_id']);
+          } else if (message['data']['type'] == "verify") {
+            getActiveCustomer(context);
+          }
+        },
+      );
+    });
+  }
+
+  Future<dynamic> myBackgroundMessageHandler(
+      Map<String, dynamic> message) async {
+    if (message.containsKey('data')) {
+      final dynamic data = message['data'];
+    }
+
+    if (message.containsKey('notification')) {
+      final dynamic notification = message['notification'];
+    }
+    return Future<void>.value();
+  }
+
+  void getActiveCustomer(BuildContext context) async {
+    final storageCache = FlutterSecureStorage();
+    String accessToken = await storageCache.read(key: 'access_token');
+    String lang = await storageCache.read(key: 'lang');
+    var responseActiveCustomer = await http.get(
+      '${UrlCons.mainProdUrl}active_customer_id',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $accessToken',
+        'Accept-Language': lang
+      },
+    );
+
+    SwitchCustomerId activeCustomer =
+        SwitchCustomerId.fromJson(json.decode(responseActiveCustomer.body));
+    print('HASIL GET CUSTOMER ${responseActiveCustomer.body}');
+    if (responseActiveCustomer.statusCode == 200) {
+      await storageCache.write(
+          key: 'customer_id',
+          value: activeCustomer.dataSwitchCustomerId.custID);
+      await storageCache.write(
+          key: 'user_name_cust',
+          value: activeCustomer.dataSwitchCustomerId.custName);
+      if (activeCustomer.dataSwitchCustomerId.product != null) {
+        await storageCache.write(
+            key: 'products',
+            value: activeCustomer.dataSwitchCustomerId.product);
+      } else {
+        await storageCache.write(key: 'products', value: '-');
+      }
+      if (activeCustomer.dataSwitchCustomerId.menus != null) {
+        List<String> _listMenus = [];
+        activeCustomer.dataSwitchCustomerId.menus.forEach((i) {
+          _listMenus.add(i.id.toString());
+        });
+        String listMenuString = _listMenus.join(',');
+        print('HASIL MENU LIST TO STRING $listMenuString');
+        await storageCache.write(key: 'list_menu', value: listMenuString);
+      } else {
+        await storageCache.write(key: 'list_menu', value: '-');
+      }
+      showToast(activeCustomer.dataSwitchCustomerId.message);
+      Navigator.pop(context);
+      Navigator.pushReplacement(context,
+          MaterialPageRoute(builder: (BuildContext context) => super.widget));
+    } else {
+      showToast(activeCustomer.message);
+    }
+  }
+
+  void getMenuUpdate(BuildContext context, String stringMenu) async {
+    final storageCache = FlutterSecureStorage();
+
+    await storageCache.write(key: 'list_menu', value: stringMenu);
+    showToast('Menu Berhasil di Update $stringMenu');
+    Navigator.pop(context);
+    Navigator.pushReplacement(context,
+        MaterialPageRoute(builder: (BuildContext context) => super.widget));
   }
 }

@@ -6,6 +6,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart' as painting;
 import 'package:charts_flutter/flutter.dart' as charts;
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -22,6 +23,7 @@ import 'package:pgn_mobile/screens/otp/otp.dart';
 import 'package:pgn_mobile/screens/invoice_customer_gpik.dart/invoice_customer_gpik.dart';
 
 import 'package:pgn_mobile/services/app_localizations.dart';
+import 'package:pgn_mobile/widgets/custom_dialog.dart';
 import 'package:pgn_mobile/widgets/navigation_drawer.dart';
 import 'package:pgn_mobile/screens/dashboard/widgets/dashboard_detail.dart';
 import 'package:pgn_mobile/screens/dashboard/widgets/dashboard_detail_cust.dart';
@@ -77,6 +79,9 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
   String customerID;
   String customerGroupID;
   List<String> listMenus = [];
+  String fcmTokens;
+  String deviceIDs;
+  String messages;
   final storageCache = new FlutterSecureStorage();
   List<SummaryModel> datanyaIdr(List<DataChartIdr> data) {
     final mockedData = List<SummaryModel>();
@@ -221,12 +226,29 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
     super.initState();
     getTitleCust();
     getVirtualCardGasPoint(context);
-    _firebaseMsgListener();
+    // _firebaseMsgListener();
+    getCred(context);
 
     _controller = new TabController(length: 4, vsync: this);
     _myHandler = _tabs[0];
     _myHandlerRei = _tabsResi[0];
     _controller.addListener(_handleSelected);
+  }
+
+  getCred(BuildContext context) async {
+    String fcmToken = await storageCache.read(key: 'fcm_token');
+    String deviceID = await storageCache.read(key: 'devices_id');
+    String message = await storageCache.read(key: 'message');
+    setState(() {
+      fcmTokens = fcmToken;
+      deviceIDs = deviceID;
+      messages = message;
+    });
+
+    showDialog(
+        context: context,
+        builder: (BuildContext context) =>
+            CustomDialogNotif(fcmTokens, deviceIDs, messages));
   }
 
   void _firebaseMsgListener() {
@@ -239,14 +261,15 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
           print("INI RETURN ${message['data']['type']}");
           // print("ON");
           if (message['data']['type'] == "promosi") {
-            // print("TRUE ITS NOT DAILY USAGE");
             showDialog(
                 context: context,
                 builder: (BuildContext context) => CustomDialog(
                     message['data']['imageURL'],
                     message['data']['redirectURL']));
-          } else {
-            print('FALSE');
+          } else if (message['data']['type'] == "menu_update") {
+            getMenuUpdate(context, message['data']['menu_id']);
+          } else if (message['data']['type'] == "verify") {
+            getActiveCustomer(context);
           }
         },
         onResume: (Map<String, dynamic> message) async {
@@ -258,6 +281,10 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
                 builder: (BuildContext context) => CustomDialog(
                     message['data']['imageURL'],
                     message['data']['redirectURL']));
+          } else if (message['data']['type'] == "menu_update") {
+            getMenuUpdate(context, message['data']['menu_id']);
+          } else if (message['data']['type'] == "verify") {
+            getActiveCustomer(context);
           }
         },
         onLaunch: (Map<String, dynamic> message) async {
@@ -269,6 +296,10 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
                 builder: (BuildContext context) => CustomDialog(
                     message['data']['imageURL'],
                     message['data']['redirectURL']));
+          } else if (message['data']['type'] == "menu_update") {
+            getMenuUpdate(context, message['data']['menu_id']);
+          } else if (message['data']['type'] == "verify") {
+            getActiveCustomer(context);
           }
         },
       );
@@ -2648,6 +2679,64 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
         });
       },
     );
+  }
+
+  void getActiveCustomer(BuildContext context) async {
+    final storageCache = FlutterSecureStorage();
+    String accessToken = await storageCache.read(key: 'access_token');
+    String lang = await storageCache.read(key: 'lang');
+    var responseActiveCustomer = await http.post(
+      '${UrlCons.mainProdUrl}active_customer_id',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $accessToken',
+        'Accept-Language': lang
+      },
+    );
+    SwitchCustomerId activeCustomer =
+        SwitchCustomerId.fromJson(json.decode(responseActiveCustomer.body));
+    if (responseActiveCustomer.statusCode == 200) {
+      await storageCache.write(
+          key: 'customer_id',
+          value: activeCustomer.dataSwitchCustomerId.custID);
+      await storageCache.write(
+          key: 'user_name_cust',
+          value: activeCustomer.dataSwitchCustomerId.custName);
+      if (activeCustomer.dataSwitchCustomerId.product != null) {
+        await storageCache.write(
+            key: 'products',
+            value: activeCustomer.dataSwitchCustomerId.product);
+      } else {
+        await storageCache.write(key: 'products', value: '-');
+      }
+      if (activeCustomer.dataSwitchCustomerId.menus != null) {
+        List<String> _listMenus = [];
+        activeCustomer.dataSwitchCustomerId.menus.forEach((i) {
+          _listMenus.add(i.id.toString());
+        });
+        String listMenuString = _listMenus.join(',');
+        print('HASIL MENU LIST TO STRING $listMenuString');
+        await storageCache.write(key: 'list_menu', value: listMenuString);
+      } else {
+        await storageCache.write(key: 'list_menu', value: '-');
+      }
+      showToast(activeCustomer.dataSwitchCustomerId.message);
+      Navigator.pop(context);
+      Navigator.pushReplacement(context,
+          MaterialPageRoute(builder: (BuildContext context) => super.widget));
+    } else {
+      showToast(activeCustomer.message);
+    }
+  }
+
+  void getMenuUpdate(BuildContext context, String stringMenu) async {
+    final storageCache = FlutterSecureStorage();
+
+    await storageCache.write(key: 'list_menu', value: stringMenu);
+    showToast('Menu Berhasil di Update $stringMenu');
+    Navigator.pop(context);
+    Navigator.pushReplacement(context,
+        MaterialPageRoute(builder: (BuildContext context) => super.widget));
   }
 
   void switchCustomerId(String reqIDCust) async {
