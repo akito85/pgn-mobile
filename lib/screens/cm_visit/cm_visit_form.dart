@@ -1696,7 +1696,8 @@ class _CMVisitFormState extends State<CMVisitForm> {
               'Content-Type': 'application/json',
             },
             body: body);
-    print('status code' + responsePostCmVisitForm.body.toString());
+    print('HASIL RETURNYA BODY  $body');
+    print('HASIL RETURNYA  ${responsePostCmVisitForm.body.toString()}');
     if (responsePostCmVisitForm.statusCode == 200) {
       setState(() {
         _showDialogSuccessSubmit(context);

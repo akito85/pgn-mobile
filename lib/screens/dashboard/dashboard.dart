@@ -23,6 +23,7 @@ import 'package:pgn_mobile/screens/otp/otp.dart';
 import 'package:pgn_mobile/screens/invoice_customer_gpik.dart/invoice_customer_gpik.dart';
 
 import 'package:pgn_mobile/services/app_localizations.dart';
+import 'package:pgn_mobile/widgets/active_cust_dialog.dart';
 import 'package:pgn_mobile/widgets/custom_dialog.dart';
 import 'package:pgn_mobile/widgets/navigation_drawer.dart';
 import 'package:pgn_mobile/screens/dashboard/widgets/dashboard_detail.dart';
@@ -227,7 +228,7 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
     getTitleCust();
     getVirtualCardGasPoint(context);
     // _firebaseMsgListener();
-    getCred(context);
+    // getCred(context);
 
     _controller = new TabController(length: 4, vsync: this);
     _myHandler = _tabs[0];
@@ -244,7 +245,9 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
       deviceIDs = deviceID;
       messages = message;
     });
-
+    // showDialog(
+    //     context: context,
+    //     builder: (BuildContext context) => ActivCustDialogNotif(messages));
     showDialog(
         context: context,
         builder: (BuildContext context) =>
@@ -409,8 +412,10 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
               ),
             ],
           ),
-          drawer: Drawer(
-            child: NavigationDrawer(),
+          drawer: SafeArea(
+            child: Drawer(
+              child: NavigationDrawer(),
+            ),
           ),
           body: Stack(
             children: <Widget>[
@@ -549,8 +554,10 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
               //     })
             ],
           ),
-          drawer: Drawer(
-            child: NavigationDrawer(),
+          drawer: SafeArea(
+            child: Drawer(
+              child: NavigationDrawer(),
+            ),
           ),
           body: Stack(
             children: <Widget>[
@@ -678,8 +685,10 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
               ),
             ],
           ),
-          drawer: Drawer(
-            child: NavigationDrawer(),
+          drawer: SafeArea(
+            child: Drawer(
+              child: NavigationDrawer(),
+            ),
           ),
           body: Stack(
             children: <Widget>[
@@ -2685,7 +2694,7 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
     final storageCache = FlutterSecureStorage();
     String accessToken = await storageCache.read(key: 'access_token');
     String lang = await storageCache.read(key: 'lang');
-    var responseActiveCustomer = await http.post(
+    var responseActiveCustomer = await http.get(
       '${UrlCons.mainProdUrl}active_customer_id',
       headers: {
         'Content-Type': 'application/json',
@@ -2693,8 +2702,10 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
         'Accept-Language': lang
       },
     );
+
     SwitchCustomerId activeCustomer =
         SwitchCustomerId.fromJson(json.decode(responseActiveCustomer.body));
+    print('HASIL GET CUSTOMER ${responseActiveCustomer.body}');
     if (responseActiveCustomer.statusCode == 200) {
       await storageCache.write(
           key: 'customer_id',
@@ -2721,9 +2732,13 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
         await storageCache.write(key: 'list_menu', value: '-');
       }
       showToast(activeCustomer.dataSwitchCustomerId.message);
-      Navigator.pop(context);
+
       Navigator.pushReplacement(context,
           MaterialPageRoute(builder: (BuildContext context) => super.widget));
+      showDialog(
+          context: context,
+          builder: (BuildContext context) =>
+              ActivCustDialogNotif(activeCustomer.message));
     } else {
       showToast(activeCustomer.message);
     }

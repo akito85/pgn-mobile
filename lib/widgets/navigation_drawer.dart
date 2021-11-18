@@ -23,6 +23,7 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
   Color indLangSelected = Color(0xFF9B9B9B);
   Color enLangSelected = Color(0xFF9B9B9B);
   String userTypes;
+  String userGroupId = '';
   String customerGroupId;
   List<String> listMenus = [];
   final storageCache = new FlutterSecureStorage();
@@ -318,6 +319,28 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
                   },
                 )
               : SizedBox(),
+          userGroupId == '11'
+              ? ListTile(
+                  contentPadding: EdgeInsets.only(left: 20),
+                  leading: Image.asset(
+                    'assets/logo_head_menu.png',
+                    width: 30.0,
+                    height: 30.0,
+                  ),
+                  title: Text(
+                    Translations.of(context).text('title_bar_about'),
+                    style: TextStyle(
+                      color: Colors.grey[600],
+                      fontSize: 17.0,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                  onTap: () {
+                    Navigator.pop(context);
+                    Navigator.pushNamed(context, '/aboutPgn');
+                  },
+                )
+              : SizedBox(),
           listMenus.contains('14')
               ? ListTile(
                   contentPadding: EdgeInsets.only(left: 20.0),
@@ -406,6 +429,24 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
                   onTap: () {
                     Navigator.pop(context);
                     Navigator.pushNamed(context, '/energyDict');
+                  },
+                )
+              : SizedBox(),
+          userGroupId == '11'
+              ? ListTile(
+                  contentPadding: EdgeInsets.only(left: 20.0),
+                  leading: Icon(Icons.ev_station),
+                  title: Text(
+                    Translations.of(context).text('a_home_tv_menu_spbg'),
+                    style: TextStyle(
+                      color: Colors.grey[600],
+                      fontSize: 17.0,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                  onTap: () {
+                    Navigator.pop(context);
+                    Navigator.pushNamed(context, '/gasStation');
                   },
                 )
               : SizedBox(),
@@ -512,11 +553,13 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
     String listMenusString = await storageCache.read(key: 'list_menu') ?? "";
     String customerGroupds =
         await storageCache.read(key: 'customer_groupId') ?? "";
+    String userGroupIds = await storageCache.read(key: 'usergroup_id') ?? "";
 
     setState(() {
       userTypes = useraUserTypes;
       customerGroupId = customerGroupds;
       listMenus = listMenusString.split(',');
+      userGroupId = userGroupIds;
     });
     print('HASIL LIST MENU LENGHT = ${listMenus.length}');
   }

@@ -22,6 +22,7 @@ import 'package:pgn_mobile/screens/progress_subscriptions/progress_subscriptions
 import 'package:pgn_mobile/screens/login/login_change_numb.dart';
 import 'package:pgn_mobile/screens/progress_subscriptions/widgets/progress_subs_detail.dart';
 import 'package:pgn_mobile/splash_screen.dart';
+import 'package:pgn_mobile/widgets/active_cust_dialog.dart';
 import 'package:pgn_mobile/widgets/push_dialog.dart';
 import 'package:provider/provider.dart';
 import 'package:pgn_mobile/services/register_residential.dart';
@@ -257,9 +258,13 @@ class _MyFirstState extends State<FirstScreen> {
         await storageCache.write(key: 'list_menu', value: '-');
       }
       showToast(activeCustomer.dataSwitchCustomerId.message);
-      Navigator.pop(context);
+
       Navigator.pushReplacement(context,
           MaterialPageRoute(builder: (BuildContext context) => super.widget));
+      showDialog(
+          context: context,
+          builder: (BuildContext context) =>
+              ActivCustDialogNotif(activeCustomer.message));
     } else {
       showToast(activeCustomer.message);
     }
