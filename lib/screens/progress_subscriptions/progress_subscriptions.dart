@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:pgn_mobile/models/subscription_progress_model.dart';
 import 'package:pgn_mobile/models/url_cons.dart';
 import 'package:http/http.dart' as http;
@@ -197,7 +196,9 @@ class _ProgressSubscriptionsState extends State<ProgressSubscriptions> {
                                     width: 115,
                                     margin: EdgeInsets.only(left: 20.0),
                                     child: Text(
-                                      'Name Customer',
+                                      Translations.of(context)
+                                              .text('pb_list_cust_name') ??
+                                          '',
                                       style: TextStyle(
                                           fontSize: 13.0,
                                           fontWeight: FontWeight.w400,
@@ -235,7 +236,9 @@ class _ProgressSubscriptionsState extends State<ProgressSubscriptions> {
                                     margin:
                                         EdgeInsets.only(left: 20.0, top: 15),
                                     child: Text(
-                                      'Category Customer',
+                                      Translations.of(context)
+                                              .text('pb_list_cust_group') ??
+                                          '',
                                       style: TextStyle(
                                           fontSize: 13.0,
                                           fontWeight: FontWeight.w400,
@@ -276,7 +279,7 @@ class _ProgressSubscriptionsState extends State<ProgressSubscriptions> {
                                     margin: EdgeInsets.only(
                                         left: 20.0, top: 15, bottom: 20),
                                     child: Text(
-                                      'Reg Status',
+                                      'Status',
                                       style: TextStyle(
                                           fontSize: 13.0,
                                           fontWeight: FontWeight.w400,
@@ -350,7 +353,7 @@ class _ProgressSubscriptionsState extends State<ProgressSubscriptions> {
                       style: TextStyle(color: Colors.white, fontSize: 20),
                     ),
                     Text(
-                      '  Add Subsription Progress',
+                      '  ${Translations.of(context).text('pb_btn_add')}',
                       style: TextStyle(
                         color: Colors.white,
                       ),
@@ -553,7 +556,7 @@ class _ProgressSubscriptionsState extends State<ProgressSubscriptions> {
             Padding(
               padding: const EdgeInsets.only(top: 20),
               child: Text(
-                'Form ID',
+                Translations.of(context).text('pb_reg_id'),
                 style: TextStyle(
                     color: Color(0xFF455055), fontWeight: FontWeight.bold),
               ),

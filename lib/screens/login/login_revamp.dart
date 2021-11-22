@@ -46,10 +46,9 @@ class LoginRevampState extends State<LoginRevamp> {
             Positioned(
                 child: ListView(
               children: <Widget>[
-                SizedBox(height: 45),
                 Container(
                   alignment: Alignment.center,
-                  margin: EdgeInsets.only(top: 40.0),
+                  margin: EdgeInsets.only(top: 50.0),
                   height: 160,
                   child: Image.asset('assets/icon_launch.png'),
                 ),

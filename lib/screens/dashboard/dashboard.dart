@@ -6,7 +6,6 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart' as painting;
 import 'package:charts_flutter/flutter.dart' as charts;
-import 'package:flutter/scheduler.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -16,9 +15,7 @@ import 'package:pgn_mobile/models/gas_point_model.dart' as modelGP;
 import 'package:pgn_mobile/models/url_cons.dart';
 import 'package:pgn_mobile/screens/customer_profile_residential/customer_profile_pgn_mobile.dart';
 import 'package:pgn_mobile/screens/dashboard/dashboard_cust_add.dart';
-import 'package:pgn_mobile/screens/cm_visit/cm_visit.dart';
 import 'package:pgn_mobile/screens/gas_point/gas_point.dart';
-import 'package:pgn_mobile/screens/invoice_customer_residential/payment.dart';
 import 'package:pgn_mobile/screens/otp/otp.dart';
 import 'package:pgn_mobile/screens/invoice_customer_gpik.dart/invoice_customer_gpik.dart';
 
@@ -227,7 +224,7 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
     super.initState();
     getTitleCust();
     getVirtualCardGasPoint(context);
-    // _firebaseMsgListener();
+    _firebaseMsgListener();
     // getCred(context);
 
     _controller = new TabController(length: 4, vsync: this);
@@ -363,19 +360,19 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
     // getTitleCust();
     print('USRER TYPE : $userType');
     String currentTime = DateFormat('kkmm').format(currentDate);
-    if (int.parse(currentTime) <= 1100) {
+    if (int.parse(currentTime) >= 0500 && int.parse(currentTime) <= 1200) {
       greetings =
           Translations.of(context).text('f_home_tv_chart_greeting_morning');
-    } else if (int.parse(currentTime) >= 1101 &&
-        int.parse(currentTime) <= 1400) {
-      greetings =
-          Translations.of(context).text('f_home_tv_chart_greeting_afternoon');
-    } else if (int.parse(currentTime) >= 1401 &&
+    } else if (int.parse(currentTime) >= 1201 &&
         int.parse(currentTime) <= 1800) {
       greetings =
-          Translations.of(context).text('f_home_tv_chart_greeting_evening');
+          Translations.of(context).text('f_home_tv_chart_greeting_afternoon');
     } else if (int.parse(currentTime) >= 1801 &&
         int.parse(currentTime) <= 2300) {
+      greetings =
+          Translations.of(context).text('f_home_tv_chart_greeting_evening');
+    } else if (int.parse(currentTime) >= 2301 ||
+        int.parse(currentTime) <= 0500) {
       greetings =
           Translations.of(context).text('f_home_tv_chart_greeting_night');
     }

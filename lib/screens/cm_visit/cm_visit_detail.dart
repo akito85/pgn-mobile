@@ -339,11 +339,11 @@ class _CMVisitDetailState extends State<CMVisitDetail> {
         Container(
           margin: EdgeInsets.only(top: 34, bottom: 14, left: 16, right: 16),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Container(
                 width: 120.0,
                 height: 40.0,
+                margin: EdgeInsets.only(right: 15),
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(5),
                     color: Color(0xFFD3D3D3)),
@@ -356,55 +356,59 @@ class _CMVisitDetailState extends State<CMVisitDetail> {
                       deleteContent(context, id);
                     }),
               ),
-              Container(
-                width: 228.0,
-                height: 40.0,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5),
-                    color: Color(0xFF81C153)),
-                child: MaterialButton(
-                    child: Text('Edit Report',
-                        style: TextStyle(
-                            color: Colors.white, fontWeight: FontWeight.w600)),
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => CMVisitForm(
-                                  id: model.data.id.toString(),
-                                  dateEdit: DateFormat("d MMMM yyyy")
-                                      .format(date)
-                                      .toString(),
-                                  activity: model.data.activityType,
-                                  visitType: model.data.visitType,
-                                  activityDesc: model.data.activityDescription,
-                                  customerName: model.data.customerCmModel.name,
-                                  customerId: model.data.customerCmModel.id,
-                                  contactPerson:
-                                      model.data.contactPersonModel.name,
-                                  address:
-                                      model.data.contactPersonModel.address,
-                                  phoneNumber:
-                                      model.data.contactPersonModel.phone,
-                                  emailAddress:
-                                      model.data.contactPersonModel.email,
-                                  report: model.data.report,
-                                  photo1: model.data.images.length > 0
-                                      ? model.data.images[0] != null
-                                          ? model.data.images[0].toString()
-                                          : ""
-                                      : '',
-                                  photo2: model.data.images.length > 1
-                                      ? model.data.images[1] != null
-                                          ? model.data.images[1].toString()
-                                          : ""
-                                      : '',
-                                  photo3: model.data.images.length > 2
-                                      ? model.data.images[2] != null
-                                          ? model.data.images[2].toString()
-                                          : ""
-                                      : '')));
-                    }),
+              Expanded(
+                child: Container(
+                  height: 40.0,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(5),
+                      color: Color(0xFF81C153)),
+                  child: MaterialButton(
+                      child: Text('Edit Report',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w600)),
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => CMVisitForm(
+                                    id: model.data.id.toString(),
+                                    dateEdit: DateFormat("d MMMM yyyy")
+                                        .format(date)
+                                        .toString(),
+                                    activity: model.data.activityType,
+                                    visitType: model.data.visitType,
+                                    activityDesc:
+                                        model.data.activityDescription,
+                                    customerName:
+                                        model.data.customerCmModel.name,
+                                    customerId: model.data.customerCmModel.id,
+                                    contactPerson:
+                                        model.data.contactPersonModel.name,
+                                    address:
+                                        model.data.contactPersonModel.address,
+                                    phoneNumber:
+                                        model.data.contactPersonModel.phone,
+                                    emailAddress:
+                                        model.data.contactPersonModel.email,
+                                    report: model.data.report,
+                                    photo1: model.data.images.length > 0
+                                        ? model.data.images[0] != null
+                                            ? model.data.images[0].toString()
+                                            : ""
+                                        : '',
+                                    photo2: model.data.images.length > 1
+                                        ? model.data.images[1] != null
+                                            ? model.data.images[1].toString()
+                                            : ""
+                                        : '',
+                                    photo3: model.data.images.length > 2
+                                        ? model.data.images[2] != null
+                                            ? model.data.images[2].toString()
+                                            : ""
+                                        : '')));
+                      }),
+                ),
               ),
             ],
           ),
