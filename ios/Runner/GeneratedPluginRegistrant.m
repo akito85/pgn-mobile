@@ -34,8 +34,8 @@
 @import fluttertoast;
 #endif
 
-#if __has_include(<google_maps_flutter/GoogleMapsPlugin.h>)
-#import <google_maps_flutter/GoogleMapsPlugin.h>
+#if __has_include(<google_maps_flutter/FLTGoogleMapsPlugin.h>)
+#import <google_maps_flutter/FLTGoogleMapsPlugin.h>
 #else
 @import google_maps_flutter;
 #endif

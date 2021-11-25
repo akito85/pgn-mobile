@@ -5,6 +5,7 @@ import 'package:pgn_mobile/screens/usage_detail_cust/widgets/bulanan.dart';
 import 'package:pgn_mobile/screens/usage_detail_cust/widgets/harian.dart';
 
 import 'package:flutter/rendering.dart';
+import 'package:pgn_mobile/screens/usage_detail_cust/widgets/realtime.dart';
 import 'package:pgn_mobile/services/app_localizations.dart';
 
 class UsageDetailCust extends StatefulWidget {
@@ -33,7 +34,7 @@ class UsageTabDetailState extends State<UsageDetailCust>
   @override
   void initState() {
     getTitleCust();
-    _tabController = new TabController(length: 3, vsync: this, initialIndex: 1);
+    _tabController = new TabController(length: 4, vsync: this, initialIndex: 2);
     super.initState();
   }
 
@@ -70,6 +71,7 @@ class UsageTabDetailState extends State<UsageDetailCust>
                 ),
                 width: 380,
                 child: TabBar(
+                  isScrollable: true,
                   indicatorColor: Color(0xff427CEF),
                   controller: _tabController,
                   labelColor: Colors.white,
@@ -79,17 +81,32 @@ class UsageTabDetailState extends State<UsageDetailCust>
                     color: Color(0xFF4578EF),
                   ),
                   tabs: <Widget>[
-                    Tab(
-                      text: Translations.of(context).text(
-                          'a_internal_gas_usage_detail_tab_title_hourly_list'),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 10, right: 10),
+                      child: Tab(
+                        text: 'Realtime',
+                      ),
                     ),
-                    Tab(
-                      text: Translations.of(context).text(
-                          'a_internal_gas_usage_detail_tab_title_daily_chart'),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 10, right: 10),
+                      child: Tab(
+                        text: Translations.of(context).text(
+                            'a_internal_gas_usage_detail_tab_title_hourly_list'),
+                      ),
                     ),
-                    Tab(
-                      text: Translations.of(context).text(
-                          'a_internal_gas_usage_detail_tab_title_monthly_chart'),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 10, right: 10),
+                      child: Tab(
+                        text: Translations.of(context).text(
+                            'a_internal_gas_usage_detail_tab_title_daily_chart'),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 10, right: 10),
+                      child: Tab(
+                        text: Translations.of(context).text(
+                            'a_internal_gas_usage_detail_tab_title_monthly_chart'),
+                      ),
                     ),
                   ],
                 ),
@@ -102,6 +119,7 @@ class UsageTabDetailState extends State<UsageDetailCust>
             ? TabBarView(
                 controller: _tabController,
                 children: <Widget>[
+                  Realtime(title: title ?? titleCust, idCust: idCust ?? " "),
                   Perjam(title: titleCust ?? title, idCust: idCust ?? " "),
                   Harian(title: title ?? titleCust, idCust: idCust ?? " "),
                   BulananCustDetail(titleCust ?? title, idCust),

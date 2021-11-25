@@ -31,7 +31,7 @@ class _CustomerPaymentConfirmation extends State<CustomerPaymentConfirmation>
   @override
   Widget build(BuildContext context) {
     int currentYear = DateTime.now().year;
-    int currentMonth = DateTime.now().month - 6;
+    int currentMonth = DateTime.now().month;
     int month2 = currentMonth - 1;
     int month3 = currentMonth - 2;
     String month3S, month2S, currentMonthS;

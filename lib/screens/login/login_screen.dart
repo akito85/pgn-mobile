@@ -709,6 +709,7 @@ class LoginScreenState extends State<LoginScreen> {
             arguments: numbPhone,
           );
         } else {
+          print('Masuk Kesini ;');
           await storageCache.write(key: 'auth_status', value: 'Logout');
           Navigator.pushReplacementNamed(
             context,

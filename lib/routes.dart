@@ -21,6 +21,7 @@ import 'package:pgn_mobile/screens/mng_payment_confirmation/mng_payment_confirma
 import 'package:pgn_mobile/screens/progress_subscriptions/progress_subscriptions.dart';
 import 'package:pgn_mobile/screens/login/login_change_numb.dart';
 import 'package:pgn_mobile/screens/progress_subscriptions/widgets/progress_subs_detail.dart';
+import 'package:pgn_mobile/screens/smartmeter_rtpk/smartmeter_rtpk.dart';
 import 'package:pgn_mobile/splash_screen.dart';
 import 'package:pgn_mobile/widgets/active_cust_dialog.dart';
 import 'package:pgn_mobile/widgets/push_dialog.dart';
@@ -104,6 +105,7 @@ class _MyFirstState extends State<FirstScreen> {
     '/subsProgressDetail': (context) => ProgressSubsDetail(),
     '/paymentConfirmation': (context) => CustomerPaymentConfirmation(),
     '/paymentConfirmationMng': (context) => MngPaymentConf(),
+    '/smartmeterRTPK': (context) => UsageDetailRTPK(),
   };
 
   SpecificLocalizationDelegate _localeOverrideDelegate;
