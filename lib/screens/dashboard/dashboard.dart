@@ -309,10 +309,12 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
   Future<dynamic> myBackgroundMessageHandler(
       Map<String, dynamic> message) async {
     if (message.containsKey('data')) {
+      print('INI RETURN ON BACKGROUND ${message['data']}');
       final dynamic data = message['data'];
     }
 
     if (message.containsKey('notification')) {
+      print('INI RETURN ON BACKGROUND ${message['notification']}');
       final dynamic notification = message['notification'];
     }
     return Future<void>.value();

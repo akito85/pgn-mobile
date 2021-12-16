@@ -46,6 +46,9 @@ dependencies:
   url_launcher: ^5.0.3
   rflutter_alert: ^1.0.2
   percent_indicator: ^2.1.1
+  flutter_signature_pad: ^3.0.0
+  dotted_border: ^2.0.0+2
+  file_picker: ^2.1.7
   # flutter_webview_plugin: 0.3.0+2
   # flutter_money_formatter: ^0.8.3
   # pull_to_refresh: ^1.5.4
@@ -54,6 +57,7 @@ dependencies:
   flutter_launcher_icons: ^0.9.1
   encrypt: ^5.0.0
   date_format: ^1.0.8
+  dropdown_search: ^0.5.0
   otp_text_field: ^1.1.1
   pin_code_fields: ^7.3.0
   fluttertoast: ^8.0.3

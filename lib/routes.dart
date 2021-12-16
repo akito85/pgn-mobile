@@ -18,10 +18,14 @@ import 'package:pgn_mobile/screens/invoice_customer_residential/payment.dart';
 import 'package:pgn_mobile/screens/login/login.dart';
 import 'package:pgn_mobile/screens/login/login_revamp.dart';
 import 'package:pgn_mobile/screens/mng_payment_confirmation/mng_payment_confirmation.dart';
+import 'package:pgn_mobile/screens/notification_customer/notification_customer.dart';
+import 'package:pgn_mobile/screens/pengajuan_layanan/pengajuan_layanan.dart';
 import 'package:pgn_mobile/screens/progress_subscriptions/progress_subscriptions.dart';
 import 'package:pgn_mobile/screens/login/login_change_numb.dart';
 import 'package:pgn_mobile/screens/progress_subscriptions/widgets/progress_subs_detail.dart';
+import 'package:pgn_mobile/screens/smartmeter_mng/smartmeter_mng.dart';
 import 'package:pgn_mobile/screens/smartmeter_rtpk/smartmeter_rtpk.dart';
+import 'package:pgn_mobile/services/push_notification.dart';
 import 'package:pgn_mobile/splash_screen.dart';
 import 'package:pgn_mobile/widgets/active_cust_dialog.dart';
 import 'package:pgn_mobile/widgets/push_dialog.dart';
@@ -61,8 +65,8 @@ class Routes {
         ChangeNotifierProvider<UsgDetail>.value(value: UsgDetail()),
         ChangeNotifierProvider<CalculatorsEnergy>.value(
             value: CalculatorsEnergy()),
-        // ChangeNotifierProvider<PushNotification>.value(
-        //     value: PushNotification()),
+        ChangeNotifierProvider<PushNotification>.value(
+            value: PushNotification()),
       ],
       child: FirstScreen(),
     ));
@@ -106,6 +110,9 @@ class _MyFirstState extends State<FirstScreen> {
     '/paymentConfirmation': (context) => CustomerPaymentConfirmation(),
     '/paymentConfirmationMng': (context) => MngPaymentConf(),
     '/smartmeterRTPK': (context) => UsageDetailRTPK(),
+    '/notificationCustomer': (context) => NotificationCustomer(),
+    '/smartmeterMng': (context) => SmartmeterMng(),
+    '/pengajuanLayanan': (context) => PengajuanLayanan(),
   };
 
   SpecificLocalizationDelegate _localeOverrideDelegate;

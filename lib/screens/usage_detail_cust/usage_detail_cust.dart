@@ -115,7 +115,7 @@ class UsageTabDetailState extends State<UsageDetailCust>
           ),
         ),
         // ID MENU USAGE DETAIL KI 25
-        body: listMenus.contains('25')
+        body: listMenus.contains('3')
             ? TabBarView(
                 controller: _tabController,
                 children: <Widget>[

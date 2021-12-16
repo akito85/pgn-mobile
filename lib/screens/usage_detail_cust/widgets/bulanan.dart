@@ -7,7 +7,6 @@ import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
 import 'package:pgn_mobile/models/url_cons.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'package:flutter/painting.dart' as painting;

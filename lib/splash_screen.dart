@@ -42,7 +42,7 @@ class _SplashScreenState extends State<SplashScreen> {
         ),
       );
     } else {
-      Navigator.pushReplacementNamed(context, '/login');
+      // Navigator.pushReplacem entNamed(context, '/login');
       Navigator.push(
         context,
         MaterialPageRoute(

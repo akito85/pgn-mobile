@@ -1,30 +1,30 @@
 class UrlCons {
-  static String mainProdUrl = 'https://dev-api-mobile.pgn.co.id/v2/';
+  static String mainProdUrl = 'https://devapi-mobile.pgn.co.id/v2/';
   // static String mainProdUrl = 'https://api-mobile.pgn.co.id/v2/';
   // static String prodRelyonUrl = 'https://relyon-api.pgn.co.id/';
   static String prodRelyonUrl = 'https://dev-relyon-api.pgn.co.id/';
-  static String mainDevUrl = 'https://dev-api-mobile.pgn.co.id/v2/';
+  static String mainDevUrl = 'https://devapi-mobile.pgn.co.id/v2/';
 
   // static String getTokenBarrer =
   //     'https://api-mobile.pgn.co.id/v2/authentication';
   //dev
-  static String getSpbgArea = 'https://dev-api-mobile.pgn.co.id/v2/spbg';
+  static String getSpbgArea = 'https://devapi-mobile.pgn.co.id/v2/spbg';
   static String getCustProfileCust =
-      'https://dev-api-mobile.pgn.co.id/v2/customers/me';
+      'https://devapi-mobile.pgn.co.id/v2/customers/me';
   static String getCustInvoiceCust =
-      'https://dev-api-mobile.pgn.co.id/v2/customers/me/invoices';
+      'https://devapi-mobile.pgn.co.id/v2/customers/me/invoices';
   static String getGasUsageSumCust =
-      'https://dev-api-mobile.pgn.co.id/v2/customers/me/gas-usages-summary';
+      'https://devapi-mobile.pgn.co.id/v2/customers/me/gas-usages-summary';
   static String getGasUsageMonthlyChartCust =
-      'https://dev-api-mobile.pgn.co.id/v2/customers/me/gas-usages/monthly-chart';
+      'https://devapi-mobile.pgn.co.id/v2/customers/me/gas-usages/monthly-chart';
   static String getGasUsageDailyChartCust =
-      'https://dev-api-mobile.pgn.co.id/v2/customers/me/gas-usages/daily-chart';
+      'https://devapi-mobile.pgn.co.id/v2/customers/me/gas-usages/daily-chart';
   static String getDataCustomerMng =
-      'https://dev-api-mobile.pgn.co.id/v2/customers/';
+      'https://devapi-mobile.pgn.co.id/v2/customers/';
   static String getUsageContractChart =
-      'https://dev-api-mobile.pgn.co.id/v2/summary/usage-contract-chart/';
+      'https://devapi-mobile.pgn.co.id/v2/summary/usage-contract-chart/';
   static String getInvoiceResidentialChart =
-      "https://dev-api-mobile.pgn.co.id/v2/residence-invoices/";
+      "https://devapi-mobile.pgn.co.id/v2/residence-invoices/";
   static String getInvoiceRavamp =
       "https://sandbox.pgn.co.id/api-mobile/PGNCRMCustPaymentRS";
 

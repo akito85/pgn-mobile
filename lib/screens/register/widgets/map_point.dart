@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:pgn_mobile/models/spbg_model.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:pgn_mobile/services/app_localizations.dart';
 import 'dart:async';
@@ -25,7 +24,7 @@ class MapPointState extends State<MapPoint> {
 
   void _updatePosition(CameraPosition _position) {
     setState(() {
-      position = _position.toString();
+      position = '${_position.target.latitude},${_position.target.longitude}';
       lat = _position.target.latitude;
       lang = _position.target.longitude;
     });
@@ -107,6 +106,14 @@ class MapPointState extends State<MapPoint> {
                       ),
                       textAlign: TextAlign.left,
                     ),
+                  ),
+                  SizedBox(height: 10),
+                  InkWell(
+                    onTap: () {
+                      String sendBack = position;
+                      Navigator.pop(context, sendBack);
+                    },
+                    child: Center(child: Text('OK')),
                   ),
                   SizedBox(height: 20),
                 ],

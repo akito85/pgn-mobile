@@ -369,7 +369,7 @@ class _ProgressSubscriptionsState extends State<ProgressSubscriptions> {
                 },
               ),
             ),
-          )
+          ),
         ],
       ),
     );

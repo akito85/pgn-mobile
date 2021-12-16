@@ -47,7 +47,7 @@ class RegisterResidentialsState extends State<RegisterResidentials>
 
   DataProvinces data;
   RegisterResidentialsState(this.data);
-  var _index = 0;
+
   String _province = 'select';
   String valueSwitch = "1";
   // final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -2677,8 +2677,11 @@ class RegisterResidentialsState extends State<RegisterResidentials>
   }
 
   void _nextLokasiPesangan(BuildContext context) async {
-    Navigator.push(
+    final result = await Navigator.push(
         context, MaterialPageRoute(builder: (context) => MapPoint()));
+    setState(() {
+      villageCtrl.text = result;
+    });
   }
 
   void _nextScreenBuildingType(BuildContext context) async {

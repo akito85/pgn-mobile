@@ -15,9 +15,6 @@ import 'package:pgn_mobile/screens/usage_detail_cust/widgets/realtime_detail.dar
 import 'dart:async';
 import 'dart:convert';
 import 'package:pgn_mobile/services/app_localizations.dart';
-import 'package:pgn_mobile/screens/usage_detail_cust/widgets/harian_detail.dart';
-
-import 'package:date_format/date_format.dart';
 
 class Realtime extends StatefulWidget {
   final String title, idCust;
@@ -57,7 +54,7 @@ class RealtimeState extends State<Realtime> with TickerProviderStateMixin {
     return myFakeDesktopData;
   }
 
-  List<charts.Series<LinearSalesDateTime, DateTime>> _createSampleData17(
+  List<charts.Series<LinearSalesDateTime, DateTime>> _createSampleDataFlow(
       List<UsageDetailChar> data) {
     return [
       charts.Series<LinearSalesDateTime, DateTime>(
@@ -67,6 +64,12 @@ class RealtimeState extends State<Realtime> with TickerProviderStateMixin {
         measureFn: (LinearSalesDateTime sales, _) => sales.sales,
         data: inputDataChartFlow(data),
       ),
+    ];
+  }
+
+  List<charts.Series<LinearSalesDateTime, DateTime>> _createSampleDataVolume(
+      List<UsageDetailChar> data) {
+    return [
       charts.Series<LinearSalesDateTime, DateTime>(
         id: 'CounterVolume',
         colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
@@ -146,7 +149,7 @@ class RealtimeState extends State<Realtime> with TickerProviderStateMixin {
                       width: 140,
                       margin: EdgeInsets.only(left: 14.0, top: 18.0),
                       child: Text(
-                        'Energi (MMBtu)',
+                        'Volume (m3)',
                         style: TextStyle(
                             fontSize: 13.0,
                             fontWeight: FontWeight.w400,
@@ -157,12 +160,43 @@ class RealtimeState extends State<Realtime> with TickerProviderStateMixin {
                 ],
               ),
               Container(
-                height: 289,
+                height: 275,
+                child: Padding(
+                  padding: EdgeInsets.only(left: 14.0, top: 14.0, right: 14.0),
+                  child: _buildChartVolumeContent(
+                      context, fetchGetChar(context, idCust)),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(left: 14.0, right: 14.0, bottom: 10),
+                child: Divider(
+                  color: Colors.black,
+                ),
+              ),
+              Row(
+                children: <Widget>[
+                  Expanded(
+                    child: Container(
+                      width: 140,
+                      margin: EdgeInsets.only(left: 14.0, top: 18.0),
+                      child: Text(
+                        'Flow (m3/h)',
+                        style: TextStyle(
+                            fontSize: 13.0,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.grey[600]),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              Container(
+                height: 310,
                 child: Padding(
                   padding: EdgeInsets.only(
                       left: 14.0, top: 14.0, right: 14.0, bottom: 5),
-                  child:
-                      _buildCharContent(context, fetchGetChar(context, idCust)),
+                  child: _buildChartFlowContent(
+                      context, fetchGetChar(context, idCust)),
                 ),
               ),
             ],
@@ -170,7 +204,7 @@ class RealtimeState extends State<Realtime> with TickerProviderStateMixin {
     );
   }
 
-  Widget _buildCharContent(BuildContext context,
+  Widget _buildChartVolumeContent(BuildContext context,
       Future<ChartUsageDetailRealtime> getChartUsageDetail) {
     return FutureBuilder<ChartUsageDetailRealtime>(
         future: getChartUsageDetail,
@@ -193,6 +227,7 @@ class RealtimeState extends State<Realtime> with TickerProviderStateMixin {
                 Container(
                   child: Text(
                     snapshot.data.message,
+                    textAlign: TextAlign.center,
                     style: TextStyle(fontSize: 18),
                   ),
                 )
@@ -206,7 +241,7 @@ class RealtimeState extends State<Realtime> with TickerProviderStateMixin {
                 itemCount: 1,
                 itemBuilder: (context, i) {
                   return i < 1
-                      ? _buildRow(snapshot.data.data)
+                      ? _buildRowVolume(snapshot.data.data)
                       : SizedBox(
                           height: 10.0,
                         );
@@ -225,40 +260,12 @@ class RealtimeState extends State<Realtime> with TickerProviderStateMixin {
                     child: Container(
                         margin: EdgeInsets.fromLTRB(5.0, 2.0, 0.0, 0.0),
                         child: Text(
-                          Translations.of(context)
-                              .text('f_gu_legend_volume_daily'),
+                          'Realtime Volume',
                           style: TextStyle(
                             fontSize: 10.0,
                           ),
                         )),
                   ),
-                  InkWell(
-                    child: Container(
-                      height: 30,
-                      width: 80,
-                      alignment: Alignment.center,
-                      margin: EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 0.0),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(15.0),
-                          color: Colors.blue),
-                      child: Text(
-                        Translations.of(context)
-                            .text('f_customer_gas_usage_detail_bt_detail'),
-                        style: TextStyle(
-                            fontSize: 11.0,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white),
-                      ),
-                    ),
-                    onTap: () {
-                      print('ini titlenyaaa : $title');
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  RealtimeDetailCustChart(title: title)));
-                    },
-                  )
                 ],
               ),
             ],
@@ -266,12 +273,118 @@ class RealtimeState extends State<Realtime> with TickerProviderStateMixin {
         });
   }
 
-  Widget _buildRow(List<UsageDetailChar> data) {
+  Widget _buildChartFlowContent(BuildContext context,
+      Future<ChartUsageDetailRealtime> getChartUsageDetail) {
+    return FutureBuilder<ChartUsageDetailRealtime>(
+        future: getChartUsageDetail,
+        builder: (context, snapshot) {
+          if (!snapshot.hasData)
+            return Column(
+              children: <Widget>[
+                LinearProgressIndicator(),
+              ],
+            );
+          if (snapshot.data.message != null)
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Container(
+                  alignment: Alignment.center,
+                  child: Image.asset('assets/penggunaan_gas.png'),
+                ),
+                SizedBox(height: 20),
+                Container(
+                  child: Text(
+                    snapshot.data.message,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 18),
+                  ),
+                )
+              ],
+            );
+          return Column(
+            children: <Widget>[
+              ListView.builder(
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                itemCount: 1,
+                itemBuilder: (context, i) {
+                  return i < 1
+                      ? _buildRowFlow(snapshot.data.data)
+                      : SizedBox(
+                          height: 10.0,
+                        );
+                },
+              ),
+              Row(
+                children: <Widget>[
+                  Container(
+                    margin: EdgeInsets.fromLTRB(3.0, 0.0, 0.0, 0.0),
+                    child: CircleAvatar(
+                      radius: 10,
+                      backgroundColor: painting.Color(0xFF4578EF),
+                    ),
+                  ),
+                  Expanded(
+                    child: Container(
+                        margin: EdgeInsets.fromLTRB(5.0, 2.0, 0.0, 0.0),
+                        child: Text(
+                          'Realtime Flow',
+                          style: TextStyle(
+                            fontSize: 10.0,
+                          ),
+                        )),
+                  ),
+                ],
+              ),
+              InkWell(
+                child: Container(
+                  height: 30,
+                  // width: 80,
+                  alignment: Alignment.center,
+                  margin: EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 10.0),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15.0),
+                      color: Colors.blue),
+                  child: Text(
+                    Translations.of(context)
+                        .text('f_customer_gas_usage_detail_bt_detail'),
+                    style: TextStyle(
+                        fontSize: 11.0,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white),
+                  ),
+                ),
+                onTap: () {
+                  print('ini titlenyaaa : $title');
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              RealtimeDetailCustChart(title: title)));
+                },
+              ),
+            ],
+          );
+        });
+  }
+
+  Widget _buildRowVolume(List<UsageDetailChar> data) {
     return Container(
       height: 212,
       child: Padding(
         padding: EdgeInsets.all(1.0),
-        child: SimpleLineCharts(_createSampleData17(data)),
+        child: SimpleLineCharts(_createSampleDataVolume(data)),
+      ),
+    );
+  }
+
+  Widget _buildRowFlow(List<UsageDetailChar> data) {
+    return Container(
+      height: 212,
+      child: Padding(
+        padding: EdgeInsets.all(1.0),
+        child: SimpleLineCharts(_createSampleDataFlow(data)),
       ),
     );
   }
@@ -346,7 +459,7 @@ class SimpleLineChart extends State<SimpleLineCharts> {
         SizedBox(height: 5),
         titleText != null
             ? Text(
-                'Energy(${DateFormat("MMM d").format(DateTime.parse(titleText))}) : $valueText' ??
+                'Data (${DateFormat("MMM d").format(DateTime.parse(titleText))}) : $valueText' ??
                     '-',
                 style: TextStyle(
                     color: painting.Color(0xFFFF972F),

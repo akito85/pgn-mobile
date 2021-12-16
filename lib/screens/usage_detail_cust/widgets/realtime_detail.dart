@@ -365,14 +365,14 @@ void _downloadPDF(BuildContext context, String period) async {
   String accessToken = await storageCache.read(key: 'access_token');
   String lang = await storageCache.read(key: 'lang');
   var responseDailyUsage = await http.get(
-      '${UrlCons.mainProdUrl}customers/me/gas-usages/daily-list/$period',
+      '${UrlCons.mainProdUrl}customers/me/gas-usages/realtime-list',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $accessToken',
         'Accept-Language': lang
       });
   var postPDF = await http.post(
-      'http://pgn-mobile-api-laravel.noxus.co.id/api/export/export_pdf_daily_usage_details',
+      'http://pgn-mobile-api-laravel.noxus.co.id/api/export/export_pdf_realtime_usage_detail',
       headers: {'Content-Type': 'application/json'},
       body: responseDailyUsage.body);
 

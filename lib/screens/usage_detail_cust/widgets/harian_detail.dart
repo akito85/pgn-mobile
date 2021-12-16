@@ -24,6 +24,31 @@ class HarianDetailCustChartState extends State<HarianDetailCustChart> {
   final String title;
   final String period;
   HarianDetailCustChartState(this.title, this.period);
+  List<DataHourlyUsage> listHourlyUsage = [];
+  String nextPage = "";
+  String errorStat = "";
+  bool isLoading = false;
+  ScrollController _scrollController = new ScrollController();
+  @override
+  void initState() {
+    super.initState();
+    loadMore();
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent) {
+        isLoading = true;
+
+        this.loadMore();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     print('INI PERIODNYA : $period');
@@ -38,6 +63,7 @@ class HarianDetailCustChartState extends State<HarianDetailCustChart> {
         ),
       ),
       body: SingleChildScrollView(
+        controller: _scrollController,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
@@ -96,6 +122,7 @@ class HarianDetailCustChartState extends State<HarianDetailCustChart> {
               ),
             ),
             _buildContent(context, fetchPost(context, period)),
+            isLoading == true ? CircularProgressIndicator : SizedBox()
           ],
         ),
       ),
@@ -129,10 +156,10 @@ class HarianDetailCustChartState extends State<HarianDetailCustChart> {
           return ListView.builder(
               shrinkWrap: true,
               physics: NeverScrollableScrollPhysics(),
-              itemCount: snapshot.data.data.length + 1,
+              itemCount: listHourlyUsage.length,
               itemBuilder: (context, i) {
-                return i < snapshot.data.data.length
-                    ? _buildRow(snapshot.data.data[i])
+                return i < listHourlyUsage.length
+                    ? _buildRow(listHourlyUsage[i])
                     : SizedBox(
                         height: 10.0,
                       );
@@ -145,6 +172,86 @@ class HarianDetailCustChartState extends State<HarianDetailCustChart> {
       children: <Widget>[Card1(data)],
     );
   }
+
+  void _downloadPDF(BuildContext context, String period) async {
+    final storageCache = FlutterSecureStorage();
+    String accessToken = await storageCache.read(key: 'access_token');
+    String lang = await storageCache.read(key: 'lang');
+    var responseDailyUsage = await http.get(
+        '${UrlCons.mainProdUrl}customers/me/gas-usages/daily-list/$period',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $accessToken',
+          'Accept-Language': lang
+        });
+    var postPDF = await http.post(
+        'http://pgn-mobile-api-laravel.noxus.co.id/api/export/export_pdf_daily_usage_details',
+        headers: {'Content-Type': 'application/json'},
+        body: responseDailyUsage.body);
+
+    _launchURL(postPDF.body);
+  }
+
+  void loadMore() async {
+    final storageCache = FlutterSecureStorage();
+    String accessToken = await storageCache.read(key: 'access_token');
+    String lang = await storageCache.read(key: 'lang');
+
+    var responseDailyUsage = await http.get(
+      '${UrlCons.mainProdUrl}customers/me/gas-usages/daily-list/$period',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $accessToken',
+        'Accept-Language': lang
+      },
+    );
+
+    HarianDetailCustDashboard detailCustDashboard =
+        HarianDetailCustDashboard.fromJson(
+            json.decode(responseDailyUsage.body));
+    if (detailCustDashboard.message != null &&
+        detailCustDashboard.data.length == 0) {
+      setState(() {
+        errorStat = detailCustDashboard.message;
+        isLoading = false;
+      });
+    } else if (detailCustDashboard.data != null) {
+      setState(() {
+        // nextPage = detailCustDashboard.paging.next;
+        listHourlyUsage.addAll(detailCustDashboard.data);
+        isLoading = false;
+      });
+    }
+  }
+}
+
+_launchURL(String url) async {
+  if (await canLaunch(url)) {
+    await launch(url);
+  } else {
+    throw 'Could not launch $url';
+  }
+}
+
+Future<HarianDetailCustDashboard> fetchPost(
+    BuildContext context, String title) async {
+  final storageCache = FlutterSecureStorage();
+  String accessToken = await storageCache.read(key: 'access_token');
+  String lang = await storageCache.read(key: 'lang');
+  var responseDailyUsage = await http.get(
+    '${UrlCons.mainProdUrl}customers/me/gas-usages/daily-list/$title',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $accessToken',
+      'Accept-Language': lang
+    },
+  );
+  print('response daily usage ${title}');
+  print('response daily usage ${responseDailyUsage.body}');
+  HarianDetailCustDashboard detailCustDashboard =
+      HarianDetailCustDashboard.fromJson(json.decode(responseDailyUsage.body));
+
+  return detailCustDashboard;
 }
 
 class Card1 extends StatelessWidget {
@@ -799,50 +906,5 @@ class Card1 extends StatelessWidget {
         ),
       ),
     );
-  }
-}
-
-Future<HarianDetailCustDashboard> fetchPost(
-    BuildContext context, String title) async {
-  final storageCache = FlutterSecureStorage();
-  String accessToken = await storageCache.read(key: 'access_token');
-  String lang = await storageCache.read(key: 'lang');
-  var responseDailyUsage = await http.get(
-    '${UrlCons.mainProdUrl}customers/me/gas-usages/daily-list/$title',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer $accessToken',
-      'Accept-Language': lang
-    },
-  );
-  print('HASIL GET LIST HARIAN : ${responseDailyUsage.body}');
-  return HarianDetailCustDashboard.fromJson(
-      json.decode(responseDailyUsage.body));
-}
-
-void _downloadPDF(BuildContext context, String period) async {
-  final storageCache = FlutterSecureStorage();
-  String accessToken = await storageCache.read(key: 'access_token');
-  String lang = await storageCache.read(key: 'lang');
-  var responseDailyUsage = await http.get(
-      '${UrlCons.mainProdUrl}customers/me/gas-usages/daily-list/$period',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer $accessToken',
-        'Accept-Language': lang
-      });
-  var postPDF = await http.post(
-      'http://pgn-mobile-api-laravel.noxus.co.id/api/export/export_pdf_daily_usage_details',
-      headers: {'Content-Type': 'application/json'},
-      body: responseDailyUsage.body);
-
-  _launchURL(postPDF.body);
-}
-
-_launchURL(String url) async {
-  if (await canLaunch(url)) {
-    await launch(url);
-  } else {
-    throw 'Could not launch $url';
   }
 }

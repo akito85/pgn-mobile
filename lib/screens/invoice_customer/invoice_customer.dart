@@ -184,7 +184,7 @@ class BillDetailState extends State<InvoiceCust>
                   ),
                 ),
                 // ID MENU INVOICE 11
-                body: listMenus.contains('11')
+                body: listMenus.contains('3')
                     ? Stack(
                         children: <Widget>[
                           Container(
@@ -199,9 +199,9 @@ class BillDetailState extends State<InvoiceCust>
                           TabBarView(
                             controller: _tabController,
                             children: [
-                              _buildContent0(context, formatDate3, custID),
-                              _buildContent1(context, formatDate2, custID),
                               _buildContent2(context, formatDate, custID),
+                              _buildContent1(context, formatDate2, custID),
+                              _buildContent0(context, formatDate3, custID),
                             ],
                           ),
                         ],

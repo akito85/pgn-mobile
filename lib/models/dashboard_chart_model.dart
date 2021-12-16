@@ -497,7 +497,7 @@ class IdrAreaData {
 
 class HarianDetailCustDashboard {
   List<DataHourlyUsage> data;
-  // PagingHourlyUsage paging;
+  PagingHourlyUsage paging;
   String message;
 
   HarianDetailCustDashboard({this.data, this.message});
@@ -694,20 +694,20 @@ class DateDaily {
   }
 }
 
-// class PagingHourlyUsage {
-//   String current;
-//   String prev;
-//   String next;
-//   int count;
+class PagingHourlyUsage {
+  String current;
+  String prev;
+  String next;
+  int count;
 
-//   PagingHourlyUsage({this.count, this.current, this.next, this.prev});
+  PagingHourlyUsage({this.count, this.current, this.next, this.prev});
 
-//   factory PagingHourlyUsage.fromJson(Map<String, dynamic> json) {
-//     return PagingHourlyUsage(
-//       count: json['count'],
-//       prev: json['prev'],
-//       next: json['next'],
-//       current: json['current'],
-//     );
-//   }
-// }
+  factory PagingHourlyUsage.fromJson(Map<String, dynamic> json) {
+    return PagingHourlyUsage(
+      count: json['count'],
+      prev: json['prev'],
+      next: json['next'],
+      current: json['current'],
+    );
+  }
+}

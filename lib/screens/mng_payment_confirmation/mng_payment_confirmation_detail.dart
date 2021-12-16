@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
 import 'package:pgn_mobile/models/payment_confirmation_model.dart';
 import 'package:pgn_mobile/services/app_localizations.dart';
@@ -381,7 +380,7 @@ class _CustomerPaymentConfirmation extends State<CustomerPaymentConfirmation>
                       child: Container(
                         margin: EdgeInsets.only(left: 5.0, top: 10.0),
                         child: Text(
-                          model.payNum != "" ? model.payNum : "-",
+                          '${model.payAmt} ${model.payCurrCode}',
                           style: TextStyle(
                               fontSize: 15.0,
                               fontWeight: FontWeight.w400,
@@ -391,6 +390,7 @@ class _CustomerPaymentConfirmation extends State<CustomerPaymentConfirmation>
                     )
                   ],
                 ),
+                //0150019822
                 Row(
                   children: <Widget>[
                     Container(

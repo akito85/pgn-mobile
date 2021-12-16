@@ -466,7 +466,7 @@ class LoginScreenState extends State<LoginScreen> {
             //     },
             //     body: body);
             final responseFCMNew = await http.post(
-                'https://dev-api-mobile.pgn.co.id/v2/fcm_token',
+                'https://devapi-mobile.pgn.co.id/v2/fcm_token',
                 headers: {
                   'Content-Type': 'application/json',
                   'Authorization': _auth.accessToken
@@ -535,7 +535,7 @@ class LoginScreenState extends State<LoginScreen> {
               //     headers: {'Content-Type': 'application/json'},
               //     body: body);
               final responseFCMNew = await http.post(
-                  'https://dev-api-mobile.pgn.co.id/v2/fcm_token',
+                  'https://devapi-mobile.pgn.co.id/v2/fcm_token',
                   headers: {
                     'Content-Type': 'application/json',
                     'Authorization': _auth.accessToken

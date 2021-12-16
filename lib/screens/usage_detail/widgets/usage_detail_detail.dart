@@ -4,6 +4,7 @@ import 'package:pgn_mobile/screens/usage_detail/widgets/bulanan_tab_detail.dart'
 import 'package:pgn_mobile/screens/usage_detail/widgets/harian_tab_detail.dart';
 
 import 'package:flutter/rendering.dart';
+import 'package:pgn_mobile/screens/usage_detail/widgets/realtime_mng.dart';
 import 'package:pgn_mobile/services/app_localizations.dart';
 
 class UsageTabDetail extends StatefulWidget {
@@ -29,7 +30,7 @@ class UsageTabDetailState extends State<UsageTabDetail>
 
   @override
   void initState() {
-    _tabController = new TabController(length: 3, vsync: this, initialIndex: 1);
+    _tabController = new TabController(length: 4, vsync: this, initialIndex: 2);
     super.initState();
   }
 
@@ -53,7 +54,7 @@ class UsageTabDetailState extends State<UsageTabDetail>
       body: Stack(
         children: <Widget>[
           DefaultTabController(
-            length: 3,
+            length: 4,
             child: Scaffold(
               backgroundColor: Colors.white,
               appBar: PreferredSize(
@@ -67,6 +68,7 @@ class UsageTabDetailState extends State<UsageTabDetail>
                       ),
                       width: 380,
                       child: TabBar(
+                        isScrollable: true,
                         indicatorColor: Color(0xff427CEF),
                         controller: _tabController,
                         labelColor: Colors.white,
@@ -76,20 +78,32 @@ class UsageTabDetailState extends State<UsageTabDetail>
                           color: Color(0xFF4578EF),
                         ),
                         tabs: <Widget>[
-                          Tab(
-                            text: Translations.of(context).text(
-                                    'a_internal_gas_usage_detail_tab_title_hourly_list') ??
-                                "",
+                          Padding(
+                            padding: const EdgeInsets.only(left: 10, right: 10),
+                            child: Tab(
+                              text: 'Realtime',
+                            ),
                           ),
-                          Tab(
-                            text: Translations.of(context).text(
-                                    'a_internal_gas_usage_detail_tab_title_daily_chart') ??
-                                "",
+                          Padding(
+                            padding: const EdgeInsets.only(left: 10, right: 10),
+                            child: Tab(
+                              text: Translations.of(context).text(
+                                  'a_internal_gas_usage_detail_tab_title_hourly_list'),
+                            ),
                           ),
-                          Tab(
-                            text: Translations.of(context).text(
-                                    'a_internal_gas_usage_detail_tab_title_monthly_chart') ??
-                                "",
+                          Padding(
+                            padding: const EdgeInsets.only(left: 10, right: 10),
+                            child: Tab(
+                              text: Translations.of(context).text(
+                                  'a_internal_gas_usage_detail_tab_title_daily_chart'),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 10, right: 10),
+                            child: Tab(
+                              text: Translations.of(context).text(
+                                  'a_internal_gas_usage_detail_tab_title_monthly_chart'),
+                            ),
                           ),
                         ],
                       ),
@@ -110,6 +124,7 @@ class UsageTabDetailState extends State<UsageTabDetail>
                   TabBarView(
                     controller: _tabController,
                     children: <Widget>[
+                      RealtimeMng(title: title, idCust: idCust),
                       PerJamTabDetail(title: title, idCust: idCust),
                       HarianTabDetail(title: title, idCust: idCust),
                       BulananTabDetail(title, idCust),

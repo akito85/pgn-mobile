@@ -133,7 +133,7 @@ class HarianDetailChartState extends State<HarianDetailChart> {
     String lang = await storageCache.read(key: 'lang');
 
     var responseDailyUsage = await http.get(
-      '${UrlCons.mainProdUrl}customers/$idCust/gas-usages/daily-list/$period?cursor=$nextPage',
+      '${UrlCons.mainProdUrl}customers/$idCust/gas-usages/daily-list/$period',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $accessToken',
@@ -151,7 +151,7 @@ class HarianDetailChartState extends State<HarianDetailChart> {
       });
     } else if (dailyUsageDetailChart.data != null) {
       setState(() {
-        nextPage = dailyUsageDetailChart.paging.next;
+        // nextPage = dailyUsageDetailChart.paging.next;
         listDailyUsage.addAll(dailyUsageDetailChart.data);
         isLoading = false;
       });
