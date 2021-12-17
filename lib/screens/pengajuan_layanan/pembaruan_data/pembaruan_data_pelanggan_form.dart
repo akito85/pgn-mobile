@@ -67,6 +67,7 @@ class _PembaruanDPelangganFormState extends State<PembaruanDPelangganForm> {
   TextEditingController kodeposCtrl = new TextEditingController();
   TextEditingController locationCtrl = new TextEditingController();
   TextEditingController numberNpwpCtrl = new TextEditingController();
+  TextEditingController ktpAddressCtrl = new TextEditingController();
 
   final storageCache = FlutterSecureStorage();
   ByteData _img = ByteData(0);
@@ -1411,6 +1412,53 @@ class _PembaruanDPelangganFormState extends State<PembaruanDPelangganForm> {
                     Padding(
                       padding: EdgeInsets.only(top: 20, left: 16, right: 16),
                       child: Text(
+                        'Alamat Sesuai KTP',
+                        style: TextStyle(
+                            color: Color(0xFF455055),
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(top: 10, left: 16, right: 16),
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(5.0),
+                          border: Border.all(color: Color(0xFFD3D3D3))),
+                      child: TextFormField(
+                        keyboardType: TextInputType.text,
+                        controller: ktpAddressCtrl,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Data tidak boleh kosong!';
+                          }
+                          return null;
+                        },
+                        decoration: InputDecoration(
+                          hintText: 'Jakarta',
+                          hintStyle: TextStyle(color: Colors.grey),
+                          contentPadding: new EdgeInsets.symmetric(
+                              vertical: 12.0, horizontal: 15.0),
+                          disabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(5),
+                            borderSide:
+                                BorderSide(color: Colors.white, width: 2.0),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(5),
+                            borderSide:
+                                BorderSide(color: Colors.white, width: 2.0),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(5),
+                            borderSide:
+                                BorderSide(color: Colors.white, width: 2.0),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(top: 20, left: 16, right: 16),
+                      child: Text(
                         'Nomer NPWP',
                         style: TextStyle(
                             color: Color(0xFF455055),
@@ -1847,6 +1895,7 @@ class _PembaruanDPelangganFormState extends State<PembaruanDPelangganForm> {
       "person_in_location_status": statusLokasi,
       "info_media": valueMediaType,
       "npwp_number": numberNpwpCtrl.text,
+      "ktp_address": ktpAddressCtrl.text,
       "npwp_file": 'test',
       "customer_signature": 'data:image/png;base64,$encoded',
     });

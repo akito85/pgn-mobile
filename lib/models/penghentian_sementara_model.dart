@@ -114,6 +114,9 @@ class DetailPenghentianSementara {
   String sign;
   String status;
   String createdAt;
+  String npwpFile;
+  String npwpNumb;
+  String ktpAddress;
   DetailPenghentianSementara(
       {this.address,
       this.bDate,
@@ -141,7 +144,10 @@ class DetailPenghentianSementara {
       this.status,
       this.street,
       this.subDateEnable,
-      this.subDateSuspend});
+      this.subDateSuspend,
+      this.ktpAddress,
+      this.npwpFile,
+      this.npwpNumb});
   factory DetailPenghentianSementara.fromJson(Map<String, dynamic> json) {
     return DetailPenghentianSementara(
       id: json['id'],
@@ -171,6 +177,9 @@ class DetailPenghentianSementara {
       address: json['address'],
       email: json['email'],
       subDateEnable: json['submission_enable_date'],
+      npwpFile: json['npwp_file'],
+      npwpNumb: json['npwp_number'],
+      ktpAddress: json['ktp_address'],
     );
   }
 }

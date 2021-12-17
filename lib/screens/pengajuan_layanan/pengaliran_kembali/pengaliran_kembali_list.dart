@@ -343,7 +343,7 @@ class _PengaliranKembaliListState extends State<PengaliranKembaliList> {
     String accessToken = await storageCache.read(key: 'access_token');
     String lang = await storageCache.read(key: 'lang');
     var response = await http.get(
-        '${UrlCons.mainDevUrl}customer-service/reflow?per_page=10',
+        '${UrlCons.mainDevUrl}customer-service/reflow?per_page=100',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $accessToken',

@@ -110,6 +110,9 @@ class DetailBerhetiBerlangganan {
   String sign;
   String status;
   String createdAt;
+  String npwpFile;
+  String npwpNumb;
+  String ktpAddress;
   DetailBerhetiBerlangganan(
       {this.address,
       this.bDate,
@@ -136,7 +139,10 @@ class DetailBerhetiBerlangganan {
       this.sign,
       this.status,
       this.street,
-      this.subDate});
+      this.subDate,
+      this.ktpAddress,
+      this.npwpFile,
+      this.npwpNumb});
   factory DetailBerhetiBerlangganan.fromJson(Map<String, dynamic> json) {
     return DetailBerhetiBerlangganan(
       id: json['id'],
@@ -165,6 +171,9 @@ class DetailBerhetiBerlangganan {
       prov: json['province'],
       address: json['address'],
       email: json['email'],
+      npwpFile: json['npwp_file'],
+      npwpNumb: json['npwp_number'],
+      ktpAddress: json['ktp_address'],
     );
   }
 }

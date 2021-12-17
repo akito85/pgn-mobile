@@ -102,6 +102,9 @@ class DetailData {
   String status;
   String createdAt;
   String mediaType;
+  String npwpFile;
+  String npwpNumb;
+  String ktpAddress;
   DetailData({
     this.address,
     this.bDate,
@@ -129,6 +132,9 @@ class DetailData {
     this.status,
     this.street,
     this.mediaType,
+    this.ktpAddress,
+    this.npwpFile,
+    this.npwpNumb,
   });
   factory DetailData.fromJson(Map<String, dynamic> json) {
     return DetailData(
@@ -158,6 +164,9 @@ class DetailData {
       prov: json['province'],
       address: json['address'],
       email: json['email'],
+      npwpFile: json['npwp_file'],
+      npwpNumb: json['npwp_number'],
+      ktpAddress: json['ktp_address'],
     );
   }
 }

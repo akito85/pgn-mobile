@@ -106,6 +106,7 @@ class DetailData {
   String sign;
   String status;
   String createdAt;
+  String ktpAddress;
   DetailData(
       {this.address,
       this.bDate,
@@ -133,7 +134,8 @@ class DetailData {
       this.status,
       this.street,
       this.nomorNpwp,
-      this.mediaType});
+      this.mediaType,
+      this.ktpAddress});
   factory DetailData.fromJson(Map<String, dynamic> json) {
     return DetailData(
       id: json['id'],
@@ -163,6 +165,7 @@ class DetailData {
       address: json['address'],
       email: json['email'],
       mediaType: json['info_media'],
+      ktpAddress: json['ktp_address'],
     );
   }
 }

@@ -104,6 +104,7 @@ class _PengajuanAmandemenFormState extends State<PengajuanAmandemenForm> {
   TextEditingController jamperHariCtrl = new TextEditingController();
   TextEditingController hariperMingguCtrl = new TextEditingController();
   TextEditingController alasanCtrl = new TextEditingController();
+  TextEditingController ktpAddressCtrl = new TextEditingController();
 
   final storageCache = FlutterSecureStorage();
   ByteData _img = ByteData(0);
@@ -1726,6 +1727,55 @@ class _PengajuanAmandemenFormState extends State<PengajuanAmandemenForm> {
                             padding:
                                 EdgeInsets.only(top: 20, left: 16, right: 16),
                             child: Text(
+                              'Alamat Sesuai KTP',
+                              style: TextStyle(
+                                  color: Color(0xFF455055),
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          Container(
+                            margin:
+                                EdgeInsets.only(top: 10, left: 16, right: 16),
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(5.0),
+                                border: Border.all(color: Color(0xFFD3D3D3))),
+                            child: TextFormField(
+                              keyboardType: TextInputType.text,
+                              controller: ktpAddressCtrl,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Data tidak boleh kosong!';
+                                }
+                                return null;
+                              },
+                              decoration: InputDecoration(
+                                hintText: 'Jakarta',
+                                hintStyle: TextStyle(color: Colors.grey),
+                                contentPadding: new EdgeInsets.symmetric(
+                                    vertical: 12.0, horizontal: 15.0),
+                                disabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(5),
+                                  borderSide: BorderSide(
+                                      color: Colors.white, width: 2.0),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(5),
+                                  borderSide: BorderSide(
+                                      color: Colors.white, width: 2.0),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(5),
+                                  borderSide: BorderSide(
+                                      color: Colors.white, width: 2.0),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding:
+                                EdgeInsets.only(top: 20, left: 16, right: 16),
+                            child: Text(
                               'Nomer NPWP',
                               style: TextStyle(
                                   color: Color(0xFF455055),
@@ -2182,6 +2232,172 @@ class _PengajuanAmandemenFormState extends State<PengajuanAmandemenForm> {
                                   borderRadius: BorderRadius.circular(5),
                                   borderSide: BorderSide(
                                       color: Color(0xFFF4F4F4), width: 2.0),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding:
+                                EdgeInsets.only(top: 20, left: 16, right: 16),
+                            child: Text(
+                              'Alamat Sesuai KTP',
+                              style: TextStyle(
+                                  color: Color(0xFF455055),
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          Container(
+                            margin:
+                                EdgeInsets.only(top: 10, left: 16, right: 16),
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(5.0),
+                                border: Border.all(color: Color(0xFFD3D3D3))),
+                            child: TextFormField(
+                              keyboardType: TextInputType.text,
+                              controller: ktpAddressCtrl,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Data tidak boleh kosong!';
+                                }
+                                return null;
+                              },
+                              decoration: InputDecoration(
+                                hintText: 'Jakarta',
+                                hintStyle: TextStyle(color: Colors.grey),
+                                contentPadding: new EdgeInsets.symmetric(
+                                    vertical: 12.0, horizontal: 15.0),
+                                disabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(5),
+                                  borderSide: BorderSide(
+                                      color: Colors.white, width: 2.0),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(5),
+                                  borderSide: BorderSide(
+                                      color: Colors.white, width: 2.0),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(5),
+                                  borderSide: BorderSide(
+                                      color: Colors.white, width: 2.0),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding:
+                                EdgeInsets.only(top: 20, left: 16, right: 16),
+                            child: Text(
+                              'Nomer NPWP',
+                              style: TextStyle(
+                                  color: Color(0xFF455055),
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          Container(
+                            margin:
+                                EdgeInsets.only(top: 10, left: 16, right: 16),
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(5.0),
+                                border: Border.all(color: Color(0xFFD3D3D3))),
+                            child: TextFormField(
+                              keyboardType: TextInputType.number,
+                              controller: nomorNpwpCtrl,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Data tidak boleh kosong!';
+                                }
+                                return null;
+                              },
+                              decoration: InputDecoration(
+                                hintText: '000000000',
+                                hintStyle: TextStyle(color: Colors.grey),
+                                contentPadding: new EdgeInsets.symmetric(
+                                    vertical: 12.0, horizontal: 15.0),
+                                disabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(5),
+                                  borderSide: BorderSide(
+                                      color: Colors.white, width: 2.0),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(5),
+                                  borderSide: BorderSide(
+                                      color: Colors.white, width: 2.0),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(5),
+                                  borderSide: BorderSide(
+                                      color: Colors.white, width: 2.0),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding:
+                                EdgeInsets.only(top: 20, left: 16, right: 16),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    'Foto NPWP',
+                                    style: TextStyle(
+                                        color: Color(0xFF455055),
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      _fileName = null;
+                                    });
+                                  },
+                                  child: Text(
+                                    'Hapus',
+                                    textAlign: TextAlign.right,
+                                    style: TextStyle(
+                                        color: Color(0xFF427CEF),
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(
+                                left: 16, right: 16, top: 20, bottom: 10),
+                            child: DottedBorder(
+                              dashPattern: [3.1],
+                              color: Color(0xFFD3D3D3),
+                              strokeWidth: 1,
+                              child: Container(
+                                height: 60,
+                                child: Center(
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      _pickFiles('npwp');
+                                    },
+                                    child: _fileName != null
+                                        ? Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 10, right: 10),
+                                            child: Text(
+                                              _fileName,
+                                              style: TextStyle(
+                                                  color: Color(0xFF427CEF),
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                          )
+                                        : Text(
+                                            'Unggah Foto NPWP',
+                                            style: TextStyle(
+                                                color: Color(0xFF427CEF),
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                  ),
                                 ),
                               ),
                             ),
@@ -3182,6 +3398,7 @@ class _PengajuanAmandemenFormState extends State<PengajuanAmandemenForm> {
       "electricity_bill_proof": "url string",
       "npwp_file": "url String",
       "npwp_number": nomorNpwpCtrl.text,
+      "ktp_address": ktpAddressCtrl.text,
       "customer_signature": 'data:image/png;base64,$encoded',
     });
     var response = await http.post(
@@ -3249,8 +3466,11 @@ class _PengajuanAmandemenFormState extends State<PengajuanAmandemenForm> {
       "average_volume_month": int.parse(pemakaianPerBulanCtrl.text),
       "operational_hour_day": int.parse(jamperHariCtrl.text),
       "operational_day_week": int.parse(hariperMingguCtrl.text),
-      "customer_equipments": '$gasEquip',
+      "customer_equipments": gasEquip,
       "reason": alasanCtrl.text,
+      "npwp_file": "url String",
+      "npwp_number": nomorNpwpCtrl.text,
+      "ktp_address": ktpAddressCtrl.text,
       "customer_signature": 'data:image/png;base64,$encoded',
     });
     print('SEGMEN BODY POST $body');

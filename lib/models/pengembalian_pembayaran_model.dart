@@ -110,6 +110,9 @@ class DetailData {
   String bankNumb;
   String bankBranch;
   String bankFile;
+  String npwpFile;
+  String npwpNumb;
+  String ktpAddress;
   DetailData({
     this.address,
     this.bDate,
@@ -140,6 +143,9 @@ class DetailData {
     this.bankName,
     this.bankNumb,
     this.bankBranch,
+    this.ktpAddress,
+    this.npwpFile,
+    this.npwpNumb,
   });
   factory DetailData.fromJson(Map<String, dynamic> json) {
     return DetailData(
@@ -172,6 +178,9 @@ class DetailData {
       bankFile: json['account_bank_file'],
       bankName: json['bank_name'],
       bankNumb: json['account_bank_number'],
+      npwpFile: json['npwp_file'],
+      npwpNumb: json['npwp_number'],
+      ktpAddress: json['ktp_address'],
     );
   }
 }

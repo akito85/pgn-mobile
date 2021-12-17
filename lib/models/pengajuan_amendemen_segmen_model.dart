@@ -112,6 +112,9 @@ class DetailData {
   int hourDay;
   int dayWeek;
   CustEquip custEquip;
+  String npwpNumb;
+  String npwpFile;
+  String ktpAddress;
   DetailData(
       {this.address,
       this.bDate,
@@ -146,7 +149,10 @@ class DetailData {
       this.dayWeek,
       this.hourDay,
       this.maxMonth,
-      this.minMonth});
+      this.minMonth,
+      this.ktpAddress,
+      this.npwpFile,
+      this.npwpNumb});
   factory DetailData.fromJson(Map<String, dynamic> json) {
     return DetailData(
       id: json['id'],
@@ -182,6 +188,9 @@ class DetailData {
       maxMonth: json['maximum_volume_month'],
       dayWeek: json['operational_day_week'],
       hourDay: json['operational_hour_day'],
+      ktpAddress: json['ktp_address'],
+      npwpFile: json['npwp_file'],
+      npwpNumb: json['npwp_number'],
       custEquip: CustEquip.fromJson(json['customer_equipments']),
     );
   }
@@ -213,8 +222,8 @@ class DatasEquip {
 
   factory DatasEquip.fromJson(Map<String, dynamic> json) {
     return DatasEquip(
-      name: json['name'],
-      val: json['value'],
+      name: json['Name'],
+      val: json['Value'],
     );
   }
 }

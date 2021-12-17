@@ -9,7 +9,6 @@ import 'package:http/http.dart' as http;
 import 'package:pgn_mobile/screens/otp/otp.dart';
 import 'package:pgn_mobile/screens/pengajuan_layanan/klaim_asuransi/klaim_asuransi_detail.dart';
 import 'package:pgn_mobile/screens/pengajuan_layanan/klaim_asuransi/klaim_asuransi_form.dart';
-import 'package:pgn_mobile/screens/pengajuan_layanan/pengaliran_kembali/pengaliran_kembali_form.dart';
 
 class KlaimAsuransiList extends StatefulWidget {
   @override
@@ -313,7 +312,7 @@ class _KlaimAsuransiListState extends State<KlaimAsuransiList> {
     String accessToken = await storageCache.read(key: 'access_token');
     String lang = await storageCache.read(key: 'lang');
     var responseGetSubsProg = await http.get(
-        '${UrlCons.mainDevUrl}customer-service/insurance-claim?per_page=10&next_page=$nextPage',
+        '${UrlCons.mainDevUrl}customer-service/insurance-claim?per_page=100&next_page=$nextPage',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $accessToken',
@@ -334,7 +333,7 @@ class _KlaimAsuransiListState extends State<KlaimAsuransiList> {
     String accessToken = await storageCache.read(key: 'access_token');
     String lang = await storageCache.read(key: 'lang');
     var response = await http.get(
-        '${UrlCons.mainDevUrl}customer-service/insurance-claim?per_page=10',
+        '${UrlCons.mainDevUrl}customer-service/insurance-claim?per_page=100',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $accessToken',

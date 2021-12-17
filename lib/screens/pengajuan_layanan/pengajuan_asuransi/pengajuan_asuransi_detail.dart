@@ -503,6 +503,78 @@ class _PengajuanKembaliDetailState extends State<PengajuanKembaliDetail> {
                           children: [
                             Container(
                               width: 150,
+                              child: Text('Alamat Sesuai KTP'),
+                            ),
+                            Container(
+                              margin: const EdgeInsets.only(left: 10),
+                              width: 10,
+                              child: Text(':'),
+                            ),
+                            Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 2),
+                                child: Text('${snapshot.data.ktpAddress}'),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding:
+                            const EdgeInsets.only(left: 5, right: 5, top: 10),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              width: 150,
+                              child: Text('Nomer NPWP'),
+                            ),
+                            Container(
+                              margin: const EdgeInsets.only(left: 10),
+                              width: 10,
+                              child: Text(':'),
+                            ),
+                            Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 2),
+                                child: Text('${snapshot.data.npwpNumb}'),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding:
+                            const EdgeInsets.only(left: 5, right: 5, top: 10),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              width: 150,
+                              child: Text('Foto NPWP'),
+                            ),
+                            Container(
+                              margin: const EdgeInsets.only(left: 10),
+                              width: 10,
+                              child: Text(':'),
+                            ),
+                            Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 2),
+                                child: Text('${snapshot.data.npwpFile}'),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding:
+                            const EdgeInsets.only(left: 5, right: 5, top: 10),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              width: 150,
                               child: Text('Media Informasi'),
                             ),
                             Container(

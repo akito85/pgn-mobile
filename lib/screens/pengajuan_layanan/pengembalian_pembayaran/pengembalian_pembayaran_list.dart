@@ -324,7 +324,7 @@ class _PengembalianPembayaranListState
     String accessToken = await storageCache.read(key: 'access_token');
     String lang = await storageCache.read(key: 'lang');
     var responseGetSubsProg = await http.get(
-        '${UrlCons.mainDevUrl}customer-service/return-deposit?per_page=10&next_page=$nextPage',
+        '${UrlCons.mainDevUrl}customer-service/return-deposit?per_page=100&next_page=$nextPage',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $accessToken',
@@ -347,7 +347,7 @@ class _PengembalianPembayaranListState
     String accessToken = await storageCache.read(key: 'access_token');
     String lang = await storageCache.read(key: 'lang');
     var response = await http.get(
-        '${UrlCons.mainDevUrl}customer-service/return-deposit?per_page=10',
+        '${UrlCons.mainDevUrl}customer-service/return-deposit?per_page=100',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $accessToken',

@@ -332,7 +332,7 @@ class _PenghentianSementaraListState extends State<PenghentianSementaraList> {
     String accessToken = await storageCache.read(key: 'access_token');
     String lang = await storageCache.read(key: 'lang');
     var responseGetSubsProg = await http.get(
-        '${UrlCons.mainDevUrl}customer-service/temporary-suspend?per_page=10&next_page=$nextPage',
+        '${UrlCons.mainDevUrl}customer-service/temporary-suspend?per_page=100&next_page=$nextPage',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $accessToken',
@@ -356,7 +356,7 @@ class _PenghentianSementaraListState extends State<PenghentianSementaraList> {
     String accessToken = await storageCache.read(key: 'access_token');
     String lang = await storageCache.read(key: 'lang');
     var responseGetPenghentianSementara = await http.get(
-        '${UrlCons.mainDevUrl}customer-service/temporary-suspend?per_page=10',
+        '${UrlCons.mainDevUrl}customer-service/temporary-suspend?per_page=100',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $accessToken',
