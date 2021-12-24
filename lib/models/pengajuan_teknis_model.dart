@@ -69,9 +69,14 @@ class Create {
 
 class DataCreate {
   String message;
-  DataCreate({this.message});
+  String formId;
+  DataCreate({this.message, this.formId});
 
   factory DataCreate.fromJson(Map<String, dynamic> json) {
+    if (json['report_number'] != null)
+      return DataCreate(
+          message: json['message'], formId: json['report_number']);
+
     return DataCreate(
       message: json['message'],
     );
@@ -82,6 +87,7 @@ class DataCreate {
 
 class DetailData {
   int id;
+  dynamic techId;
   String custId;
   String custName;
   String gender;
@@ -108,6 +114,9 @@ class DetailData {
   String status;
   String createdAt;
   String techTye;
+  String npwpFile;
+  String npwpNumb;
+  String ktpAddress;
   DetailData(
       {this.address,
       this.bDate,
@@ -135,7 +144,11 @@ class DetailData {
       this.status,
       this.street,
       this.subDate,
-      this.techTye});
+      this.techTye,
+      this.ktpAddress,
+      this.npwpFile,
+      this.npwpNumb,
+      this.techId});
   factory DetailData.fromJson(Map<String, dynamic> json) {
     return DetailData(
       id: json['id'],
@@ -153,7 +166,7 @@ class DetailData {
       long: json['longitude'],
       rt: json['rt'],
       rw: json['rw'],
-      kabupaten: json['kabupaten'],
+      kabupaten: json['kota_kabupaten'],
       sign: json['customer_signature'],
       street: json['street'],
       locStat: json['person_in_location_status'],
@@ -165,6 +178,10 @@ class DetailData {
       address: json['address'],
       email: json['email'],
       techTye: json['technical_type'],
+      npwpFile: json['npwp_file'],
+      npwpNumb: json['npwp_number'],
+      ktpAddress: json['ktp_address'],
+      techId: json['technical_type_id'],
     );
   }
 }
@@ -196,5 +213,39 @@ class DataTechType {
 
   factory DataTechType.fromJson(Map<String, dynamic> json) {
     return DataTechType(name: json['name']);
+  }
+}
+
+class Biaya {
+  List<TitleData> titleData;
+  Biaya({this.titleData});
+
+  factory Biaya.fromJson(Map<String, dynamic> json) {
+    return Biaya(
+      titleData: parseDataTitle(json['G.1.6']),
+    );
+  }
+
+  static List<TitleData> parseDataTitle(datasJson) {
+    var list = datasJson as List;
+    List<TitleData> datasTitle =
+        list.map((data) => TitleData.fromJson(data)).toList();
+    return datasTitle;
+  }
+}
+
+class TitleData {
+  String meterType;
+  String area;
+  String cost;
+
+  TitleData({this.area, this.cost, this.meterType});
+
+  factory TitleData.fromJson(Map<String, dynamic> json) {
+    return TitleData(
+      area: json['area'],
+      cost: json['cost'],
+      meterType: json['meter_type'],
+    );
   }
 }

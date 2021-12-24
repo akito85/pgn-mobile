@@ -68,9 +68,14 @@ class Create {
 
 class DataCreate {
   String message;
-  DataCreate({this.message});
+  String formId;
+  DataCreate({this.message, this.formId});
 
   factory DataCreate.fromJson(Map<String, dynamic> json) {
+    if (json['report_number'] != null)
+      return DataCreate(
+          message: json['message'], formId: json['report_number']);
+
     return DataCreate(
       message: json['message'],
     );
@@ -162,7 +167,7 @@ class DetailData {
       long: json['longitude'],
       rt: json['rt'],
       rw: json['rw'],
-      kabupaten: json['kabupaten'],
+      kabupaten: json['kota_kabupaten'],
       sign: json['customer_signature'],
       street: json['street'],
       locStat: json['person_in_location_status'],
@@ -176,6 +181,37 @@ class DetailData {
       npwpFile: json['npwp_file'],
       npwpNumb: json['npwp_number'],
       ktpAddress: json['ktp_address'],
+    );
+  }
+}
+
+class Liability {
+  List<DatasLiability> datasLiability;
+  Liability({this.datasLiability});
+
+  factory Liability.fromJson(Map<String, dynamic> json) {
+    return Liability(
+      datasLiability: parsedDataLiability(json['data']),
+    );
+  }
+  static List<DatasLiability> parsedDataLiability(dataJson) {
+    var list = dataJson as List;
+    List<DatasLiability> datas =
+        list.map((data) => DatasLiability.fromJson(data)).toList();
+    return datas;
+  }
+}
+
+class DatasLiability {
+  String name;
+  String cost;
+
+  DatasLiability({this.cost, this.name});
+
+  factory DatasLiability.fromJson(Map<String, dynamic> json) {
+    return DatasLiability(
+      cost: json['cost'],
+      name: json['liability'],
     );
   }
 }

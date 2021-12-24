@@ -9,6 +9,7 @@ import 'package:pgn_mobile/models/url_cons.dart';
 import 'package:http/http.dart' as http;
 import 'package:pgn_mobile/screens/otp/otp.dart';
 import 'package:pgn_mobile/screens/pengajuan_layanan/berhenti_berlangganan/berhenti_berlangganan_update.dart';
+import 'package:pgn_mobile/screens/pengajuan_layanan/pengajuan_amandemen/penajuan_amendemen_segmen_update.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
 class SegmenDetail extends StatefulWidget {
@@ -877,10 +878,10 @@ class _SegmenDetailState extends State<SegmenDetail> {
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) =>
-                                          BerhentiBerlanggananUpdate(
+                                          PengajuanAmandemenSegmenUpdate(
                                               id: widget.id),
                                     ),
-                                  );
+                                  ).then((value) => setState(() {}));
                                 },
                                 style: ElevatedButton.styleFrom(
                                     primary: Color(0xFF81C153),

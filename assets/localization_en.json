@@ -810,5 +810,11 @@
     "f_title_porg_subs_stat_evaluation": "PGN Evaluation",
     "f_title_porg_subs_stat_construction": "Gas Piping Construction",
     "pc_tab_title": "Payment Confirmation",
-    "pc_tab_title_desc": "Payment Confirmation Detail"
+    "pc_tab_title_desc": "Payment Confirmation Detail",
+    "payment_guarantee" : "Payment Guarantee",
+    "available_guarantee" : "Available Guarantee",
+    "current_bill_date": "Current Bill Date",
+    "gas_bill": "Gas Bill",
+    "invoice_detail": "Invoice Detail",
+    "total_billing": "Total"
 }

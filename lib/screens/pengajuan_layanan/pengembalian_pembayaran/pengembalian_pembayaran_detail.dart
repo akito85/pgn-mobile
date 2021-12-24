@@ -8,6 +8,7 @@ import 'package:pgn_mobile/models/pengembalian_pembayaran_model.dart';
 import 'package:pgn_mobile/models/url_cons.dart';
 import 'package:http/http.dart' as http;
 import 'package:pgn_mobile/screens/otp/otp.dart';
+import 'package:pgn_mobile/screens/pengajuan_layanan/pengembalian_pembayaran/pengembalian_pembayaran_update.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
 class PengembalianPembayaranDetail extends StatefulWidget {
@@ -689,14 +690,14 @@ class _PengembalianPembayaranDetailState
                             Expanded(
                               child: ElevatedButton(
                                 onPressed: () {
-                                  // Navigator.push(
-                                  //   context,
-                                  //   MaterialPageRoute(
-                                  //     builder: (context) =>
-                                  //         BerhentiBerlanggananUpdate(
-                                  //             id: widget.id),
-                                  //   ),
-                                  // );
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          PengembalianPembayaranUpdate(
+                                              id: widget.id),
+                                    ),
+                                  ).then((value) => setState(() {}));
                                 },
                                 style: ElevatedButton.styleFrom(
                                     primary: Color(0xFF81C153),

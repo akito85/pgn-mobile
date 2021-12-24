@@ -8,26 +8,40 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
-import 'package:pgn_mobile/models/penghentian_sementara_model.dart';
+import 'package:dropdown_search/dropdown_search.dart';
+import 'package:pgn_mobile/models/auth_model.dart';
+import 'package:pgn_mobile/models/pengajuan_amandemen_model.dart';
+import 'package:pgn_mobile/models/provinces_model.dart';
 import 'package:pgn_mobile/models/url_cons.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_signature_pad/flutter_signature_pad.dart';
 import 'dart:ui' as ui;
+
 import 'package:pgn_mobile/screens/otp/otp.dart';
-import 'package:pgn_mobile/screens/pengajuan_layanan/widgets/widget_biaya_admin.dart';
 import 'package:pgn_mobile/screens/register/widgets/map_point.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
-class PenghentianPengaliranForm extends StatefulWidget {
+class PengajuanAmandemenUpdate extends StatefulWidget {
+  final int id;
+  PengajuanAmandemenUpdate({this.id});
   @override
-  _PenghentianPengaliranFormState createState() =>
-      _PenghentianPengaliranFormState();
+  _PengajuanAmandemenUpdateState createState() =>
+      _PengajuanAmandemenUpdateState(id: id);
 }
 
-class _PenghentianPengaliranFormState extends State<PenghentianPengaliranForm> {
+class _PengajuanAmandemenUpdateState extends State<PengajuanAmandemenUpdate> {
+  int id;
+
+  _PengajuanAmandemenUpdateState({this.id});
+  DetailData detailDatas = DetailData();
   List listGenderType = [
     "Laki-Laki",
     "Perempuan",
+  ];
+  List listMediaType = [
+    "Email",
+    "WhatsApp",
+    "SMS",
   ];
   List listStatusKepemilikan = [
     "Pemilik",
@@ -35,23 +49,31 @@ class _PenghentianPengaliranFormState extends State<PenghentianPengaliranForm> {
     "Lain-lain",
   ];
 
+  List listKelompokPelanggan = [
+    "KI",
+    "RT",
+    "Bulk",
+  ];
+
   DateTime selected = DateTime.now();
-  DateTime selectedPenghentian = DateTime.now();
-  DateTime selectedPengaliran = DateTime.now();
+  DateTime selectedPengajuan = DateTime.now();
   String valueChoose;
   String valueMediaType;
-  bool visibleSign = true;
+  String valueKelompokPelanggan;
   bool visibleDataDiri = true;
   bool visibleAlamat = false;
   bool visibleDataPelengkap = false;
   bool visibleReview = false;
+  bool pengaliranBBG = true;
+  bool perubahanSegmen = false;
+
   String custName = '';
+  String custGroup = '';
   String custID = '';
   String email = '';
   String phoneNumb = '';
   String statusLokasi;
 
-  String _fileName;
   TextEditingController tempatLahirCtrl = new TextEditingController();
   TextEditingController nikCtrl = new TextEditingController();
   TextEditingController alamatCtrl = new TextEditingController();
@@ -64,15 +86,28 @@ class _PenghentianPengaliranFormState extends State<PenghentianPengaliranForm> {
   TextEditingController provinsiCtrl = new TextEditingController();
   TextEditingController kodeposCtrl = new TextEditingController();
   TextEditingController locationCtrl = new TextEditingController();
+  TextEditingController volumeMinCtrl = new TextEditingController();
+  TextEditingController volumeMaxCtrl = new TextEditingController();
+  TextEditingController jmlJamCtrl = new TextEditingController();
+  TextEditingController jmlHariCtrl = new TextEditingController();
+  TextEditingController nomorNpwpCtrl = new TextEditingController();
+  TextEditingController dayaCtrl = new TextEditingController();
+  TextEditingController pemakaianPerBulanCtrl = new TextEditingController();
+  TextEditingController jamperHariCtrl = new TextEditingController();
+  TextEditingController hariperMingguCtrl = new TextEditingController();
   TextEditingController alasanCtrl = new TextEditingController();
-  TextEditingController numberNpwpCtrl = new TextEditingController();
   TextEditingController ktpAddressCtrl = new TextEditingController();
+
   final storageCache = FlutterSecureStorage();
   ByteData _img = ByteData(0);
   final _sign = GlobalKey<SignatureState>();
   final _formKeyDataDiri = GlobalKey<FormState>();
   final _formKeyAlamat = GlobalKey<FormState>();
-  final _formKeyPelengkap = GlobalKey<FormState>();
+  final _formKeyPelengkapBBG = GlobalKey<FormState>();
+  final _formKeyPelengkapSegmen = GlobalKey<FormState>();
+
+  String _fileName;
+  String _fileNameRekListrik;
   Future _showDatePicker() async {
     dynamic selectedPicker = await showDatePicker(
       context: context,
@@ -93,19 +128,7 @@ class _PenghentianPengaliranFormState extends State<PenghentianPengaliranForm> {
       lastDate: DateTime(2050),
     );
     setState(() {
-      selectedPenghentian = selectedPicker;
-    });
-  }
-
-  Future _showDatePickerPengaliran() async {
-    dynamic selectedPicker = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(1960),
-      lastDate: DateTime(2050),
-    );
-    setState(() {
-      selectedPengaliran = selectedPicker;
+      selectedPengajuan = selectedPicker;
     });
   }
 
@@ -113,6 +136,7 @@ class _PenghentianPengaliranFormState extends State<PenghentianPengaliranForm> {
     super.initState();
 
     getDataCred();
+    getData();
   }
 
   @override
@@ -124,7 +148,7 @@ class _PenghentianPengaliranFormState extends State<PenghentianPengaliranForm> {
         elevation: 0,
         iconTheme: IconThemeData(color: Colors.white),
         title: Text(
-          'Penghentian Sementara Pengaliran',
+          'Pengajuan Amendemen',
           style: TextStyle(color: Colors.white, fontSize: 16),
         ),
       ),
@@ -301,7 +325,7 @@ class _PenghentianPengaliranFormState extends State<PenghentianPengaliranForm> {
                         enabled: false,
                         keyboardType: TextInputType.text,
                         decoration: InputDecoration(
-                          hintText: custID,
+                          hintText: detailDatas.custId,
                           hintStyle: TextStyle(color: Colors.black),
                           contentPadding: new EdgeInsets.symmetric(
                               vertical: 12.0, horizontal: 15.0),
@@ -326,6 +350,99 @@ class _PenghentianPengaliranFormState extends State<PenghentianPengaliranForm> {
                     Padding(
                       padding: EdgeInsets.only(top: 20, left: 16, right: 16),
                       child: Text(
+                        'Jenis Pengajuan',
+                        style: TextStyle(
+                            color: Color(0xFF455055),
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                          top: 20, bottom: 20, left: 16, right: 16),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Expanded(
+                            child: InkWell(
+                              onTap: () {
+                                setState(() {
+                                  pengaliranBBG = true;
+                                  perubahanSegmen = false;
+                                });
+                              },
+                              child: Container(
+                                height: 75,
+                                padding: EdgeInsets.all(5),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(5),
+                                  color: pengaliranBBG == true
+                                      ? Color(0xFF427CEF)
+                                      : Colors.white,
+                                  border: Border.all(
+                                    color: pengaliranBBG == true
+                                        ? Color(0xFF427CEF)
+                                        : Color(0xFFC3C3C3),
+                                  ),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    'Pengalihan BBG',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: pengaliranBBG == true
+                                            ? Colors.white
+                                            : Color(0xFFC3C3C3),
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 14),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: InkWell(
+                              onTap: () {
+                                // setState(() {
+                                //   pengaliranBBG = false;
+                                //   perubahanSegmen = true;
+                                // });
+                              },
+                              child: Container(
+                                height: 75,
+                                margin: EdgeInsets.only(left: 15),
+                                padding: EdgeInsets.all(5),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(5),
+                                  color: perubahanSegmen == true
+                                      ? Color(0xFF427CEF)
+                                      : Colors.white,
+                                  border: Border.all(
+                                    color: perubahanSegmen == true
+                                        ? Color(0xFF427CEF)
+                                        : Color(0xFFC3C3C3),
+                                  ),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    'Perubahan Segmen / Kelompok Pelanggan',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: perubahanSegmen == true
+                                            ? Colors.white
+                                            : Color(0xFFC3C3C3),
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 14),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(top: 5, left: 16, right: 16),
+                      child: Text(
                         'Nama Pelanggan',
                         style: TextStyle(
                             color: Color(0xFF455055),
@@ -346,7 +463,7 @@ class _PenghentianPengaliranFormState extends State<PenghentianPengaliranForm> {
                               enabled: false,
                               keyboardType: TextInputType.text,
                               decoration: InputDecoration(
-                                hintText: '$custName',
+                                hintText: detailDatas.custName,
                                 hintStyle: TextStyle(color: Colors.black),
                                 contentPadding: new EdgeInsets.symmetric(
                                     vertical: 12.0, horizontal: 15.0),
@@ -556,7 +673,7 @@ class _PenghentianPengaliranFormState extends State<PenghentianPengaliranForm> {
                         enabled: false,
                         keyboardType: TextInputType.text,
                         decoration: InputDecoration(
-                          hintText: email,
+                          hintText: detailDatas.email,
                           hintStyle: TextStyle(color: Colors.black),
                           contentPadding: new EdgeInsets.symmetric(
                               vertical: 12.0, horizontal: 15.0),
@@ -601,7 +718,7 @@ class _PenghentianPengaliranFormState extends State<PenghentianPengaliranForm> {
                           prefixStyle: TextStyle(color: Color(0xFF828388)),
                           contentPadding: new EdgeInsets.symmetric(
                               vertical: 12.0, horizontal: 15.0),
-                          hintText: '+$phoneNumb',
+                          hintText: '+${detailDatas.phoneNumb}',
                           hintStyle: TextStyle(color: Colors.black),
                           disabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(5),
@@ -712,7 +829,7 @@ class _PenghentianPengaliranFormState extends State<PenghentianPengaliranForm> {
                         enabled: false,
                         keyboardType: TextInputType.text,
                         decoration: InputDecoration(
-                          hintText: custID,
+                          hintText: detailDatas.custId,
                           hintStyle: TextStyle(color: Colors.black),
                           contentPadding: new EdgeInsets.symmetric(
                               vertical: 12.0, horizontal: 15.0),
@@ -1376,7 +1493,7 @@ class _PenghentianPengaliranFormState extends State<PenghentianPengaliranForm> {
           Visibility(
             visible: visibleDataPelengkap,
             child: Form(
-              key: _formKeyPelengkap,
+              key: _formKeyPelengkapBBG,
               child: Container(
                 alignment: Alignment.bottomCenter,
                 margin: EdgeInsets.only(top: 100),
@@ -1408,7 +1525,7 @@ class _PenghentianPengaliranFormState extends State<PenghentianPengaliranForm> {
                         enabled: false,
                         keyboardType: TextInputType.text,
                         decoration: InputDecoration(
-                          hintText: custID,
+                          hintText: detailDatas.custId,
                           hintStyle: TextStyle(color: Colors.black),
                           contentPadding: new EdgeInsets.symmetric(
                               vertical: 12.0, horizontal: 15.0),
@@ -1426,6 +1543,167 @@ class _PenghentianPengaliranFormState extends State<PenghentianPengaliranForm> {
                             borderRadius: BorderRadius.circular(5),
                             borderSide: BorderSide(
                                 color: Color(0xFFF4F4F4), width: 2.0),
+                          ),
+                        ),
+                      ),
+                    ),
+
+                    Padding(
+                      padding: EdgeInsets.only(top: 20, left: 16, right: 16),
+                      child: Text(
+                        'Kelompok Pelanggan',
+                        style: TextStyle(
+                            color: Color(0xFF455055),
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(top: 10, left: 16, right: 16),
+                      decoration: BoxDecoration(
+                          color: Color(0xFFF4F4F4),
+                          borderRadius: BorderRadius.circular(5.0),
+                          border: Border.all(color: Color(0xFFD3D3D3))),
+                      child: TextFormField(
+                        enabled: false,
+                        keyboardType: TextInputType.text,
+                        decoration: InputDecoration(
+                          hintText: custGroup,
+                          hintStyle: TextStyle(color: Colors.black),
+                          contentPadding: new EdgeInsets.symmetric(
+                              vertical: 12.0, horizontal: 15.0),
+                          disabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(5),
+                            borderSide: BorderSide(
+                                color: Color(0xFFF4F4F4), width: 2.0),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(5),
+                            borderSide:
+                                BorderSide(color: Colors.blue, width: 2.0),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(5),
+                            borderSide: BorderSide(
+                                color: Color(0xFFF4F4F4), width: 2.0),
+                          ),
+                        ),
+                      ),
+                    ),
+
+                    Padding(
+                      padding: EdgeInsets.only(top: 20, left: 16, right: 16),
+                      child: Text(
+                        'Daya Listrik',
+                        style: TextStyle(
+                            color: Color(0xFF455055),
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(top: 10, left: 16, right: 16),
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(5.0),
+                          border: Border.all(color: Color(0xFFD3D3D3))),
+                      child: TextFormField(
+                        controller: dayaCtrl,
+                        keyboardType: TextInputType.text,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Data tidak boleh kosong!';
+                          }
+                          return null;
+                        },
+                        decoration: InputDecoration(
+                          suffixIcon: Text("\Watt    "),
+                          suffixIconConstraints:
+                              BoxConstraints(minWidth: 5, minHeight: 5),
+                          isDense: true,
+                          hintText: '00',
+                          hintStyle: TextStyle(color: Colors.grey),
+                          contentPadding: new EdgeInsets.symmetric(
+                              vertical: 12.0, horizontal: 15.0),
+                          disabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(5),
+                            borderSide:
+                                BorderSide(color: Colors.white, width: 2.0),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(5),
+                            borderSide:
+                                BorderSide(color: Colors.white, width: 2.0),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(5),
+                            borderSide:
+                                BorderSide(color: Colors.white, width: 2.0),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(top: 20, left: 16, right: 16),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              'Bukti Rekening Listrik',
+                              style: TextStyle(
+                                  color: Color(0xFF455055),
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                _fileNameRekListrik = null;
+                              });
+                            },
+                            child: Text(
+                              'Hapus',
+                              textAlign: TextAlign.right,
+                              style: TextStyle(
+                                  color: Color(0xFF427CEF),
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(
+                          left: 16, right: 16, top: 20, bottom: 10),
+                      child: DottedBorder(
+                        dashPattern: [3.1],
+                        color: Color(0xFFD3D3D3),
+                        strokeWidth: 1,
+                        child: Container(
+                          height: 60,
+                          child: Center(
+                            child: GestureDetector(
+                              onTap: () {
+                                _pickFiles('rekListrik');
+                              },
+                              child: _fileNameRekListrik != null
+                                  ? Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 10, right: 10),
+                                      child: Text(
+                                        _fileNameRekListrik,
+                                        style: TextStyle(
+                                            color: Color(0xFF427CEF),
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    )
+                                  : Text(
+                                      'Unggah Bukti Rekening Listrik',
+                                      style: TextStyle(
+                                          color: Color(0xFF427CEF),
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                            ),
                           ),
                         ),
                       ),
@@ -1494,7 +1772,7 @@ class _PenghentianPengaliranFormState extends State<PenghentianPengaliranForm> {
                           border: Border.all(color: Color(0xFFD3D3D3))),
                       child: TextFormField(
                         keyboardType: TextInputType.number,
-                        controller: numberNpwpCtrl,
+                        controller: nomorNpwpCtrl,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Data tidak boleh kosong!';
@@ -1565,7 +1843,7 @@ class _PenghentianPengaliranFormState extends State<PenghentianPengaliranForm> {
                           child: Center(
                             child: GestureDetector(
                               onTap: () {
-                                _pickFiles();
+                                _pickFiles('npwp');
                               },
                               child: _fileName != null
                                   ? Padding(
@@ -1592,19 +1870,55 @@ class _PenghentianPengaliranFormState extends State<PenghentianPengaliranForm> {
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.only(top: 10, left: 16, right: 16),
-                      child: Center(
-                          child: Text(
-                        'NPWP dan foto NPWP (tidak mandatory)',
+                      padding: EdgeInsets.only(top: 20, left: 16, right: 16),
+                      child: Text(
+                        'Pilihan Media Informasi',
                         style: TextStyle(
                             color: Color(0xFF455055),
                             fontWeight: FontWeight.bold),
-                      )),
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(top: 10, right: 16, left: 16),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                          border:
+                              Border.all(color: Color(0xFFD3D3D3), width: 1)),
+                      child: Padding(
+                        padding: EdgeInsets.only(left: 10, right: 8),
+                        child: DropdownButton(
+                          hint: Text('Media Informasi',
+                              style: TextStyle(
+                                  color: Color(0xFF455055),
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.normal)),
+                          dropdownColor: Colors.white,
+                          icon: Icon(Icons.arrow_drop_down,
+                              color: Color(0xFF455055)),
+                          isExpanded: true,
+                          underline: SizedBox(),
+                          style: TextStyle(
+                              color: Color(0xFF455055),
+                              fontSize: 14,
+                              fontWeight: FontWeight.normal),
+                          value: valueMediaType,
+                          onChanged: (newValue) {
+                            setState(() {
+                              valueMediaType = newValue;
+                            });
+                            print('INI MEDIA TYPE NYA $valueMediaType');
+                          },
+                          items: listMediaType.map((valueItem) {
+                            return DropdownMenuItem(
+                                value: valueItem, child: Text(valueItem));
+                          }).toList(),
+                        ),
+                      ),
                     ),
                     Padding(
-                      padding: EdgeInsets.only(top: 30, left: 16, right: 16),
+                      padding: EdgeInsets.only(top: 20, left: 16, right: 16),
                       child: Text(
-                        'Tanggal Penghentian',
+                        'Bulan Berlaku yang Diajukan',
                         style: TextStyle(
                             color: Color(0xFF455055),
                             fontWeight: FontWeight.bold),
@@ -1622,7 +1936,7 @@ class _PenghentianPengaliranFormState extends State<PenghentianPengaliranForm> {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           Text(DateFormat('d MMM yyy')
-                              .format(selectedPenghentian)),
+                              .format(selectedPengajuan)),
                           Expanded(
                             child: Container(
                               alignment: Alignment.centerRight,
@@ -1630,41 +1944,6 @@ class _PenghentianPengaliranFormState extends State<PenghentianPengaliranForm> {
                                   icon: Icon(Icons.calendar_today_outlined),
                                   onPressed: () {
                                     _showDatePickerPengajuan();
-                                  }),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(top: 20, left: 16, right: 16),
-                      child: Text(
-                        'Tanggal Pengaliran Kembali',
-                        style: TextStyle(
-                            color: Color(0xFF455055),
-                            fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                    Container(
-                      height: 55,
-                      margin: EdgeInsets.only(top: 10, left: 16, right: 16),
-                      padding: EdgeInsets.only(left: 16, right: 5),
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(5.0),
-                          border: Border.all(color: Color(0xFFC3C3C3))),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Text(DateFormat('d MMM yyy')
-                              .format(selectedPengaliran)),
-                          Expanded(
-                            child: Container(
-                              alignment: Alignment.centerRight,
-                              child: IconButton(
-                                  icon: Icon(Icons.calendar_today_outlined),
-                                  onPressed: () {
-                                    _showDatePickerPengaliran();
                                   }),
                             ),
                           )
@@ -1700,7 +1979,7 @@ class _PenghentianPengaliranFormState extends State<PenghentianPengaliranForm> {
                                     BorderSide(color: Color(0xFFC3C3C3)),
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(5))),
-                            hintText: ''),
+                            hintText: 'Kronologi kejadian'),
                       ),
                     ),
                     Padding(
@@ -1735,10 +2014,11 @@ class _PenghentianPengaliranFormState extends State<PenghentianPengaliranForm> {
                     //     ? Container()
                     //     : LimitedBox(
                     //         maxHeight: 200.0,
-                    //         child: Image.memory(_img.buffer.asUint8List())),
+                    //         child:
+                    //             Image.memory(_img.buffer.asUint8List())),
                     Padding(
                       padding: EdgeInsets.only(
-                          top: 10, left: 16, right: 16, bottom: 40),
+                          top: 10, left: 16, right: 16, bottom: 20),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
@@ -1765,8 +2045,8 @@ class _PenghentianPengaliranFormState extends State<PenghentianPengaliranForm> {
                           //           var data = await image.toByteData(
                           //               format: ui.ImageByteFormat.png);
                           //           sign.clear();
-                          //           final encoded =
-                          //               base64.encode(data.buffer.asUint8List());
+                          //           final encoded = base64.encode(
+                          //               data.buffer.asUint8List());
                           //           setState(() {
                           //             _img = data;
                           //           });
@@ -1777,70 +2057,6 @@ class _PenghentianPengaliranFormState extends State<PenghentianPengaliranForm> {
                         ],
                       ),
                     ),
-                    // Container(
-                    //   height: 70,
-                    //   decoration: BoxDecoration(
-                    //       color: Color(0xFF81C153),
-                    //       borderRadius: BorderRadius.circular(5.0),
-                    //       border: Border.all(color: Color(0xFF81C153))),
-                    //   margin: EdgeInsets.only(left: 16, right: 16, bottom: 20),
-                    //   child: Row(
-                    //     children: [
-                    //       Expanded(
-                    //         child: Padding(
-                    //           padding: const EdgeInsets.only(left: 16),
-                    //           child: Text(
-                    //             'Biaya Administrasi:',
-                    //             style: TextStyle(
-                    //               color: Colors.white,
-                    //             ),
-                    //           ),
-                    //         ),
-                    //       ),
-                    //       Padding(
-                    //         padding: const EdgeInsets.only(right: 16),
-                    //         child: Text(
-                    //           'Rp 610.000',
-                    //           style: TextStyle(
-                    //               color: Colors.white,
-                    //               fontWeight: FontWeight.bold),
-                    //         ),
-                    //       ),
-                    //     ],
-                    //   ),
-                    // ),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => WidgetBiayaAdmin(),
-                          ),
-                        );
-                      },
-                      child: Padding(
-                        padding:
-                            EdgeInsets.only(left: 16, right: 16, bottom: 20),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.info_outline_rounded,
-                              color: Color(0xFF427CEF),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.only(left: 10),
-                              child: Text(
-                                'Lihat Referensi Biaya Administrasi',
-                                style: TextStyle(
-                                    color: Color(0xFF427CEF),
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
                     Padding(
                       padding: EdgeInsets.only(left: 16, right: 16, bottom: 20),
                       child: Divider(
@@ -1848,9 +2064,18 @@ class _PenghentianPengaliranFormState extends State<PenghentianPengaliranForm> {
                       ),
                     ),
                     Padding(
+                      padding: EdgeInsets.only(left: 16, right: 16, bottom: 20),
+                      child: Text(
+                        'Bersama ini menyatakan bertanggung jawab terhadap kebenaran data tersebut dan bersedia memenuhi segala persyaratan & kewajiban yang telah ditetapkan oleh PT Perusahaan Gas Negara Tbk. Pastikan Anda telah melunasi segala kewajiban, denda, dan biaya lainnya (jika ada).',
+                        style: TextStyle(
+                          height: 1.5,
+                        ),
+                      ),
+                    ),
+                    Padding(
                       padding: EdgeInsets.only(left: 16, right: 16, bottom: 45),
                       child: Text(
-                        'Bersama ini menyatakan bertanggung jawab terhadap kebenaran data tersebut dan bersedia memenuhi segala persyaratan & kewajiban yang telah ditetapkan oleh PT Perusahaan Gas Negara Tbk.',
+                        'Anda akan dikenakan biaya administrasi amendemen sebesar Rp50.000.',
                         style: TextStyle(
                           height: 1.5,
                         ),
@@ -1888,11 +2113,15 @@ class _PenghentianPengaliranFormState extends State<PenghentianPengaliranForm> {
                             child: ElevatedButton(
                               onPressed: () {
                                 final sign = _sign.currentState;
-                                if (_formKeyPelengkap.currentState.validate() &&
-                                    sign.hasPoints) {
-                                  addFormAlert();
+                                if (_formKeyPelengkapBBG.currentState
+                                        .validate() &&
+                                    sign.hasPoints &&
+                                    valueMediaType != null) {
+                                  addFormAlert('BBG');
                                 } else if (!sign.hasPoints) {
                                   showToast('Tanda Tangan harus ada !');
+                                } else if (valueMediaType == null) {
+                                  showToast('Media Informasi harus ada !');
                                 }
                               },
                               style: ElevatedButton.styleFrom(
@@ -1903,7 +2132,7 @@ class _PenghentianPengaliranFormState extends State<PenghentianPengaliranForm> {
                               child: Padding(
                                 padding: const EdgeInsets.symmetric(
                                     vertical: 16, horizontal: 5),
-                                child: Text('Kirim Pengajuan'),
+                                child: Text('Update Pengajuan'),
                               ),
                             ),
                           )
@@ -1920,29 +2149,7 @@ class _PenghentianPengaliranFormState extends State<PenghentianPengaliranForm> {
     );
   }
 
-  void getDataCred() async {
-    String custNameString = await storageCache.read(key: 'customer_id');
-    String custIDString = await storageCache.read(key: 'user_name_cust');
-    String emailString = await storageCache.read(key: 'user_email');
-    String userPhoneString = await storageCache.read(key: 'user_mobile_otp');
-    setState(() {
-      custID = custNameString;
-      custName = custIDString;
-      email = emailString;
-      phoneNumb = userPhoneString;
-    });
-  }
-
-  void _nextLokasiPesangan(BuildContext context) async {
-    final result = await Navigator.push(
-        context, MaterialPageRoute(builder: (context) => MapPoint()));
-    print('INI RESULT LAT LANG $result');
-    setState(() {
-      locationCtrl.text = result;
-    });
-  }
-
-  Future<bool> addFormAlert() {
+  Future<bool> addFormAlert(String status) {
     var alertStyle = AlertStyle(
       animationType: AnimationType.fromTop,
       isCloseButton: false,
@@ -1967,7 +2174,7 @@ class _PenghentianPengaliranFormState extends State<PenghentianPengaliranForm> {
         children: <Widget>[
           SizedBox(height: 5),
           Text(
-            "Anda yakin ingin melakukan pengajuan penghentian sementara ? ",
+            "Anda yakin ingin perbarui pengalihan BBG? ",
             style: TextStyle(
                 // color: painting.Color.fromRGBO(255, 255, 255, 0),
                 fontSize: 17,
@@ -1993,7 +2200,7 @@ class _PenghentianPengaliranFormState extends State<PenghentianPengaliranForm> {
         DialogButton(
           width: 130,
           onPressed: () async {
-            submitForm();
+            submitFormBBG();
           },
           color: Colors.green,
           child: Text(
@@ -2006,9 +2213,117 @@ class _PenghentianPengaliranFormState extends State<PenghentianPengaliranForm> {
     ).show();
   }
 
-  void submitForm() async {
+  void getDataCred() async {
+    String custNameString = await storageCache.read(key: 'customer_id');
+    String custIDString = await storageCache.read(key: 'user_name_cust');
+    String emailString = await storageCache.read(key: 'user_email');
+    String userPhoneString = await storageCache.read(key: 'user_mobile_otp');
+    String custGroupString = await storageCache.read(key: 'customer_groupId');
+
+    setState(() {
+      custID = custNameString;
+      custName = custIDString;
+      email = emailString;
+      phoneNumb = userPhoneString;
+      custGroup = custGroupString;
+      if (custGroupString == '3') {
+        custGroup = 'RT';
+      } else if (custGroupString == '1') {
+        custGroup = 'KI';
+      } else if (custGroupString == '2') {
+        custGroup = 'Bulk';
+      }
+    });
+  }
+
+  void _nextLokasiPesangan(BuildContext context) async {
+    final result = await Navigator.push(
+        context, MaterialPageRoute(builder: (context) => MapPoint()));
+    print('INI RESULT LAT LANG $result');
+    setState(() {
+      locationCtrl.text = result;
+    });
+  }
+
+  void getData() async {
+    print('ID Nya ${widget.id}');
+    String accessToken = await storageCache.read(key: 'access_token');
+    String lang = await storageCache.read(key: 'lang');
+    var response = await http.get(
+        '${UrlCons.mainDevUrl}customer-service/pengalihan-bbg/${widget.id}',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $accessToken',
+          'Accept-Language': lang,
+        });
+    print('GET DETAIL PEMASANGAN KEMBALI ${response.body}');
+    DetailData detailData = DetailData.fromJson(json.decode(response.body));
+    // print('IMAGENYA  ${detailBerhetiBerlanggananData.sign}');
+    // var splitString = detailBerhetiBerlanggananData.sign.split(',');
+    setState(() {
+      detailDatas = detailData;
+      valueMediaType = detailData.mediaInfo;
+      // _byteImage = base64.decode(splitString[1]);
+    });
+    nikCtrl.value = new TextEditingController.fromValue(
+            new TextEditingValue(text: detailData.nik))
+        .value;
+    tempatLahirCtrl.value = new TextEditingController.fromValue(
+            new TextEditingValue(text: detailData.bPlace))
+        .value;
+    valueChoose = detailData.gender;
+    selected = DateTime.parse(detailData.bDate).toLocal();
+    alamatCtrl.value = new TextEditingController.fromValue(
+            new TextEditingValue(text: detailData.address))
+        .value;
+    perumahanCtrl.value = new TextEditingController.fromValue(
+            new TextEditingValue(text: detailData.street))
+        .value;
+    rtCtrl.value = new TextEditingController.fromValue(
+            new TextEditingValue(text: detailData.rt))
+        .value;
+    rwCtrl.value = new TextEditingController.fromValue(
+            new TextEditingValue(text: detailData.rw))
+        .value;
+    kelurahanCtrl.value = new TextEditingController.fromValue(
+            new TextEditingValue(text: detailData.kelurahan))
+        .value;
+    kecamatanCtrl.value = new TextEditingController.fromValue(
+            new TextEditingValue(text: detailData.kecamatan))
+        .value;
+    // kabupatenCtrl.value = new TextEditingController.fromValue(
+    //         new TextEditingValue(text: detailBerhetiBerlangganan.kabupaten))
+    // .value;
+    provinsiCtrl.value = new TextEditingController.fromValue(
+            new TextEditingValue(text: detailData.prov))
+        .value;
+    kodeposCtrl.value = new TextEditingController.fromValue(
+            new TextEditingValue(text: detailData.postalCode))
+        .value;
+    locationCtrl.value = new TextEditingController.fromValue(
+            new TextEditingValue(text: '${detailData.lat},${detailData.long}'))
+        .value;
+    statusLokasi = detailData.locStat;
+    selectedPengajuan = DateTime.parse(detailData.subDate).toLocal();
+    alasanCtrl.value = new TextEditingController.fromValue(
+            new TextEditingValue(text: detailData.reason))
+        .value;
+    ktpAddressCtrl.value = new TextEditingController.fromValue(
+            new TextEditingValue(text: detailData.ktpAddress))
+        .value;
+    nomorNpwpCtrl.value = new TextEditingController.fromValue(
+            new TextEditingValue(text: detailData.npwpNumb))
+        .value;
+    dayaCtrl.value = new TextEditingController.fromValue(
+            new TextEditingValue(text: detailData.electricalPower))
+        .value;
+    kabupatenCtrl.value = new TextEditingController.fromValue(
+            new TextEditingValue(text: detailData.kabupaten))
+        .value;
+  }
+
+  void submitFormBBG() async {
     final sign = _sign.currentState;
-    //retrieve image data, do whatever you want with it (send to server, save locally...)
     final image = await sign.getData();
     var data = await image.toByteData(format: ui.ImageByteFormat.png);
     sign.clear();
@@ -2024,14 +2339,14 @@ class _PenghentianPengaliranFormState extends State<PenghentianPengaliranForm> {
     print('GAMBARNYA  data:image/png;base64,$encoded} ');
     String accessToken = await storageCache.read(key: 'access_token');
     var body = json.encode({
-      "customer_id": custID,
-      "customer_name": custName,
+      "customer_id": detailDatas.custId,
+      "customer_name": detailDatas.custName,
       "gender": valueChoose,
       "birth_place": tempatLahirCtrl.text,
       "birth_date": DateFormat('yyy-MM-dd').format(selected),
       "id_card_number": nikCtrl.text,
-      "email": email,
-      "phone_number": phoneNumb,
+      "email": detailDatas.email,
+      "phone_number": detailDatas.phoneNumb,
       "address": alamatCtrl.text,
       "street": perumahanCtrl.text,
       "rt": rwCtrl.text,
@@ -2044,49 +2359,52 @@ class _PenghentianPengaliranFormState extends State<PenghentianPengaliranForm> {
       "longitude": long,
       "latitude": lat,
       "person_in_location_status": statusLokasi,
-      "info_media": '',
-      "submission_suspend_date":
-          DateFormat('yyy-MM-dd').format(selectedPenghentian),
-      "submission_enable_date":
-          DateFormat('yyy-MM-dd').format(selectedPengaliran),
+      "info_media": valueMediaType,
+      "submission_date": DateFormat('yyy-MM-dd').format(selectedPengajuan),
       "reason": alasanCtrl.text,
-      "npwp_number": numberNpwpCtrl.text,
+      "customer_group": custGroup,
+      "electrical_power": dayaCtrl.text,
+      "electricity_bill_proof": "url string",
+      "npwp_file": "url String",
+      "npwp_number": nomorNpwpCtrl.text,
       "ktp_address": ktpAddressCtrl.text,
-      "npwp_file": 'test',
       "customer_signature": 'data:image/png;base64,$encoded',
     });
-    var responseCreatePenghentianSementara = await http.post(
-        '${UrlCons.mainProdUrl}customer-service/temporary-suspend',
+    var response = await http.put(
+        '${UrlCons.mainProdUrl}customer-service/pengalihan-bbg/$id',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $accessToken'
         },
         body: body);
-    print(
-        'INI HASIL POST CREATE PENGHASILAN SEMENTARA ${responseCreatePenghentianSementara.body}');
-    CreatePenghentianSementara createPenghentianSementara =
-        CreatePenghentianSementara.fromJson(
-            json.decode(responseCreatePenghentianSementara.body));
+    print('INI HASIL UPDATE CREATE PENGAHUAN AMANDEMEN ${response.body}');
+    Create create = Create.fromJson(json.decode(response.body));
 
-    if (responseCreatePenghentianSementara.statusCode == 200) {
-      successAlert(createPenghentianSementara.dataCreate.message,
-          createPenghentianSementara.dataCreate.formId);
+    if (response.statusCode == 200) {
+      successAlert(create.dataCreate.message);
     } else {
       Navigator.pop(context);
-      showToast(createPenghentianSementara.dataCreate.message);
+      showToast(create.dataCreate.message);
     }
   }
 
-  void _pickFiles() async {
+  void _pickFiles(String status) async {
     _resetState();
     FilePickerResult result = await FilePicker.platform.pickFiles();
 
     if (result != null) {
       File file = File(result.files.single.path.toString());
-      setState(() {
-        _fileName = result.names.single;
-        print('NAMA FILE : $_fileName');
-      });
+      if (status == 'rekListrik') {
+        setState(() {
+          _fileNameRekListrik = result.names.single;
+          print('NAMA FILE : $_fileName');
+        });
+      } else {
+        setState(() {
+          _fileName = result.names.single;
+          print('NAMA FILE : $_fileName');
+        });
+      }
     } else {
       // User canceled the picker
     }
@@ -2101,7 +2419,7 @@ class _PenghentianPengaliranFormState extends State<PenghentianPengaliranForm> {
     });
   }
 
-  Future<bool> successAlert(String message, String formID) {
+  Future<bool> successAlert(String message) {
     var alertStyle = AlertStyle(
       animationType: AnimationType.fromTop,
       isCloseButton: false,
@@ -2127,15 +2445,6 @@ class _PenghentianPengaliranFormState extends State<PenghentianPengaliranForm> {
           SizedBox(height: 5),
           Text(
             message,
-            style: TextStyle(
-                // color: painting.Color.fromRGBO(255, 255, 255, 0),
-                fontSize: 17,
-                fontWeight: FontWeight.w400),
-            textAlign: TextAlign.center,
-          ),
-          SizedBox(height: 5),
-          Text(
-            'Nomor Formulir Layanan Pelanggan Anda: $formID',
             style: TextStyle(
                 // color: painting.Color.fromRGBO(255, 255, 255, 0),
                 fontSize: 17,

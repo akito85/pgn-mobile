@@ -2,11 +2,11 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:pgn_mobile/models/penghentian_sementara_model.dart';
+import 'package:pgn_mobile/models/pengajuan_teknis_model.dart';
 import 'package:pgn_mobile/models/url_cons.dart';
 import 'package:http/http.dart' as http;
 
-class WidgetBiayaAdmin extends StatelessWidget {
+class WidgetReferensiBiayaTeknis extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -15,46 +15,30 @@ class WidgetBiayaAdmin extends StatelessWidget {
         backgroundColor: Colors.white,
         elevation: 0,
         title: Text(
-          'Biaya Administrasi Penghentian Sementara',
+          'Informasi Biaya yang Dikenakan',
           style: TextStyle(color: Colors.black),
         ),
       ),
       body: ListView(
         children: [
           Padding(
-            padding: EdgeInsets.only(left: 16, right: 16, top: 20, bottom: 10),
-            child: Text(
-              'Pelayanan Wilayah Utama',
-              style: TextStyle(color: Color(0xFF427CEF)),
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.only(left: 16, right: 16, bottom: 20),
+            padding: EdgeInsets.only(left: 16, right: 16, top: 20),
             child: Text(
               'Provinsi Sumatera Utara, Riau, Kepulauan Riau, Jambi, Sumatera Selatan, Lampung, DKI Jakarta, Jawa Barat, Banten, Kalimantan Utara, Kalimantan Timur, Jawa Tengah, Jawa Timur, Sulawesi Selatan, Sulawesi Tenggara',
-              style: TextStyle(
-                height: 1.5,
-              ),
+              style: TextStyle(color: Color(0xFF5C727D), height: 2),
             ),
           ),
           Container(
-            height: 60,
+            height: 45,
             color: Color(0xFFF4F4F4),
             margin: EdgeInsets.only(left: 16, right: 16, top: 10),
             child: Row(
               children: [
                 Container(
-                    width: 70,
-                    margin: EdgeInsets.only(left: 16, right: 5),
-                    child: Text('Jenis G Size Meter')),
-                Container(
-                    width: 110,
+                    width: 150,
                     margin: EdgeInsets.only(left: 16, right: 16),
-                    child: Text('Penutupan Aliran Gas')),
-                Expanded(
-                    child: Padding(
-                        padding: EdgeInsets.only(right: 5),
-                        child: Text('Penutupan Aliran Gas & Pencabutan Meter')))
+                    child: Text('Jenis G Size Meter')),
+                Text('Biaya yang Dikenakan')
               ],
             ),
           ),
@@ -74,29 +58,20 @@ class WidgetBiayaAdmin extends StatelessWidget {
                         child: Row(
                           children: [
                             Container(
-                                width: 70,
-                                margin: EdgeInsets.only(left: 16, right: 5),
-                                child:
-                                    Text(snapshot.data.titleData[i].meteSize)),
-                            Container(
-                                width: 110,
+                                width: 150,
                                 margin: EdgeInsets.only(left: 16, right: 16),
                                 child: Text(
-                                    'Rp ${snapshot.data.titleData[i].gasClosing}')),
-                            Expanded(
-                                child: Padding(
-                                    padding: EdgeInsets.only(right: 5),
-                                    child: Text(
-                                        'Rp ${snapshot.data.titleData[i].gasAndMeterClosing}')))
+                                    '${snapshot.data.titleData[i].meterType}')),
+                            Text('Rp ${snapshot.data.titleData[i].cost}')
                           ],
                         ),
                       ),
                       Padding(
-                          padding:
-                              EdgeInsets.only(left: 16, right: 16, top: 10),
-                          child: Divider(
-                            color: Colors.grey,
-                          )),
+                        padding: EdgeInsets.only(left: 16, right: 16, top: 10),
+                        child: Divider(
+                          color: Colors.grey,
+                        ),
+                      ),
                     ],
                   );
                 },
@@ -112,7 +87,7 @@ class WidgetBiayaAdmin extends StatelessWidget {
     final storageCache = FlutterSecureStorage();
     String accessToken = await storageCache.read(key: 'access_token');
     var response = await http.get(
-        '${UrlCons.mainProdUrl}customer-service/temporary-suspend-cost?per_page=10000',
+        '${UrlCons.mainProdUrl}customer-service/resubscribe-cost?per_page=10000',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $accessToken'

@@ -8,7 +8,7 @@ import 'package:pgn_mobile/models/pengajuan_teknis_model.dart';
 import 'package:pgn_mobile/models/url_cons.dart';
 import 'package:http/http.dart' as http;
 import 'package:pgn_mobile/screens/otp/otp.dart';
-import 'package:pgn_mobile/screens/pengajuan_layanan/berhenti_berlangganan/berhenti_berlangganan_update.dart';
+import 'package:pgn_mobile/screens/pengajuan_layanan/pengajuan_teknis/pengajuan_teknis_update.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
 class PengajuanTeknisDetail extends StatefulWidget {
@@ -503,6 +503,78 @@ class _PengajuanTeknisDetailState extends State<PengajuanTeknisDetail> {
                           children: [
                             Container(
                               width: 150,
+                              child: Text('Alamat Sesuai KTP'),
+                            ),
+                            Container(
+                              margin: const EdgeInsets.only(left: 10),
+                              width: 10,
+                              child: Text(':'),
+                            ),
+                            Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 2),
+                                child: Text('${snapshot.data.ktpAddress}'),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding:
+                            const EdgeInsets.only(left: 5, right: 5, top: 10),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              width: 150,
+                              child: Text('Nomer NPWP'),
+                            ),
+                            Container(
+                              margin: const EdgeInsets.only(left: 10),
+                              width: 10,
+                              child: Text(':'),
+                            ),
+                            Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 2),
+                                child: Text('${snapshot.data.npwpNumb}'),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding:
+                            const EdgeInsets.only(left: 5, right: 5, top: 10),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              width: 150,
+                              child: Text('Foto NPWP'),
+                            ),
+                            Container(
+                              margin: const EdgeInsets.only(left: 10),
+                              width: 10,
+                              child: Text(':'),
+                            ),
+                            Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 2),
+                                child: Text('${snapshot.data.npwpFile}'),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding:
+                            const EdgeInsets.only(left: 5, right: 5, top: 10),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              width: 150,
                               child: Text('Jenis Layanan Teknis'),
                             ),
                             Container(
@@ -598,10 +670,13 @@ class _PengajuanTeknisDetailState extends State<PengajuanTeknisDetail> {
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) =>
-                                          BerhentiBerlanggananUpdate(
-                                              id: widget.id),
+                                          PengajuanTeknisUpdate(
+                                        id: widget.id,
+                                        techId: snapshot.data.techId,
+                                        techName: snapshot.data.techTye,
+                                      ),
                                     ),
-                                  );
+                                  ).then((value) => setState(() {}));
                                 },
                                 style: ElevatedButton.styleFrom(
                                     primary: Color(0xFF81C153),

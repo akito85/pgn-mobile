@@ -8,7 +8,7 @@ import 'package:pgn_mobile/models/klaim_asuransi_model.dart';
 import 'package:pgn_mobile/models/url_cons.dart';
 import 'package:http/http.dart' as http;
 import 'package:pgn_mobile/screens/otp/otp.dart';
-import 'package:pgn_mobile/screens/pengajuan_layanan/berhenti_berlangganan/berhenti_berlangganan_update.dart';
+import 'package:pgn_mobile/screens/pengajuan_layanan/klaim_asuransi/klaim_asuransi_update.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
 class KlaimAsuransiDetail extends StatefulWidget {
@@ -574,30 +574,6 @@ class _KlaimAsuransiDetailState extends State<KlaimAsuransiDetail> {
                           children: [
                             Container(
                               width: 150,
-                              child: Text('Pilihan Media Informasi'),
-                            ),
-                            Container(
-                              margin: const EdgeInsets.only(left: 10),
-                              width: 10,
-                              child: Text(':'),
-                            ),
-                            Expanded(
-                              child: Padding(
-                                padding: const EdgeInsets.only(left: 2),
-                                child: Text('${snapshot.data.mediaType}'),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding:
-                            const EdgeInsets.only(left: 5, right: 5, top: 10),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                              width: 150,
                               child: Text('File Klaim Asuransi'),
                             ),
                             Container(
@@ -644,10 +620,9 @@ class _KlaimAsuransiDetailState extends State<KlaimAsuransiDetail> {
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) =>
-                                          BerhentiBerlanggananUpdate(
-                                              id: widget.id),
+                                          KlaimAsuransiUpdate(id: widget.id),
                                     ),
-                                  );
+                                  ).then((value) => setState(() {}));
                                 },
                                 style: ElevatedButton.styleFrom(
                                     primary: Color(0xFF81C153),

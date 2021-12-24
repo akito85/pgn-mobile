@@ -309,7 +309,7 @@ class _SegmenListState extends State<SegmenList> {
     String accessToken = await storageCache.read(key: 'access_token');
     String lang = await storageCache.read(key: 'lang');
     var responseGetSubsProg = await http.get(
-        '${UrlCons.mainDevUrl}customer-service/change-segment?per_page=100&next_page=$nextPage',
+        '${UrlCons.mainDevUrl}customer-service/change-segment?per_page=1000&next_page=$nextPage',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $accessToken',
@@ -330,7 +330,7 @@ class _SegmenListState extends State<SegmenList> {
     String accessToken = await storageCache.read(key: 'access_token');
     String lang = await storageCache.read(key: 'lang');
     var response = await http.get(
-        '${UrlCons.mainDevUrl}customer-service/change-segment?per_page=100',
+        '${UrlCons.mainDevUrl}customer-service/change-segment?per_page=1000',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $accessToken',

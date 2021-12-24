@@ -8,9 +8,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
 import 'package:dropdown_search/dropdown_search.dart';
-import 'package:pgn_mobile/models/auth_model.dart';
 import 'package:pgn_mobile/models/pengajuan_asuransi_model.dart';
-import 'package:pgn_mobile/models/provinces_model.dart';
 import 'package:pgn_mobile/models/url_cons.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_signature_pad/flutter_signature_pad.dart';
@@ -28,7 +26,7 @@ class PengajuanAsuransiForm extends StatefulWidget {
 
 class _PengajuanAsuransiFormState extends State<PengajuanAsuransiForm> {
   List listGenderType = [
-    "Laki-laki",
+    "Laki-Laki",
     "Perempuan",
   ];
   List listMediaType = [
@@ -51,6 +49,8 @@ class _PengajuanAsuransiFormState extends State<PengajuanAsuransiForm> {
   bool visibleDataPelengkap = false;
   bool visibleReview = false;
   String _fileName;
+  String dataLia;
+  String dataPremi;
 
   String custName = '';
   String custID = '';
@@ -1584,7 +1584,17 @@ class _PengajuanAsuransiFormState extends State<PengajuanAsuransiForm> {
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.only(top: 20, left: 16, right: 16),
+                    padding: EdgeInsets.only(top: 10, left: 16, right: 16),
+                    child: Center(
+                        child: Text(
+                      'NPWP dan foto NPWP (tidak mandatory)',
+                      style: TextStyle(
+                          color: Color(0xFF455055),
+                          fontWeight: FontWeight.bold),
+                    )),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 30, left: 16, right: 16),
                     child: Text(
                       'Pilihan Media Informasi',
                       style: TextStyle(
@@ -1673,11 +1683,16 @@ class _PengajuanAsuransiFormState extends State<PengajuanAsuransiForm> {
                   Padding(
                     padding: EdgeInsets.only(
                         top: 10, left: 16, right: 16, bottom: 20),
-                    child: DropdownSearch<DataProvinces>(
+                    child: DropdownSearch<DatasLiability>(
                       mode: Mode.MENU,
                       onFind: (String filter) => getOwnerTypes(),
-                      itemAsString: (DataProvinces u) => u.name,
-                      onChanged: (DataProvinces data) {
+                      itemAsString: (DatasLiability u) => u.name,
+                      onChanged: (DatasLiability data) {
+                        setState(() {
+                          dataLia = data.name;
+                          dataPremi = data.cost;
+                        });
+
                         print(data);
                       },
                       label: "",
@@ -1747,7 +1762,7 @@ class _PengajuanAsuransiFormState extends State<PengajuanAsuransiForm> {
                       enabled: false,
                       keyboardType: TextInputType.text,
                       decoration: InputDecoration(
-                        hintText: '100000',
+                        hintText: dataPremi,
                         hintStyle: TextStyle(color: Colors.black),
                         contentPadding: new EdgeInsets.symmetric(
                             vertical: 12.0, horizontal: 15.0),
@@ -2045,13 +2060,14 @@ class _PengajuanAsuransiFormState extends State<PengajuanAsuransiForm> {
       "kecamatan": kecamatanCtrl.text,
       "province": provinsiCtrl.text,
       "postal_code": kodeposCtrl.text,
-      "longitude": locationCtrl.text,
-      "latitude": locationCtrl.text,
+      "kota_kabupaten": kabupatenCtrl.text,
+      "longitude": long,
+      "latitude": lat,
       "person_in_location_status": statusLokasi,
       "info_media": valueMediaType,
       "submission_date": DateFormat('yyy-MM-dd').format(selectedPengajuan),
-      "submission_liability": '1000',
-      "submission_insurance_fee": '20000',
+      "submission_liability": dataLia,
+      "submission_insurance_fee": dataPremi,
       "npwp_number": numberNpwpCtrl.text,
       "ktp_address": ktpAddressCtrl.text,
       "npwp_file": 'test',
@@ -2068,34 +2084,25 @@ class _PengajuanAsuransiFormState extends State<PengajuanAsuransiForm> {
     Create create = Create.fromJson(json.decode(response.body));
 
     if (response.statusCode == 200) {
-      showToast(create.dataCreate.message);
-      Navigator.pop(context);
-      Navigator.pop(context);
+      successAlert(create.dataCreate.message, create.dataCreate.formId);
     } else {
       Navigator.pop(context);
       showToast(create.dataCreate.message);
     }
   }
 
-  Future<List<DataProvinces>> getOwnerTypes() async {
-    var responseTokenBarrer =
-        await http.post('${UrlCons.prodRelyonUrl}oauth/access_token', body: {
-      'client_id': '0dUIDb81bBUsGDfDsYYHQ9wBujfjL9XWfH0ZoAzi',
-      'client_secret': '0DTuUFYRPtWUFN2UbzSvzqZMzNsW4kAl4t4PTrtC',
-      'grant_type': 'client_credentials'
-    });
-    AuthSalesRegit _auth =
-        AuthSalesRegit.fromJson(json.decode(responseTokenBarrer.body));
-
-    var responseOwnerType =
-        await http.get('${UrlCons.prodRelyonUrl}v1/location-status', headers: {
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer ${_auth.accessToken}'
-    });
-    GetProvinces getProvinces;
-    getProvinces = GetProvinces.fromJson(json.decode(responseOwnerType.body));
-    var dataOwnerTypes = getProvinces.data;
-    return dataOwnerTypes;
+  Future<List<DatasLiability>> getOwnerTypes() async {
+    String accessToken = await storageCache.read(key: 'access_token');
+    var response = await http.get(
+        '${UrlCons.mainProdUrl}customer-service/fire-insurance-application-cost?per_page=10000',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $accessToken'
+        });
+    Liability getLiability;
+    getLiability = Liability.fromJson(json.decode(response.body));
+    var datasLia = getLiability.datasLiability;
+    return datasLia;
   }
 
   void _pickFiles() async {
@@ -2120,5 +2127,68 @@ class _PengajuanAsuransiFormState extends State<PengajuanAsuransiForm> {
     setState(() {
       _fileName = null;
     });
+  }
+
+  Future<bool> successAlert(String message, String formID) {
+    var alertStyle = AlertStyle(
+      animationType: AnimationType.fromTop,
+      isCloseButton: false,
+      isOverlayTapDismiss: false,
+      descStyle: TextStyle(fontWeight: FontWeight.bold),
+      animationDuration: Duration(milliseconds: 400),
+      alertBorder: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(0.0),
+        side: BorderSide(
+          color: Colors.grey,
+        ),
+      ),
+      titleStyle: TextStyle(
+        color: Colors.black,
+      ),
+    );
+    return Alert(
+      context: context,
+      style: alertStyle,
+      title: "Information !",
+      content: Column(
+        children: <Widget>[
+          SizedBox(height: 5),
+          Text(
+            message,
+            style: TextStyle(
+                // color: painting.Color.fromRGBO(255, 255, 255, 0),
+                fontSize: 17,
+                fontWeight: FontWeight.w400),
+            textAlign: TextAlign.center,
+          ),
+          SizedBox(height: 5),
+          Text(
+            'Nomor Formulir Layanan Pelanggan Anda: $formID',
+            style: TextStyle(
+                // color: painting.Color.fromRGBO(255, 255, 255, 0),
+                fontSize: 17,
+                fontWeight: FontWeight.w400),
+            textAlign: TextAlign.center,
+          ),
+          SizedBox(height: 10)
+        ],
+      ),
+      buttons: [
+        DialogButton(
+          width: 130,
+          onPressed: () async {
+            Navigator.pop(context);
+            Navigator.pop(context);
+            Navigator.pop(context);
+          },
+          color: Colors.green,
+          child: Text(
+            "Ok",
+            style: TextStyle(
+                color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
+          ),
+        )
+      ],
+    ).show();
   }
 }

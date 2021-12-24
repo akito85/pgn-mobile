@@ -9,6 +9,7 @@ import 'package:pgn_mobile/models/url_cons.dart';
 import 'package:http/http.dart' as http;
 import 'package:pgn_mobile/screens/otp/otp.dart';
 import 'package:pgn_mobile/screens/pengajuan_layanan/berhenti_berlangganan/berhenti_berlangganan_update.dart';
+import 'package:pgn_mobile/screens/pengajuan_layanan/pembaruan_data/pembaruan_data_update.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
 class PembaruanDataDetail extends StatefulWidget {
@@ -620,10 +621,10 @@ class _PembaruanDataDetailState extends State<PembaruanDataDetail> {
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) =>
-                                          BerhentiBerlanggananUpdate(
+                                          PembaruanDPelangganUpdate(
                                               id: widget.id),
                                     ),
-                                  );
+                                  ).then((value) => setState(() {}));
                                 },
                                 style: ElevatedButton.styleFrom(
                                     primary: Color(0xFF81C153),

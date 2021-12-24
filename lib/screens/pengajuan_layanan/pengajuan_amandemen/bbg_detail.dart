@@ -8,7 +8,7 @@ import 'package:pgn_mobile/models/pengajuan_amandemen_model.dart';
 import 'package:pgn_mobile/models/url_cons.dart';
 import 'package:http/http.dart' as http;
 import 'package:pgn_mobile/screens/otp/otp.dart';
-import 'package:pgn_mobile/screens/pengajuan_layanan/berhenti_berlangganan/berhenti_berlangganan_update.dart';
+import 'package:pgn_mobile/screens/pengajuan_layanan/pengajuan_amandemen/pengajuan_amandemen_update.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
 class BBGDetail extends StatefulWidget {
@@ -32,7 +32,7 @@ class _BBGDetailState extends State<BBGDetail> {
         elevation: 0,
         iconTheme: IconThemeData(color: Colors.white),
         title: Text(
-          'Pengajuan Amandemen BBG',
+          'Pengajuan Amandemen BBG Detail',
           style: TextStyle(color: Colors.white, fontSize: 16),
         ),
       ),
@@ -742,10 +742,10 @@ class _BBGDetailState extends State<BBGDetail> {
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) =>
-                                          BerhentiBerlanggananUpdate(
+                                          PengajuanAmandemenUpdate(
                                               id: widget.id),
                                     ),
-                                  );
+                                  ).then((value) => setState(() {}));
                                 },
                                 style: ElevatedButton.styleFrom(
                                     primary: Color(0xFF81C153),

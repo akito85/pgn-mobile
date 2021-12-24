@@ -32,13 +32,13 @@ class PengajuanLayanan extends StatelessWidget {
           Padding(
             padding: EdgeInsets.only(left: 18, right: 18, top: 20),
             child: Text(
-                'Pengajuan pembaharuan layanan dapat dilakukan dengan mengirimkan form pengajuan yang sesuai dengan lorem ipsum dolor sit amet'),
+                'Pengajuan layanan kepelangganan dapat dilakukan dengan mengisi form pengajuan sesuai dengan daftar layanan di bawah ini:'),
           ),
           Padding(
             padding: EdgeInsets.only(left: 18, right: 18, top: 44),
             child: Row(
               children: [
-                Container(width: 85, child: Text('Umum')),
+                Container(width: 85, child: Text('Layanan Komersial')),
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.only(left: 5),
@@ -76,7 +76,7 @@ class PengajuanLayanan extends StatelessWidget {
                   Expanded(
                     child: Padding(
                         padding: const EdgeInsets.only(left: 5),
-                        child: Text('Pengajuan Amandemen')),
+                        child: Text('Pengajuan Amendemen')),
                   ),
                 ],
               ),
@@ -117,7 +117,9 @@ class PengajuanLayanan extends StatelessWidget {
             padding: EdgeInsets.only(left: 18, right: 18, top: 44),
             child: Row(
               children: [
-                Container(width: 85, child: Text('Layanan')),
+                Expanded(
+                  child: Container(child: Text('Layanan Teknis & Operasional')),
+                ),
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.only(left: 5),
@@ -128,37 +130,6 @@ class PengajuanLayanan extends StatelessWidget {
                   ),
                 ),
               ],
-            ),
-          ),
-          GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => PengajuanTeknisList(),
-                ),
-              );
-            },
-            child: Padding(
-              padding: EdgeInsets.only(left: 34, right: 18, top: 20),
-              child: Row(
-                children: [
-                  Center(
-                    child: Padding(
-                      padding: EdgeInsets.only(right: 12.0),
-                      child: CircleAvatar(
-                        backgroundColor: Color(0xFF427CEF),
-                        radius: 15,
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    child: Padding(
-                        padding: const EdgeInsets.only(left: 5),
-                        child: Text('Layanan Teknis')),
-                  ),
-                ],
-              ),
             ),
           ),
           GestureDetector(
@@ -254,29 +225,15 @@ class PengajuanLayanan extends StatelessWidget {
               ),
             ),
           ),
-          Padding(
-            padding: EdgeInsets.only(left: 18, right: 18, top: 44),
-            child: Row(
-              children: [
-                Container(width: 85, child: Text('Akun')),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 5),
-                    child: Divider(
-                      color: Colors.grey,
-                      height: 1,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
           GestureDetector(
             onTap: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => PengembalianPembayaranList(),
+                  builder: (context) => PengajuanTeknisList(
+                    techId: 33,
+                    techName: 'Pemasangan PGN Meter',
+                  ),
                 ),
               );
             },
@@ -296,10 +253,197 @@ class PengajuanLayanan extends StatelessWidget {
                   Expanded(
                     child: Padding(
                         padding: const EdgeInsets.only(left: 5),
-                        child: Text('Pengembalian Sisa Jaminan')),
+                        child: Text('Pemasangan PGN Meter')),
                   ),
                 ],
               ),
+            ),
+          ),
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => PengajuanTeknisList(
+                    techId: 34,
+                    techName: 'Pemasangan Pipa Instalasi per meter',
+                  ),
+                ),
+              );
+            },
+            child: Padding(
+              padding: EdgeInsets.only(left: 34, right: 18, top: 20),
+              child: Row(
+                children: [
+                  Center(
+                    child: Padding(
+                      padding: EdgeInsets.only(right: 12.0),
+                      child: CircleAvatar(
+                        backgroundColor: Color(0xFF427CEF),
+                        radius: 15,
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: Padding(
+                        padding: const EdgeInsets.only(left: 5),
+                        child: Text('Pemasangan Pipa Instalasi per meter')),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => PengajuanTeknisList(
+                    techId: 35,
+                    techName: 'Pasang Water Heater Rinnai',
+                  ),
+                ),
+              );
+            },
+            child: Padding(
+              padding: EdgeInsets.only(left: 34, right: 18, top: 20),
+              child: Row(
+                children: [
+                  Center(
+                    child: Padding(
+                      padding: EdgeInsets.only(right: 12.0),
+                      child: CircleAvatar(
+                        backgroundColor: Color(0xFF427CEF),
+                        radius: 15,
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: Padding(
+                        padding: const EdgeInsets.only(left: 5),
+                        child: Text('Pasang Water Heater Rinnai')),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => PengajuanTeknisList(
+                    techId: 36,
+                    techName: 'Pembersihan Tungku Kompor',
+                  ),
+                ),
+              );
+            },
+            child: Padding(
+              padding: EdgeInsets.only(left: 34, right: 18, top: 20),
+              child: Row(
+                children: [
+                  Center(
+                    child: Padding(
+                      padding: EdgeInsets.only(right: 12.0),
+                      child: CircleAvatar(
+                        backgroundColor: Color(0xFF427CEF),
+                        radius: 15,
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: Padding(
+                        padding: const EdgeInsets.only(left: 5),
+                        child: Text('Pembersihan Tungku Kompor')),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => PengajuanTeknisList(
+                    techId: 37,
+                    techName: 'Penambahan Pipa Instalasi',
+                  ),
+                ),
+              );
+            },
+            child: Padding(
+              padding: EdgeInsets.only(left: 34, right: 18, top: 20),
+              child: Row(
+                children: [
+                  Center(
+                    child: Padding(
+                      padding: EdgeInsets.only(right: 12.0),
+                      child: CircleAvatar(
+                        backgroundColor: Color(0xFF427CEF),
+                        radius: 15,
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: Padding(
+                        padding: const EdgeInsets.only(left: 5),
+                        child: Text('Penambahan Pipa Instalasi')),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => PengajuanTeknisList(
+                    techId: 38,
+                    techName: 'Perbaikan Pipa Instalasi',
+                  ),
+                ),
+              );
+            },
+            child: Padding(
+              padding: EdgeInsets.only(left: 34, right: 18, top: 20),
+              child: Row(
+                children: [
+                  Center(
+                    child: Padding(
+                      padding: EdgeInsets.only(right: 12.0),
+                      child: CircleAvatar(
+                        backgroundColor: Color(0xFF427CEF),
+                        radius: 15,
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: Padding(
+                        padding: const EdgeInsets.only(left: 5),
+                        child: Text('Perbaikan Pipa Instalasi')),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(left: 18, right: 18, top: 44),
+            child: Row(
+              children: [
+                Container(width: 85, child: Text('Lain-Lain')),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 5),
+                    child: Divider(
+                      color: Colors.grey,
+                      height: 1,
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
           GestureDetector(
@@ -333,21 +477,35 @@ class PengajuanLayanan extends StatelessWidget {
               ),
             ),
           ),
-          Padding(
-            padding: EdgeInsets.only(left: 18, right: 18, top: 44),
-            child: Row(
-              children: [
-                Container(width: 85, child: Text('Asuransi')),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 5),
-                    child: Divider(
-                      color: Colors.grey,
-                      height: 1,
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => PengembalianPembayaranList(),
+                ),
+              );
+            },
+            child: Padding(
+              padding: EdgeInsets.only(left: 34, right: 18, top: 20),
+              child: Row(
+                children: [
+                  Center(
+                    child: Padding(
+                      padding: EdgeInsets.only(right: 12.0),
+                      child: CircleAvatar(
+                        backgroundColor: Color(0xFF427CEF),
+                        radius: 15,
+                      ),
                     ),
                   ),
-                ),
-              ],
+                  Expanded(
+                    child: Padding(
+                        padding: const EdgeInsets.only(left: 5),
+                        child: Text('Pengembalian Sisa Jaminan')),
+                  ),
+                ],
+              ),
             ),
           ),
           GestureDetector(

@@ -49,6 +49,7 @@ class _BerhentiBerlanggananFormState extends State<BerhentiBerlanggananForm> {
   String email = '';
   String phoneNumb = '';
   String statusLokasi;
+  File fileNPWP;
 
   TextEditingController tempatLahirCtrl = new TextEditingController();
   TextEditingController nikCtrl = new TextEditingController();
@@ -1578,7 +1579,17 @@ class _BerhentiBerlanggananFormState extends State<BerhentiBerlanggananForm> {
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.only(top: 20, left: 16, right: 16),
+                      padding: EdgeInsets.only(top: 10, left: 16, right: 16),
+                      child: Center(
+                          child: Text(
+                        'NPWP dan foto NPWP (tidak mandatory)',
+                        style: TextStyle(
+                            color: Color(0xFF455055),
+                            fontWeight: FontWeight.bold),
+                      )),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(top: 30, left: 16, right: 16),
                       child: Text(
                         'Bulan Berlaku yang Diajukan',
                         style: TextStyle(
@@ -1643,7 +1654,7 @@ class _BerhentiBerlanggananFormState extends State<BerhentiBerlanggananForm> {
                                     BorderSide(color: Color(0xFFC3C3C3)),
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(5))),
-                            hintText: 'Kronologi kejadian'),
+                            hintText: ''),
                       ),
                     ),
                     Padding(
@@ -1913,55 +1924,105 @@ class _BerhentiBerlanggananFormState extends State<BerhentiBerlanggananForm> {
     var location = locationCtrl.text.split(',');
     var lat = location[0].trim();
     var long = location[1].trim();
-    print('INI LAT $lat');
     print('INI LONG $long');
     print('GAMBARNYA  data:image/png;base64,$encoded} ');
     String accessToken = await storageCache.read(key: 'access_token');
-    var body = json.encode({
-      "customer_id": custID,
-      "customer_name": custName,
-      "gender": valueChoose,
-      "birth_place": tempatLahirCtrl.text,
-      "birth_date": DateFormat('yyy-MM-dd').format(selected),
-      "id_card_number": nikCtrl.text,
-      "email": email,
-      "phone_number": phoneNumb,
-      "address": alamatCtrl.text,
-      "street": perumahanCtrl.text,
-      "rt": rwCtrl.text,
-      "rw": rtCtrl.text,
-      "kelurahan": kelurahanCtrl.text,
-      "kecamatan": kecamatanCtrl.text,
-      "province": provinsiCtrl.text,
-      "postal_code": kodeposCtrl.text,
-      "longitude": locationCtrl.text,
-      "latitude": locationCtrl.text,
-      "person_in_location_status": statusLokasi,
-      "info_media": '',
-      "submission_date": DateFormat('yyy-MM-dd').format(selectedPengajuan),
-      "reason": alasanCtrl.text,
-      "npwp_number": numberNpwpCtrl.text,
-      "ktp_address": ktpAddressCtrl.text,
-      "npwp_file": 'test',
-      "customer_signature": 'data:image/png;base64,$encoded',
-    });
-    var responseCreateBerhentiBerlangganan = await http.post(
-        '${UrlCons.mainProdUrl}customer-service/unsubscribe',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer $accessToken'
-        },
-        body: body);
-    print(
-        'INI HASIL POST CREATE BERLANGGANAN ${responseCreateBerhentiBerlangganan.body}');
+    final multiFile =
+        await http.MultipartFile.fromPath('npwp_file', fileNPWP.path);
+    var responses = http.MultipartRequest("POST",
+        Uri.parse('${UrlCons.mainProdUrl}customer-service/unsubscribe'));
+    responses.headers['Authorization'] = 'Bearer $accessToken';
+    responses.headers['Content-Type'] = 'application/json';
+    responses.files.add(multiFile);
+    responses.fields['customer_id'] = custID;
+    responses.fields['customer_name'] = custName;
+    responses.fields['gender'] = valueChoose;
+    responses.fields['birth_place'] = tempatLahirCtrl.text;
+    responses.fields['birth_date'] = DateFormat('yyy-MM-dd').format(selected);
+    responses.fields['id_card_number'] = nikCtrl.text;
+    responses.fields['email'] = email;
+    responses.fields['phone_number'] = phoneNumb;
+    responses.fields['address'] = alamatCtrl.text;
+    responses.fields['street'] = perumahanCtrl.text;
+    responses.fields['rt'] = rwCtrl.text;
+    responses.fields['rw'] = rtCtrl.text;
+    responses.fields['kelurahan'] = kelurahanCtrl.text;
+    responses.fields['kecamatan'] = kecamatanCtrl.text;
+    responses.fields['province'] = provinsiCtrl.text;
+    responses.fields['postal_code'] = kodeposCtrl.text;
+    responses.fields['kota_kabupaten'] = kabupatenCtrl.text;
+    responses.fields['longitude'] = long;
+    responses.fields['latitude'] = lat;
+    responses.fields['person_in_location_status'] = statusLokasi;
+    responses.fields['info_media'] = '';
+    responses.fields['submission_date'] =
+        DateFormat('yyy-MM-dd').format(selectedPengajuan);
+    responses.fields['reason'] = alasanCtrl.text;
+    responses.fields['npwp_number'] = numberNpwpCtrl.text;
+    responses.fields['ktp_address'] = ktpAddressCtrl.text;
+    responses.fields['customer_signature'] = 'data:image/png;base64,$encoded';
+    http.StreamedResponse response = await responses.send();
+    final res = await http.Response.fromStream(response);
+    //////////////////////////////////////////
+    // final sign = _sign.currentState;
+    // //retrieve image data, do whatever you want with it (send to server, save locally...)
+    // final image = await sign.getData();
+    // var data = await image.toByteData(format: ui.ImageByteFormat.png);
+    // sign.clear();
+    // final encoded = base64.encode(data.buffer.asUint8List());
+    // setState(() {
+    //   _img = data;
+    // });
+    // var location = locationCtrl.text.split(',');
+    // var lat = location[0].trim();
+    // var long = location[1].trim();
+    // print('INI LAT $lat');
+    // print('INI LONG $long');
+    // print('GAMBARNYA  data:image/png;base64,$encoded} ');
+    // String accessToken = await storageCache.read(key: 'access_token');
+    // var body = json.encode({
+    //   "customer_id": custID,
+    //   "customer_name": custName,
+    //   "gender": valueChoose,
+    //   "birth_place": tempatLahirCtrl.text,
+    //   "birth_date": DateFormat('yyy-MM-dd').format(selected),
+    //   "id_card_number": nikCtrl.text,
+    //   "email": email,
+    //   "phone_number": phoneNumb,
+    //   "address": alamatCtrl.text,
+    //   "street": perumahanCtrl.text,
+    //   "rt": rwCtrl.text,
+    //   "rw": rtCtrl.text,
+    //   "kelurahan": kelurahanCtrl.text,
+    //   "kecamatan": kecamatanCtrl.text,
+    //   "province": provinsiCtrl.text,
+    //   "postal_code": kodeposCtrl.text,
+    //   "kota_kabupaten": kabupatenCtrl.text,
+    //   "longitude": long,
+    //   "latitude": lat,
+    //   "person_in_location_status": statusLokasi,
+    //   "info_media": '',
+    //   "submission_date": DateFormat('yyy-MM-dd').format(selectedPengajuan),
+    //   "reason": alasanCtrl.text,
+    //   "npwp_number": numberNpwpCtrl.text,
+    //   "ktp_address": ktpAddressCtrl.text,
+    //   "npwp_file": 'test',
+    //   "customer_signature": 'data:image/png;base64,$encoded',
+    // });
+    // var responseCreateBerhentiBerlangganan = await http.post(
+    //     '${UrlCons.mainProdUrl}customer-service/unsubscribe',
+    //     headers: {
+    //       'Content-Type': 'application/json',
+    //       'Authorization': 'Bearer $accessToken'
+    //     },
+    //     body: body);
+    print('INI HASIL POST CREATE BERLANGGANAN ${res.body}');
     CreateBerhentiBerlangganan createBerhentiBerlangganan =
-        CreateBerhentiBerlangganan.fromJson(
-            json.decode(responseCreateBerhentiBerlangganan.body));
+        CreateBerhentiBerlangganan.fromJson(json.decode(res.body));
 
-    if (responseCreateBerhentiBerlangganan.statusCode == 200) {
-      showToast(createBerhentiBerlangganan.dataCreate.message);
-      Navigator.pop(context);
-      Navigator.pop(context);
+    if (res.statusCode == 200) {
+      successAlert(createBerhentiBerlangganan.dataCreate.message,
+          createBerhentiBerlangganan.dataCreate.formId);
     } else {
       Navigator.pop(context);
       showToast(createBerhentiBerlangganan.dataCreate.message);
@@ -1976,6 +2037,7 @@ class _BerhentiBerlanggananFormState extends State<BerhentiBerlanggananForm> {
       File file = File(result.files.single.path.toString());
       setState(() {
         _fileName = result.names.single;
+        fileNPWP = file;
         print('NAMA FILE : $_fileName');
       });
     } else {
@@ -1990,5 +2052,68 @@ class _BerhentiBerlanggananFormState extends State<BerhentiBerlanggananForm> {
     setState(() {
       _fileName = null;
     });
+  }
+
+  Future<bool> successAlert(String message, String formID) {
+    var alertStyle = AlertStyle(
+      animationType: AnimationType.fromTop,
+      isCloseButton: false,
+      isOverlayTapDismiss: false,
+      descStyle: TextStyle(fontWeight: FontWeight.bold),
+      animationDuration: Duration(milliseconds: 400),
+      alertBorder: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(0.0),
+        side: BorderSide(
+          color: Colors.grey,
+        ),
+      ),
+      titleStyle: TextStyle(
+        color: Colors.black,
+      ),
+    );
+    return Alert(
+      context: context,
+      style: alertStyle,
+      title: "Information !",
+      content: Column(
+        children: <Widget>[
+          SizedBox(height: 5),
+          Text(
+            message,
+            style: TextStyle(
+                // color: painting.Color.fromRGBO(255, 255, 255, 0),
+                fontSize: 17,
+                fontWeight: FontWeight.w400),
+            textAlign: TextAlign.center,
+          ),
+          SizedBox(height: 5),
+          Text(
+            'Nomor Formulir Layanan Pelanggan Anda: $formID',
+            style: TextStyle(
+                // color: painting.Color.fromRGBO(255, 255, 255, 0),
+                fontSize: 17,
+                fontWeight: FontWeight.w400),
+            textAlign: TextAlign.center,
+          ),
+          SizedBox(height: 10)
+        ],
+      ),
+      buttons: [
+        DialogButton(
+          width: 130,
+          onPressed: () async {
+            Navigator.pop(context);
+            Navigator.pop(context);
+            Navigator.pop(context);
+          },
+          color: Colors.green,
+          child: Text(
+            "Ok",
+            style: TextStyle(
+                color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
+          ),
+        )
+      ],
+    ).show();
   }
 }

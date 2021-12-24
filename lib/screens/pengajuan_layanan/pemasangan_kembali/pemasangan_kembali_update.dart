@@ -1,6 +1,9 @@
 import 'dart:convert';
+import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:dotted_border/dotted_border.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -12,6 +15,7 @@ import 'package:flutter_signature_pad/flutter_signature_pad.dart';
 import 'dart:ui' as ui;
 import 'package:pgn_mobile/screens/otp/otp.dart';
 import 'package:pgn_mobile/screens/pengajuan_layanan/widgets/widget_biaya_admin.dart';
+import 'package:pgn_mobile/screens/pengajuan_layanan/widgets/widget_biaya_pemasangan_kembali.dart';
 import 'package:pgn_mobile/screens/register/widgets/map_point.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
@@ -26,8 +30,9 @@ class PemasanganKembaliUpdate extends StatefulWidget {
 class _PemasanganKembaliUpdateState extends State<PemasanganKembaliUpdate> {
   final int id;
   _PemasanganKembaliUpdateState({this.id});
+  DetailData detailDatas = DetailData();
   List listGenderType = [
-    "Laki-laki",
+    "Laki-Laki",
     "Perempuan",
   ];
   List listStatusKepemilikan = [
@@ -44,12 +49,14 @@ class _PemasanganKembaliUpdateState extends State<PemasanganKembaliUpdate> {
   bool visibleAlamat = false;
   bool visibleDataPelengkap = false;
   bool visibleReview = false;
+  String _fileName;
 
   String custName = '';
   String custID = '';
   String email = '';
   String phoneNumb = '';
   String statusLokasi;
+  String nik = '';
 
   TextEditingController tempatLahirCtrl = new TextEditingController();
   TextEditingController nikCtrl = new TextEditingController();
@@ -64,6 +71,8 @@ class _PemasanganKembaliUpdateState extends State<PemasanganKembaliUpdate> {
   TextEditingController kodeposCtrl = new TextEditingController();
   TextEditingController locationCtrl = new TextEditingController();
   TextEditingController alasanCtrl = new TextEditingController();
+  TextEditingController numberNpwpCtrl = new TextEditingController();
+  TextEditingController ktpAddressCtrl = new TextEditingController();
   final storageCache = FlutterSecureStorage();
   ByteData _img = ByteData(0);
   final _sign = GlobalKey<SignatureState>();
@@ -97,7 +106,8 @@ class _PemasanganKembaliUpdateState extends State<PemasanganKembaliUpdate> {
   void initState() {
     super.initState();
 
-    getDataCred();
+    // getDataCred();
+    getData();
   }
 
   @override
@@ -286,7 +296,7 @@ class _PemasanganKembaliUpdateState extends State<PemasanganKembaliUpdate> {
                         enabled: false,
                         keyboardType: TextInputType.text,
                         decoration: InputDecoration(
-                          hintText: custID,
+                          hintText: detailDatas.custId,
                           hintStyle: TextStyle(color: Colors.black),
                           contentPadding: new EdgeInsets.symmetric(
                               vertical: 12.0, horizontal: 15.0),
@@ -331,7 +341,7 @@ class _PemasanganKembaliUpdateState extends State<PemasanganKembaliUpdate> {
                               enabled: false,
                               keyboardType: TextInputType.text,
                               decoration: InputDecoration(
-                                hintText: '$custName',
+                                hintText: detailDatas.custName,
                                 hintStyle: TextStyle(color: Colors.black),
                                 contentPadding: new EdgeInsets.symmetric(
                                     vertical: 12.0, horizontal: 15.0),
@@ -541,7 +551,7 @@ class _PemasanganKembaliUpdateState extends State<PemasanganKembaliUpdate> {
                         enabled: false,
                         keyboardType: TextInputType.text,
                         decoration: InputDecoration(
-                          hintText: email,
+                          hintText: detailDatas.email,
                           hintStyle: TextStyle(color: Colors.black),
                           contentPadding: new EdgeInsets.symmetric(
                               vertical: 12.0, horizontal: 15.0),
@@ -586,7 +596,7 @@ class _PemasanganKembaliUpdateState extends State<PemasanganKembaliUpdate> {
                           prefixStyle: TextStyle(color: Color(0xFF828388)),
                           contentPadding: new EdgeInsets.symmetric(
                               vertical: 12.0, horizontal: 15.0),
-                          hintText: '+$phoneNumb',
+                          hintText: '+${detailDatas.phoneNumb}',
                           hintStyle: TextStyle(color: Colors.black),
                           disabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(5),
@@ -697,7 +707,7 @@ class _PemasanganKembaliUpdateState extends State<PemasanganKembaliUpdate> {
                         enabled: false,
                         keyboardType: TextInputType.text,
                         decoration: InputDecoration(
-                          hintText: custID,
+                          hintText: detailDatas.custId,
                           hintStyle: TextStyle(color: Colors.black),
                           contentPadding: new EdgeInsets.symmetric(
                               vertical: 12.0, horizontal: 15.0),
@@ -1393,7 +1403,7 @@ class _PemasanganKembaliUpdateState extends State<PemasanganKembaliUpdate> {
                         enabled: false,
                         keyboardType: TextInputType.text,
                         decoration: InputDecoration(
-                          hintText: custID,
+                          hintText: detailDatas.custId,
                           hintStyle: TextStyle(color: Colors.black),
                           contentPadding: new EdgeInsets.symmetric(
                               vertical: 12.0, horizontal: 15.0),
@@ -1417,6 +1427,177 @@ class _PemasanganKembaliUpdateState extends State<PemasanganKembaliUpdate> {
                     ),
                     Padding(
                       padding: EdgeInsets.only(top: 20, left: 16, right: 16),
+                      child: Text(
+                        'Alamat Sesuai KTP',
+                        style: TextStyle(
+                            color: Color(0xFF455055),
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(top: 10, left: 16, right: 16),
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(5.0),
+                          border: Border.all(color: Color(0xFFD3D3D3))),
+                      child: TextFormField(
+                        keyboardType: TextInputType.text,
+                        controller: ktpAddressCtrl,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Data tidak boleh kosong!';
+                          }
+                          return null;
+                        },
+                        decoration: InputDecoration(
+                          hintText: 'Jakarta',
+                          hintStyle: TextStyle(color: Colors.grey),
+                          contentPadding: new EdgeInsets.symmetric(
+                              vertical: 12.0, horizontal: 15.0),
+                          disabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(5),
+                            borderSide:
+                                BorderSide(color: Colors.white, width: 2.0),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(5),
+                            borderSide:
+                                BorderSide(color: Colors.white, width: 2.0),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(5),
+                            borderSide:
+                                BorderSide(color: Colors.white, width: 2.0),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(top: 20, left: 16, right: 16),
+                      child: Text(
+                        'Nomer NPWP',
+                        style: TextStyle(
+                            color: Color(0xFF455055),
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(top: 10, left: 16, right: 16),
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(5.0),
+                          border: Border.all(color: Color(0xFFD3D3D3))),
+                      child: TextFormField(
+                        keyboardType: TextInputType.number,
+                        controller: numberNpwpCtrl,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Data tidak boleh kosong!';
+                          }
+                          return null;
+                        },
+                        decoration: InputDecoration(
+                          hintText: '000000000',
+                          hintStyle: TextStyle(color: Colors.grey),
+                          contentPadding: new EdgeInsets.symmetric(
+                              vertical: 12.0, horizontal: 15.0),
+                          disabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(5),
+                            borderSide:
+                                BorderSide(color: Colors.white, width: 2.0),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(5),
+                            borderSide:
+                                BorderSide(color: Colors.white, width: 2.0),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(5),
+                            borderSide:
+                                BorderSide(color: Colors.white, width: 2.0),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(top: 20, left: 16, right: 16),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              'Foto NPWP',
+                              style: TextStyle(
+                                  color: Color(0xFF455055),
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                _fileName = null;
+                              });
+                            },
+                            child: Text(
+                              'Hapus',
+                              textAlign: TextAlign.right,
+                              style: TextStyle(
+                                  color: Color(0xFF427CEF),
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(
+                          left: 16, right: 16, top: 20, bottom: 10),
+                      child: DottedBorder(
+                        dashPattern: [3.1],
+                        color: Color(0xFFD3D3D3),
+                        strokeWidth: 1,
+                        child: Container(
+                          height: 60,
+                          child: Center(
+                            child: GestureDetector(
+                              onTap: () {
+                                _pickFiles();
+                              },
+                              child: _fileName != null
+                                  ? Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 10, right: 10),
+                                      child: Text(
+                                        _fileName,
+                                        style: TextStyle(
+                                            color: Color(0xFF427CEF),
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    )
+                                  : Text(
+                                      'Unggah Foto NPWP',
+                                      style: TextStyle(
+                                          color: Color(0xFF427CEF),
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(top: 10, left: 16, right: 16),
+                      child: Center(
+                          child: Text(
+                        'NPWP dan foto NPWP (tidak mandatory)',
+                        style: TextStyle(
+                            color: Color(0xFF455055),
+                            fontWeight: FontWeight.bold),
+                      )),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(top: 30, left: 16, right: 16),
                       child: Text(
                         'Tanggal Pemasangan',
                         style: TextStyle(
@@ -1593,7 +1774,7 @@ class _PemasanganKembaliUpdateState extends State<PemasanganKembaliUpdate> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => WidgetBiayaAdmin(),
+                            builder: (context) => WidgetReferensiBiayaTeknis(),
                           ),
                         );
                       },
@@ -1682,7 +1863,7 @@ class _PemasanganKembaliUpdateState extends State<PemasanganKembaliUpdate> {
                               child: Padding(
                                 padding: const EdgeInsets.symmetric(
                                     vertical: 16, horizontal: 5),
-                                child: Text('Kirim Pengajuan'),
+                                child: Text('Update Pengajuan'),
                               ),
                             ),
                           )
@@ -1724,7 +1905,7 @@ class _PemasanganKembaliUpdateState extends State<PemasanganKembaliUpdate> {
         children: <Widget>[
           SizedBox(height: 5),
           Text(
-            "Anda yakin ingin melakukan pengajuan pemasangan kembali ? ",
+            "Anda yakin ingin perbarui pengajuan pemasangan kembali ? ",
             style: TextStyle(
                 // color: painting.Color.fromRGBO(255, 255, 255, 0),
                 fontSize: 17,
@@ -1776,6 +1957,80 @@ class _PemasanganKembaliUpdateState extends State<PemasanganKembaliUpdate> {
     });
   }
 
+  void getData() async {
+    print('ID Nya ${widget.id}');
+    String accessToken = await storageCache.read(key: 'access_token');
+    String lang = await storageCache.read(key: 'lang');
+    var response = await http.get(
+        '${UrlCons.mainDevUrl}customer-service/resubscribe/${widget.id}',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $accessToken',
+          'Accept-Language': lang,
+        });
+    print('GET DETAIL PEMASANGAN KEMBALI ${response.body}');
+    DetailData detailData = DetailData.fromJson(json.decode(response.body));
+    // print('IMAGENYA  ${detailBerhetiBerlanggananData.sign}');
+    // var splitString = detailBerhetiBerlanggananData.sign.split(',');
+    setState(() {
+      detailDatas = detailData;
+      nik = detailData.nik;
+      // _byteImage = base64.decode(splitString[1]);
+    });
+    nikCtrl.value = new TextEditingController.fromValue(
+            new TextEditingValue(text: detailData.nik))
+        .value;
+    tempatLahirCtrl.value = new TextEditingController.fromValue(
+            new TextEditingValue(text: detailData.bPlace))
+        .value;
+    valueChoose = detailData.gender;
+    selected = DateTime.parse(detailData.bDate).toLocal();
+    alamatCtrl.value = new TextEditingController.fromValue(
+            new TextEditingValue(text: detailData.address))
+        .value;
+    perumahanCtrl.value = new TextEditingController.fromValue(
+            new TextEditingValue(text: detailData.street))
+        .value;
+    rtCtrl.value = new TextEditingController.fromValue(
+            new TextEditingValue(text: detailData.rt))
+        .value;
+    rwCtrl.value = new TextEditingController.fromValue(
+            new TextEditingValue(text: detailData.rw))
+        .value;
+    kelurahanCtrl.value = new TextEditingController.fromValue(
+            new TextEditingValue(text: detailData.kelurahan))
+        .value;
+    kecamatanCtrl.value = new TextEditingController.fromValue(
+            new TextEditingValue(text: detailData.kecamatan))
+        .value;
+    // kabupatenCtrl.value = new TextEditingController.fromValue(
+    //         new TextEditingValue(text: detailBerhetiBerlangganan.kabupaten))
+    // .value;
+    provinsiCtrl.value = new TextEditingController.fromValue(
+            new TextEditingValue(text: detailData.prov))
+        .value;
+    kodeposCtrl.value = new TextEditingController.fromValue(
+            new TextEditingValue(text: detailData.postalCode))
+        .value;
+    locationCtrl.value = new TextEditingController.fromValue(
+            new TextEditingValue(text: '${detailData.lat},${detailData.long}'))
+        .value;
+    statusLokasi = detailData.locStat;
+    selectedPemasangan = DateTime.parse(detailData.subDate).toLocal();
+    alasanCtrl.value = new TextEditingController.fromValue(
+            new TextEditingValue(text: detailData.reason))
+        .value;
+    ktpAddressCtrl.value = new TextEditingController.fromValue(
+            new TextEditingValue(text: detailData.ktpAddress))
+        .value;
+    numberNpwpCtrl.value = new TextEditingController.fromValue(
+            new TextEditingValue(text: detailData.npwpNumb))
+        .value;
+    kabupatenCtrl.value = new TextEditingController.fromValue(
+            new TextEditingValue(text: detailData.kabupaten))
+        .value;
+  }
+
   void _nextLokasiPesangan(BuildContext context) async {
     final result = await Navigator.push(
         context, MaterialPageRoute(builder: (context) => MapPoint()));
@@ -1802,14 +2057,14 @@ class _PemasanganKembaliUpdateState extends State<PemasanganKembaliUpdate> {
     print('GAMBARNYA  data:image/png;base64,$encoded} ');
     String accessToken = await storageCache.read(key: 'access_token');
     var body = json.encode({
-      "customer_id": custID,
-      "customer_name": custName,
+      "customer_id": detailDatas.custId,
+      "customer_name": detailDatas.custName,
       "gender": valueChoose,
       "birth_place": tempatLahirCtrl.text,
       "birth_date": DateFormat('yyy-MM-dd').format(selected),
       "id_card_number": nikCtrl.text,
-      "email": email,
-      "phone_number": phoneNumb,
+      "email": detailDatas.email,
+      "phone_number": detailDatas.phoneNumb,
       "address": alamatCtrl.text,
       "street": perumahanCtrl.text,
       "rt": rwCtrl.text,
@@ -1818,16 +2073,20 @@ class _PemasanganKembaliUpdateState extends State<PemasanganKembaliUpdate> {
       "kecamatan": kecamatanCtrl.text,
       "province": provinsiCtrl.text,
       "postal_code": kodeposCtrl.text,
-      "longitude": locationCtrl.text,
-      "latitude": locationCtrl.text,
+      "kota_kabupaten": kabupatenCtrl.text,
+      "longitude": long,
+      "latitude": lat,
       "person_in_location_status": statusLokasi,
       "info_media": '',
       "submission_date": DateFormat('yyy-MM-dd').format(selectedPemasangan),
       "reason": alasanCtrl.text,
+      "npwp_number": numberNpwpCtrl.text,
+      "ktp_address": ktpAddressCtrl.text,
+      "npwp_file": 'test',
       "customer_signature": 'data:image/png;base64,$encoded',
     });
-    var response = await http.post(
-        '${UrlCons.mainProdUrl}customer-service/resubscribe',
+    var response = await http.put(
+        '${UrlCons.mainProdUrl}customer-service/resubscribe/$id',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $accessToken'
@@ -1837,11 +2096,88 @@ class _PemasanganKembaliUpdateState extends State<PemasanganKembaliUpdate> {
     Create create = Create.fromJson(json.decode(response.body));
 
     if (response.statusCode == 200) {
-      showToast(create.dataCreate.message);
-      Navigator.pop(context);
-      Navigator.pop(context);
+      successAlert(create.dataCreate.message);
     } else {
+      Navigator.pop(context);
       showToast(create.dataCreate.message);
     }
+  }
+
+  void _pickFiles() async {
+    _resetState();
+    FilePickerResult result = await FilePicker.platform.pickFiles();
+
+    if (result != null) {
+      File file = File(result.files.single.path.toString());
+      setState(() {
+        _fileName = result.names.single;
+        print('NAMA FILE : $_fileName');
+      });
+    } else {
+      // User canceled the picker
+    }
+  }
+
+  void _resetState() {
+    if (!mounted) {
+      return;
+    }
+    setState(() {
+      _fileName = null;
+    });
+  }
+
+  Future<bool> successAlert(String message) {
+    var alertStyle = AlertStyle(
+      animationType: AnimationType.fromTop,
+      isCloseButton: false,
+      isOverlayTapDismiss: false,
+      descStyle: TextStyle(fontWeight: FontWeight.bold),
+      animationDuration: Duration(milliseconds: 400),
+      alertBorder: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(0.0),
+        side: BorderSide(
+          color: Colors.grey,
+        ),
+      ),
+      titleStyle: TextStyle(
+        color: Colors.black,
+      ),
+    );
+    return Alert(
+      context: context,
+      style: alertStyle,
+      title: "Information !",
+      content: Column(
+        children: <Widget>[
+          SizedBox(height: 5),
+          Text(
+            message,
+            style: TextStyle(
+                // color: painting.Color.fromRGBO(255, 255, 255, 0),
+                fontSize: 17,
+                fontWeight: FontWeight.w400),
+            textAlign: TextAlign.center,
+          ),
+          SizedBox(height: 10)
+        ],
+      ),
+      buttons: [
+        DialogButton(
+          width: 130,
+          onPressed: () async {
+            Navigator.pop(context);
+            Navigator.pop(context);
+            Navigator.pop(context);
+          },
+          color: Colors.green,
+          child: Text(
+            "Ok",
+            style: TextStyle(
+                color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
+          ),
+        )
+      ],
+    ).show();
   }
 }

@@ -649,7 +649,7 @@ class _PemasanganKembaliDetailState extends State<PemasanganKembaliDetail> {
                                           PemasanganKembaliUpdate(
                                               id: widget.id),
                                     ),
-                                  );
+                                  ).then((value) => setState(() {}));
                                 },
                                 style: ElevatedButton.styleFrom(
                                     primary: Color(0xFF81C153),

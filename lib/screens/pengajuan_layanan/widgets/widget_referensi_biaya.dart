@@ -1,4 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:pgn_mobile/models/pengajuan_asuransi_model.dart';
+import 'package:pgn_mobile/models/url_cons.dart';
+import 'package:http/http.dart' as http;
 
 class WidgetReferensiBiaya extends StatelessWidget {
   @override
@@ -36,144 +42,58 @@ class WidgetReferensiBiaya extends StatelessWidget {
               ],
             ),
           ),
-          Padding(
-            padding: EdgeInsets.only(left: 16, right: 16, top: 10),
-            child: Row(
-              children: [
-                Container(
-                    width: 150,
-                    margin: EdgeInsets.only(left: 16, right: 16),
-                    child: Text('Rp 30.000.000')),
-                Text('Rp 15.000')
-              ],
-            ),
+          FutureBuilder<Liability>(
+            future: getLiability(),
+            builder: (context, snapshot) {
+              if (!snapshot.hasData) return LinearProgressIndicator();
+              return ListView.builder(
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                itemCount: snapshot.data.datasLiability.length,
+                itemBuilder: (context, i) {
+                  return Column(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(left: 16, right: 16, top: 10),
+                        child: Row(
+                          children: [
+                            Container(
+                                width: 150,
+                                margin: EdgeInsets.only(left: 16, right: 16),
+                                child: Text(
+                                    'Rp ${snapshot.data.datasLiability[i].name}')),
+                            Text('Rp ${snapshot.data.datasLiability[i].cost}')
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(left: 16, right: 16, top: 10),
+                        child: Divider(
+                          color: Colors.grey,
+                        ),
+                      ),
+                    ],
+                  );
+                },
+              );
+            },
           ),
-          Padding(
-              padding: EdgeInsets.only(left: 16, right: 16, top: 10),
-              child: Divider(
-                color: Colors.grey,
-              )),
-          Padding(
-            padding: EdgeInsets.only(left: 16, right: 16, top: 10),
-            child: Row(
-              children: [
-                Container(
-                    width: 150,
-                    margin: EdgeInsets.only(left: 16, right: 16),
-                    child: Text('Rp 50.000.000')),
-                Text('Rp 20.000')
-              ],
-            ),
-          ),
-          Padding(
-              padding: EdgeInsets.only(left: 16, right: 16, top: 10),
-              child: Divider(
-                color: Colors.grey,
-              )),
-          Padding(
-            padding: EdgeInsets.only(left: 16, right: 16, top: 10),
-            child: Row(
-              children: [
-                Container(
-                    width: 150,
-                    margin: EdgeInsets.only(left: 16, right: 16),
-                    child: Text('Rp 70.000.000')),
-                Text('Rp 25.000')
-              ],
-            ),
-          ),
-          Padding(
-              padding: EdgeInsets.only(left: 16, right: 16, top: 10),
-              child: Divider(
-                color: Colors.grey,
-              )),
-          Padding(
-            padding: EdgeInsets.only(left: 16, right: 16, top: 10),
-            child: Row(
-              children: [
-                Container(
-                    width: 150,
-                    margin: EdgeInsets.only(left: 16, right: 16),
-                    child: Text('Rp 90.000.000')),
-                Text('Rp 30.000')
-              ],
-            ),
-          ),
-          Padding(
-              padding: EdgeInsets.only(left: 16, right: 16, top: 10),
-              child: Divider(
-                color: Colors.grey,
-              )),
-          Padding(
-            padding: EdgeInsets.only(left: 16, right: 16, top: 10),
-            child: Row(
-              children: [
-                Container(
-                    width: 150,
-                    margin: EdgeInsets.only(left: 16, right: 16),
-                    child: Text('Rp 110.000.000')),
-                Text('Rp 35.000')
-              ],
-            ),
-          ),
-          Padding(
-              padding: EdgeInsets.only(left: 16, right: 16, top: 10),
-              child: Divider(
-                color: Colors.grey,
-              )),
-          Padding(
-            padding: EdgeInsets.only(left: 16, right: 16, top: 10),
-            child: Row(
-              children: [
-                Container(
-                    width: 150,
-                    margin: EdgeInsets.only(left: 16, right: 16),
-                    child: Text('Rp 130.000.000')),
-                Text('Rp 40.000')
-              ],
-            ),
-          ),
-          Padding(
-              padding: EdgeInsets.only(left: 16, right: 16, top: 10),
-              child: Divider(
-                color: Colors.grey,
-              )),
-          Padding(
-            padding: EdgeInsets.only(left: 16, right: 16, top: 10),
-            child: Row(
-              children: [
-                Container(
-                    width: 150,
-                    margin: EdgeInsets.only(left: 16, right: 16),
-                    child: Text('Rp 150.000.000')),
-                Text('Rp 45.000')
-              ],
-            ),
-          ),
-          Padding(
-              padding: EdgeInsets.only(left: 16, right: 16, top: 10),
-              child: Divider(
-                color: Colors.grey,
-              )),
-          Padding(
-            padding: EdgeInsets.only(left: 16, right: 16, top: 10),
-            child: Row(
-              children: [
-                Container(
-                    width: 150,
-                    margin: EdgeInsets.only(left: 16, right: 16),
-                    child: Text('Rp 200.000.000')),
-                Text('Rp 55.000')
-              ],
-            ),
-          ),
-          Padding(
-              padding: EdgeInsets.only(left: 16, right: 16, top: 10),
-              child: Divider(
-                color: Colors.grey,
-              )),
         ],
       ),
     );
+  }
+
+  Future<Liability> getLiability() async {
+    final storageCache = FlutterSecureStorage();
+    String accessToken = await storageCache.read(key: 'access_token');
+    var response = await http.get(
+        '${UrlCons.mainProdUrl}customer-service/fire-insurance-application-cost?per_page=10000',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $accessToken'
+        });
+    Liability getLiability;
+    getLiability = Liability.fromJson(json.decode(response.body));
+    return getLiability;
   }
 }

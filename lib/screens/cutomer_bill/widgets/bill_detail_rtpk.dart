@@ -381,20 +381,24 @@ class BillDetailState extends State<InvoiceRTPK>
   }
 
   Widget _buildRow(DataCustInvoiceResidential data) {
-    var invoicePeriod = DateTime.parse(data.invoicePeriod);
-    var usagePeriod = DateTime.parse(data.usagePeriod);
-    String stringInvoicePeriod =
-        "${formatDate((invoicePeriod), [d])} ${formatDate((invoicePeriod), [
-      MM
-    ])} ${formatDate((invoicePeriod), [yyyy])}";
-    String stringUsagePeriod =
-        "${formatDate((usagePeriod), [d])} ${formatDate((usagePeriod), [
-      MM
-    ])} ${formatDate((usagePeriod), [yyyy])}";
     return Container(
       margin: EdgeInsets.only(top: 10.0, right: 5.0, left: 5.0, bottom: 10.0),
       child: Column(
         children: <Widget>[
+          Container(
+            height: 40,
+            color: Colors.blue[800],
+            margin: EdgeInsets.only(bottom: 10.0),
+            child: Center(
+              child: Text(
+                '${Translations.of(context).text('current_bill_date')} : ${DateFormat('dd MMMM yyyy').format(DateTime.parse(data.usagePeriod))}',
+                style: TextStyle(
+                    fontSize: 16.0,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white),
+              ),
+            ),
+          ),
           Card(
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10.0),
@@ -429,6 +433,7 @@ class BillDetailState extends State<InvoiceRTPK>
                   ],
                 ),
                 Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Container(
                       width: 125,
@@ -467,14 +472,93 @@ class BillDetailState extends State<InvoiceRTPK>
                   ],
                 ),
                 Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Container(
+                      width: 125,
+                      margin: EdgeInsets.only(left: 20.0, top: 10.0),
+                      child: Text(
+                        Translations.of(context)
+                            .text('f_commercial_invoice_detail_tv_name'),
+                        style: TextStyle(
+                            fontSize: 15.0,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.grey[600]),
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(top: 10.0, left: 25.0),
+                      child: Text(
+                        ':',
+                        style: TextStyle(
+                            fontSize: 15.0,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.grey[600]),
+                      ),
+                    ),
+                    Expanded(
+                      child: Container(
+                        margin:
+                            EdgeInsets.only(left: 5.0, top: 10.0, right: 10),
+                        child: Text(
+                          data.custInvoiceName ?? "-",
+                          style: TextStyle(
+                              fontSize: 15.0,
+                              fontWeight: FontWeight.w400,
+                              color: Colors.grey[600]),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Container(
+                      width: 125,
+                      margin: EdgeInsets.only(left: 20.0, top: 10.0),
+                      child: Text(
+                        Translations.of(context).text('available_guarantee'),
+                        style: TextStyle(
+                            fontSize: 15.0,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.grey[600]),
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(top: 10.0, left: 25.0),
+                      child: Text(
+                        ':',
+                        style: TextStyle(
+                            fontSize: 15.0,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.grey[600]),
+                      ),
+                    ),
+                    Expanded(
+                      child: Container(
+                        margin:
+                            EdgeInsets.only(left: 5.0, top: 10.0, right: 10),
+                        child: Text(
+                          '${data.availableGuarantee.toString()} IDR',
+                          style: TextStyle(
+                              fontSize: 15.0,
+                              fontWeight: FontWeight.w400,
+                              color: Colors.grey[600]),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Container(
                       width: 125,
                       margin:
                           EdgeInsets.only(left: 20.0, top: 10.0, bottom: 20),
                       child: Text(
-                        Translations.of(context)
-                            .text('f_commercial_invoice_detail_tv_name'),
+                        Translations.of(context).text('payment_guarantee'),
                         style: TextStyle(
                             fontSize: 15.0,
                             fontWeight: FontWeight.w400,
@@ -497,7 +581,7 @@ class BillDetailState extends State<InvoiceRTPK>
                         margin: EdgeInsets.only(
                             left: 5.0, top: 10.0, bottom: 20, right: 10),
                         child: Text(
-                          data.custInvoiceName ?? "-",
+                          '${data.paymentGuatantee.toString()} IDR',
                           style: TextStyle(
                               fontSize: 15.0,
                               fontWeight: FontWeight.w400,
@@ -524,7 +608,7 @@ class BillDetailState extends State<InvoiceRTPK>
                       width: 130,
                       margin: EdgeInsets.only(left: 20.0, top: 21.0),
                       child: Text(
-                        'Contract Details',
+                        Translations.of(context).text('invoice_detail'),
                         style: TextStyle(
                             fontSize: 16.0,
                             fontWeight: FontWeight.bold,
@@ -534,13 +618,13 @@ class BillDetailState extends State<InvoiceRTPK>
                   ],
                 ),
                 Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Container(
                       width: 125,
                       margin: EdgeInsets.only(left: 20.0, top: 22.0),
                       child: Text(
-                        Translations.of(context)
-                            .text('f_commercial_invoice_detail_tv_month_label'),
+                        'Period',
                         style: TextStyle(
                             fontSize: 15.0,
                             fontWeight: FontWeight.w400,
@@ -561,7 +645,7 @@ class BillDetailState extends State<InvoiceRTPK>
                       child: Container(
                         margin: EdgeInsets.only(left: 5.0, top: 22.0),
                         child: Text(
-                          stringUsagePeriod ?? "-",
+                          data.invoicePeriod ?? "-",
                           style: TextStyle(
                               fontSize: 15.0,
                               fontWeight: FontWeight.w400,
@@ -572,51 +656,14 @@ class BillDetailState extends State<InvoiceRTPK>
                   ],
                 ),
                 Row(
-                  children: <Widget>[
-                    Container(
-                      width: 125,
-                      margin: EdgeInsets.only(left: 20.0, top: 10.0),
-                      child: Text(
-                        Translations.of(context).text(
-                            'f_commercial_invoice_detail_tv_invoice_month_label'),
-                        style: TextStyle(
-                            fontSize: 15.0,
-                            fontWeight: FontWeight.w400,
-                            color: Colors.grey[600]),
-                      ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.only(top: 10.0, left: 25.0),
-                      child: Text(
-                        ':',
-                        style: TextStyle(
-                            fontSize: 15.0,
-                            fontWeight: FontWeight.w400,
-                            color: Colors.grey[600]),
-                      ),
-                    ),
-                    Expanded(
-                      child: Container(
-                        margin: EdgeInsets.only(left: 5.0, top: 10.0),
-                        child: Text(
-                          stringInvoicePeriod ?? "-",
-                          style: TextStyle(
-                              fontSize: 15.0,
-                              fontWeight: FontWeight.w400,
-                              color: Colors.grey[600]),
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Container(
                       width: 125,
                       margin: EdgeInsets.only(left: 20.0, top: 10.0),
                       child: Text(
                         Translations.of(context)
-                            .text('row_daily_usage_tv_volume_label'),
+                            .text('f_commercial_invoice_detail_tv_duedate'),
                         style: TextStyle(
                             fontSize: 15.0,
                             fontWeight: FontWeight.w400,
@@ -637,7 +684,9 @@ class BillDetailState extends State<InvoiceRTPK>
                       child: Container(
                         margin: EdgeInsets.only(left: 5.0, top: 10.0),
                         child: Text(
-                          "${data.custVolUsage ?? "-"} m3",
+                          DateFormat('dd MMMM yyyy')
+                                  .format(DateTime.parse(data.usagePeriod)) ??
+                              "-",
                           style: TextStyle(
                               fontSize: 15.0,
                               fontWeight: FontWeight.w400,
@@ -648,13 +697,13 @@ class BillDetailState extends State<InvoiceRTPK>
                   ],
                 ),
                 Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Container(
                       width: 125,
                       margin: EdgeInsets.only(left: 20.0, top: 10.0),
                       child: Text(
-                        Translations.of(context)
-                            .text('f_customer_guarantees_title'),
+                        Translations.of(context).text('gas_bill'),
                         style: TextStyle(
                             fontSize: 15.0,
                             fontWeight: FontWeight.w400,
@@ -675,7 +724,7 @@ class BillDetailState extends State<InvoiceRTPK>
                       child: Container(
                         margin: EdgeInsets.only(left: 5.0, top: 10.0),
                         child: Text(
-                          "Rp.${data.pGuaranteeIdr ?? "-"}",
+                          "${data.tagihanIDR.toString()} IDR",
                           style: TextStyle(
                               fontSize: 15.0,
                               fontWeight: FontWeight.w400,
@@ -685,14 +734,186 @@ class BillDetailState extends State<InvoiceRTPK>
                     )
                   ],
                 ),
+
+                ListView.builder(
+                  itemCount: data.cmm.length,
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemBuilder: (context, i) {
+                    return Column(
+                      children: [
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Container(
+                              width: 125,
+                              margin: EdgeInsets.only(left: 20.0, top: 10.0),
+                              child: Text(
+                                'Stand Awal',
+                                style: TextStyle(
+                                    fontSize: 15.0,
+                                    fontWeight: FontWeight.w400,
+                                    color: Colors.grey[600]),
+                              ),
+                            ),
+                            Container(
+                              margin: EdgeInsets.only(top: 10.0, left: 25.0),
+                              child: Text(
+                                ':',
+                                style: TextStyle(
+                                    fontSize: 15.0,
+                                    fontWeight: FontWeight.w400,
+                                    color: Colors.grey[600]),
+                              ),
+                            ),
+                            Expanded(
+                              child: Container(
+                                margin: EdgeInsets.only(left: 5.0, top: 10.0),
+                                child: Text(
+                                  data.cmm[i].standAwal.toString(),
+                                  style: TextStyle(
+                                      fontSize: 15.0,
+                                      fontWeight: FontWeight.w400,
+                                      color: Colors.grey[600]),
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Container(
+                              width: 125,
+                              margin: EdgeInsets.only(left: 20.0, top: 10.0),
+                              child: Text(
+                                'Stand Akhir',
+                                style: TextStyle(
+                                    fontSize: 15.0,
+                                    fontWeight: FontWeight.w400,
+                                    color: Colors.grey[600]),
+                              ),
+                            ),
+                            Container(
+                              margin: EdgeInsets.only(top: 10.0, left: 25.0),
+                              child: Text(
+                                ':',
+                                style: TextStyle(
+                                    fontSize: 15.0,
+                                    fontWeight: FontWeight.w400,
+                                    color: Colors.grey[600]),
+                              ),
+                            ),
+                            Expanded(
+                              child: Container(
+                                margin: EdgeInsets.only(left: 5.0, top: 10.0),
+                                child: Text(
+                                  data.cmm[i].standAkhir.toString(),
+                                  style: TextStyle(
+                                      fontSize: 15.0,
+                                      fontWeight: FontWeight.w400,
+                                      color: Colors.grey[600]),
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Container(
+                              width: 125,
+                              margin: EdgeInsets.only(left: 20.0, top: 10.0),
+                              child: Text(
+                                'Jenis Meter',
+                                style: TextStyle(
+                                    fontSize: 15.0,
+                                    fontWeight: FontWeight.w400,
+                                    color: Colors.grey[600]),
+                              ),
+                            ),
+                            Container(
+                              margin: EdgeInsets.only(top: 10.0, left: 25.0),
+                              child: Text(
+                                ':',
+                                style: TextStyle(
+                                    fontSize: 15.0,
+                                    fontWeight: FontWeight.w400,
+                                    color: Colors.grey[600]),
+                              ),
+                            ),
+                            Expanded(
+                              child: Container(
+                                margin: EdgeInsets.only(left: 5.0, top: 10.0),
+                                child: Text(
+                                  data.cmm[i].metodePerhitungan.toString(),
+                                  style: TextStyle(
+                                      fontSize: 15.0,
+                                      fontWeight: FontWeight.w400,
+                                      color: Colors.grey[600]),
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Container(
+                              width: 125,
+                              margin: EdgeInsets.only(left: 20.0, top: 10.0),
+                              child: Text(
+                                'Metode Pencatatan',
+                                style: TextStyle(
+                                    fontSize: 15.0,
+                                    fontWeight: FontWeight.w400,
+                                    color: Colors.grey[600]),
+                              ),
+                            ),
+                            Container(
+                              margin: EdgeInsets.only(top: 10.0, left: 25.0),
+                              child: Text(
+                                ':',
+                                style: TextStyle(
+                                    fontSize: 15.0,
+                                    fontWeight: FontWeight.w400,
+                                    color: Colors.grey[600]),
+                              ),
+                            ),
+                            Expanded(
+                              child: Container(
+                                margin: EdgeInsets.only(left: 5.0, top: 10.0),
+                                child: Text(
+                                  data.cmm[i].metodePencatatan.toString(),
+                                  style: TextStyle(
+                                      fontSize: 15.0,
+                                      fontWeight: FontWeight.w400,
+                                      color: Colors.grey[600]),
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                        data.cmm.length <= 1
+                            ? SizedBox()
+                            : Padding(
+                                padding:
+                                    const EdgeInsets.only(left: 20, right: 20),
+                                child: Divider(color: Colors.grey),
+                              ),
+                      ],
+                    );
+                  },
+                ),
+
                 Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Container(
                       width: 125,
                       margin: EdgeInsets.only(left: 20.0, top: 10.0),
                       child: Text(
-                        Translations.of(context)
-                            .text('f_commercial_invoice_detail_tv_denda'),
+                        'Volume Usage',
                         style: TextStyle(
                             fontSize: 15.0,
                             fontWeight: FontWeight.w400,
@@ -713,7 +934,7 @@ class BillDetailState extends State<InvoiceRTPK>
                       child: Container(
                         margin: EdgeInsets.only(left: 5.0, top: 10.0),
                         child: Text(
-                          data.denda != "" ? data.denda : "-",
+                          '${data.volumeUsage.toString()} m3',
                           style: TextStyle(
                               fontSize: 15.0,
                               fontWeight: FontWeight.w400,
@@ -724,13 +945,13 @@ class BillDetailState extends State<InvoiceRTPK>
                   ],
                 ),
                 Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Container(
                       width: 125,
                       margin: EdgeInsets.only(left: 20.0, top: 10.0),
                       child: Text(
-                        Translations.of(context).text(
-                            'f_commercial_invoice_detail_tv_b_pengaliran_kembali'),
+                        'Volume Normal',
                         style: TextStyle(
                             fontSize: 15.0,
                             fontWeight: FontWeight.w400,
@@ -751,9 +972,7 @@ class BillDetailState extends State<InvoiceRTPK>
                       child: Container(
                         margin: EdgeInsets.only(left: 5.0, top: 10.0),
                         child: Text(
-                          data.biayaPengaliran != ""
-                              ? data.biayaPengaliran
-                              : "-",
+                          '${data.volumeNormal.toString()} m3',
                           style: TextStyle(
                               fontSize: 15.0,
                               fontWeight: FontWeight.w400,
@@ -764,168 +983,14 @@ class BillDetailState extends State<InvoiceRTPK>
                   ],
                 ),
                 Row(
-                  children: <Widget>[
-                    Container(
-                      width: 125,
-                      margin: EdgeInsets.only(left: 20.0, top: 10.0),
-                      child: Text(
-                        Translations.of(context).text(
-                            'f_commercial_invoice_detail_tv_b_pemasangan_kembali'),
-                        style: TextStyle(
-                            fontSize: 15.0,
-                            fontWeight: FontWeight.w400,
-                            color: Colors.grey[600]),
-                      ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.only(top: 10.0, left: 25.0),
-                      child: Text(
-                        ':',
-                        style: TextStyle(
-                            fontSize: 15.0,
-                            fontWeight: FontWeight.w400,
-                            color: Colors.grey[600]),
-                      ),
-                    ),
-                    Expanded(
-                      child: Container(
-                        margin: EdgeInsets.only(left: 5.0, top: 10.0),
-                        child: Text(
-                          data.biayaPemasangan != ""
-                              ? data.biayaPemasangan
-                              : "-",
-                          style: TextStyle(
-                              fontSize: 15.0,
-                              fontWeight: FontWeight.w400,
-                              color: Colors.grey[600]),
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-                Row(
-                  children: <Widget>[
-                    Container(
-                      width: 125,
-                      margin: EdgeInsets.only(left: 20.0, top: 10.0),
-                      child: Text(
-                        Translations.of(context)
-                            .text('f_commercial_invoice_detail_tv_b_migrasi'),
-                        style: TextStyle(
-                            fontSize: 15.0,
-                            fontWeight: FontWeight.w400,
-                            color: Colors.grey[600]),
-                      ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.only(top: 10.0, left: 25.0),
-                      child: Text(
-                        ':',
-                        style: TextStyle(
-                            fontSize: 15.0,
-                            fontWeight: FontWeight.w400,
-                            color: Colors.grey[600]),
-                      ),
-                    ),
-                    Expanded(
-                      child: Container(
-                        margin: EdgeInsets.only(left: 5.0, top: 10.0),
-                        child: Text(
-                          data.biayaMigrasi != "" ? data.biayaMigrasi : "-",
-                          style: TextStyle(
-                              fontSize: 15.0,
-                              fontWeight: FontWeight.w400,
-                              color: Colors.grey[600]),
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-                Row(
-                  children: <Widget>[
-                    Container(
-                      width: 125,
-                      margin: EdgeInsets.only(left: 20.0, top: 10.0),
-                      child: Text(
-                        Translations.of(context)
-                            .text('f_commercial_invoice_detail_tv_b_pelayanan'),
-                        style: TextStyle(
-                            fontSize: 15.0,
-                            fontWeight: FontWeight.w400,
-                            color: Colors.grey[600]),
-                      ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.only(top: 10.0, left: 25.0),
-                      child: Text(
-                        ':',
-                        style: TextStyle(
-                            fontSize: 15.0,
-                            fontWeight: FontWeight.w400,
-                            color: Colors.grey[600]),
-                      ),
-                    ),
-                    Expanded(
-                      child: Container(
-                        margin: EdgeInsets.only(left: 5.0, top: 10.0),
-                        child: Text(
-                          data.biayaPelayanan != "" ? data.biayaPelayanan : "-",
-                          style: TextStyle(
-                              fontSize: 15.0,
-                              fontWeight: FontWeight.w400,
-                              color: Colors.grey[600]),
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-                Row(
-                  children: <Widget>[
-                    Container(
-                      width: 125,
-                      margin: EdgeInsets.only(left: 20.0, top: 10.0),
-                      child: Text(
-                        Translations.of(context)
-                            .text('f_commercial_invoice_detail_tv_b_sms'),
-                        style: TextStyle(
-                            fontSize: 15.0,
-                            fontWeight: FontWeight.w400,
-                            color: Colors.grey[600]),
-                      ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.only(top: 10.0, left: 25.0),
-                      child: Text(
-                        ':',
-                        style: TextStyle(
-                            fontSize: 15.0,
-                            fontWeight: FontWeight.w400,
-                            color: Colors.grey[600]),
-                      ),
-                    ),
-                    Expanded(
-                      child: Container(
-                        margin: EdgeInsets.only(left: 5.0, top: 10.0),
-                        child: Text(
-                          data.biayaSms != "" ? data.biayaSms : "-",
-                          style: TextStyle(
-                              fontSize: 15.0,
-                              fontWeight: FontWeight.w400,
-                              color: Colors.grey[600]),
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Container(
                       width: 125,
                       margin:
                           EdgeInsets.only(left: 20.0, top: 10.0, bottom: 20),
                       child: Text(
-                        Translations.of(context)
-                            .text('f_customer_issue_arrears_title'),
+                        'Volume Over Usage',
                         style: TextStyle(
                             fontSize: 15.0,
                             fontWeight: FontWeight.w400,
@@ -939,7 +1004,7 @@ class BillDetailState extends State<InvoiceRTPK>
                         ':',
                         style: TextStyle(
                             fontSize: 15.0,
-                            fontWeight: FontWeight.w500,
+                            fontWeight: FontWeight.w400,
                             color: Colors.grey[600]),
                       ),
                     ),
@@ -948,7 +1013,7 @@ class BillDetailState extends State<InvoiceRTPK>
                         margin:
                             EdgeInsets.only(left: 5.0, top: 10.0, bottom: 20),
                         child: Text(
-                          "Rp.${data.arrersIdr ?? "-"}",
+                          "${data.volumeOverUsage ?? "-"} m3",
                           style: TextStyle(
                               fontSize: 15.0,
                               fontWeight: FontWeight.w400,
@@ -958,9 +1023,400 @@ class BillDetailState extends State<InvoiceRTPK>
                     )
                   ],
                 ),
+
+                // Row(
+                //   children: <Widget>[
+                //     Container(
+                //       width: 125,
+                //       margin: EdgeInsets.only(left: 20.0, top: 10.0),
+                //       child: Text(
+                //         Translations.of(context)
+                //             .text('f_customer_guarantees_title'),
+                //         style: TextStyle(
+                //             fontSize: 15.0,
+                //             fontWeight: FontWeight.w400,
+                //             color: Colors.grey[600]),
+                //       ),
+                //     ),
+                //     Container(
+                //       margin: EdgeInsets.only(top: 10.0, left: 25.0),
+                //       child: Text(
+                //         ':',
+                //         style: TextStyle(
+                //             fontSize: 15.0,
+                //             fontWeight: FontWeight.w400,
+                //             color: Colors.grey[600]),
+                //       ),
+                //     ),
+                //     Expanded(
+                //       child: Container(
+                //         margin: EdgeInsets.only(left: 5.0, top: 10.0),
+                //         child: Text(
+                //           "Rp.${data.pGuaranteeIdr ?? "-"}",
+                //           style: TextStyle(
+                //               fontSize: 15.0,
+                //               fontWeight: FontWeight.w400,
+                //               color: Colors.grey[600]),
+                //         ),
+                //       ),
+                //     )
+                //   ],
+                // ),
+                // Row(
+                //   children: <Widget>[
+                //     Container(
+                //       width: 125,
+                //       margin: EdgeInsets.only(left: 20.0, top: 10.0),
+                //       child: Text(
+                //         Translations.of(context)
+                //             .text('f_commercial_invoice_detail_tv_denda'),
+                //         style: TextStyle(
+                //             fontSize: 15.0,
+                //             fontWeight: FontWeight.w400,
+                //             color: Colors.grey[600]),
+                //       ),
+                //     ),
+                //     Container(
+                //       margin: EdgeInsets.only(top: 10.0, left: 25.0),
+                //       child: Text(
+                //         ':',
+                //         style: TextStyle(
+                //             fontSize: 15.0,
+                //             fontWeight: FontWeight.w400,
+                //             color: Colors.grey[600]),
+                //       ),
+                //     ),
+                //     Expanded(
+                //       child: Container(
+                //         margin: EdgeInsets.only(left: 5.0, top: 10.0),
+                //         child: Text(
+                //           data.denda != "" ? data.denda : "-",
+                //           style: TextStyle(
+                //               fontSize: 15.0,
+                //               fontWeight: FontWeight.w400,
+                //               color: Colors.grey[600]),
+                //         ),
+                //       ),
+                //     )
+                //   ],
+                // ),
+                // Row(
+                //   children: <Widget>[
+                //     Container(
+                //       width: 125,
+                //       margin: EdgeInsets.only(left: 20.0, top: 10.0),
+                //       child: Text(
+                //         Translations.of(context).text(
+                //             'f_commercial_invoice_detail_tv_b_pengaliran_kembali'),
+                //         style: TextStyle(
+                //             fontSize: 15.0,
+                //             fontWeight: FontWeight.w400,
+                //             color: Colors.grey[600]),
+                //       ),
+                //     ),
+                //     Container(
+                //       margin: EdgeInsets.only(top: 10.0, left: 25.0),
+                //       child: Text(
+                //         ':',
+                //         style: TextStyle(
+                //             fontSize: 15.0,
+                //             fontWeight: FontWeight.w400,
+                //             color: Colors.grey[600]),
+                //       ),
+                //     ),
+                //     Expanded(
+                //       child: Container(
+                //         margin: EdgeInsets.only(left: 5.0, top: 10.0),
+                //         child: Text(
+                //           data.biayaPengaliran != ""
+                //               ? data.biayaPengaliran
+                //               : "-",
+                //           style: TextStyle(
+                //               fontSize: 15.0,
+                //               fontWeight: FontWeight.w400,
+                //               color: Colors.grey[600]),
+                //         ),
+                //       ),
+                //     )
+                //   ],
+                // ),
+                // Row(
+                //   children: <Widget>[
+                //     Container(
+                //       width: 125,
+                //       margin: EdgeInsets.only(left: 20.0, top: 10.0),
+                //       child: Text(
+                //         Translations.of(context).text(
+                //             'f_commercial_invoice_detail_tv_b_pemasangan_kembali'),
+                //         style: TextStyle(
+                //             fontSize: 15.0,
+                //             fontWeight: FontWeight.w400,
+                //             color: Colors.grey[600]),
+                //       ),
+                //     ),
+                //     Container(
+                //       margin: EdgeInsets.only(top: 10.0, left: 25.0),
+                //       child: Text(
+                //         ':',
+                //         style: TextStyle(
+                //             fontSize: 15.0,
+                //             fontWeight: FontWeight.w400,
+                //             color: Colors.grey[600]),
+                //       ),
+                //     ),
+                //     Expanded(
+                //       child: Container(
+                //         margin: EdgeInsets.only(left: 5.0, top: 10.0),
+                //         child: Text(
+                //           data.biayaPemasangan != ""
+                //               ? data.biayaPemasangan
+                //               : "-",
+                //           style: TextStyle(
+                //               fontSize: 15.0,
+                //               fontWeight: FontWeight.w400,
+                //               color: Colors.grey[600]),
+                //         ),
+                //       ),
+                //     )
+                //   ],
+                // ),
+                // Row(
+                //   children: <Widget>[
+                //     Container(
+                //       width: 125,
+                //       margin: EdgeInsets.only(left: 20.0, top: 10.0),
+                //       child: Text(
+                //         Translations.of(context)
+                //             .text('f_commercial_invoice_detail_tv_b_migrasi'),
+                //         style: TextStyle(
+                //             fontSize: 15.0,
+                //             fontWeight: FontWeight.w400,
+                //             color: Colors.grey[600]),
+                //       ),
+                //     ),
+                //     Container(
+                //       margin: EdgeInsets.only(top: 10.0, left: 25.0),
+                //       child: Text(
+                //         ':',
+                //         style: TextStyle(
+                //             fontSize: 15.0,
+                //             fontWeight: FontWeight.w400,
+                //             color: Colors.grey[600]),
+                //       ),
+                //     ),
+                //     Expanded(
+                //       child: Container(
+                //         margin: EdgeInsets.only(left: 5.0, top: 10.0),
+                //         child: Text(
+                //           data.biayaMigrasi != "" ? data.biayaMigrasi : "-",
+                //           style: TextStyle(
+                //               fontSize: 15.0,
+                //               fontWeight: FontWeight.w400,
+                //               color: Colors.grey[600]),
+                //         ),
+                //       ),
+                //     )
+                //   ],
+                // ),
+                // Row(
+                //   children: <Widget>[
+                //     Container(
+                //       width: 125,
+                //       margin: EdgeInsets.only(left: 20.0, top: 10.0),
+                //       child: Text(
+                //         Translations.of(context)
+                //             .text('f_commercial_invoice_detail_tv_b_pelayanan'),
+                //         style: TextStyle(
+                //             fontSize: 15.0,
+                //             fontWeight: FontWeight.w400,
+                //             color: Colors.grey[600]),
+                //       ),
+                //     ),
+                //     Container(
+                //       margin: EdgeInsets.only(top: 10.0, left: 25.0),
+                //       child: Text(
+                //         ':',
+                //         style: TextStyle(
+                //             fontSize: 15.0,
+                //             fontWeight: FontWeight.w400,
+                //             color: Colors.grey[600]),
+                //       ),
+                //     ),
+                //     Expanded(
+                //       child: Container(
+                //         margin: EdgeInsets.only(left: 5.0, top: 10.0),
+                //         child: Text(
+                //           data.biayaPelayanan != "" ? data.biayaPelayanan : "-",
+                //           style: TextStyle(
+                //               fontSize: 15.0,
+                //               fontWeight: FontWeight.w400,
+                //               color: Colors.grey[600]),
+                //         ),
+                //       ),
+                //     )
+                //   ],
+                // ),
+                // Row(
+                //   children: <Widget>[
+                //     Container(
+                //       width: 125,
+                //       margin: EdgeInsets.only(left: 20.0, top: 10.0),
+                //       child: Text(
+                //         Translations.of(context)
+                //             .text('f_commercial_invoice_detail_tv_b_sms'),
+                //         style: TextStyle(
+                //             fontSize: 15.0,
+                //             fontWeight: FontWeight.w400,
+                //             color: Colors.grey[600]),
+                //       ),
+                //     ),
+                //     Container(
+                //       margin: EdgeInsets.only(top: 10.0, left: 25.0),
+                //       child: Text(
+                //         ':',
+                //         style: TextStyle(
+                //             fontSize: 15.0,
+                //             fontWeight: FontWeight.w400,
+                //             color: Colors.grey[600]),
+                //       ),
+                //     ),
+                //     Expanded(
+                //       child: Container(
+                //         margin: EdgeInsets.only(left: 5.0, top: 10.0),
+                //         child: Text(
+                //           data.biayaSms != "" ? data.biayaSms : "-",
+                //           style: TextStyle(
+                //               fontSize: 15.0,
+                //               fontWeight: FontWeight.w400,
+                //               color: Colors.grey[600]),
+                //         ),
+                //       ),
+                //     )
+                //   ],
+                // ),
+                // Row(
+                //   children: <Widget>[
+                //     Container(
+                //       width: 125,
+                //       margin:
+                //           EdgeInsets.only(left: 20.0, top: 10.0, bottom: 20),
+                //       child: Text(
+                //         Translations.of(context)
+                //             .text('f_customer_issue_arrears_title'),
+                //         style: TextStyle(
+                //             fontSize: 15.0,
+                //             fontWeight: FontWeight.w400,
+                //             color: Colors.grey[600]),
+                //       ),
+                //     ),
+                //     Container(
+                //       margin:
+                //           EdgeInsets.only(top: 10.0, left: 25.0, bottom: 20),
+                //       child: Text(
+                //         ':',
+                //         style: TextStyle(
+                //             fontSize: 15.0,
+                //             fontWeight: FontWeight.w500,
+                //             color: Colors.grey[600]),
+                //       ),
+                //     ),
+                //     Expanded(
+                //       child: Container(
+                //         margin:
+                //             EdgeInsets.only(left: 5.0, top: 10.0, bottom: 20),
+                //         child: Text(
+                //           "Rp.${data.arrersIdr ?? "-"}",
+                //           style: TextStyle(
+                //               fontSize: 15.0,
+                //               fontWeight: FontWeight.w400,
+                //               color: Colors.grey[600]),
+                //         ),
+                //       ),
+                //     )
+                //   ],
+                // ),
               ],
             ),
           ),
+          data.others.length != 0
+              ? Card(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  margin: EdgeInsets.only(top: 10),
+                  elevation: 5,
+                  child: Column(
+                    children: <Widget>[
+                      Row(
+                        children: <Widget>[
+                          Container(
+                            width: 125,
+                            margin: EdgeInsets.only(
+                                left: 20.0, top: 21.0, bottom: 10),
+                            child: Text(
+                              'Tagihan Lain-lain',
+                              style: TextStyle(
+                                  fontSize: 16.0,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.blue[600]),
+                            ),
+                          ),
+                        ],
+                      ),
+                      ListView.builder(
+                          itemCount: data.others.length,
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          itemBuilder: (context, i) {
+                            return Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Container(
+                                  width: 125,
+                                  margin:
+                                      EdgeInsets.only(left: 20.0, top: 10.0),
+                                  child: Text(
+                                    data.others[i].type,
+                                    style: TextStyle(
+                                        fontSize: 15.0,
+                                        fontWeight: FontWeight.w400,
+                                        color: Colors.grey[600]),
+                                  ),
+                                ),
+                                Container(
+                                  margin:
+                                      EdgeInsets.only(top: 10.0, left: 25.0),
+                                  child: Text(
+                                    ':',
+                                    style: TextStyle(
+                                        fontSize: 15.0,
+                                        fontWeight: FontWeight.w400,
+                                        color: Colors.grey[600]),
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Container(
+                                    margin:
+                                        EdgeInsets.only(left: 5.0, top: 10.0),
+                                    child: Text(
+                                      data.others[i].idr,
+                                      style: TextStyle(
+                                          fontSize: 15.0,
+                                          fontWeight: FontWeight.w400,
+                                          color: Colors.grey[600]),
+                                    ),
+                                  ),
+                                )
+                              ],
+                            );
+                          }),
+                      SizedBox(
+                        height: 20,
+                      ),
+                    ],
+                  ),
+                )
+              : SizedBox(),
           Card(
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10.0),
@@ -970,6 +1426,7 @@ class BillDetailState extends State<InvoiceRTPK>
             child: Column(
               children: <Widget>[
                 Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Container(
                       width: 125,
@@ -985,13 +1442,13 @@ class BillDetailState extends State<InvoiceRTPK>
                   ],
                 ),
                 Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Container(
                       width: 125,
                       margin: EdgeInsets.only(left: 20.0, top: 22.0),
                       child: Text(
-                        Translations.of(context)
-                            .text('f_household_invoice_detail_tv_total'),
+                        Translations.of(context).text('total_billing'),
                         style: TextStyle(
                             fontSize: 15.0,
                             fontWeight: FontWeight.w400,
@@ -1010,9 +1467,10 @@ class BillDetailState extends State<InvoiceRTPK>
                     ),
                     Expanded(
                       child: Container(
-                        margin: EdgeInsets.only(left: 5.0, top: 20.0),
+                        margin:
+                            EdgeInsets.only(left: 5.0, top: 20.0, bottom: 20),
                         child: Text(
-                          "Rp.${data.tBillIdr ?? "-"}",
+                          "${data.tBillIdr ?? "-"} IDR",
                           style: TextStyle(
                               fontSize: 15.0,
                               fontWeight: FontWeight.w400,
@@ -1022,92 +1480,92 @@ class BillDetailState extends State<InvoiceRTPK>
                     )
                   ],
                 ),
-                if (data.isPaid == 1)
-                  Row(
-                    children: <Widget>[
-                      Container(
-                        width: 125,
-                        margin:
-                            EdgeInsets.only(left: 20.0, top: 10.0, bottom: 20),
-                        child: Text(
-                          Translations.of(context).text(
-                              'f_household_invoice_detail_tv_payment_status'),
-                          style: TextStyle(
-                              fontSize: 15.0,
-                              fontWeight: FontWeight.w400,
-                              color: Colors.grey[600]),
-                        ),
-                      ),
-                      Container(
-                        margin:
-                            EdgeInsets.only(top: 10.0, left: 25.0, bottom: 20),
-                        child: Text(
-                          ':',
-                          style: TextStyle(
-                              fontSize: 15.0,
-                              fontWeight: FontWeight.w400,
-                              color: Colors.grey[600]),
-                        ),
-                      ),
-                      Expanded(
-                        child: Container(
-                          margin:
-                              EdgeInsets.only(left: 5.0, top: 10.0, bottom: 20),
-                          child: Text(
-                            Translations.of(context).text(
-                                'f_commercial_invoice_detail_tv_payment_status_paid'),
-                            style: TextStyle(
-                                fontSize: 15.0,
-                                fontWeight: FontWeight.w400,
-                                color: Colors.grey[600]),
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                if (data.isPaid == 0)
-                  Row(
-                    children: <Widget>[
-                      Container(
-                        width: 125,
-                        margin:
-                            EdgeInsets.only(left: 20.0, top: 10.0, bottom: 20),
-                        child: Text(
-                          Translations.of(context).text(
-                              'f_household_invoice_detail_tv_payment_status'),
-                          style: TextStyle(
-                              fontSize: 15.0,
-                              fontWeight: FontWeight.w400,
-                              color: Colors.grey[600]),
-                        ),
-                      ),
-                      Container(
-                        margin:
-                            EdgeInsets.only(top: 10.0, left: 25.0, bottom: 20),
-                        child: Text(
-                          ':',
-                          style: TextStyle(
-                              fontSize: 15.0,
-                              fontWeight: FontWeight.w400,
-                              color: Colors.grey[600]),
-                        ),
-                      ),
-                      Expanded(
-                        child: Container(
-                          margin:
-                              EdgeInsets.only(left: 5.0, top: 10.0, bottom: 20),
-                          child: Text(
-                            Translations.of(context).text(
-                                'f_commercial_invoice_detail_tv_payment_status_unpaid'),
-                            style: TextStyle(
-                                fontSize: 15.0,
-                                fontWeight: FontWeight.w400,
-                                color: Colors.grey[600]),
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
+                // if (data.isPaid == 1)
+                //   Row(
+                //     children: <Widget>[
+                //       Container(
+                //         width: 125,
+                //         margin:
+                //             EdgeInsets.only(left: 20.0, top: 10.0, bottom: 20),
+                //         child: Text(
+                //           Translations.of(context).text(
+                //               'f_household_invoice_detail_tv_payment_status'),
+                //           style: TextStyle(
+                //               fontSize: 15.0,
+                //               fontWeight: FontWeight.w400,
+                //               color: Colors.grey[600]),
+                //         ),
+                //       ),
+                //       Container(
+                //         margin:
+                //             EdgeInsets.only(top: 10.0, left: 25.0, bottom: 20),
+                //         child: Text(
+                //           ':',
+                //           style: TextStyle(
+                //               fontSize: 15.0,
+                //               fontWeight: FontWeight.w400,
+                //               color: Colors.grey[600]),
+                //         ),
+                //       ),
+                //       Expanded(
+                //         child: Container(
+                //           margin:
+                //               EdgeInsets.only(left: 5.0, top: 10.0, bottom: 20),
+                //           child: Text(
+                //             Translations.of(context).text(
+                //                 'f_commercial_invoice_detail_tv_payment_status_paid'),
+                //             style: TextStyle(
+                //                 fontSize: 15.0,
+                //                 fontWeight: FontWeight.w400,
+                //                 color: Colors.grey[600]),
+                //           ),
+                //         ),
+                //       )
+                //     ],
+                //   ),
+                // if (data.isPaid == 0)
+                //   Row(
+                //     children: <Widget>[
+                //       Container(
+                //         width: 125,
+                //         margin:
+                //             EdgeInsets.only(left: 20.0, top: 10.0, bottom: 20),
+                //         child: Text(
+                //           Translations.of(context).text(
+                //               'f_household_invoice_detail_tv_payment_status'),
+                //           style: TextStyle(
+                //               fontSize: 15.0,
+                //               fontWeight: FontWeight.w400,
+                //               color: Colors.grey[600]),
+                //         ),
+                //       ),
+                //       Container(
+                //         margin:
+                //             EdgeInsets.only(top: 10.0, left: 25.0, bottom: 20),
+                //         child: Text(
+                //           ':',
+                //           style: TextStyle(
+                //               fontSize: 15.0,
+                //               fontWeight: FontWeight.w400,
+                //               color: Colors.grey[600]),
+                //         ),
+                //       ),
+                //       Expanded(
+                //         child: Container(
+                //           margin:
+                //               EdgeInsets.only(left: 5.0, top: 10.0, bottom: 20),
+                //           child: Text(
+                //             Translations.of(context).text(
+                //                 'f_commercial_invoice_detail_tv_payment_status_unpaid'),
+                //             style: TextStyle(
+                //                 fontSize: 15.0,
+                //                 fontWeight: FontWeight.w400,
+                //                 color: Colors.grey[600]),
+                //           ),
+                //         ),
+                //       )
+                //     ],
+                //   ),
               ],
             ),
           ),

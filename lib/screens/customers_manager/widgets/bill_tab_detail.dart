@@ -569,88 +569,12 @@ class Card2 extends StatelessWidget {
                 children: <Widget>[
                   Container(
                     width: 150,
-                    margin: EdgeInsets.only(left: 20.0, top: 15),
+                    margin: EdgeInsets.only(left: 20.0, top: 15, bottom: 15),
                     child: Text(
                       Translations.of(context).text(
                           'f_commercial_invoice_detail_tv_billed_volume_label'),
                       style: TextStyle(
                           fontSize: 13.0,
-                          fontWeight: FontWeight.w400,
-                          color: Colors.grey[600]),
-                    ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(left: 10.0, top: 15),
-                    child: Text(
-                      ':',
-                      style: TextStyle(
-                          fontSize: 13.0,
-                          fontWeight: FontWeight.w400,
-                          color: Colors.grey[600]),
-                    ),
-                  ),
-                  Expanded(
-                    child: Container(
-                      margin: EdgeInsets.only(left: 5.0, top: 15),
-                      child: Text(
-                        data.billedVolume.display ?? "-",
-                        style: TextStyle(
-                            fontSize: 13.0,
-                            fontWeight: FontWeight.w400,
-                            color: Colors.grey[600]),
-                      ),
-                    ),
-                  )
-                ],
-              ),
-              Row(
-                children: <Widget>[
-                  Container(
-                    width: 150,
-                    margin: EdgeInsets.only(left: 20.0, top: 15),
-                    child: Text(
-                      Translations.of(context).text(
-                          'f_commercial_invoice_detail_tv_warranty_idr_label'),
-                      style: TextStyle(
-                          fontSize: 13.0,
-                          fontWeight: FontWeight.w400,
-                          color: Colors.grey[600]),
-                    ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(left: 10.0, top: 15),
-                    child: Text(
-                      ':',
-                      style: TextStyle(
-                          fontSize: 13.0,
-                          fontWeight: FontWeight.w400,
-                          color: Colors.grey[600]),
-                    ),
-                  ),
-                  Expanded(
-                    child: Container(
-                      margin: EdgeInsets.only(left: 5.0, top: 15),
-                      child: Text(
-                        data.pGuaranteeIdr.display ?? "-",
-                        style: TextStyle(
-                            fontSize: 13.0,
-                            fontWeight: FontWeight.w400,
-                            color: Colors.grey[600]),
-                      ),
-                    ),
-                  )
-                ],
-              ),
-              Row(
-                children: <Widget>[
-                  Container(
-                    width: 150,
-                    margin: EdgeInsets.only(left: 20.0, top: 15, bottom: 15),
-                    child: Text(
-                      Translations.of(context).text(
-                          'f_commercial_invoice_detail_tv_warranty_usd_label'),
-                      style: TextStyle(
-                          fontSize: 12.5,
                           fontWeight: FontWeight.w400,
                           color: Colors.grey[600]),
                     ),
@@ -669,7 +593,7 @@ class Card2 extends StatelessWidget {
                     child: Container(
                       margin: EdgeInsets.only(left: 5.0, top: 15, bottom: 15),
                       child: Text(
-                        data.pGuaranteeUsd.display ?? "-",
+                        data.billedVolume.display ?? "-",
                         style: TextStyle(
                             fontSize: 13.0,
                             fontWeight: FontWeight.w400,
@@ -679,6 +603,82 @@ class Card2 extends StatelessWidget {
                   )
                 ],
               ),
+              // Row(
+              //   children: <Widget>[
+              //     Container(
+              //       width: 150,
+              //       margin: EdgeInsets.only(left: 20.0, top: 15),
+              //       child: Text(
+              //         Translations.of(context).text(
+              //             'f_commercial_invoice_detail_tv_warranty_idr_label'),
+              //         style: TextStyle(
+              //             fontSize: 13.0,
+              //             fontWeight: FontWeight.w400,
+              //             color: Colors.grey[600]),
+              //       ),
+              //     ),
+              //     Container(
+              //       margin: EdgeInsets.only(left: 10.0, top: 15),
+              //       child: Text(
+              //         ':',
+              //         style: TextStyle(
+              //             fontSize: 13.0,
+              //             fontWeight: FontWeight.w400,
+              //             color: Colors.grey[600]),
+              //       ),
+              //     ),
+              //     Expanded(
+              //       child: Container(
+              //         margin: EdgeInsets.only(left: 5.0, top: 15),
+              //         child: Text(
+              //           data.pGuaranteeIdr.display ?? "-",
+              //           style: TextStyle(
+              //               fontSize: 13.0,
+              //               fontWeight: FontWeight.w400,
+              //               color: Colors.grey[600]),
+              //         ),
+              //       ),
+              //     )
+              //   ],
+              // ),
+              // Row(
+              //   children: <Widget>[
+              //     Container(
+              //       width: 150,
+              //       margin: EdgeInsets.only(left: 20.0, top: 15, bottom: 15),
+              //       child: Text(
+              //         Translations.of(context).text(
+              //             'f_commercial_invoice_detail_tv_warranty_usd_label'),
+              //         style: TextStyle(
+              //             fontSize: 12.5,
+              //             fontWeight: FontWeight.w400,
+              //             color: Colors.grey[600]),
+              //       ),
+              //     ),
+              //     Container(
+              //       margin: EdgeInsets.only(left: 10.0, top: 15, bottom: 15),
+              //       child: Text(
+              //         ':',
+              //         style: TextStyle(
+              //             fontSize: 13.0,
+              //             fontWeight: FontWeight.w400,
+              //             color: Colors.grey[600]),
+              //       ),
+              //     ),
+              //     Expanded(
+              //       child: Container(
+              //         margin: EdgeInsets.only(left: 5.0, top: 15, bottom: 15),
+              //         child: Text(
+              //           data.pGuaranteeUsd.display ?? "-",
+              //           style: TextStyle(
+              //               fontSize: 13.0,
+              //               fontWeight: FontWeight.w400,
+              //               color: Colors.grey[600]),
+              //         ),
+              //       ),
+              //     )
+              //   ],
+              // ),
             ],
           ),
         ],

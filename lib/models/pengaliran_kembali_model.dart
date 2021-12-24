@@ -68,9 +68,14 @@ class Create {
 
 class DataCreate {
   String message;
-  DataCreate({this.message});
+  String formId;
+  DataCreate({this.message, this.formId});
 
   factory DataCreate.fromJson(Map<String, dynamic> json) {
+    if (json['report_number'] != null)
+      return DataCreate(
+          message: json['message'], formId: json['report_number']);
+
     return DataCreate(
       message: json['message'],
     );
@@ -156,7 +161,7 @@ class DetailData {
       long: json['longitude'],
       rt: json['rt'],
       rw: json['rw'],
-      kabupaten: json['kabupaten'],
+      kabupaten: json['kota_kabupaten'],
       sign: json['customer_signature'],
       street: json['street'],
       locStat: json['person_in_location_status'],
@@ -170,6 +175,40 @@ class DetailData {
       npwpFile: json['npwp_file'],
       npwpNumb: json['npwp_number'],
       ktpAddress: json['ktp_address'],
+    );
+  }
+}
+
+class Biaya {
+  List<TitleData> titleData;
+  Biaya({this.titleData});
+
+  factory Biaya.fromJson(Map<String, dynamic> json) {
+    return Biaya(
+      titleData: parseDataTitle(json['RT']),
+    );
+  }
+
+  static List<TitleData> parseDataTitle(datasJson) {
+    var list = datasJson as List;
+    List<TitleData> datasTitle =
+        list.map((data) => TitleData.fromJson(data)).toList();
+    return datasTitle;
+  }
+}
+
+class TitleData {
+  String customerType;
+  String area;
+  String cost;
+
+  TitleData({this.area, this.cost, this.customerType});
+
+  factory TitleData.fromJson(Map<String, dynamic> json) {
+    return TitleData(
+      area: json['area'],
+      cost: json['cost'],
+      customerType: json['customer_type'],
     );
   }
 }

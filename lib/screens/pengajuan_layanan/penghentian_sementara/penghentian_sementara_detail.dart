@@ -675,7 +675,7 @@ class _PenghentianSementaraDetailState
                                           PenghentianPengaliranUpdate(
                                               id: widget.id),
                                     ),
-                                  );
+                                  ).then((value) => setState(() {}));
                                 },
                                 style: ElevatedButton.styleFrom(
                                     primary: Color(0xFF81C153),

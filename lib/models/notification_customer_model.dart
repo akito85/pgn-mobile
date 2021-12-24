@@ -26,13 +26,15 @@ class NotifCustModel {
 class DataNotifList {
   int id;
   Payload payload;
+  String date;
 
-  DataNotifList({this.id, this.payload});
+  DataNotifList({this.id, this.payload, this.date});
 
   factory DataNotifList.fromJson(Map<String, dynamic> json) {
     return DataNotifList(
       id: json['id'],
       payload: Payload.fromJson(json['payload']),
+      date: json['date'],
     );
   }
 }

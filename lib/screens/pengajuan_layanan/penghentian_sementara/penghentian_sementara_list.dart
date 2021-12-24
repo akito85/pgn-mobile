@@ -173,12 +173,16 @@ class _PenghentianSementaraListState extends State<PenghentianSementaraList> {
                                       width: 120,
                                       child: Text('ID Pelanggan'),
                                     ),
+                                    Container(
+                                      margin: const EdgeInsets.only(left: 10),
+                                      width: 10,
+                                      child: Text(':'),
+                                    ),
                                     Expanded(
                                       child: Padding(
-                                        padding:
-                                            const EdgeInsets.only(left: 10),
+                                        padding: const EdgeInsets.only(left: 2),
                                         child: Text(
-                                            ': ${dataPenghentianSementara[i].idCust}'),
+                                            '${dataPenghentianSementara[i].idCust}'),
                                       ),
                                     ),
                                   ],
@@ -194,12 +198,16 @@ class _PenghentianSementaraListState extends State<PenghentianSementaraList> {
                                       width: 120,
                                       child: Text('Nama Pelanggan'),
                                     ),
+                                    Container(
+                                      margin: const EdgeInsets.only(left: 10),
+                                      width: 10,
+                                      child: Text(':'),
+                                    ),
                                     Expanded(
                                       child: Padding(
-                                        padding:
-                                            const EdgeInsets.only(left: 10),
+                                        padding: const EdgeInsets.only(left: 2),
                                         child: Text(
-                                            ': ${dataPenghentianSementara[i].name}'),
+                                            '${dataPenghentianSementara[i].name}'),
                                       ),
                                     ),
                                   ],
@@ -215,12 +223,16 @@ class _PenghentianSementaraListState extends State<PenghentianSementaraList> {
                                       width: 120,
                                       child: Text('Tanggal Penghentian'),
                                     ),
+                                    Container(
+                                      margin: const EdgeInsets.only(left: 10),
+                                      width: 10,
+                                      child: Text(':'),
+                                    ),
                                     Expanded(
                                       child: Padding(
-                                        padding:
-                                            const EdgeInsets.only(left: 10),
+                                        padding: const EdgeInsets.only(left: 2),
                                         child: Text(
-                                            ': ${DateFormat('dd MMMM yyy ').format(DateTime.parse(dataPenghentianSementara[i].subDateSuspend).toLocal())}'),
+                                            '${DateFormat('dd MMMM yyy ').format(DateTime.parse(dataPenghentianSementara[i].subDateSuspend).toLocal())}'),
                                       ),
                                     ),
                                   ],
@@ -236,12 +248,16 @@ class _PenghentianSementaraListState extends State<PenghentianSementaraList> {
                                       width: 120,
                                       child: Text('Tanggal Pengaliran Kembali'),
                                     ),
+                                    Container(
+                                      margin: const EdgeInsets.only(left: 10),
+                                      width: 10,
+                                      child: Text(':'),
+                                    ),
                                     Expanded(
                                       child: Padding(
-                                        padding:
-                                            const EdgeInsets.only(left: 10),
+                                        padding: const EdgeInsets.only(left: 2),
                                         child: Text(
-                                            ': ${DateFormat('dd MMMM yyy ').format(DateTime.parse(dataPenghentianSementara[i].subDateEnable).toLocal())}'),
+                                            '${DateFormat('dd MMMM yyy ').format(DateTime.parse(dataPenghentianSementara[i].subDateEnable).toLocal())}'),
                                       ),
                                     ),
                                   ],
@@ -257,12 +273,16 @@ class _PenghentianSementaraListState extends State<PenghentianSementaraList> {
                                       width: 120,
                                       child: Text('Alasan'),
                                     ),
+                                    Container(
+                                      margin: const EdgeInsets.only(left: 10),
+                                      width: 10,
+                                      child: Text(':'),
+                                    ),
                                     Expanded(
                                       child: Padding(
-                                        padding:
-                                            const EdgeInsets.only(left: 10),
+                                        padding: const EdgeInsets.only(left: 2),
                                         child: Text(
-                                            ': ${dataPenghentianSementara[i].reason}'),
+                                            '${dataPenghentianSementara[i].reason}'),
                                       ),
                                     ),
                                   ],
@@ -332,7 +352,7 @@ class _PenghentianSementaraListState extends State<PenghentianSementaraList> {
     String accessToken = await storageCache.read(key: 'access_token');
     String lang = await storageCache.read(key: 'lang');
     var responseGetSubsProg = await http.get(
-        '${UrlCons.mainDevUrl}customer-service/temporary-suspend?per_page=100&next_page=$nextPage',
+        '${UrlCons.mainDevUrl}customer-service/temporary-suspend?per_page=1000&next_page=$nextPage',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $accessToken',
@@ -356,7 +376,7 @@ class _PenghentianSementaraListState extends State<PenghentianSementaraList> {
     String accessToken = await storageCache.read(key: 'access_token');
     String lang = await storageCache.read(key: 'lang');
     var responseGetPenghentianSementara = await http.get(
-        '${UrlCons.mainDevUrl}customer-service/temporary-suspend?per_page=100',
+        '${UrlCons.mainDevUrl}customer-service/temporary-suspend?per_page=1000',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $accessToken',

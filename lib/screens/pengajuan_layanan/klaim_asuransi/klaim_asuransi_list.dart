@@ -190,7 +190,7 @@ class _KlaimAsuransiListState extends State<KlaimAsuransiList> {
                               ),
                               Padding(
                                 padding: const EdgeInsets.only(
-                                    left: 17, right: 17, top: 10),
+                                    left: 17, right: 17, top: 10, bottom: 20),
                                 child: Row(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -207,30 +207,6 @@ class _KlaimAsuransiListState extends State<KlaimAsuransiList> {
                                       child: Padding(
                                         padding: const EdgeInsets.only(left: 2),
                                         child: Text('${datas[i].name}'),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(
-                                    left: 17, right: 17, top: 10, bottom: 15),
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Container(
-                                      width: 120,
-                                      child: Text('Pilihan Media Informasi'),
-                                    ),
-                                    Container(
-                                      margin: const EdgeInsets.only(left: 10),
-                                      width: 10,
-                                      child: Text(':'),
-                                    ),
-                                    Expanded(
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(left: 2),
-                                        child: Text('${datas[i].infoMedia}'),
                                       ),
                                     ),
                                   ],
@@ -312,7 +288,7 @@ class _KlaimAsuransiListState extends State<KlaimAsuransiList> {
     String accessToken = await storageCache.read(key: 'access_token');
     String lang = await storageCache.read(key: 'lang');
     var responseGetSubsProg = await http.get(
-        '${UrlCons.mainDevUrl}customer-service/insurance-claim?per_page=100&next_page=$nextPage',
+        '${UrlCons.mainDevUrl}customer-service/insurance-claim?per_page=1000&next_page=$nextPage',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $accessToken',
@@ -333,7 +309,7 @@ class _KlaimAsuransiListState extends State<KlaimAsuransiList> {
     String accessToken = await storageCache.read(key: 'access_token');
     String lang = await storageCache.read(key: 'lang');
     var response = await http.get(
-        '${UrlCons.mainDevUrl}customer-service/insurance-claim?per_page=100',
+        '${UrlCons.mainDevUrl}customer-service/insurance-claim?per_page=1000',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $accessToken',

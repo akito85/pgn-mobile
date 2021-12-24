@@ -72,9 +72,14 @@ class CreateBerhentiBerlangganan {
 
 class DataCreate {
   String message;
-  DataCreate({this.message});
+  String formId;
+  DataCreate({this.message, this.formId});
 
   factory DataCreate.fromJson(Map<String, dynamic> json) {
+    if (json['report_number'] != null)
+      return DataCreate(
+          message: json['message'], formId: json['report_number']);
+
     return DataCreate(
       message: json['message'],
     );
@@ -107,9 +112,9 @@ class DetailBerhetiBerlangganan {
   String locStat;
   String subDate;
   String reason;
-  String sign;
+  dynamic sign;
   String status;
-  String createdAt;
+  dynamic createdAt;
   String npwpFile;
   String npwpNumb;
   String ktpAddress;
@@ -146,12 +151,12 @@ class DetailBerhetiBerlangganan {
   factory DetailBerhetiBerlangganan.fromJson(Map<String, dynamic> json) {
     return DetailBerhetiBerlangganan(
       id: json['id'],
+      createdAt: json['created_at'],
       subDate: json['submission_date'],
       status: json['progress_status'],
       reason: json['reason'],
       custId: json['customer_id'],
       custName: json['customer_name'],
-      createdAt: json['created_at'],
       bDate: json['birth_date'],
       bPlace: json['birth_place'],
       gender: json['gender'],
@@ -160,7 +165,7 @@ class DetailBerhetiBerlangganan {
       long: json['longitude'],
       rt: json['rt'],
       rw: json['rw'],
-      kabupaten: json['kabupaten'],
+      kabupaten: json['kota_kabupaten'],
       sign: json['customer_signature'],
       street: json['street'],
       locStat: json['person_in_location_status'],

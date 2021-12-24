@@ -10,11 +10,18 @@ import 'package:pgn_mobile/screens/pengajuan_layanan/pengajuan_teknis/pengajuan_
 import 'package:pgn_mobile/screens/pengajuan_layanan/pengajuan_teknis/pengajuan_teknis_detail.dart';
 
 class PengajuanTeknisList extends StatefulWidget {
+  final int techId;
+  final String techName;
+  PengajuanTeknisList({this.techId, this.techName});
   @override
-  _PengajuanTeknisListState createState() => _PengajuanTeknisListState();
+  _PengajuanTeknisListState createState() =>
+      _PengajuanTeknisListState(techName: techName, techId: techId);
 }
 
 class _PengajuanTeknisListState extends State<PengajuanTeknisList> {
+  final int techId;
+  final String techName;
+  _PengajuanTeknisListState({this.techId, this.techName});
   String userName = '';
   String userID = '';
   String nextPage = '';
@@ -58,7 +65,7 @@ class _PengajuanTeknisListState extends State<PengajuanTeknisList> {
         elevation: 0,
         backgroundColor: Colors.white,
         title: Text(
-          'Layanan Teknis',
+          techName,
           style: TextStyle(color: Colors.black),
         ),
       ),
@@ -325,7 +332,8 @@ class _PengajuanTeknisListState extends State<PengajuanTeknisList> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => PengajuanTeknisForm(),
+                      builder: (context) => PengajuanTeknisForm(
+                          techId: techId, techName: techName),
                     ),
                   ).then((value) => setState(() {
                         datas.clear();
@@ -346,7 +354,7 @@ class _PengajuanTeknisListState extends State<PengajuanTeknisList> {
     String accessToken = await storageCache.read(key: 'access_token');
     String lang = await storageCache.read(key: 'lang');
     var responseGetSubsProg = await http.get(
-        '${UrlCons.mainDevUrl}customer-service/technical-service?per_page=10&next_page=$nextPage',
+        '${UrlCons.mainDevUrl}customer-service/technical-service?per_page=1000&filter_technical_type_id=$techId&next_page=$nextPage',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $accessToken',
@@ -367,7 +375,7 @@ class _PengajuanTeknisListState extends State<PengajuanTeknisList> {
     String accessToken = await storageCache.read(key: 'access_token');
     String lang = await storageCache.read(key: 'lang');
     var response = await http.get(
-        '${UrlCons.mainDevUrl}customer-service/technical-service?per_page=10',
+        '${UrlCons.mainDevUrl}customer-service/technical-service?per_page=1000&filter_technical_type_id=$techId',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $accessToken',

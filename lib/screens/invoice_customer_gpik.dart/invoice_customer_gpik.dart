@@ -312,20 +312,19 @@ class InvoiceCustGPIRnGPIKState extends State<InvoiceCustGPIRnGPIK>
           );
         // if (snapshot.data.data[2] == null)
         return Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Container(
-              margin: EdgeInsets.only(top: 70),
-              alignment: Alignment.center,
-              child: Image.asset('assets/penggunaan_gas.png'),
+            ListView.builder(
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              itemCount: 1,
+              itemBuilder: (context, i) {
+                return i < 1
+                    ? _buildRow(snapshot.data.data[2])
+                    : SizedBox(
+                        height: 10.0,
+                      );
+              },
             ),
-            SizedBox(height: 20),
-            Container(
-              child: Text(
-                Translations.of(context).text('f_gus_all_summary_error_empty'),
-                style: TextStyle(fontSize: 18),
-              ),
-            )
           ],
         );
       },
@@ -369,21 +368,19 @@ class InvoiceCustGPIRnGPIKState extends State<InvoiceCustGPIRnGPIK>
             );
           // if (snapshot.data.data[1] == null)
           return Column(
-            mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Container(
-                margin: EdgeInsets.only(top: 70),
-                alignment: Alignment.center,
-                child: Image.asset('assets/penggunaan_gas.png'),
+              ListView.builder(
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                itemCount: 1,
+                itemBuilder: (context, i) {
+                  return i < 1
+                      ? _buildRow(snapshot.data.data[1])
+                      : SizedBox(
+                          height: 10.0,
+                        );
+                },
               ),
-              SizedBox(height: 20),
-              Container(
-                child: Text(
-                  Translations.of(context)
-                      .text('f_gus_all_summary_error_empty'),
-                  style: TextStyle(fontSize: 18),
-                ),
-              )
             ],
           );
         });
@@ -823,90 +820,90 @@ class InvoiceCustGPIRnGPIKState extends State<InvoiceCustGPIRnGPIK>
                       )
                     ],
                   ),
-                  SizedBox(height: 10),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Container(
-                        width: 125,
-                        alignment: Alignment.topLeft,
-                        margin: EdgeInsets.only(left: 20.0),
-                        child: Text(
-                          Translations.of(context).text(
-                              'f_commercial_invoice_detail_tv_warranty_idr_label'),
-                          style: TextStyle(
-                              fontSize: 15.0,
-                              fontWeight: FontWeight.w400,
-                              color: Colors.grey[600]),
-                        ),
-                      ),
-                      Container(
-                        alignment: Alignment.topLeft,
-                        margin: EdgeInsets.only(left: 25.0),
-                        child: Text(
-                          ':',
-                          style: TextStyle(
-                              fontSize: 15.0,
-                              fontWeight: FontWeight.w400,
-                              color: Colors.grey[600]),
-                        ),
-                      ),
-                      Expanded(
-                        child: Container(
-                          alignment: Alignment.topLeft,
-                          margin: EdgeInsets.only(left: 5.0),
-                          child: Text(
-                            data.pGuaranteeIdr.display ?? "-",
-                            style: TextStyle(
-                                fontSize: 15.0,
-                                fontWeight: FontWeight.w400,
-                                color: Colors.grey[600]),
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                  SizedBox(height: 10),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Container(
-                        alignment: Alignment.topLeft,
-                        width: 125,
-                        margin: EdgeInsets.only(left: 20.0, bottom: 20),
-                        child: Text(
-                          Translations.of(context).text(
-                              'f_commercial_invoice_detail_tv_warranty_usd_label'),
-                          style: TextStyle(
-                              fontSize: 15.0,
-                              fontWeight: FontWeight.w400,
-                              color: Colors.grey[600]),
-                        ),
-                      ),
-                      Container(
-                        margin: EdgeInsets.only(left: 25.0, bottom: 20),
-                        child: Text(
-                          ':',
-                          style: TextStyle(
-                              fontSize: 15.0,
-                              fontWeight: FontWeight.w500,
-                              color: Colors.grey[600]),
-                        ),
-                      ),
-                      Expanded(
-                        child: Container(
-                          margin: EdgeInsets.only(left: 5.0, bottom: 20),
-                          child: Text(
-                            data.pGuaranteeUsd.display ?? "-",
-                            style: TextStyle(
-                                fontSize: 15.0,
-                                fontWeight: FontWeight.w400,
-                                color: Colors.grey[600]),
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
+                  SizedBox(height: 20),
+                  // Row(
+                  //   crossAxisAlignment: CrossAxisAlignment.start,
+                  //   children: <Widget>[
+                  //     Container(
+                  //       width: 125,
+                  //       alignment: Alignment.topLeft,
+                  //       margin: EdgeInsets.only(left: 20.0),
+                  //       child: Text(
+                  //         Translations.of(context).text(
+                  //             'f_commercial_invoice_detail_tv_warranty_idr_label'),
+                  //         style: TextStyle(
+                  //             fontSize: 15.0,
+                  //             fontWeight: FontWeight.w400,
+                  //             color: Colors.grey[600]),
+                  //       ),
+                  //     ),
+                  //     Container(
+                  //       alignment: Alignment.topLeft,
+                  //       margin: EdgeInsets.only(left: 25.0),
+                  //       child: Text(
+                  //         ':',
+                  //         style: TextStyle(
+                  //             fontSize: 15.0,
+                  //             fontWeight: FontWeight.w400,
+                  //             color: Colors.grey[600]),
+                  //       ),
+                  //     ),
+                  //     Expanded(
+                  //       child: Container(
+                  //         alignment: Alignment.topLeft,
+                  //         margin: EdgeInsets.only(left: 5.0),
+                  //         child: Text(
+                  //           data.pGuaranteeIdr.display ?? "-",
+                  //           style: TextStyle(
+                  //               fontSize: 15.0,
+                  //               fontWeight: FontWeight.w400,
+                  //               color: Colors.grey[600]),
+                  //         ),
+                  //       ),
+                  //     )
+                  //   ],
+                  // ),
+                  // SizedBox(height: 10),
+                  // Row(
+                  //   crossAxisAlignment: CrossAxisAlignment.start,
+                  //   children: <Widget>[
+                  //     Container(
+                  //       alignment: Alignment.topLeft,
+                  //       width: 125,
+                  //       margin: EdgeInsets.only(left: 20.0, bottom: 20),
+                  //       child: Text(
+                  //         Translations.of(context).text(
+                  //             'f_commercial_invoice_detail_tv_warranty_usd_label'),
+                  //         style: TextStyle(
+                  //             fontSize: 15.0,
+                  //             fontWeight: FontWeight.w400,
+                  //             color: Colors.grey[600]),
+                  //       ),
+                  //     ),
+                  //     Container(
+                  //       margin: EdgeInsets.only(left: 25.0, bottom: 20),
+                  //       child: Text(
+                  //         ':',
+                  //         style: TextStyle(
+                  //             fontSize: 15.0,
+                  //             fontWeight: FontWeight.w500,
+                  //             color: Colors.grey[600]),
+                  //       ),
+                  //     ),
+                  //     Expanded(
+                  //       child: Container(
+                  //         margin: EdgeInsets.only(left: 5.0, bottom: 20),
+                  //         child: Text(
+                  //           data.pGuaranteeUsd.display ?? "-",
+                  //           style: TextStyle(
+                  //               fontSize: 15.0,
+                  //               fontWeight: FontWeight.w400,
+                  //               color: Colors.grey[600]),
+                  //         ),
+                  //       ),
+                  //     )
+                  //   ],
+                  // ),
                 ],
               ),
             ),
@@ -1632,49 +1629,49 @@ class InvoiceCustGPIRnGPIKState extends State<InvoiceCustGPIRnGPIK>
                       )
                     ],
                   ),
-                  SizedBox(height: 10),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Container(
-                        width: 125,
-                        alignment: Alignment.topLeft,
-                        margin: EdgeInsets.only(left: 20.0),
-                        child: Text(
-                          Translations.of(context).text(
-                              'f_commercial_invoice_detail_tv_warranty_idr_label'),
-                          style: TextStyle(
-                              fontSize: 15.0,
-                              fontWeight: FontWeight.w400,
-                              color: Colors.grey[600]),
-                        ),
-                      ),
-                      Container(
-                        alignment: Alignment.topLeft,
-                        margin: EdgeInsets.only(left: 25.0),
-                        child: Text(
-                          ':',
-                          style: TextStyle(
-                              fontSize: 15.0,
-                              fontWeight: FontWeight.w400,
-                              color: Colors.grey[600]),
-                        ),
-                      ),
-                      Expanded(
-                        child: Container(
-                          alignment: Alignment.topLeft,
-                          margin: EdgeInsets.only(left: 5.0),
-                          child: Text(
-                            data.pGuaranteeIdr.display ?? "-",
-                            style: TextStyle(
-                                fontSize: 15.0,
-                                fontWeight: FontWeight.w400,
-                                color: Colors.grey[600]),
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
+                  // SizedBox(height: 10),
+                  // Row(
+                  //   crossAxisAlignment: CrossAxisAlignment.start,
+                  //   children: <Widget>[
+                  //     Container(
+                  //       width: 125,
+                  //       alignment: Alignment.topLeft,
+                  //       margin: EdgeInsets.only(left: 20.0),
+                  //       child: Text(
+                  //         Translations.of(context).text(
+                  //             'f_commercial_invoice_detail_tv_warranty_idr_label'),
+                  //         style: TextStyle(
+                  //             fontSize: 15.0,
+                  //             fontWeight: FontWeight.w400,
+                  //             color: Colors.grey[600]),
+                  //       ),
+                  //     ),
+                  //     Container(
+                  //       alignment: Alignment.topLeft,
+                  //       margin: EdgeInsets.only(left: 25.0),
+                  //       child: Text(
+                  //         ':',
+                  //         style: TextStyle(
+                  //             fontSize: 15.0,
+                  //             fontWeight: FontWeight.w400,
+                  //             color: Colors.grey[600]),
+                  //       ),
+                  //     ),
+                  //     Expanded(
+                  //       child: Container(
+                  //         alignment: Alignment.topLeft,
+                  //         margin: EdgeInsets.only(left: 5.0),
+                  //         child: Text(
+                  //           data.pGuaranteeIdr.display ?? "-",
+                  //           style: TextStyle(
+                  //               fontSize: 15.0,
+                  //               fontWeight: FontWeight.w400,
+                  //               color: Colors.grey[600]),
+                  //         ),
+                  //       ),
+                  //     )
+                  //   ],
+                  // ),
                   SizedBox(
                     height: 10,
                   ),

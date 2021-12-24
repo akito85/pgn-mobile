@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
-import 'package:dropdown_search/dropdown_search.dart';
 import 'package:pgn_mobile/models/auth_model.dart';
 import 'package:pgn_mobile/models/pengajuan_amandemen_model.dart';
 import 'package:pgn_mobile/models/provinces_model.dart';
@@ -28,7 +27,7 @@ class PengajuanAmandemenForm extends StatefulWidget {
 
 class _PengajuanAmandemenFormState extends State<PengajuanAmandemenForm> {
   List listGenderType = [
-    "Laki-laki",
+    "Laki-Laki",
     "Perempuan",
   ];
   List listMediaType = [
@@ -72,6 +71,7 @@ class _PengajuanAmandemenFormState extends State<PengajuanAmandemenForm> {
   String email = '';
   String phoneNumb = '';
   String statusLokasi;
+  String jenisPemakianGas;
 
   List<Map<String, dynamic>> gasEquip = [
     {"Name": "Kompor 1 Tungku", "Value": 0},
@@ -155,7 +155,7 @@ class _PengajuanAmandemenFormState extends State<PengajuanAmandemenForm> {
         elevation: 0,
         iconTheme: IconThemeData(color: Colors.white),
         title: Text(
-          'Pengajuan Amandemen',
+          'Pengajuan Amendemen',
           style: TextStyle(color: Colors.white, fontSize: 16),
         ),
       ),
@@ -1928,6 +1928,7 @@ class _PengajuanAmandemenFormState extends State<PengajuanAmandemenForm> {
                                   setState(() {
                                     valueMediaType = newValue;
                                   });
+                                  print('INI MEDIA TYPE NYA $valueMediaType');
                                 },
                                 items: listMediaType.map((valueItem) {
                                   return DropdownMenuItem(
@@ -2005,7 +2006,7 @@ class _PengajuanAmandemenFormState extends State<PengajuanAmandemenForm> {
                                           BorderSide(color: Color(0xFFC3C3C3)),
                                       borderRadius:
                                           BorderRadius.all(Radius.circular(5))),
-                                  hintText: 'Kronologi kejadian'),
+                                  hintText: ' '),
                             ),
                           ),
                           Padding(
@@ -2404,7 +2405,18 @@ class _PengajuanAmandemenFormState extends State<PengajuanAmandemenForm> {
                           ),
                           Padding(
                             padding:
-                                EdgeInsets.only(top: 20, left: 16, right: 16),
+                                EdgeInsets.only(top: 10, left: 16, right: 16),
+                            child: Center(
+                                child: Text(
+                              'NPWP dan foto NPWP (tidak mandatory)',
+                              style: TextStyle(
+                                  color: Color(0xFF455055),
+                                  fontWeight: FontWeight.bold),
+                            )),
+                          ),
+                          Padding(
+                            padding:
+                                EdgeInsets.only(top: 30, left: 16, right: 16),
                             child: Text(
                               'Bulan Berlaku yang Diajukan',
                               style: TextStyle(
@@ -2450,33 +2462,40 @@ class _PengajuanAmandemenFormState extends State<PengajuanAmandemenForm> {
                                   fontWeight: FontWeight.bold),
                             ),
                           ),
-                          Padding(
-                            padding: EdgeInsets.only(
-                                top: 10, left: 16, right: 16, bottom: 20),
-                            child: DropdownSearch<DataProvinces>(
-                              mode: Mode.MENU,
-                              onFind: (String filter) => getOwnerTypes(),
-                              itemAsString: (DataProvinces u) => u.name,
-                              onChanged: (DataProvinces data) {
-                                print(data);
-                              },
-                              label: "Pilih Status Kepemilikan",
-                              hint: "Pilih Status Kepemilikan",
-                              dropdownSearchDecoration: InputDecoration(
-                                contentPadding: new EdgeInsets.only(
-                                    left: 15, right: 15, top: 2, bottom: 2),
-                                enabledBorder: OutlineInputBorder(
-                                  borderSide:
-                                      BorderSide(color: Color(0xFFC3C3C3)),
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide:
-                                      BorderSide(color: Color(0xFFC3C3C3)),
-                                ),
-                                border: OutlineInputBorder(
-                                  borderSide:
-                                      BorderSide(color: Color(0xFFC3C3C3)),
-                                ),
+                          Container(
+                            margin: EdgeInsets.only(
+                                top: 10, right: 16, left: 16, bottom: 20),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5),
+                                border: Border.all(
+                                    color: Color(0xFFD3D3D3), width: 1)),
+                            child: Padding(
+                              padding: EdgeInsets.only(left: 10, right: 8),
+                              child: DropdownButton(
+                                hint: Text('Jenis Pemakaian Gas',
+                                    style: TextStyle(
+                                        color: Color(0xFF455055),
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.normal)),
+                                dropdownColor: Colors.white,
+                                icon: Icon(Icons.arrow_drop_down,
+                                    color: Color(0xFF455055)),
+                                isExpanded: true,
+                                underline: SizedBox(),
+                                style: TextStyle(
+                                    color: Color(0xFF455055),
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.normal),
+                                value: jenisPemakianGas,
+                                onChanged: (newValue) {
+                                  setState(() {
+                                    jenisPemakianGas = newValue;
+                                  });
+                                },
+                                items: listJenisPemakaianGas.map((valueItem) {
+                                  return DropdownMenuItem(
+                                      value: valueItem, child: Text(valueItem));
+                                }).toList(),
                               ),
                             ),
                           ),
@@ -2988,7 +3007,7 @@ class _PengajuanAmandemenFormState extends State<PengajuanAmandemenForm> {
                                           BorderSide(color: Color(0xFFC3C3C3)),
                                       borderRadius:
                                           BorderRadius.all(Radius.circular(5))),
-                                  hintText: 'Kronologi kejadian'),
+                                  hintText: ' '),
                             ),
                           ),
                           Padding(
@@ -3387,13 +3406,14 @@ class _PengajuanAmandemenFormState extends State<PengajuanAmandemenForm> {
       "kecamatan": kecamatanCtrl.text,
       "province": provinsiCtrl.text,
       "postal_code": kodeposCtrl.text,
-      "longitude": locationCtrl.text,
-      "latitude": locationCtrl.text,
+      "kota_kabupaten": kabupatenCtrl.text,
+      "longitude": long,
+      "latitude": lat,
       "person_in_location_status": statusLokasi,
       "info_media": valueMediaType,
       "submission_date": DateFormat('yyy-MM-dd').format(selectedPengajuan),
       "reason": alasanCtrl.text,
-      "customer_group": 'RT',
+      "customer_group": custGroup,
       "electrical_power": dayaCtrl.text,
       "electricity_bill_proof": "url string",
       "npwp_file": "url String",
@@ -3412,9 +3432,7 @@ class _PengajuanAmandemenFormState extends State<PengajuanAmandemenForm> {
     Create create = Create.fromJson(json.decode(response.body));
 
     if (response.statusCode == 200) {
-      showToast(create.dataCreate.message);
-      Navigator.pop(context);
-      Navigator.pop(context);
+      successAlert(create.dataCreate.message, create.dataCreate.formId);
     } else {
       Navigator.pop(context);
       showToast(create.dataCreate.message);
@@ -3454,10 +3472,11 @@ class _PengajuanAmandemenFormState extends State<PengajuanAmandemenForm> {
       "kecamatan": kecamatanCtrl.text,
       "province": provinsiCtrl.text,
       "postal_code": kodeposCtrl.text,
-      "longitude": locationCtrl.text,
-      "latitude": locationCtrl.text,
+      "kota_kabupaten": kabupatenCtrl.text,
+      "longitude": long,
+      "latitude": lat,
       "person_in_location_status": statusLokasi,
-      "info_media": '',
+      "info_media": valueMediaType,
       "customer_group": custGroup,
       "submission_date": DateFormat('yyy-MM-dd').format(selectedPengajuan),
       "submission_customer_group": valueKelompokPelanggan,
@@ -3471,6 +3490,7 @@ class _PengajuanAmandemenFormState extends State<PengajuanAmandemenForm> {
       "npwp_file": "url String",
       "npwp_number": nomorNpwpCtrl.text,
       "ktp_address": ktpAddressCtrl.text,
+      "submission_gas_usage": jenisPemakianGas,
       "customer_signature": 'data:image/png;base64,$encoded',
     });
     print('SEGMEN BODY POST $body');
@@ -3486,9 +3506,7 @@ class _PengajuanAmandemenFormState extends State<PengajuanAmandemenForm> {
     Create create = Create.fromJson(json.decode(response.body));
 
     if (response.statusCode == 200) {
-      showToast(create.dataCreate.message);
-      Navigator.pop(context);
-      Navigator.pop(context);
+      successAlert(create.dataCreate.message, create.dataCreate.formId);
     } else {
       Navigator.pop(context);
       showToast(create.dataCreate.message);
@@ -3545,5 +3563,68 @@ class _PengajuanAmandemenFormState extends State<PengajuanAmandemenForm> {
     setState(() {
       _fileName = null;
     });
+  }
+
+  Future<bool> successAlert(String message, String formID) {
+    var alertStyle = AlertStyle(
+      animationType: AnimationType.fromTop,
+      isCloseButton: false,
+      isOverlayTapDismiss: false,
+      descStyle: TextStyle(fontWeight: FontWeight.bold),
+      animationDuration: Duration(milliseconds: 400),
+      alertBorder: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(0.0),
+        side: BorderSide(
+          color: Colors.grey,
+        ),
+      ),
+      titleStyle: TextStyle(
+        color: Colors.black,
+      ),
+    );
+    return Alert(
+      context: context,
+      style: alertStyle,
+      title: "Information !",
+      content: Column(
+        children: <Widget>[
+          SizedBox(height: 5),
+          Text(
+            message,
+            style: TextStyle(
+                // color: painting.Color.fromRGBO(255, 255, 255, 0),
+                fontSize: 17,
+                fontWeight: FontWeight.w400),
+            textAlign: TextAlign.center,
+          ),
+          SizedBox(height: 5),
+          Text(
+            'Nomor Formulir Layanan Pelanggan Anda: $formID',
+            style: TextStyle(
+                // color: painting.Color.fromRGBO(255, 255, 255, 0),
+                fontSize: 17,
+                fontWeight: FontWeight.w400),
+            textAlign: TextAlign.center,
+          ),
+          SizedBox(height: 10)
+        ],
+      ),
+      buttons: [
+        DialogButton(
+          width: 130,
+          onPressed: () async {
+            Navigator.pop(context);
+            Navigator.pop(context);
+            Navigator.pop(context);
+          },
+          color: Colors.green,
+          child: Text(
+            "Ok",
+            style: TextStyle(
+                color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
+          ),
+        )
+      ],
+    ).show();
   }
 }

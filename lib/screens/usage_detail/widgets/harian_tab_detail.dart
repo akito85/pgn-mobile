@@ -67,7 +67,7 @@ class HarianTabDetailState extends State<HarianTabDetail>
   String hintPeriod = DateFormat("MMMM yyyy").format(DateTime.now()).toString();
   void getPeriod() {
     final now = DateTime.now();
-    final sixMonthAgo = now.subtract(Duration(days: 400));
+    final sixMonthAgo = now.subtract(Duration(days: 150));
     final sixMonthFromNow = DateTime(sixMonthAgo.year, sixMonthAgo.month + 6);
     DateTime date = sixMonthAgo;
     hintPeriod = now.toString();

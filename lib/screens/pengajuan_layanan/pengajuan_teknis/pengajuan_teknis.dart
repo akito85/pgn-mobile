@@ -2,32 +2,37 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
-import 'package:dropdown_search/dropdown_search.dart';
-import 'package:pgn_mobile/models/auth_model.dart';
 import 'package:pgn_mobile/models/pengajuan_teknis_model.dart';
-import 'package:pgn_mobile/models/provinces_model.dart';
 import 'package:pgn_mobile/models/url_cons.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_signature_pad/flutter_signature_pad.dart';
 import 'dart:ui' as ui;
 import 'package:file_picker/file_picker.dart';
 import 'package:pgn_mobile/screens/otp/otp.dart';
-import 'package:pgn_mobile/screens/pengajuan_layanan/widgets/widget_referensi_biaya.dart';
+import 'package:pgn_mobile/screens/pengajuan_layanan/widgets/widget_biaya_pemasangan_kembali.dart';
 import 'package:pgn_mobile/screens/register/widgets/map_point.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
 class PengajuanTeknisForm extends StatefulWidget {
+  final int techId;
+  final String techName;
+  PengajuanTeknisForm({this.techId, this.techName});
   @override
-  _PengajuanTeknisFormState createState() => _PengajuanTeknisFormState();
+  _PengajuanTeknisFormState createState() =>
+      _PengajuanTeknisFormState(techId: techId, techName: techName);
 }
 
 class _PengajuanTeknisFormState extends State<PengajuanTeknisForm> {
+  final int techId;
+  final String techName;
+  _PengajuanTeknisFormState({this.techId, this.techName});
   List listGenderType = [
-    "Laki-laki",
+    "Laki-Laki",
     "Perempuan",
   ];
   List listStatusKepemilikan = [
@@ -44,6 +49,7 @@ class _PengajuanTeknisFormState extends State<PengajuanTeknisForm> {
   bool visibleAlamat = false;
   bool visibleDataPelengkap = false;
   bool visibleReview = false;
+  String _fileName;
 
   String custName = '';
   String custID = '';
@@ -64,6 +70,8 @@ class _PengajuanTeknisFormState extends State<PengajuanTeknisForm> {
   TextEditingController kodeposCtrl = new TextEditingController();
   TextEditingController locationCtrl = new TextEditingController();
   TextEditingController alasanCtrl = new TextEditingController();
+  TextEditingController numberNpwpCtrl = new TextEditingController();
+  TextEditingController ktpAddressCtrl = new TextEditingController();
   final storageCache = FlutterSecureStorage();
   ByteData _img = ByteData(0);
   final _sign = GlobalKey<SignatureState>();
@@ -1419,38 +1427,211 @@ class _PengajuanTeknisFormState extends State<PengajuanTeknisForm> {
                     Padding(
                       padding: EdgeInsets.only(top: 20, left: 16, right: 16),
                       child: Text(
+                        'Alamat Sesuai KTP',
+                        style: TextStyle(
+                            color: Color(0xFF455055),
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(top: 10, left: 16, right: 16),
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(5.0),
+                          border: Border.all(color: Color(0xFFD3D3D3))),
+                      child: TextFormField(
+                        keyboardType: TextInputType.text,
+                        controller: ktpAddressCtrl,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Data tidak boleh kosong!';
+                          }
+                          return null;
+                        },
+                        decoration: InputDecoration(
+                          hintText: 'Jakarta',
+                          hintStyle: TextStyle(color: Colors.grey),
+                          contentPadding: new EdgeInsets.symmetric(
+                              vertical: 12.0, horizontal: 15.0),
+                          disabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(5),
+                            borderSide:
+                                BorderSide(color: Colors.white, width: 2.0),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(5),
+                            borderSide:
+                                BorderSide(color: Colors.white, width: 2.0),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(5),
+                            borderSide:
+                                BorderSide(color: Colors.white, width: 2.0),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(top: 20, left: 16, right: 16),
+                      child: Text(
+                        'Nomer NPWP',
+                        style: TextStyle(
+                            color: Color(0xFF455055),
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(top: 10, left: 16, right: 16),
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(5.0),
+                          border: Border.all(color: Color(0xFFD3D3D3))),
+                      child: TextFormField(
+                        keyboardType: TextInputType.number,
+                        controller: numberNpwpCtrl,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Data tidak boleh kosong!';
+                          }
+                          return null;
+                        },
+                        decoration: InputDecoration(
+                          hintText: '000000000',
+                          hintStyle: TextStyle(color: Colors.grey),
+                          contentPadding: new EdgeInsets.symmetric(
+                              vertical: 12.0, horizontal: 15.0),
+                          disabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(5),
+                            borderSide:
+                                BorderSide(color: Colors.white, width: 2.0),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(5),
+                            borderSide:
+                                BorderSide(color: Colors.white, width: 2.0),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(5),
+                            borderSide:
+                                BorderSide(color: Colors.white, width: 2.0),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(top: 20, left: 16, right: 16),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              'Foto NPWP',
+                              style: TextStyle(
+                                  color: Color(0xFF455055),
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                _fileName = null;
+                              });
+                            },
+                            child: Text(
+                              'Hapus',
+                              textAlign: TextAlign.right,
+                              style: TextStyle(
+                                  color: Color(0xFF427CEF),
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(
+                          left: 16, right: 16, top: 20, bottom: 10),
+                      child: DottedBorder(
+                        dashPattern: [3.1],
+                        color: Color(0xFFD3D3D3),
+                        strokeWidth: 1,
+                        child: Container(
+                          height: 60,
+                          child: Center(
+                            child: GestureDetector(
+                              onTap: () {
+                                _pickFiles();
+                              },
+                              child: _fileName != null
+                                  ? Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 10, right: 10),
+                                      child: Text(
+                                        _fileName,
+                                        style: TextStyle(
+                                            color: Color(0xFF427CEF),
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    )
+                                  : Text(
+                                      'Unggah Foto NPWP',
+                                      style: TextStyle(
+                                          color: Color(0xFF427CEF),
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(top: 10, left: 16, right: 16),
+                      child: Center(
+                          child: Text(
+                        'NPWP dan foto NPWP (tidak mandatory)',
+                        style: TextStyle(
+                            color: Color(0xFF455055),
+                            fontWeight: FontWeight.bold),
+                      )),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(top: 30, left: 16, right: 16),
+                      child: Text(
                         'Layanan Teknis',
                         style: TextStyle(
                             color: Color(0xFF455055),
                             fontWeight: FontWeight.bold),
                       ),
                     ),
-                    Padding(
-                      padding: EdgeInsets.only(
-                          top: 10, left: 16, right: 16, bottom: 20),
-                      child: DropdownSearch<DataTechType>(
-                        mode: Mode.MENU,
-                        onFind: (String filter) => getTechTypes(),
-                        itemAsString: (DataTechType u) => u.name,
-                        onChanged: (DataTechType data) {
-                          print(data);
-                          setState(() {
-                            teknisType = data.name;
-                          });
-                        },
-                        label: "Jenis Layanan Teknis",
-                        hint: "Pilih Layanan Teknis",
-                        dropdownSearchDecoration: InputDecoration(
-                          contentPadding: new EdgeInsets.only(
-                              left: 15, right: 15, top: 2, bottom: 2),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Color(0xFFC3C3C3)),
+                    Container(
+                      margin: EdgeInsets.only(top: 10, left: 16, right: 16),
+                      decoration: BoxDecoration(
+                          color: Color(0xFFF4F4F4),
+                          borderRadius: BorderRadius.circular(5.0),
+                          border: Border.all(color: Color(0xFFD3D3D3))),
+                      child: TextFormField(
+                        enabled: false,
+                        keyboardType: TextInputType.text,
+                        decoration: InputDecoration(
+                          hintText: this.techName,
+                          hintStyle: TextStyle(color: Colors.black),
+                          contentPadding: new EdgeInsets.symmetric(
+                              vertical: 12.0, horizontal: 15.0),
+                          disabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(5),
+                            borderSide: BorderSide(
+                                color: Color(0xFFF4F4F4), width: 2.0),
                           ),
                           focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Color(0xFFC3C3C3)),
+                            borderRadius: BorderRadius.circular(5),
+                            borderSide:
+                                BorderSide(color: Colors.blue, width: 2.0),
                           ),
-                          border: OutlineInputBorder(
-                            borderSide: BorderSide(color: Color(0xFFC3C3C3)),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(5),
+                            borderSide: BorderSide(
+                                color: Color(0xFFF4F4F4), width: 2.0),
                           ),
                         ),
                       ),
@@ -1495,7 +1676,7 @@ class _PengajuanTeknisFormState extends State<PengajuanTeknisForm> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => WidgetReferensiBiaya(),
+                            builder: (context) => WidgetReferensiBiayaTeknis(),
                           ),
                         );
                       },
@@ -1676,7 +1857,6 @@ class _PengajuanTeknisFormState extends State<PengajuanTeknisForm> {
                               onPressed: () {
                                 final sign = _sign.currentState;
                                 if (_formKeyPelengkap.currentState.validate() &&
-                                    teknisType != null &&
                                     sign.hasPoints) {
                                   addFormAlert();
                                 } else if (!sign.hasPoints) {
@@ -1829,13 +2009,18 @@ class _PengajuanTeknisFormState extends State<PengajuanTeknisForm> {
       "kecamatan": kecamatanCtrl.text,
       "province": provinsiCtrl.text,
       "postal_code": kodeposCtrl.text,
-      "longitude": locationCtrl.text,
-      "latitude": locationCtrl.text,
+      "kota_kabupaten": kabupatenCtrl.text,
+      "longitude": long,
+      "latitude": lat,
       "person_in_location_status": statusLokasi,
-      "technical_type": teknisType,
+      "technical_type": this.techName,
+      'technical_type_id': this.techId,
       "info_media": '',
       "submission_date": DateFormat('yyy-MM-dd').format(selectedPengajuan),
       "reason": alasanCtrl.text,
+      "npwp_number": numberNpwpCtrl.text,
+      "ktp_address": ktpAddressCtrl.text,
+      "npwp_file": 'test',
       "customer_signature": 'data:image/png;base64,$encoded',
     });
     var response = await http.post(
@@ -1849,9 +2034,7 @@ class _PengajuanTeknisFormState extends State<PengajuanTeknisForm> {
     Create create = Create.fromJson(json.decode(response.body));
 
     if (response.statusCode == 200) {
-      showToast(create.dataCreate.message);
-      Navigator.pop(context);
-      Navigator.pop(context);
+      successAlert(create.dataCreate.message, create.dataCreate.formId);
     } else {
       Navigator.pop(context);
       showToast(create.dataCreate.message);
@@ -1870,5 +2053,92 @@ class _PengajuanTeknisFormState extends State<PengajuanTeknisForm> {
     getTechType = GetTechTypes.fromJson(json.decode(responseTechType.body));
     var dataTechTypes = getTechType.data;
     return dataTechTypes;
+  }
+
+  void _pickFiles() async {
+    _resetState();
+    FilePickerResult result = await FilePicker.platform.pickFiles();
+
+    if (result != null) {
+      File file = File(result.files.single.path.toString());
+      setState(() {
+        _fileName = result.names.single;
+        print('NAMA FILE : $_fileName');
+      });
+    } else {
+      // User canceled the picker
+    }
+  }
+
+  void _resetState() {
+    if (!mounted) {
+      return;
+    }
+    setState(() {
+      _fileName = null;
+    });
+  }
+
+  Future<bool> successAlert(String message, String formID) {
+    var alertStyle = AlertStyle(
+      animationType: AnimationType.fromTop,
+      isCloseButton: false,
+      isOverlayTapDismiss: false,
+      descStyle: TextStyle(fontWeight: FontWeight.bold),
+      animationDuration: Duration(milliseconds: 400),
+      alertBorder: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(0.0),
+        side: BorderSide(
+          color: Colors.grey,
+        ),
+      ),
+      titleStyle: TextStyle(
+        color: Colors.black,
+      ),
+    );
+    return Alert(
+      context: context,
+      style: alertStyle,
+      title: "Information !",
+      content: Column(
+        children: <Widget>[
+          SizedBox(height: 5),
+          Text(
+            message,
+            style: TextStyle(
+                // color: painting.Color.fromRGBO(255, 255, 255, 0),
+                fontSize: 17,
+                fontWeight: FontWeight.w400),
+            textAlign: TextAlign.center,
+          ),
+          SizedBox(height: 5),
+          Text(
+            'Nomor Formulir Layanan Pelanggan Anda: $formID',
+            style: TextStyle(
+                // color: painting.Color.fromRGBO(255, 255, 255, 0),
+                fontSize: 17,
+                fontWeight: FontWeight.w400),
+            textAlign: TextAlign.center,
+          ),
+          SizedBox(height: 10)
+        ],
+      ),
+      buttons: [
+        DialogButton(
+          width: 130,
+          onPressed: () async {
+            Navigator.pop(context);
+            Navigator.pop(context);
+            Navigator.pop(context);
+          },
+          color: Colors.green,
+          child: Text(
+            "Ok",
+            style: TextStyle(
+                color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
+          ),
+        )
+      ],
+    ).show();
   }
 }

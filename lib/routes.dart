@@ -123,7 +123,7 @@ class _MyFirstState extends State<FirstScreen> {
     _localeOverrideDelegate = new SpecificLocalizationDelegate(null);
     applic.onLocaleChanged = onLocaleChange;
     // getActiveCustomer(context);
-    _firebaseMsgListener();
+    // _firebaseMsgListener();
   }
 
   onLocaleChange(Locale locale) {

@@ -64,9 +64,14 @@ class Create {
 
 class DataCreate {
   String message;
-  DataCreate({this.message});
+  String formId;
+  DataCreate({this.message, this.formId});
 
   factory DataCreate.fromJson(Map<String, dynamic> json) {
+    if (json['report_number'] != null)
+      return DataCreate(
+          message: json['message'], formId: json['report_number']);
+
     return DataCreate(
       message: json['message'],
     );
@@ -153,7 +158,7 @@ class DetailData {
       long: json['longitude'],
       rt: json['rt'],
       rw: json['rw'],
-      kabupaten: json['kabupaten'],
+      kabupaten: json['kota_kabupaten'],
       sign: json['customer_signature'],
       street: json['street'],
       locStat: json['person_in_location_status'],

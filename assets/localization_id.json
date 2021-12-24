@@ -790,5 +790,11 @@
     "f_title_porg_subs_stat_evaluation": "Evaluasi PGN",
     "f_title_porg_subs_stat_construction": "Konstruksi Jaringan",
     "pc_tab_title": "Konfirmasi Pembayaran",
-    "pc_tab_title_desc": "Detail Konfirmasi Pembayaran"
+    "pc_tab_title_desc": "Detail Konfirmasi Pembayaran",
+    "payment_guarantee" : "Jaminan Pembayaran Seharusnya",
+    "available_guarantee" : "Jaminan Pembayaran Tersedia",
+    "current_bill_date": "Tanggal Tagihan Saat Ini",
+    "gas_bill": "Tagihan Gas",
+    "invoice_detail": "Detil Pembayaran",
+    "total_billing": "Total"
 }

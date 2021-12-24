@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 import 'package:pgn_mobile/models/notification_customer_model.dart';
 import 'package:pgn_mobile/models/url_cons.dart';
 import 'package:pgn_mobile/screens/notification_customer/widgets/notification_customer_detail.dart';
@@ -183,87 +184,88 @@ class Card1 extends StatelessWidget {
           margin: EdgeInsets.only(top: 10, left: 10, right: 10),
           elevation: 5,
           clipBehavior: Clip.antiAlias,
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          child: Column(
             children: [
-              if (data.payload.type == 'notifikasi_progress_berlangganan')
-                Padding(
-                  padding: const EdgeInsets.only(top: 10, left: 15),
-                  child: Icon(
-                    Icons.verified_outlined,
-                    color: Colors.green,
-                  ),
-                ),
-              if (data.payload.type == 'Perubahan Ketentuan')
-                Padding(
-                  padding: const EdgeInsets.only(top: 10, left: 15),
-                  child: Icon(
-                    Icons.info_outline_rounded,
-                    color: Color(0xFF427CEF),
-                  ),
-                ),
-              if (data.payload.type == 'Info Pembayaran Pelanggan')
-                Padding(
-                  padding: const EdgeInsets.only(top: 10, left: 15),
-                  child: Icon(
-                    Icons.verified_outlined,
-                    color: Colors.green,
-                  ),
-                ),
-              if (data.payload.type == 'Info Tagihan')
-                Padding(
-                  padding: const EdgeInsets.only(top: 10, left: 15),
-                  child: Icon(
-                    Icons.info_outline_rounded,
-                    color: Color(0xFF427CEF),
-                  ),
-                ),
-              if (data.payload.type == 'Data tagihan terbaru sudah tersedia')
-                Padding(
-                  padding: const EdgeInsets.only(top: 10, left: 15),
-                  child: Icon(
-                    Icons.info_outline_rounded,
-                    color: Color(0xFF427CEF),
-                  ),
-                ),
-              if (data.payload.type == 'konfirmasi_pengajuan_tc')
-                Padding(
-                  padding: const EdgeInsets.only(top: 10, left: 15),
-                  child: Icon(
-                    Icons.verified_outlined,
-                    color: Colors.green,
-                  ),
-                ),
-              if (data.payload.type ==
-                  'Konfirmasi Pengajuan Komerisal Dan Keuangan')
-                Padding(
-                  padding: const EdgeInsets.only(top: 10, left: 15),
-                  child: Icon(
-                    Icons.verified_outlined,
-                    color: Colors.green,
-                  ),
-                ),
-              if (data.payload.type == 'Penutupan Aliran')
-                Padding(
-                  padding: const EdgeInsets.only(top: 10, left: 15),
-                  child: Icon(
-                    Icons.warning_amber_outlined,
-                    color: Colors.red,
-                  ),
-                ),
-              if (data.payload.type == 'Promosi')
-                Padding(
-                  padding: const EdgeInsets.only(top: 10, left: 15),
-                  child: Icon(
-                    Icons.info_outline_rounded,
-                    color: Color(0xFF427CEF),
-                  ),
-                ),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (data.payload.type == 'notifikasi_progress_berlangganan')
+                    Padding(
+                      padding: const EdgeInsets.only(top: 10, left: 15),
+                      child: Icon(
+                        Icons.verified_outlined,
+                        color: Colors.green,
+                      ),
+                    ),
+                  if (data.payload.type == 'Info Perubahan Ketentuan')
+                    Padding(
+                      padding: const EdgeInsets.only(top: 10, left: 15),
+                      child: Icon(
+                        Icons.info_outline_rounded,
+                        color: Color(0xFF427CEF),
+                      ),
+                    ),
+                  if (data.payload.type == 'Info Pembayaran Pelanggan')
+                    Padding(
+                      padding: const EdgeInsets.only(top: 10, left: 15),
+                      child: Icon(
+                        Icons.verified_outlined,
+                        color: Colors.green,
+                      ),
+                    ),
+                  if (data.payload.type == 'Info Tagihan')
+                    Padding(
+                      padding: const EdgeInsets.only(top: 10, left: 15),
+                      child: Icon(
+                        Icons.info_outline_rounded,
+                        color: Color(0xFF427CEF),
+                      ),
+                    ),
+                  if (data.payload.type ==
+                      'Data tagihan terbaru sudah tersedia')
+                    Padding(
+                      padding: const EdgeInsets.only(top: 10, left: 15),
+                      child: Icon(
+                        Icons.info_outline_rounded,
+                        color: Color(0xFF427CEF),
+                      ),
+                    ),
+                  if (data.payload.type ==
+                      'Konfirmasi Pengajuan Technical Complaint')
+                    Padding(
+                      padding: const EdgeInsets.only(top: 10, left: 15),
+                      child: Icon(
+                        Icons.verified_outlined,
+                        color: Colors.green,
+                      ),
+                    ),
+                  if (data.payload.type ==
+                      'Konfirmasi Pengajuan Komerisal Dan Keuangan')
+                    Padding(
+                      padding: const EdgeInsets.only(top: 10, left: 15),
+                      child: Icon(
+                        Icons.verified_outlined,
+                        color: Colors.green,
+                      ),
+                    ),
+                  if (data.payload.type == 'Info Penutupan Aliran')
+                    Padding(
+                      padding: const EdgeInsets.only(top: 10, left: 15),
+                      child: Icon(
+                        Icons.warning_amber_outlined,
+                        color: Colors.red,
+                      ),
+                    ),
+                  if (data.payload.type == 'Promosi')
+                    Padding(
+                      padding: const EdgeInsets.only(top: 10, left: 15),
+                      child: Icon(
+                        Icons.info_outline_rounded,
+                        color: Color(0xFF427CEF),
+                      ),
+                    ),
+                  Expanded(
+                    child: Container(
                       margin: EdgeInsets.only(left: 20, top: 10, right: 15),
                       alignment: Alignment.centerLeft,
                       child: Text(
@@ -272,49 +274,71 @@ class Card1 extends StatelessWidget {
                             TextStyle(color: Color(0xFFADADAD), fontSize: 16),
                       ),
                     ),
-                    Container(
-                      margin: EdgeInsets.only(left: 20, top: 10, right: 15),
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        '${data.payload.title}',
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 2,
-                        softWrap: false,
-                        style: TextStyle(
-                            color: Color(0xFF5C727D),
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold),
-                      ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10, right: 15),
+                    child: Column(
+                      children: [
+                        Text(
+                          DateFormat('dd MMM yyy').format(
+                              DateTime.parse(data.date.toString()).toLocal()),
+                          style: TextStyle(
+                              color: Color(0xFF5C727D),
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        Text(
+                          DateFormat('hh:mm:ss a').format(
+                              DateTime.parse(data.date.toString()).toLocal()),
+                          style: TextStyle(
+                              color: Color(0xFF5C727D),
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ],
                     ),
-                    Padding(
-                      padding: EdgeInsets.only(left: 20, top: 10, right: 15),
-                      child: Divider(),
-                    ),
-                    Container(
-                      margin: EdgeInsets.only(
-                          left: 20, top: 10, right: 15, bottom: 10),
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        '${data.payload.body}',
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 2,
-                        softWrap: false,
-                        style:
-                            TextStyle(color: Color(0xFF5C727D), fontSize: 14),
-                      ),
-                    ),
-                    data.payload.imageUrl != null
-                        ? Container(
-                            margin: EdgeInsets.only(left: 20, bottom: 20),
-                            alignment: Alignment.centerLeft,
-                            child: Image.network(
-                              data.payload.imageUrl,
-                            ),
-                          )
-                        : SizedBox(height: 10),
-                  ],
+                  ),
+                ],
+              ),
+              Container(
+                margin: EdgeInsets.only(left: 60, top: 10, right: 15),
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  '${data.payload.title}',
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 2,
+                  softWrap: false,
+                  style: TextStyle(
+                      color: Color(0xFF5C727D),
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold),
                 ),
               ),
+              Padding(
+                padding: EdgeInsets.only(left: 60, top: 10, right: 15),
+                child: Divider(),
+              ),
+              Container(
+                margin:
+                    EdgeInsets.only(left: 60, top: 10, right: 15, bottom: 10),
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  '${data.payload.body}',
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 2,
+                  softWrap: false,
+                  style: TextStyle(color: Color(0xFF5C727D), fontSize: 14),
+                ),
+              ),
+              data.payload.imageUrl != null
+                  ? Container(
+                      margin: EdgeInsets.only(left: 60, bottom: 20),
+                      alignment: Alignment.centerLeft,
+                      child: Image.network(
+                        data.payload.imageUrl,
+                      ),
+                    )
+                  : SizedBox(height: 10),
             ],
           ),
         ),

@@ -8,7 +8,7 @@ import 'package:pgn_mobile/models/pengajuan_asuransi_model.dart';
 import 'package:pgn_mobile/models/url_cons.dart';
 import 'package:http/http.dart' as http;
 import 'package:pgn_mobile/screens/otp/otp.dart';
-import 'package:pgn_mobile/screens/pengajuan_layanan/berhenti_berlangganan/berhenti_berlangganan_update.dart';
+import 'package:pgn_mobile/screens/pengajuan_layanan/pengajuan_asuransi/pengajuan_asuransi_update.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
 class PengajuanKembaliDetail extends StatefulWidget {
@@ -694,10 +694,10 @@ class _PengajuanKembaliDetailState extends State<PengajuanKembaliDetail> {
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) =>
-                                          BerhentiBerlanggananUpdate(
+                                          PengajuanAsuransiUpdate(
                                               id: widget.id),
                                     ),
-                                  );
+                                  ).then((value) => setState(() {}));
                                 },
                                 style: ElevatedButton.styleFrom(
                                     primary: Color(0xFF81C153),

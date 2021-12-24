@@ -25,7 +25,7 @@ class KlaimAsuransiForm extends StatefulWidget {
 
 class _KlaimAsuransiFormState extends State<KlaimAsuransiForm> {
   List listGenderType = [
-    "Laki-laki",
+    "Laki-Laki",
     "Perempuan",
   ];
 
@@ -1566,8 +1566,18 @@ class _KlaimAsuransiFormState extends State<KlaimAsuransiForm> {
                     ),
                   ),
                   Padding(
+                    padding: EdgeInsets.only(top: 10, left: 16, right: 16),
+                    child: Center(
+                        child: Text(
+                      'NPWP dan foto NPWP (tidak mandatory)',
+                      style: TextStyle(
+                          color: Color(0xFF455055),
+                          fontWeight: FontWeight.bold),
+                    )),
+                  ),
+                  Padding(
                     padding: EdgeInsets.only(
-                        top: 20, left: 16, right: 16, bottom: 30),
+                        top: 30, left: 16, right: 16, bottom: 30),
                     child: DottedBorder(
                       dashPattern: [3.1],
                       color: Color(0xFFD3D3D3),
@@ -1798,7 +1808,7 @@ class _KlaimAsuransiFormState extends State<KlaimAsuransiForm> {
         children: <Widget>[
           SizedBox(height: 5),
           Text(
-            "Anda yakin ingin melakukan pengajuan pengaliran kembali ? ",
+            "Anda yakin ingin melakukan pengajuan klaim asuransi ? ",
             style: TextStyle(
                 // color: painting.Color.fromRGBO(255, 255, 255, 0),
                 fontSize: 17,
@@ -1892,8 +1902,9 @@ class _KlaimAsuransiFormState extends State<KlaimAsuransiForm> {
       "kecamatan": kecamatanCtrl.text,
       "province": provinsiCtrl.text,
       "postal_code": kodeposCtrl.text,
-      "longitude": locationCtrl.text,
-      "latitude": locationCtrl.text,
+      "kota_kabupaten": kabupatenCtrl.text,
+      "longitude": long,
+      "latitude": lat,
       "person_in_location_status": statusLokasi,
       "info_media": '',
       "claim_file": 'test',
@@ -1913,9 +1924,7 @@ class _KlaimAsuransiFormState extends State<KlaimAsuransiForm> {
     Create create = Create.fromJson(json.decode(response.body));
 
     if (response.statusCode == 200) {
-      showToast(create.dataCreate.message);
-      Navigator.pop(context);
-      Navigator.pop(context);
+      successAlert(create.dataCreate.message, create.dataCreate.formId);
     } else {
       Navigator.pop(context);
       showToast(create.dataCreate.message);
@@ -1949,5 +1958,68 @@ class _KlaimAsuransiFormState extends State<KlaimAsuransiForm> {
     setState(() {
       _fileName = null;
     });
+  }
+
+  Future<bool> successAlert(String message, String formID) {
+    var alertStyle = AlertStyle(
+      animationType: AnimationType.fromTop,
+      isCloseButton: false,
+      isOverlayTapDismiss: false,
+      descStyle: TextStyle(fontWeight: FontWeight.bold),
+      animationDuration: Duration(milliseconds: 400),
+      alertBorder: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(0.0),
+        side: BorderSide(
+          color: Colors.grey,
+        ),
+      ),
+      titleStyle: TextStyle(
+        color: Colors.black,
+      ),
+    );
+    return Alert(
+      context: context,
+      style: alertStyle,
+      title: "Information !",
+      content: Column(
+        children: <Widget>[
+          SizedBox(height: 5),
+          Text(
+            message,
+            style: TextStyle(
+                // color: painting.Color.fromRGBO(255, 255, 255, 0),
+                fontSize: 17,
+                fontWeight: FontWeight.w400),
+            textAlign: TextAlign.center,
+          ),
+          SizedBox(height: 5),
+          Text(
+            'Nomor Formulir Layanan Pelanggan Anda: $formID',
+            style: TextStyle(
+                // color: painting.Color.fromRGBO(255, 255, 255, 0),
+                fontSize: 17,
+                fontWeight: FontWeight.w400),
+            textAlign: TextAlign.center,
+          ),
+          SizedBox(height: 10)
+        ],
+      ),
+      buttons: [
+        DialogButton(
+          width: 130,
+          onPressed: () async {
+            Navigator.pop(context);
+            Navigator.pop(context);
+            Navigator.pop(context);
+          },
+          color: Colors.green,
+          child: Text(
+            "Ok",
+            style: TextStyle(
+                color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
+          ),
+        )
+      ],
+    ).show();
   }
 }

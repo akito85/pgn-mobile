@@ -47,6 +47,7 @@ class HarianTabDetailState extends State<Harian> with TickerProviderStateMixin {
     final myFakeDesktopData = List<LinearSalesDateTime>();
 
     data.forEach((itemData) {
+      print('INI DATANYA ${itemData.date.value}');
       DateTime todayDate = DateTime.parse(itemData.date.value);
       myFakeDesktopData
           .add(LinearSalesDateTime(todayDate, itemData.usage.value));
@@ -198,6 +199,7 @@ class HarianTabDetailState extends State<Harian> with TickerProviderStateMixin {
   Widget _buildCharContent(BuildContext context,
       Future<ChartUsageDetail> getChartUsageDetail, String period) {
     print('PERIOD CHANGE $period');
+
     return FutureBuilder<ChartUsageDetail>(
         future: getChartUsageDetail,
         builder: (context, snapshot) {
@@ -406,6 +408,7 @@ class HarianTabDetailState extends State<Harian> with TickerProviderStateMixin {
   }
 
   Widget _buildRow(List<UsageDetailChar> data) {
+    print('DATANYA ${data[0].date.display}');
     return Container(
       height: 212,
       child: Padding(
@@ -436,6 +439,7 @@ class SimpleLineChart extends State<SimpleLineCharts> {
   @override
   void initState() {
     super.initState();
+
     setState(() {
       _timeSeriesChart = charts.TimeSeriesChart(
         seriesList,

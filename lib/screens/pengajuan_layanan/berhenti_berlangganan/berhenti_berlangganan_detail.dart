@@ -10,6 +10,7 @@ import 'package:http/http.dart' as http;
 import 'package:pgn_mobile/screens/otp/otp.dart';
 import 'package:pgn_mobile/screens/pengajuan_layanan/berhenti_berlangganan/berhenti_berlangganan_update.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class BerhentiBerlanggananDetail extends StatefulWidget {
   final int id;
@@ -92,7 +93,8 @@ class _BerhentiBerlanggananDetailState
                           padding: EdgeInsets.only(top: 5, bottom: 5, left: 15),
                           child: Text(
                               DateFormat('dd MMM yyy | hh:mm:ss a').format(
-                                  DateTime.parse(snapshot.data.createdAt)
+                                  DateTime.parse(
+                                          snapshot.data.createdAt.toString())
                                       .toLocal()),
                               style: TextStyle(
                                   color: Colors.white,
@@ -562,7 +564,11 @@ class _BerhentiBerlanggananDetailState
                             Expanded(
                               child: Padding(
                                 padding: const EdgeInsets.only(left: 2),
-                                child: Text('${snapshot.data.npwpFile}'),
+                                child: GestureDetector(
+                                    onTap: () {
+                                      _launchURL(snapshot.data.npwpFile);
+                                    },
+                                    child: Text('${snapshot.data.npwpFile}')),
                               ),
                             ),
                           ],
@@ -650,7 +656,7 @@ class _BerhentiBerlanggananDetailState
                                           BerhentiBerlanggananUpdate(
                                               id: widget.id),
                                     ),
-                                  );
+                                  ).then((value) => setState(() {}));
                                 },
                                 style: ElevatedButton.styleFrom(
                                     primary: Color(0xFF81C153),
@@ -777,5 +783,13 @@ class _BerhentiBerlanggananDetailState
     } else {
       showToast(deleteFormId.dataCreate.message);
     }
+  }
+}
+
+_launchURL(String url) async {
+  if (await canLaunch(url)) {
+    await launch(url);
+  } else {
+    throw 'Could not launch $url';
   }
 }

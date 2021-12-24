@@ -66,9 +66,14 @@ class Create {
 
 class DataCreate {
   String message;
-  DataCreate({this.message});
+  String formId;
+  DataCreate({this.message, this.formId});
 
   factory DataCreate.fromJson(Map<String, dynamic> json) {
+    if (json['report_number'] != null)
+      return DataCreate(
+          message: json['message'], formId: json['report_number']);
+
     return DataCreate(
       message: json['message'],
     );
@@ -106,6 +111,7 @@ class DetailData {
   String createdAt;
   String custGroup;
   String custSubGroup;
+  String jenisPemakianGas;
   int minMonth;
   int maxMonth;
   int avgMonth;
@@ -152,7 +158,8 @@ class DetailData {
       this.minMonth,
       this.ktpAddress,
       this.npwpFile,
-      this.npwpNumb});
+      this.npwpNumb,
+      this.jenisPemakianGas});
   factory DetailData.fromJson(Map<String, dynamic> json) {
     return DetailData(
       id: json['id'],
@@ -170,7 +177,7 @@ class DetailData {
       long: json['longitude'],
       rt: json['rt'],
       rw: json['rw'],
-      kabupaten: json['kabupaten'],
+      kabupaten: json['kota_kabupaten'],
       sign: json['customer_signature'],
       street: json['street'],
       locStat: json['person_in_location_status'],
@@ -178,7 +185,7 @@ class DetailData {
       kelurahan: json['kelurahan'],
       phoneNumb: json['phone_number'],
       postalCode: json['postal_code'],
-      prov: json['province'],
+      prov: json['provice'],
       address: json['address'],
       email: json['email'],
       custGroup: json['customer_group'],
@@ -191,6 +198,7 @@ class DetailData {
       ktpAddress: json['ktp_address'],
       npwpFile: json['npwp_file'],
       npwpNumb: json['npwp_number'],
+      jenisPemakianGas: json['submission_gas_usage'],
       custEquip: CustEquip.fromJson(json['customer_equipments']),
     );
   }

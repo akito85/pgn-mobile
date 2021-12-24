@@ -3,32 +3,37 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:dotted_border/dotted_border.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
-import 'package:pgn_mobile/models/penghentian_sementara_model.dart';
+import 'package:pgn_mobile/models/klaim_asuransi_model.dart';
 import 'package:pgn_mobile/models/url_cons.dart';
 import 'package:http/http.dart' as http;
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter_signature_pad/flutter_signature_pad.dart';
 import 'dart:ui' as ui;
+
 import 'package:pgn_mobile/screens/otp/otp.dart';
-import 'package:pgn_mobile/screens/pengajuan_layanan/widgets/widget_biaya_admin.dart';
 import 'package:pgn_mobile/screens/register/widgets/map_point.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
-class PenghentianPengaliranForm extends StatefulWidget {
+class KlaimAsuransiUpdate extends StatefulWidget {
+  final int id;
+  KlaimAsuransiUpdate({this.id});
   @override
-  _PenghentianPengaliranFormState createState() =>
-      _PenghentianPengaliranFormState();
+  _KlaimAsuransiUpdateState createState() => _KlaimAsuransiUpdateState(id: id);
 }
 
-class _PenghentianPengaliranFormState extends State<PenghentianPengaliranForm> {
+class _KlaimAsuransiUpdateState extends State<KlaimAsuransiUpdate> {
+  final int id;
+  _KlaimAsuransiUpdateState({this.id});
+  DetailData detailDatas = DetailData();
   List listGenderType = [
     "Laki-Laki",
     "Perempuan",
   ];
+
   List listStatusKepemilikan = [
     "Pemilik",
     "Penyewa",
@@ -36,22 +41,28 @@ class _PenghentianPengaliranFormState extends State<PenghentianPengaliranForm> {
   ];
 
   DateTime selected = DateTime.now();
-  DateTime selectedPenghentian = DateTime.now();
-  DateTime selectedPengaliran = DateTime.now();
+  DateTime selectedPengajuan = DateTime.now();
   String valueChoose;
-  String valueMediaType;
-  bool visibleSign = true;
   bool visibleDataDiri = true;
   bool visibleAlamat = false;
   bool visibleDataPelengkap = false;
   bool visibleReview = false;
+  String _fileName;
+  String _fileNameNPWP;
+
   String custName = '';
   String custID = '';
   String email = '';
   String phoneNumb = '';
   String statusLokasi;
 
-  String _fileName;
+  final storageCache = FlutterSecureStorage();
+
+  ByteData _img = ByteData(0);
+  final _sign = GlobalKey<SignatureState>();
+  final _formKeyDataDiri = GlobalKey<FormState>();
+  final _formKeyAlamat = GlobalKey<FormState>();
+  final _formKeyPelengkap = GlobalKey<FormState>();
   TextEditingController tempatLahirCtrl = new TextEditingController();
   TextEditingController nikCtrl = new TextEditingController();
   TextEditingController alamatCtrl = new TextEditingController();
@@ -64,15 +75,9 @@ class _PenghentianPengaliranFormState extends State<PenghentianPengaliranForm> {
   TextEditingController provinsiCtrl = new TextEditingController();
   TextEditingController kodeposCtrl = new TextEditingController();
   TextEditingController locationCtrl = new TextEditingController();
-  TextEditingController alasanCtrl = new TextEditingController();
   TextEditingController numberNpwpCtrl = new TextEditingController();
   TextEditingController ktpAddressCtrl = new TextEditingController();
-  final storageCache = FlutterSecureStorage();
-  ByteData _img = ByteData(0);
-  final _sign = GlobalKey<SignatureState>();
-  final _formKeyDataDiri = GlobalKey<FormState>();
-  final _formKeyAlamat = GlobalKey<FormState>();
-  final _formKeyPelengkap = GlobalKey<FormState>();
+
   Future _showDatePicker() async {
     dynamic selectedPicker = await showDatePicker(
       context: context,
@@ -85,34 +90,11 @@ class _PenghentianPengaliranFormState extends State<PenghentianPengaliranForm> {
     });
   }
 
-  Future _showDatePickerPengajuan() async {
-    dynamic selectedPicker = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(1960),
-      lastDate: DateTime(2050),
-    );
-    setState(() {
-      selectedPenghentian = selectedPicker;
-    });
-  }
-
-  Future _showDatePickerPengaliran() async {
-    dynamic selectedPicker = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(1960),
-      lastDate: DateTime(2050),
-    );
-    setState(() {
-      selectedPengaliran = selectedPicker;
-    });
-  }
-
   void initState() {
     super.initState();
 
-    getDataCred();
+    // getDataCred();
+    getData();
   }
 
   @override
@@ -124,7 +106,7 @@ class _PenghentianPengaliranFormState extends State<PenghentianPengaliranForm> {
         elevation: 0,
         iconTheme: IconThemeData(color: Colors.white),
         title: Text(
-          'Penghentian Sementara Pengaliran',
+          'Update Klaim Asuransi Update',
           style: TextStyle(color: Colors.white, fontSize: 16),
         ),
       ),
@@ -301,7 +283,7 @@ class _PenghentianPengaliranFormState extends State<PenghentianPengaliranForm> {
                         enabled: false,
                         keyboardType: TextInputType.text,
                         decoration: InputDecoration(
-                          hintText: custID,
+                          hintText: detailDatas.custId,
                           hintStyle: TextStyle(color: Colors.black),
                           contentPadding: new EdgeInsets.symmetric(
                               vertical: 12.0, horizontal: 15.0),
@@ -346,7 +328,7 @@ class _PenghentianPengaliranFormState extends State<PenghentianPengaliranForm> {
                               enabled: false,
                               keyboardType: TextInputType.text,
                               decoration: InputDecoration(
-                                hintText: '$custName',
+                                hintText: detailDatas.custName,
                                 hintStyle: TextStyle(color: Colors.black),
                                 contentPadding: new EdgeInsets.symmetric(
                                     vertical: 12.0, horizontal: 15.0),
@@ -556,7 +538,7 @@ class _PenghentianPengaliranFormState extends State<PenghentianPengaliranForm> {
                         enabled: false,
                         keyboardType: TextInputType.text,
                         decoration: InputDecoration(
-                          hintText: email,
+                          hintText: detailDatas.email,
                           hintStyle: TextStyle(color: Colors.black),
                           contentPadding: new EdgeInsets.symmetric(
                               vertical: 12.0, horizontal: 15.0),
@@ -601,7 +583,7 @@ class _PenghentianPengaliranFormState extends State<PenghentianPengaliranForm> {
                           prefixStyle: TextStyle(color: Color(0xFF828388)),
                           contentPadding: new EdgeInsets.symmetric(
                               vertical: 12.0, horizontal: 15.0),
-                          hintText: '+$phoneNumb',
+                          hintText: '+${detailDatas.phoneNumb}',
                           hintStyle: TextStyle(color: Colors.black),
                           disabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(5),
@@ -712,7 +694,7 @@ class _PenghentianPengaliranFormState extends State<PenghentianPengaliranForm> {
                         enabled: false,
                         keyboardType: TextInputType.text,
                         decoration: InputDecoration(
-                          hintText: custID,
+                          hintText: detailDatas.custId,
                           hintStyle: TextStyle(color: Colors.black),
                           contentPadding: new EdgeInsets.symmetric(
                               vertical: 12.0, horizontal: 15.0),
@@ -1375,571 +1357,438 @@ class _PenghentianPengaliranFormState extends State<PenghentianPengaliranForm> {
           ),
           Visibility(
             visible: visibleDataPelengkap,
-            child: Form(
-              key: _formKeyPelengkap,
-              child: Container(
-                alignment: Alignment.bottomCenter,
-                margin: EdgeInsets.only(top: 100),
-                padding: EdgeInsets.only(left: 18, right: 18, top: 10),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(25),
-                      topRight: Radius.circular(25)),
-                ),
-                child: ListView(
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.only(top: 20, left: 16, right: 16),
-                      child: Text(
-                        'Customer ID',
-                        style: TextStyle(
-                            color: Color(0xFF455055),
-                            fontWeight: FontWeight.bold),
-                      ),
+            child: Container(
+              alignment: Alignment.bottomCenter,
+              margin: EdgeInsets.only(top: 100),
+              padding: EdgeInsets.only(left: 18, right: 18, top: 10),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(25),
+                    topRight: Radius.circular(25)),
+              ),
+              child: ListView(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(top: 20, left: 16, right: 16),
+                    child: Text(
+                      'Customer ID',
+                      style: TextStyle(
+                          color: Color(0xFF455055),
+                          fontWeight: FontWeight.bold),
                     ),
-                    Container(
-                      margin: EdgeInsets.only(top: 10, left: 16, right: 16),
-                      decoration: BoxDecoration(
-                          color: Color(0xFFF4F4F4),
-                          borderRadius: BorderRadius.circular(5.0),
-                          border: Border.all(color: Color(0xFFD3D3D3))),
-                      child: TextFormField(
-                        enabled: false,
-                        keyboardType: TextInputType.text,
-                        decoration: InputDecoration(
-                          hintText: custID,
-                          hintStyle: TextStyle(color: Colors.black),
-                          contentPadding: new EdgeInsets.symmetric(
-                              vertical: 12.0, horizontal: 15.0),
-                          disabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(5),
-                            borderSide: BorderSide(
-                                color: Color(0xFFF4F4F4), width: 2.0),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(5),
-                            borderSide:
-                                BorderSide(color: Colors.blue, width: 2.0),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(5),
-                            borderSide: BorderSide(
-                                color: Color(0xFFF4F4F4), width: 2.0),
-                          ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(top: 10, left: 16, right: 16),
+                    decoration: BoxDecoration(
+                        color: Color(0xFFF4F4F4),
+                        borderRadius: BorderRadius.circular(5.0),
+                        border: Border.all(color: Color(0xFFD3D3D3))),
+                    child: TextFormField(
+                      enabled: false,
+                      keyboardType: TextInputType.text,
+                      decoration: InputDecoration(
+                        hintText: detailDatas.custId,
+                        hintStyle: TextStyle(color: Colors.black),
+                        contentPadding: new EdgeInsets.symmetric(
+                            vertical: 12.0, horizontal: 15.0),
+                        disabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(5),
+                          borderSide:
+                              BorderSide(color: Color(0xFFF4F4F4), width: 2.0),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(5),
+                          borderSide:
+                              BorderSide(color: Colors.blue, width: 2.0),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(5),
+                          borderSide:
+                              BorderSide(color: Color(0xFFF4F4F4), width: 2.0),
                         ),
                       ),
                     ),
-                    Padding(
-                      padding: EdgeInsets.only(top: 20, left: 16, right: 16),
-                      child: Text(
-                        'Alamat Sesuai KTP',
-                        style: TextStyle(
-                            color: Color(0xFF455055),
-                            fontWeight: FontWeight.bold),
-                      ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 20, left: 16, right: 16),
+                    child: Text(
+                      'Alamat Sesuai KTP',
+                      style: TextStyle(
+                          color: Color(0xFF455055),
+                          fontWeight: FontWeight.bold),
                     ),
-                    Container(
-                      margin: EdgeInsets.only(top: 10, left: 16, right: 16),
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(5.0),
-                          border: Border.all(color: Color(0xFFD3D3D3))),
-                      child: TextFormField(
-                        keyboardType: TextInputType.text,
-                        controller: ktpAddressCtrl,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Data tidak boleh kosong!';
-                          }
-                          return null;
-                        },
-                        decoration: InputDecoration(
-                          hintText: 'Jakarta',
-                          hintStyle: TextStyle(color: Colors.grey),
-                          contentPadding: new EdgeInsets.symmetric(
-                              vertical: 12.0, horizontal: 15.0),
-                          disabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(5),
-                            borderSide:
-                                BorderSide(color: Colors.white, width: 2.0),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(5),
-                            borderSide:
-                                BorderSide(color: Colors.white, width: 2.0),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(5),
-                            borderSide:
-                                BorderSide(color: Colors.white, width: 2.0),
-                          ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(top: 10, left: 16, right: 16),
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(5.0),
+                        border: Border.all(color: Color(0xFFD3D3D3))),
+                    child: TextFormField(
+                      keyboardType: TextInputType.text,
+                      controller: ktpAddressCtrl,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Data tidak boleh kosong!';
+                        }
+                        return null;
+                      },
+                      decoration: InputDecoration(
+                        hintText: 'Jakarta',
+                        hintStyle: TextStyle(color: Colors.grey),
+                        contentPadding: new EdgeInsets.symmetric(
+                            vertical: 12.0, horizontal: 15.0),
+                        disabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(5),
+                          borderSide:
+                              BorderSide(color: Colors.white, width: 2.0),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(5),
+                          borderSide:
+                              BorderSide(color: Colors.white, width: 2.0),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(5),
+                          borderSide:
+                              BorderSide(color: Colors.white, width: 2.0),
                         ),
                       ),
                     ),
-                    Padding(
-                      padding: EdgeInsets.only(top: 20, left: 16, right: 16),
-                      child: Text(
-                        'Nomer NPWP',
-                        style: TextStyle(
-                            color: Color(0xFF455055),
-                            fontWeight: FontWeight.bold),
-                      ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 20, left: 16, right: 16),
+                    child: Text(
+                      'Nomer NPWP',
+                      style: TextStyle(
+                          color: Color(0xFF455055),
+                          fontWeight: FontWeight.bold),
                     ),
-                    Container(
-                      margin: EdgeInsets.only(top: 10, left: 16, right: 16),
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(5.0),
-                          border: Border.all(color: Color(0xFFD3D3D3))),
-                      child: TextFormField(
-                        keyboardType: TextInputType.number,
-                        controller: numberNpwpCtrl,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Data tidak boleh kosong!';
-                          }
-                          return null;
-                        },
-                        decoration: InputDecoration(
-                          hintText: '000000000',
-                          hintStyle: TextStyle(color: Colors.grey),
-                          contentPadding: new EdgeInsets.symmetric(
-                              vertical: 12.0, horizontal: 15.0),
-                          disabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(5),
-                            borderSide:
-                                BorderSide(color: Colors.white, width: 2.0),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(5),
-                            borderSide:
-                                BorderSide(color: Colors.white, width: 2.0),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(5),
-                            borderSide:
-                                BorderSide(color: Colors.white, width: 2.0),
-                          ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(top: 10, left: 16, right: 16),
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(5.0),
+                        border: Border.all(color: Color(0xFFD3D3D3))),
+                    child: TextFormField(
+                      keyboardType: TextInputType.number,
+                      controller: numberNpwpCtrl,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Data tidak boleh kosong!';
+                        }
+                        return null;
+                      },
+                      decoration: InputDecoration(
+                        hintText: '000000000',
+                        hintStyle: TextStyle(color: Colors.grey),
+                        contentPadding: new EdgeInsets.symmetric(
+                            vertical: 12.0, horizontal: 15.0),
+                        disabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(5),
+                          borderSide:
+                              BorderSide(color: Colors.white, width: 2.0),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(5),
+                          borderSide:
+                              BorderSide(color: Colors.white, width: 2.0),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(5),
+                          borderSide:
+                              BorderSide(color: Colors.white, width: 2.0),
                         ),
                       ),
                     ),
-                    Padding(
-                      padding: EdgeInsets.only(top: 20, left: 16, right: 16),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: Text(
-                              'Foto NPWP',
-                              style: TextStyle(
-                                  color: Color(0xFF455055),
-                                  fontWeight: FontWeight.bold),
-                            ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 20, left: 16, right: 16),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            'Foto NPWP',
+                            style: TextStyle(
+                                color: Color(0xFF455055),
+                                fontWeight: FontWeight.bold),
                           ),
-                          GestureDetector(
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              _fileName = null;
+                            });
+                          },
+                          child: Text(
+                            'Hapus',
+                            textAlign: TextAlign.right,
+                            style: TextStyle(
+                                color: Color(0xFF427CEF),
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(
+                        left: 16, right: 16, top: 20, bottom: 10),
+                    child: DottedBorder(
+                      dashPattern: [3.1],
+                      color: Color(0xFFD3D3D3),
+                      strokeWidth: 1,
+                      child: Container(
+                        height: 60,
+                        child: Center(
+                          child: GestureDetector(
                             onTap: () {
-                              setState(() {
-                                _fileName = null;
-                              });
+                              _pickFiles('NPWP');
                             },
-                            child: Text(
-                              'Hapus',
-                              textAlign: TextAlign.right,
-                              style: TextStyle(
-                                  color: Color(0xFF427CEF),
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(
-                          left: 16, right: 16, top: 20, bottom: 10),
-                      child: DottedBorder(
-                        dashPattern: [3.1],
-                        color: Color(0xFFD3D3D3),
-                        strokeWidth: 1,
-                        child: Container(
-                          height: 60,
-                          child: Center(
-                            child: GestureDetector(
-                              onTap: () {
-                                _pickFiles();
-                              },
-                              child: _fileName != null
-                                  ? Padding(
-                                      padding: const EdgeInsets.only(
-                                          left: 10, right: 10),
-                                      child: Text(
-                                        _fileName,
-                                        style: TextStyle(
-                                            color: Color(0xFF427CEF),
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    )
-                                  : Text(
-                                      'Unggah Foto NPWP',
+                            child: _fileNameNPWP != null
+                                ? Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 10, right: 10),
+                                    child: Text(
+                                      _fileName,
                                       style: TextStyle(
                                           color: Color(0xFF427CEF),
                                           fontSize: 12,
                                           fontWeight: FontWeight.bold),
                                     ),
-                            ),
+                                  )
+                                : Text(
+                                    'Unggah Foto NPWP',
+                                    style: TextStyle(
+                                        color: Color(0xFF427CEF),
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.bold),
+                                  ),
                           ),
                         ),
                       ),
                     ),
-                    Padding(
-                      padding: EdgeInsets.only(top: 10, left: 16, right: 16),
-                      child: Center(
-                          child: Text(
-                        'NPWP dan foto NPWP (tidak mandatory)',
-                        style: TextStyle(
-                            color: Color(0xFF455055),
-                            fontWeight: FontWeight.bold),
-                      )),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(top: 30, left: 16, right: 16),
-                      child: Text(
-                        'Tanggal Penghentian',
-                        style: TextStyle(
-                            color: Color(0xFF455055),
-                            fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                    Container(
-                      height: 55,
-                      margin: EdgeInsets.only(top: 10, left: 16, right: 16),
-                      padding: EdgeInsets.only(left: 16, right: 5),
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(5.0),
-                          border: Border.all(color: Color(0xFFC3C3C3))),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Text(DateFormat('d MMM yyy')
-                              .format(selectedPenghentian)),
-                          Expanded(
-                            child: Container(
-                              alignment: Alignment.centerRight,
-                              child: IconButton(
-                                  icon: Icon(Icons.calendar_today_outlined),
-                                  onPressed: () {
-                                    _showDatePickerPengajuan();
-                                  }),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(top: 20, left: 16, right: 16),
-                      child: Text(
-                        'Tanggal Pengaliran Kembali',
-                        style: TextStyle(
-                            color: Color(0xFF455055),
-                            fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                    Container(
-                      height: 55,
-                      margin: EdgeInsets.only(top: 10, left: 16, right: 16),
-                      padding: EdgeInsets.only(left: 16, right: 5),
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(5.0),
-                          border: Border.all(color: Color(0xFFC3C3C3))),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Text(DateFormat('d MMM yyy')
-                              .format(selectedPengaliran)),
-                          Expanded(
-                            child: Container(
-                              alignment: Alignment.centerRight,
-                              child: IconButton(
-                                  icon: Icon(Icons.calendar_today_outlined),
-                                  onPressed: () {
-                                    _showDatePickerPengaliran();
-                                  }),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(top: 20, left: 16, right: 16),
-                      child: Text(
-                        'Alasan',
-                        style: TextStyle(
-                            color: Color(0xFF455055),
-                            fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(top: 10, left: 16, right: 16),
-                      child: TextFormField(
-                        controller: alasanCtrl,
-                        keyboardType: TextInputType.text,
-                        minLines: 5,
-                        maxLines: 5,
-                        maxLength: 2000,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Data tidak boleh kosong!';
-                          }
-                          return null;
-                        },
-                        decoration: const InputDecoration(
-                            border: OutlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: Color(0xFFC3C3C3)),
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(5))),
-                            hintText: ''),
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(top: 20, left: 16, right: 16),
-                      child: Text(
-                        'Tanda Tangan Anda',
-                        style: TextStyle(
-                            color: Color(0xFF455055),
-                            fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                    Container(
-                      height: 200,
-                      margin: EdgeInsets.only(
-                          top: 20, left: 16, right: 16, bottom: 5),
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Signature(
-                          color: Colors.black,
-                          key: _sign,
-                          onSign: () {
-                            final sign = _sign.currentState;
-                            debugPrint(
-                                '${sign.points.length} points in the signature');
-                          },
-                          strokeWidth: 3.0,
-                        ),
-                      ),
-                      color: Colors.black12,
-                    ),
-                    // _img.buffer.lengthInBytes == 0
-                    //     ? Container()
-                    //     : LimitedBox(
-                    //         maxHeight: 200.0,
-                    //         child: Image.memory(_img.buffer.asUint8List())),
-                    Padding(
-                      padding: EdgeInsets.only(
-                          top: 10, left: 16, right: 16, bottom: 40),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          MaterialButton(
-                              color: Color(0xFFC3C3C3),
-                              onPressed: () {
-                                final sign = _sign.currentState;
-                                sign.clear();
-                                setState(() {
-                                  _img = ByteData(0);
-                                });
-                                debugPrint("cleared");
-                              },
-                              child: Text("Hapus")),
-                          SizedBox(width: 10),
-                          // _img.buffer.lengthInBytes == 0
-                          //     ? MaterialButton(
-                          //         color: Colors.green,
-                          //         textColor: Colors.white,
-                          //         onPressed: () async {
-                          //           final sign = _sign.currentState;
-                          //           //retrieve image data, do whatever you want with it (send to server, save locally...)
-                          //           final image = await sign.getData();
-                          //           var data = await image.toByteData(
-                          //               format: ui.ImageByteFormat.png);
-                          //           sign.clear();
-                          //           final encoded =
-                          //               base64.encode(data.buffer.asUint8List());
-                          //           setState(() {
-                          //             _img = data;
-                          //           });
-                          //           debugPrint("onPressed " + encoded);
-                          //         },
-                          //         child: Text("Konfirmasi"))
-                          //     : Container(),
-                        ],
-                      ),
-                    ),
-                    // Container(
-                    //   height: 70,
-                    //   decoration: BoxDecoration(
-                    //       color: Color(0xFF81C153),
-                    //       borderRadius: BorderRadius.circular(5.0),
-                    //       border: Border.all(color: Color(0xFF81C153))),
-                    //   margin: EdgeInsets.only(left: 16, right: 16, bottom: 20),
-                    //   child: Row(
-                    //     children: [
-                    //       Expanded(
-                    //         child: Padding(
-                    //           padding: const EdgeInsets.only(left: 16),
-                    //           child: Text(
-                    //             'Biaya Administrasi:',
-                    //             style: TextStyle(
-                    //               color: Colors.white,
-                    //             ),
-                    //           ),
-                    //         ),
-                    //       ),
-                    //       Padding(
-                    //         padding: const EdgeInsets.only(right: 16),
-                    //         child: Text(
-                    //           'Rp 610.000',
-                    //           style: TextStyle(
-                    //               color: Colors.white,
-                    //               fontWeight: FontWeight.bold),
-                    //         ),
-                    //       ),
-                    //     ],
-                    //   ),
-                    // ),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => WidgetBiayaAdmin(),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 10, left: 16, right: 16),
+                    child: Center(
+                        child: Text(
+                      'NPWP dan foto NPWP (tidak mandatory)',
+                      style: TextStyle(
+                          color: Color(0xFF455055),
+                          fontWeight: FontWeight.bold),
+                    )),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(
+                        top: 30, left: 16, right: 16, bottom: 30),
+                    child: DottedBorder(
+                      dashPattern: [3.1],
+                      color: Color(0xFFD3D3D3),
+                      strokeWidth: 1,
+                      child: Container(
+                        height: 60,
+                        child: Center(
+                          child: GestureDetector(
+                            onTap: () {
+                              _pickFiles('Dokumen');
+                            },
+                            child: _fileName != null
+                                ? Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 10, right: 10),
+                                    child: Text(
+                                      _fileName,
+                                      style: TextStyle(
+                                          color: Color(0xFF427CEF),
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  )
+                                : Text(
+                                    'Unggah Dokumen Klaim Asuransi dengan Materai',
+                                    style: TextStyle(
+                                        color: Color(0xFF427CEF),
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.bold),
+                                  ),
                           ),
-                        );
-                      },
-                      child: Padding(
-                        padding:
-                            EdgeInsets.only(left: 16, right: 16, bottom: 20),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.info_outline_rounded,
-                              color: Color(0xFF427CEF),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.only(left: 10),
-                              child: Text(
-                                'Lihat Referensi Biaya Administrasi',
-                                style: TextStyle(
-                                    color: Color(0xFF427CEF),
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            )
-                          ],
                         ),
                       ),
                     ),
-                    Padding(
-                      padding: EdgeInsets.only(left: 16, right: 16, bottom: 20),
-                      child: Divider(
-                        color: Colors.grey,
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(left: 16, right: 16, bottom: 45),
-                      child: Text(
-                        'Bersama ini menyatakan bertanggung jawab terhadap kebenaran data tersebut dan bersedia memenuhi segala persyaratan & kewajiban yang telah ditetapkan oleh PT Perusahaan Gas Negara Tbk.',
-                        style: TextStyle(
-                          height: 1.5,
-                        ),
-                      ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.only(left: 16, right: 16, bottom: 20),
-                      child: Row(
-                        children: [
-                          ElevatedButton(
-                            onPressed: () {
-                              setState(() {
-                                visibleDataPelengkap = false;
+                  ),
 
-                                visibleDataDiri = false;
-                                visibleAlamat = true;
+                  Padding(
+                    padding: EdgeInsets.only(left: 16, right: 16, bottom: 20),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.download_rounded,
+                          color: Color(0xFF427CEF),
+                        ),
+                        Text(
+                          '  Unduh Template Surat Klaim Asuransi',
+                          style: TextStyle(
+                              color: Color(0xFF427CEF),
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  Padding(
+                    padding: EdgeInsets.only(top: 20, left: 16, right: 16),
+                    child: Text(
+                      'Tanda Tangan Anda',
+                      style: TextStyle(
+                          color: Color(0xFF455055),
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  Container(
+                    height: 200,
+                    margin: EdgeInsets.only(
+                        top: 20, left: 16, right: 16, bottom: 5),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Signature(
+                        color: Colors.black,
+                        key: _sign,
+                        onSign: () {
+                          final sign = _sign.currentState;
+                          debugPrint(
+                              '${sign.points.length} points in the signature');
+                        },
+                        strokeWidth: 3.0,
+                      ),
+                    ),
+                    color: Colors.black12,
+                  ),
+                  // _img.buffer.lengthInBytes == 0
+                  //     ? Container()
+                  //     : LimitedBox(
+                  //         maxHeight: 200.0,
+                  //         child: Image.memory(_img.buffer.asUint8List())),
+                  Padding(
+                    padding: EdgeInsets.only(
+                        top: 10, left: 16, right: 16, bottom: 20),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        MaterialButton(
+                            color: Color(0xFFC3C3C3),
+                            onPressed: () {
+                              final sign = _sign.currentState;
+                              sign.clear();
+                              setState(() {
+                                _img = ByteData(0);
                               });
+                              debugPrint("cleared");
+                            },
+                            child: Text("Hapus")),
+                        SizedBox(width: 10),
+                        // _img.buffer.lengthInBytes == 0
+                        //     ? MaterialButton(
+                        //         color: Colors.green,
+                        //         textColor: Colors.white,
+                        //         onPressed: () async {
+                        //           final sign = _sign.currentState;
+                        //           //retrieve image data, do whatever you want with it (send to server, save locally...)
+                        //           final image = await sign.getData();
+                        //           var data = await image.toByteData(
+                        //               format: ui.ImageByteFormat.png);
+                        //           sign.clear();
+                        //           final encoded =
+                        //               base64.encode(data.buffer.asUint8List());
+                        //           setState(() {
+                        //             _img = data;
+                        //           });
+                        //           debugPrint("onPressed " + encoded);
+                        //         },
+                        //         child: Text("Konfirmasi"))
+                        //     : Container(),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(left: 16, right: 16, bottom: 20),
+                    child: Divider(
+                      color: Colors.grey,
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(left: 16, right: 16, bottom: 45),
+                    child: Text(
+                      'Bersama ini menyatakan bertanggung jawab terhadap kebenaran data tersebut dan bersedia memenuhi segala persyaratan & kewajiban yang telah ditetapkan oleh PT Perusahaan Gas Negara Tbk.',
+                      style: TextStyle(
+                        height: 1.5,
+                      ),
+                    ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(left: 16, right: 16, bottom: 20),
+                    child: Row(
+                      children: [
+                        ElevatedButton(
+                          onPressed: () {
+                            setState(() {
+                              visibleDataPelengkap = false;
+
+                              visibleDataDiri = false;
+                              visibleAlamat = true;
+                            });
+                          },
+                          style: ElevatedButton.styleFrom(
+                              primary: Color(0xFFEFEFEF),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(5)))),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 16, horizontal: 5),
+                            child: Text(
+                              'Kembali',
+                              style: TextStyle(color: Color(0xFF828388)),
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: 15),
+                        Expanded(
+                          child: ElevatedButton(
+                            onPressed: () {
+                              final sign = _sign.currentState;
+                              if (sign.hasPoints) {
+                                addFormAlert();
+                              } else if (!sign.hasPoints) {
+                                showToast('Tanda Tangan harus ada !');
+                              }
                             },
                             style: ElevatedButton.styleFrom(
-                                primary: Color(0xFFEFEFEF),
+                                primary: Color(0xFF427CEF),
                                 shape: RoundedRectangleBorder(
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(5)))),
                             child: Padding(
                               padding: const EdgeInsets.symmetric(
                                   vertical: 16, horizontal: 5),
-                              child: Text(
-                                'Kembali',
-                                style: TextStyle(color: Color(0xFF828388)),
-                              ),
+                              child: Text('Update Pengajuan'),
                             ),
                           ),
-                          SizedBox(width: 15),
-                          Expanded(
-                            child: ElevatedButton(
-                              onPressed: () {
-                                final sign = _sign.currentState;
-                                if (_formKeyPelengkap.currentState.validate() &&
-                                    sign.hasPoints) {
-                                  addFormAlert();
-                                } else if (!sign.hasPoints) {
-                                  showToast('Tanda Tangan harus ada !');
-                                }
-                              },
-                              style: ElevatedButton.styleFrom(
-                                  primary: Color(0xFF427CEF),
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(5)))),
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 16, horizontal: 5),
-                                child: Text('Kirim Pengajuan'),
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
+                        )
+                      ],
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ),
         ],
       ),
     );
-  }
-
-  void getDataCred() async {
-    String custNameString = await storageCache.read(key: 'customer_id');
-    String custIDString = await storageCache.read(key: 'user_name_cust');
-    String emailString = await storageCache.read(key: 'user_email');
-    String userPhoneString = await storageCache.read(key: 'user_mobile_otp');
-    setState(() {
-      custID = custNameString;
-      custName = custIDString;
-      email = emailString;
-      phoneNumb = userPhoneString;
-    });
-  }
-
-  void _nextLokasiPesangan(BuildContext context) async {
-    final result = await Navigator.push(
-        context, MaterialPageRoute(builder: (context) => MapPoint()));
-    print('INI RESULT LAT LANG $result');
-    setState(() {
-      locationCtrl.text = result;
-    });
   }
 
   Future<bool> addFormAlert() {
@@ -1967,7 +1816,7 @@ class _PenghentianPengaliranFormState extends State<PenghentianPengaliranForm> {
         children: <Widget>[
           SizedBox(height: 5),
           Text(
-            "Anda yakin ingin melakukan pengajuan penghentian sementara ? ",
+            "Anda yakin ingin perbarui pengajuan pengaliran kembali ? ",
             style: TextStyle(
                 // color: painting.Color.fromRGBO(255, 255, 255, 0),
                 fontSize: 17,
@@ -2006,9 +1855,100 @@ class _PenghentianPengaliranFormState extends State<PenghentianPengaliranForm> {
     ).show();
   }
 
+  void getDataCred() async {
+    String custNameString = await storageCache.read(key: 'customer_id');
+    String custIDString = await storageCache.read(key: 'user_name_cust');
+    String emailString = await storageCache.read(key: 'user_email');
+    String userPhoneString = await storageCache.read(key: 'user_mobile_otp');
+    setState(() {
+      custID = custNameString;
+      custName = custIDString;
+      email = emailString;
+      phoneNumb = userPhoneString;
+    });
+  }
+
+  void getData() async {
+    print('ID Nya ${widget.id}');
+    String accessToken = await storageCache.read(key: 'access_token');
+    String lang = await storageCache.read(key: 'lang');
+    var response = await http.get(
+        '${UrlCons.mainDevUrl}customer-service/insurance-claim/${widget.id}',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $accessToken',
+          'Accept-Language': lang,
+        });
+    print('GET DETAIL PEMASANGAN KEMBALI ${response.body}');
+    DetailData detailData = DetailData.fromJson(json.decode(response.body));
+    // print('IMAGENYA  ${detailBerhetiBerlanggananData.sign}');
+    // var splitString = detailBerhetiBerlanggananData.sign.split(',');
+    setState(() {
+      detailDatas = detailData;
+      // _byteImage = base64.decode(splitString[1]);
+    });
+    nikCtrl.value = new TextEditingController.fromValue(
+            new TextEditingValue(text: detailData.nik))
+        .value;
+    tempatLahirCtrl.value = new TextEditingController.fromValue(
+            new TextEditingValue(text: detailData.bPlace))
+        .value;
+    valueChoose = detailData.gender;
+    selected = DateTime.parse(detailData.bDate).toLocal();
+    alamatCtrl.value = new TextEditingController.fromValue(
+            new TextEditingValue(text: detailData.address))
+        .value;
+    perumahanCtrl.value = new TextEditingController.fromValue(
+            new TextEditingValue(text: detailData.street))
+        .value;
+    rtCtrl.value = new TextEditingController.fromValue(
+            new TextEditingValue(text: detailData.rt))
+        .value;
+    rwCtrl.value = new TextEditingController.fromValue(
+            new TextEditingValue(text: detailData.rw))
+        .value;
+    kelurahanCtrl.value = new TextEditingController.fromValue(
+            new TextEditingValue(text: detailData.kelurahan))
+        .value;
+    kecamatanCtrl.value = new TextEditingController.fromValue(
+            new TextEditingValue(text: detailData.kecamatan))
+        .value;
+    // kabupatenCtrl.value = new TextEditingController.fromValue(
+    //         new TextEditingValue(text: detailBerhetiBerlangganan.kabupaten))
+    // .value;
+    provinsiCtrl.value = new TextEditingController.fromValue(
+            new TextEditingValue(text: detailData.prov))
+        .value;
+    kodeposCtrl.value = new TextEditingController.fromValue(
+            new TextEditingValue(text: detailData.postalCode))
+        .value;
+    locationCtrl.value = new TextEditingController.fromValue(
+            new TextEditingValue(text: '${detailData.lat},${detailData.long}'))
+        .value;
+    statusLokasi = detailData.locStat;
+
+    ktpAddressCtrl.value = new TextEditingController.fromValue(
+            new TextEditingValue(text: detailData.ktpAddress))
+        .value;
+    numberNpwpCtrl.value = new TextEditingController.fromValue(
+            new TextEditingValue(text: detailData.npwpNumb))
+        .value;
+    kabupatenCtrl.value = new TextEditingController.fromValue(
+            new TextEditingValue(text: detailData.kabupaten))
+        .value;
+  }
+
+  void _nextLokasiPesangan(BuildContext context) async {
+    final result = await Navigator.push(
+        context, MaterialPageRoute(builder: (context) => MapPoint()));
+    print('INI RESULT LAT LANG $result');
+    setState(() {
+      locationCtrl.text = result;
+    });
+  }
+
   void submitForm() async {
     final sign = _sign.currentState;
-    //retrieve image data, do whatever you want with it (send to server, save locally...)
     final image = await sign.getData();
     var data = await image.toByteData(format: ui.ImageByteFormat.png);
     sign.clear();
@@ -2024,14 +1964,14 @@ class _PenghentianPengaliranFormState extends State<PenghentianPengaliranForm> {
     print('GAMBARNYA  data:image/png;base64,$encoded} ');
     String accessToken = await storageCache.read(key: 'access_token');
     var body = json.encode({
-      "customer_id": custID,
-      "customer_name": custName,
+      "customer_id": detailDatas.custId,
+      "customer_name": detailDatas.custName,
       "gender": valueChoose,
       "birth_place": tempatLahirCtrl.text,
       "birth_date": DateFormat('yyy-MM-dd').format(selected),
       "id_card_number": nikCtrl.text,
-      "email": email,
-      "phone_number": phoneNumb,
+      "email": detailDatas.email,
+      "phone_number": detailDatas.phoneNumb,
       "address": alamatCtrl.text,
       "street": perumahanCtrl.text,
       "rt": rwCtrl.text,
@@ -2045,46 +1985,43 @@ class _PenghentianPengaliranFormState extends State<PenghentianPengaliranForm> {
       "latitude": lat,
       "person_in_location_status": statusLokasi,
       "info_media": '',
-      "submission_suspend_date":
-          DateFormat('yyy-MM-dd').format(selectedPenghentian),
-      "submission_enable_date":
-          DateFormat('yyy-MM-dd').format(selectedPengaliran),
-      "reason": alasanCtrl.text,
+      "claim_file": 'test',
       "npwp_number": numberNpwpCtrl.text,
       "ktp_address": ktpAddressCtrl.text,
       "npwp_file": 'test',
       "customer_signature": 'data:image/png;base64,$encoded',
     });
-    var responseCreatePenghentianSementara = await http.post(
-        '${UrlCons.mainProdUrl}customer-service/temporary-suspend',
+    var response = await http.put(
+        '${UrlCons.mainProdUrl}customer-service/insurance-claim/$id',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $accessToken'
         },
         body: body);
-    print(
-        'INI HASIL POST CREATE PENGHASILAN SEMENTARA ${responseCreatePenghentianSementara.body}');
-    CreatePenghentianSementara createPenghentianSementara =
-        CreatePenghentianSementara.fromJson(
-            json.decode(responseCreatePenghentianSementara.body));
+    print('INI HASIL POST CREATE PENGALIRAN KEMBALI ${response.body}');
+    Create create = Create.fromJson(json.decode(response.body));
 
-    if (responseCreatePenghentianSementara.statusCode == 200) {
-      successAlert(createPenghentianSementara.dataCreate.message,
-          createPenghentianSementara.dataCreate.formId);
+    if (response.statusCode == 200) {
+      successAlert(create.dataCreate.message);
     } else {
       Navigator.pop(context);
-      showToast(createPenghentianSementara.dataCreate.message);
+      showToast(create.dataCreate.message);
     }
   }
 
-  void _pickFiles() async {
+  void _pickFiles(String title) async {
     _resetState();
     FilePickerResult result = await FilePicker.platform.pickFiles();
 
     if (result != null) {
       File file = File(result.files.single.path.toString());
       setState(() {
-        _fileName = result.names.single;
+        if (title == 'Dokumen') {
+          _fileName = result.names.single;
+        } else {
+          _fileNameNPWP = result.names.single;
+        }
+
         print('NAMA FILE : $_fileName');
       });
     } else {
@@ -2101,7 +2038,7 @@ class _PenghentianPengaliranFormState extends State<PenghentianPengaliranForm> {
     });
   }
 
-  Future<bool> successAlert(String message, String formID) {
+  Future<bool> successAlert(String message) {
     var alertStyle = AlertStyle(
       animationType: AnimationType.fromTop,
       isCloseButton: false,
@@ -2127,15 +2064,6 @@ class _PenghentianPengaliranFormState extends State<PenghentianPengaliranForm> {
           SizedBox(height: 5),
           Text(
             message,
-            style: TextStyle(
-                // color: painting.Color.fromRGBO(255, 255, 255, 0),
-                fontSize: 17,
-                fontWeight: FontWeight.w400),
-            textAlign: TextAlign.center,
-          ),
-          SizedBox(height: 5),
-          Text(
-            'Nomor Formulir Layanan Pelanggan Anda: $formID',
             style: TextStyle(
                 // color: painting.Color.fromRGBO(255, 255, 255, 0),
                 fontSize: 17,

@@ -26,6 +26,7 @@ class DataCustInvoice {
   String custInvoiceId;
   String custInvoiceName;
   UsagePeriod usagePeriod;
+  String invoicePeriodRT;
   InvoicePeriod invoicePeriod;
   String invoicePeriodS;
   String usagePeriodS;
@@ -57,7 +58,18 @@ class DataCustInvoice {
   String biayaPemasangan;
   String biayaMigrasi;
   String biayaPelayanan;
+  String tBillIdrRT;
+  String tBillUsdRT;
+  dynamic availableGuarantee;
+  dynamic paymentGuatantee;
   String biayaSms;
+  String volumeUsage;
+  String volumeNormal;
+  String volumeOverUsage;
+  dynamic tagihanIDR;
+  String usagePeriodRT;
+  List<CMM> cmm;
+  List<Others> others;
 
   DataCustInvoice(
       {this.maxUsage,
@@ -77,8 +89,16 @@ class DataCustInvoice {
       this.paymentStatus,
       this.pGuaranteeIdr,
       this.pGuaranteeUsd,
-      this.tBillIdr,
-      this.tBillUsd,
+      this.availableGuarantee,
+      this.paymentGuatantee,
+      this.cmm,
+      this.tagihanIDR,
+      this.volumeNormal,
+      this.volumeOverUsage,
+      this.volumeUsage,
+      this.others,
+      this.tBillIdrRT,
+      this.tBillUsdRT,
       this.type,
       this.usagePeriod,
       this.arrersIdr,
@@ -95,7 +115,11 @@ class DataCustInvoice {
       this.biayaPemasangan,
       this.biayaPengaliran,
       this.biayaSms,
-      this.denda});
+      this.denda,
+      this.tBillIdr,
+      this.tBillUsd,
+      this.invoicePeriodRT,
+      this.usagePeriodRT});
 
   factory DataCustInvoice.fromJson(Map<String, dynamic> json) {
     print('INI JSON NYA ${json['type']}');
@@ -131,27 +155,72 @@ class DataCustInvoice {
           biayaSms: json['biasa_sms']);
     } else {
       return DataCustInvoice(
-          invoiceId: json['id'],
-          custInvoiceId: json['customer_id'],
-          custInvoiceName: json['customer_name'],
-          custVolUsage: json['volume_usage'],
-          tBillIdrS: json['total_bill_idr'],
-          pGuaranteeIdrS: json['payment_guarantee_idr'],
-          pGuaranteeUsdS: json['payment_guarantee_usd'],
-          arrersIdr: json['arrears_idr'],
-          arrersUsd: json['arrears_usd'],
-          isPaid: json['is_paid'],
-          invoicePeriodS: json['invoice_period'],
-          usagePeriodS: json['usage_period'],
-          custInvoicePeriod: json['custom_invoice_period'],
-          type: json['type'],
-          denda: json['denda'],
-          biayaPengaliran: json['biaya_pengaliran_kembali'],
-          biayaPelayanan: json['biaya_pelayanan'],
-          biayaPemasangan: json['biaya_pemasangan_kembali'],
-          biayaMigrasi: json['biaya_migrasi'],
-          biayaSms: json['biasa_sms']);
+        invoiceId: json['id'],
+        custInvoiceId: json['customer_id'],
+        custInvoiceName: json['customer_name'],
+        custVolUsage: json['volume_usage'],
+        tBillIdrRT: json['total_bill_idr'],
+        tBillUsdRT: json['total_bill_usd'],
+        isPaid: json['is_paid'],
+        invoicePeriodRT: json['period'],
+        usagePeriodRT: json['due_date'],
+        custInvoicePeriod: json['custom_invoice_period'],
+        type: json['type'],
+        tagihanIDR: json['tagihan_idr'],
+        volumeNormal: json['volume_normal'],
+        volumeOverUsage: json['volume_over_usage'],
+        volumeUsage: json['volume_usage'],
+        others: parseDataOthers(json['other']),
+        availableGuarantee: json['available_guarantee'],
+        paymentGuatantee: json['payment_guarantee'],
+        cmm: parseDataCMM(json['cmm']),
+      );
     }
+  }
+  static List<Others> parseDataOthers(datasJson) {
+    var list = datasJson as List;
+    List<Others> datasOther =
+        list.map((data) => Others.fromJson(data)).toList();
+    return datasOther;
+  }
+
+  static List<CMM> parseDataCMM(datasJson) {
+    var list = datasJson as List;
+    List<CMM> datasCmm = list.map((data) => CMM.fromJson(data)).toList();
+    return datasCmm;
+  }
+}
+
+class Others {
+  String type;
+  String idr;
+  String usd;
+
+  Others({this.idr, this.type, this.usd});
+
+  factory Others.fromJson(Map<String, dynamic> json) {
+    return Others(type: json['type'], idr: json['IDR'], usd: json['USD']);
+  }
+}
+
+class CMM {
+  dynamic standAwal;
+  dynamic standAkhir;
+  dynamic metodePerhitungan;
+  dynamic metodePencatatan;
+
+  CMM(
+      {this.metodePerhitungan,
+      this.standAkhir,
+      this.standAwal,
+      this.metodePencatatan});
+
+  factory CMM.fromJson(Map<String, dynamic> json) {
+    return CMM(
+        standAwal: json['stand_awal'],
+        standAkhir: json['stand_akhir'],
+        metodePerhitungan: json['metode_perhitungan'],
+        metodePencatatan: json['metode_pencatatan']);
   }
 }
 

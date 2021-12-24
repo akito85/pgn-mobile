@@ -58,7 +58,7 @@ class _PembaruanDataiListState extends State<PembaruanDataiList> {
         elevation: 0,
         backgroundColor: Colors.white,
         title: Text(
-          'Pengaliran Kembali',
+          'Pembaruan Data Pelanggan',
           style: TextStyle(color: Colors.black),
         ),
       ),
@@ -321,7 +321,7 @@ class _PembaruanDataiListState extends State<PembaruanDataiList> {
     String accessToken = await storageCache.read(key: 'access_token');
     String lang = await storageCache.read(key: 'lang');
     var responseGetSubsProg = await http.get(
-        '${UrlCons.mainDevUrl}customer-service/update-data-customer?per_page=100&next_page=$nextPage',
+        '${UrlCons.mainDevUrl}customer-service/update-data-customer?per_page=1000&next_page=$nextPage',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $accessToken',
@@ -342,7 +342,7 @@ class _PembaruanDataiListState extends State<PembaruanDataiList> {
     String accessToken = await storageCache.read(key: 'access_token');
     String lang = await storageCache.read(key: 'lang');
     var response = await http.get(
-        '${UrlCons.mainDevUrl}customer-service/update-data-customer?per_page=10',
+        '${UrlCons.mainDevUrl}customer-service/update-data-customer?per_page=1000',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $accessToken',
