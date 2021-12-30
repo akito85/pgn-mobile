@@ -50,6 +50,7 @@ class _PenghentianPengaliranFormState extends State<PenghentianPengaliranForm> {
   String email = '';
   String phoneNumb = '';
   String statusLokasi;
+  File imgNPWP;
 
   String _fileName;
   TextEditingController tempatLahirCtrl = new TextEditingController();
@@ -581,7 +582,7 @@ class _PenghentianPengaliranFormState extends State<PenghentianPengaliranForm> {
                     Padding(
                       padding: EdgeInsets.only(top: 20, left: 16, right: 16),
                       child: Text(
-                        'Nomer Handphone',
+                        'Nomor Handphone',
                         style: TextStyle(
                             color: Color(0xFF455055),
                             fontWeight: FontWeight.bold),
@@ -1480,7 +1481,7 @@ class _PenghentianPengaliranFormState extends State<PenghentianPengaliranForm> {
                     Padding(
                       padding: EdgeInsets.only(top: 20, left: 16, right: 16),
                       child: Text(
-                        'Nomer NPWP',
+                        'Nomor NPWP',
                         style: TextStyle(
                             color: Color(0xFF455055),
                             fontWeight: FontWeight.bold),
@@ -2007,8 +2008,17 @@ class _PenghentianPengaliranFormState extends State<PenghentianPengaliranForm> {
   }
 
   void submitForm() async {
+    String encodedImageNPWP;
+    if (_fileName != null) {
+      Uint8List imageUnit8;
+      imageUnit8 = imgNPWP.readAsBytesSync();
+      String fileExt = imgNPWP.path.split('.').last;
+      encodedImageNPWP =
+          'data:image/$fileExt;base64,${base64Encode(imageUnit8)}';
+    } else {
+      encodedImageNPWP = "";
+    }
     final sign = _sign.currentState;
-    //retrieve image data, do whatever you want with it (send to server, save locally...)
     final image = await sign.getData();
     var data = await image.toByteData(format: ui.ImageByteFormat.png);
     sign.clear();
@@ -2052,7 +2062,7 @@ class _PenghentianPengaliranFormState extends State<PenghentianPengaliranForm> {
       "reason": alasanCtrl.text,
       "npwp_number": numberNpwpCtrl.text,
       "ktp_address": ktpAddressCtrl.text,
-      "npwp_file": 'test',
+      "npwp_file": encodedImageNPWP,
       "customer_signature": 'data:image/png;base64,$encoded',
     });
     var responseCreatePenghentianSementara = await http.post(
@@ -2085,6 +2095,7 @@ class _PenghentianPengaliranFormState extends State<PenghentianPengaliranForm> {
       File file = File(result.files.single.path.toString());
       setState(() {
         _fileName = result.names.single;
+        imgNPWP = file;
         print('NAMA FILE : $_fileName');
       });
     } else {

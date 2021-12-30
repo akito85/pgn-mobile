@@ -483,7 +483,7 @@ class Card1 extends StatelessWidget {
                             child: Container(
                               margin: EdgeInsets.only(left: 5.0, top: 15),
                               child: Text(
-                                data.cFactor,
+                                data.cFactor.toString(),
                                 style: TextStyle(
                                     fontSize: 13.0,
                                     fontWeight: FontWeight.w400,

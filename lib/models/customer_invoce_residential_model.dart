@@ -32,7 +32,7 @@ class DataCustInvoiceResidential {
   String tBillUsd;
   dynamic availableGuarantee;
   dynamic paymentGuatantee;
-
+  String billDate;
   String volumeUsage;
   String volumeNormal;
   String volumeOverUsage;
@@ -64,7 +64,8 @@ class DataCustInvoiceResidential {
       this.volumeNormal,
       this.volumeOverUsage,
       this.volumeUsage,
-      this.others});
+      this.others,
+      this.billDate});
 
   factory DataCustInvoiceResidential.fromJson(Map<String, dynamic> json) {
     return DataCustInvoiceResidential(
@@ -86,6 +87,7 @@ class DataCustInvoiceResidential {
       others: parseDataOthers(json['other']),
       availableGuarantee: json['available_guarantee'],
       paymentGuatantee: json['payment_guarantee'],
+      billDate: json['bill_date'],
       cmm: parseDataCMM(json['cmm']),
     );
   }
@@ -131,7 +133,7 @@ class CMM {
     return CMM(
         standAwal: json['stand_awal'],
         standAkhir: json['stand_akhir'],
-        metodePerhitungan: json['metode_perhitungan'],
+        metodePerhitungan: json['status_meter'],
         metodePencatatan: json['metode_pencatatan']);
   }
 }

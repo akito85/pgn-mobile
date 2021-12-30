@@ -759,7 +759,7 @@ class _UsageDetailRTPKState extends State<UsageDetailRTPK>
     ChartUsageDetailSmartmeter _getContract =
         ChartUsageDetailSmartmeter.fromJson(
             json.decode(responseUsageChar.body));
-    print('RETURN DATA MODEL ${_getContract.data.length}');
+    // print('RETURN DATA MODEL ${_getContract.data.length}');
     return _getContract;
   }
 
@@ -781,7 +781,7 @@ class _UsageDetailRTPKState extends State<UsageDetailRTPK>
     ChartUsageDetailSmartmeter _getContract =
         ChartUsageDetailSmartmeter.fromJson(
             json.decode(responseUsageChar.body));
-    print('RETURN DATA MODEL ${_getContract.data.length}');
+    // print('RETURN DATA MODEL ${_getContract.data.length}');
     return _getContract;
   }
 

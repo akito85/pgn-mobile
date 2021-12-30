@@ -26,6 +26,9 @@ class PengajuanAmandemenForm extends StatefulWidget {
 }
 
 class _PengajuanAmandemenFormState extends State<PengajuanAmandemenForm> {
+  var splitString;
+  Uint8List imageNpwp;
+  Uint8List imageRek;
   List listGenderType = [
     "Laki-Laki",
     "Perempuan",
@@ -72,6 +75,8 @@ class _PengajuanAmandemenFormState extends State<PengajuanAmandemenForm> {
   String phoneNumb = '';
   String statusLokasi;
   String jenisPemakianGas;
+  File imgNPWP;
+  File imgRek;
 
   List<Map<String, dynamic>> gasEquip = [
     {"Name": "Kompor 1 Tungku", "Value": 0},
@@ -705,7 +710,7 @@ class _PengajuanAmandemenFormState extends State<PengajuanAmandemenForm> {
                     Padding(
                       padding: EdgeInsets.only(top: 20, left: 16, right: 16),
                       child: Text(
-                        'Nomer Handphone',
+                        'Nomor Handphone',
                         style: TextStyle(
                             color: Color(0xFF455055),
                             fontWeight: FontWeight.bold),
@@ -1776,7 +1781,7 @@ class _PengajuanAmandemenFormState extends State<PengajuanAmandemenForm> {
                             padding:
                                 EdgeInsets.only(top: 20, left: 16, right: 16),
                             child: Text(
-                              'Nomer NPWP',
+                              'Nomor NPWP',
                               style: TextStyle(
                                   color: Color(0xFF455055),
                                   fontWeight: FontWeight.bold),
@@ -2290,7 +2295,7 @@ class _PengajuanAmandemenFormState extends State<PengajuanAmandemenForm> {
                             padding:
                                 EdgeInsets.only(top: 20, left: 16, right: 16),
                             child: Text(
-                              'Nomer NPWP',
+                              'Nomor NPWP',
                               style: TextStyle(
                                   color: Color(0xFF455055),
                                   fontWeight: FontWeight.bold),
@@ -3374,6 +3379,26 @@ class _PengajuanAmandemenFormState extends State<PengajuanAmandemenForm> {
   }
 
   void submitFormBBG() async {
+    String encodedImageNPWP;
+    String encodedImageRek;
+    if (_fileName != null) {
+      Uint8List imageUnit8;
+      imageUnit8 = imgNPWP.readAsBytesSync();
+      String fileExt = imgNPWP.path.split('.').last;
+      encodedImageNPWP =
+          'data:image/$fileExt;base64,${base64Encode(imageUnit8)}';
+    } else {
+      encodedImageNPWP = "";
+    }
+    if (_fileNameRekListrik != null) {
+      Uint8List imageUnit8;
+      imageUnit8 = imgRek.readAsBytesSync();
+      String fileExt = imgRek.path.split('.').last;
+      encodedImageRek =
+          'data:image/$fileExt;base64,${base64Encode(imageUnit8)}';
+    } else {
+      encodedImageRek = "";
+    }
     final sign = _sign.currentState;
     final image = await sign.getData();
     var data = await image.toByteData(format: ui.ImageByteFormat.png);
@@ -3415,8 +3440,8 @@ class _PengajuanAmandemenFormState extends State<PengajuanAmandemenForm> {
       "reason": alasanCtrl.text,
       "customer_group": custGroup,
       "electrical_power": dayaCtrl.text,
-      "electricity_bill_proof": "url string",
-      "npwp_file": "url String",
+      "electricity_bill_proof": encodedImageRek,
+      "npwp_file": encodedImageNPWP,
       "npwp_number": nomorNpwpCtrl.text,
       "ktp_address": ktpAddressCtrl.text,
       "customer_signature": 'data:image/png;base64,$encoded',
@@ -3440,6 +3465,16 @@ class _PengajuanAmandemenFormState extends State<PengajuanAmandemenForm> {
   }
 
   void submitForm() async {
+    String encodedImageNPWP;
+    if (_fileName != null) {
+      Uint8List imageUnit8;
+      imageUnit8 = imgNPWP.readAsBytesSync();
+      String fileExt = imgNPWP.path.split('.').last;
+      encodedImageNPWP =
+          'data:image/$fileExt;base64,${base64Encode(imageUnit8)}';
+    } else {
+      encodedImageNPWP = "";
+    }
     final sign = _sign.currentState;
     final image = await sign.getData();
     var data = await image.toByteData(format: ui.ImageByteFormat.png);
@@ -3487,10 +3522,10 @@ class _PengajuanAmandemenFormState extends State<PengajuanAmandemenForm> {
       "operational_day_week": int.parse(hariperMingguCtrl.text),
       "customer_equipments": gasEquip,
       "reason": alasanCtrl.text,
-      "npwp_file": "url String",
+      "npwp_file": encodedImageNPWP,
       "npwp_number": nomorNpwpCtrl.text,
       "ktp_address": ktpAddressCtrl.text,
-      "submission_gas_usage": jenisPemakianGas,
+      "gas_usage_type_submission": jenisPemakianGas,
       "customer_signature": 'data:image/png;base64,$encoded',
     });
     print('SEGMEN BODY POST $body');
@@ -3536,18 +3571,21 @@ class _PengajuanAmandemenFormState extends State<PengajuanAmandemenForm> {
 
   void _pickFiles(String status) async {
     _resetState();
-    FilePickerResult result = await FilePicker.platform.pickFiles();
+    FilePickerResult result = await FilePicker.platform.pickFiles(
+        type: FileType.custom, allowedExtensions: ['jpg', 'png', 'jpeg']);
 
     if (result != null) {
       File file = File(result.files.single.path.toString());
       if (status == 'rekListrik') {
         setState(() {
           _fileNameRekListrik = result.names.single;
+          imgRek = file;
           print('NAMA FILE : $_fileName');
         });
       } else {
         setState(() {
           _fileName = result.names.single;
+          imgNPWP = file;
           print('NAMA FILE : $_fileName');
         });
       }

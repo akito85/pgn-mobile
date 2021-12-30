@@ -8,10 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
-import 'package:dropdown_search/dropdown_search.dart';
-import 'package:pgn_mobile/models/auth_model.dart';
 import 'package:pgn_mobile/models/pengajuan_amandemen_model.dart';
-import 'package:pgn_mobile/models/provinces_model.dart';
 import 'package:pgn_mobile/models/url_cons.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_signature_pad/flutter_signature_pad.dart';
@@ -34,6 +31,9 @@ class _PengajuanAmandemenUpdateState extends State<PengajuanAmandemenUpdate> {
 
   _PengajuanAmandemenUpdateState({this.id});
   DetailData detailDatas = DetailData();
+  var splitString;
+  Uint8List imageNpwp;
+  Uint8List imageRek;
   List listGenderType = [
     "Laki-Laki",
     "Perempuan",
@@ -73,6 +73,8 @@ class _PengajuanAmandemenUpdateState extends State<PengajuanAmandemenUpdate> {
   String email = '';
   String phoneNumb = '';
   String statusLokasi;
+  File imgNPWP;
+  File imgRek;
 
   TextEditingController tempatLahirCtrl = new TextEditingController();
   TextEditingController nikCtrl = new TextEditingController();
@@ -698,7 +700,7 @@ class _PengajuanAmandemenUpdateState extends State<PengajuanAmandemenUpdate> {
                     Padding(
                       padding: EdgeInsets.only(top: 20, left: 16, right: 16),
                       child: Text(
-                        'Nomer Handphone',
+                        'Nomor Handphone',
                         style: TextStyle(
                             color: Color(0xFF455055),
                             fontWeight: FontWeight.bold),
@@ -1653,20 +1655,36 @@ class _PengajuanAmandemenUpdateState extends State<PengajuanAmandemenUpdate> {
                                   fontWeight: FontWeight.bold),
                             ),
                           ),
-                          GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                _fileNameRekListrik = null;
-                              });
-                            },
-                            child: Text(
-                              'Hapus',
-                              textAlign: TextAlign.right,
-                              style: TextStyle(
-                                  color: Color(0xFF427CEF),
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ),
+                          detailDatas.electricalBillProof == ""
+                              ? GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      _fileNameRekListrik = null;
+                                    });
+                                  },
+                                  child: Text(
+                                    'Hapus',
+                                    textAlign: TextAlign.right,
+                                    style: TextStyle(
+                                        color: Color(0xFF427CEF),
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                )
+                              : GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      detailDatas.electricalBillProof = "";
+                                    });
+                                    _pickFiles('rekListrik');
+                                  },
+                                  child: Text(
+                                    'Ubah',
+                                    textAlign: TextAlign.right,
+                                    style: TextStyle(
+                                        color: Color(0xFF427CEF),
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
                         ],
                       ),
                     ),
@@ -1677,35 +1695,44 @@ class _PengajuanAmandemenUpdateState extends State<PengajuanAmandemenUpdate> {
                         dashPattern: [3.1],
                         color: Color(0xFFD3D3D3),
                         strokeWidth: 1,
-                        child: Container(
-                          height: 60,
-                          child: Center(
-                            child: GestureDetector(
-                              onTap: () {
-                                _pickFiles('rekListrik');
-                              },
-                              child: _fileNameRekListrik != null
-                                  ? Padding(
-                                      padding: const EdgeInsets.only(
-                                          left: 10, right: 10),
-                                      child: Text(
-                                        _fileNameRekListrik,
-                                        style: TextStyle(
-                                            color: Color(0xFF427CEF),
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    )
-                                  : Text(
-                                      'Unggah Bukti Rekening Listrik',
-                                      style: TextStyle(
-                                          color: Color(0xFF427CEF),
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                            ),
-                          ),
-                        ),
+                        child: detailDatas.electricalBillProof == ""
+                            ? Container(
+                                height: 60,
+                                child: Center(
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      _pickFiles('rekListrik');
+                                    },
+                                    child: _fileNameRekListrik != null
+                                        ? Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 10, right: 10),
+                                            child: Text(
+                                              _fileNameRekListrik,
+                                              style: TextStyle(
+                                                  color: Color(0xFF427CEF),
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                          )
+                                        : Text(
+                                            'Unggah Bukti Rekening Listrik',
+                                            style: TextStyle(
+                                                color: Color(0xFF427CEF),
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                  ),
+                                ),
+                              )
+                            : Container(
+                                height: 150,
+                                decoration: BoxDecoration(
+                                    color: Colors.black,
+                                    borderRadius: BorderRadius.circular(5),
+                                    image: DecorationImage(
+                                        fit: BoxFit.contain,
+                                        image: MemoryImage(imageRek)))),
                       ),
                     ),
                     Padding(
@@ -1758,7 +1785,7 @@ class _PengajuanAmandemenUpdateState extends State<PengajuanAmandemenUpdate> {
                     Padding(
                       padding: EdgeInsets.only(top: 20, left: 16, right: 16),
                       child: Text(
-                        'Nomer NPWP',
+                        'Nomor NPWP',
                         style: TextStyle(
                             color: Color(0xFF455055),
                             fontWeight: FontWeight.bold),
@@ -1814,20 +1841,36 @@ class _PengajuanAmandemenUpdateState extends State<PengajuanAmandemenUpdate> {
                                   fontWeight: FontWeight.bold),
                             ),
                           ),
-                          GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                _fileName = null;
-                              });
-                            },
-                            child: Text(
-                              'Hapus',
-                              textAlign: TextAlign.right,
-                              style: TextStyle(
-                                  color: Color(0xFF427CEF),
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ),
+                          detailDatas.npwpFile == ""
+                              ? GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      _fileName = null;
+                                    });
+                                  },
+                                  child: Text(
+                                    'Hapus',
+                                    textAlign: TextAlign.right,
+                                    style: TextStyle(
+                                        color: Color(0xFF427CEF),
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                )
+                              : GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      detailDatas.npwpFile = "";
+                                    });
+                                    _pickFiles('npwp');
+                                  },
+                                  child: Text(
+                                    'Ubah',
+                                    textAlign: TextAlign.right,
+                                    style: TextStyle(
+                                        color: Color(0xFF427CEF),
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
                         ],
                       ),
                     ),
@@ -1838,35 +1881,44 @@ class _PengajuanAmandemenUpdateState extends State<PengajuanAmandemenUpdate> {
                         dashPattern: [3.1],
                         color: Color(0xFFD3D3D3),
                         strokeWidth: 1,
-                        child: Container(
-                          height: 60,
-                          child: Center(
-                            child: GestureDetector(
-                              onTap: () {
-                                _pickFiles('npwp');
-                              },
-                              child: _fileName != null
-                                  ? Padding(
-                                      padding: const EdgeInsets.only(
-                                          left: 10, right: 10),
-                                      child: Text(
-                                        _fileName,
-                                        style: TextStyle(
-                                            color: Color(0xFF427CEF),
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    )
-                                  : Text(
-                                      'Unggah Foto NPWP',
-                                      style: TextStyle(
-                                          color: Color(0xFF427CEF),
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                            ),
-                          ),
-                        ),
+                        child: detailDatas.npwpFile == ""
+                            ? Container(
+                                height: 60,
+                                child: Center(
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      _pickFiles('npwp');
+                                    },
+                                    child: _fileName != null
+                                        ? Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 10, right: 10),
+                                            child: Text(
+                                              _fileName,
+                                              style: TextStyle(
+                                                  color: Color(0xFF427CEF),
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                          )
+                                        : Text(
+                                            'Unggah Foto NPWP',
+                                            style: TextStyle(
+                                                color: Color(0xFF427CEF),
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                  ),
+                                ),
+                              )
+                            : Container(
+                                height: 150,
+                                decoration: BoxDecoration(
+                                    color: Colors.black,
+                                    borderRadius: BorderRadius.circular(5),
+                                    image: DecorationImage(
+                                        fit: BoxFit.contain,
+                                        image: MemoryImage(imageNpwp)))),
                       ),
                     ),
                     Padding(
@@ -2258,8 +2310,15 @@ class _PengajuanAmandemenUpdateState extends State<PengajuanAmandemenUpdate> {
         });
     print('GET DETAIL PEMASANGAN KEMBALI ${response.body}');
     DetailData detailData = DetailData.fromJson(json.decode(response.body));
-    // print('IMAGENYA  ${detailBerhetiBerlanggananData.sign}');
-    // var splitString = detailBerhetiBerlanggananData.sign.split(',');
+    if (detailData.npwpFile != "") {
+      splitString = detailData.npwpFile.split(',');
+      imageNpwp = base64.decode(splitString[1]);
+    }
+    if (detailData.electricalBillProof != "") {
+      splitString = detailData.electricalBillProof.split(',');
+      imageRek = base64.decode(splitString[1]);
+    }
+
     setState(() {
       detailDatas = detailData;
       valueMediaType = detailData.mediaInfo;
@@ -2323,6 +2382,26 @@ class _PengajuanAmandemenUpdateState extends State<PengajuanAmandemenUpdate> {
   }
 
   void submitFormBBG() async {
+    String encodedImageNPWP;
+    String encodedImageRek;
+    if (_fileName != null) {
+      Uint8List imageUnit8;
+      imageUnit8 = imgNPWP.readAsBytesSync();
+      String fileExt = imgNPWP.path.split('.').last;
+      encodedImageNPWP =
+          'data:image/$fileExt;base64,${base64Encode(imageUnit8)}';
+    } else {
+      encodedImageNPWP = detailDatas.npwpFile;
+    }
+    if (_fileNameRekListrik != null) {
+      Uint8List imageUnit8;
+      imageUnit8 = imgRek.readAsBytesSync();
+      String fileExt = imgRek.path.split('.').last;
+      encodedImageRek =
+          'data:image/$fileExt;base64,${base64Encode(imageUnit8)}';
+    } else {
+      encodedImageRek = detailDatas.electricalBillProof;
+    }
     final sign = _sign.currentState;
     final image = await sign.getData();
     var data = await image.toByteData(format: ui.ImageByteFormat.png);
@@ -2364,8 +2443,8 @@ class _PengajuanAmandemenUpdateState extends State<PengajuanAmandemenUpdate> {
       "reason": alasanCtrl.text,
       "customer_group": custGroup,
       "electrical_power": dayaCtrl.text,
-      "electricity_bill_proof": "url string",
-      "npwp_file": "url String",
+      "electricity_bill_proof": encodedImageRek,
+      "npwp_file": encodedImageNPWP,
       "npwp_number": nomorNpwpCtrl.text,
       "ktp_address": ktpAddressCtrl.text,
       "customer_signature": 'data:image/png;base64,$encoded',
@@ -2390,18 +2469,21 @@ class _PengajuanAmandemenUpdateState extends State<PengajuanAmandemenUpdate> {
 
   void _pickFiles(String status) async {
     _resetState();
-    FilePickerResult result = await FilePicker.platform.pickFiles();
+    FilePickerResult result = await FilePicker.platform.pickFiles(
+        type: FileType.custom, allowedExtensions: ['jpg', 'png', 'jpeg']);
 
     if (result != null) {
       File file = File(result.files.single.path.toString());
       if (status == 'rekListrik') {
         setState(() {
           _fileNameRekListrik = result.names.single;
+          imgRek = file;
           print('NAMA FILE : $_fileName');
         });
       } else {
         setState(() {
           _fileName = result.names.single;
+          imgNPWP = file;
           print('NAMA FILE : $_fileName');
         });
       }

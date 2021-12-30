@@ -118,6 +118,8 @@ class DetailData {
   String npwpFile;
   String npwpNumb;
   String ktpAddress;
+  String fileSuratKuasa;
+
   DetailData({
     this.address,
     this.bDate,
@@ -151,6 +153,7 @@ class DetailData {
     this.ktpAddress,
     this.npwpFile,
     this.npwpNumb,
+    this.fileSuratKuasa,
   });
   factory DetailData.fromJson(Map<String, dynamic> json) {
     return DetailData(

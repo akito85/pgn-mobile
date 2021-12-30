@@ -557,24 +557,25 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
                   },
                 )
               : SizedBox(),
-          customerGroupId == '3'
-              ? ListTile(
-                  contentPadding: EdgeInsets.only(left: 20.0),
-                  leading: Icon(Icons.subscriptions_sharp),
-                  title: Text(
-                    'Smartmeter',
-                    style: TextStyle(
-                      color: Colors.grey[600],
-                      fontSize: 17.0,
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ),
-                  onTap: () {
-                    Navigator.pop(context);
-                    Navigator.pushNamed(context, '/smartmeterRTPK');
-                  },
-                )
-              : SizedBox(),
+          // customerGroupId == '3'
+          //     ?
+          ListTile(
+            contentPadding: EdgeInsets.only(left: 20.0),
+            leading: Icon(Icons.subscriptions_sharp),
+            title: Text(
+              'Smartmeter',
+              style: TextStyle(
+                color: Colors.grey[600],
+                fontSize: 17.0,
+                fontWeight: FontWeight.w400,
+              ),
+            ),
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.pushNamed(context, '/smartmeterRTPK');
+            },
+          ),
+          // : SizedBox(),
           ListTile(
             contentPadding: EdgeInsets.only(left: 20.0),
             leading: Icon(Icons.subscriptions_sharp),

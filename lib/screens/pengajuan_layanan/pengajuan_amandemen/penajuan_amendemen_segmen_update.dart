@@ -33,6 +33,8 @@ class _PengajuanAmandemenSegmenUpdateState
   final int id;
   _PengajuanAmandemenSegmenUpdateState({this.id});
   DetailData detailDatas = DetailData();
+  var splitString;
+  Uint8List image;
   List listGenderType = [
     "Laki-Laki",
     "Perempuan",
@@ -75,6 +77,7 @@ class _PengajuanAmandemenSegmenUpdateState
   String phoneNumb = '';
   String statusLokasi;
   String jenisPemakianGas;
+  File imgNPWP;
 
   List<Map<String, dynamic>> gasEquip = [];
   TextEditingController tempatLahirCtrl = new TextEditingController();
@@ -694,7 +697,7 @@ class _PengajuanAmandemenSegmenUpdateState
                     Padding(
                       padding: EdgeInsets.only(top: 20, left: 16, right: 16),
                       child: Text(
-                        'Nomer Handphone',
+                        'Nomor Handphone',
                         style: TextStyle(
                             color: Color(0xFF455055),
                             fontWeight: FontWeight.bold),
@@ -1593,7 +1596,7 @@ class _PengajuanAmandemenSegmenUpdateState
                     Padding(
                       padding: EdgeInsets.only(top: 20, left: 16, right: 16),
                       child: Text(
-                        'Nomer NPWP',
+                        'Nomor NPWP',
                         style: TextStyle(
                             color: Color(0xFF455055),
                             fontWeight: FontWeight.bold),
@@ -1649,20 +1652,36 @@ class _PengajuanAmandemenSegmenUpdateState
                                   fontWeight: FontWeight.bold),
                             ),
                           ),
-                          GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                _fileName = null;
-                              });
-                            },
-                            child: Text(
-                              'Hapus',
-                              textAlign: TextAlign.right,
-                              style: TextStyle(
-                                  color: Color(0xFF427CEF),
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ),
+                          detailDatas.npwpFile == ""
+                              ? GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      _fileName = null;
+                                    });
+                                  },
+                                  child: Text(
+                                    'Hapus',
+                                    textAlign: TextAlign.right,
+                                    style: TextStyle(
+                                        color: Color(0xFF427CEF),
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                )
+                              : GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      detailDatas.npwpFile = "";
+                                    });
+                                    _pickFiles('npwp');
+                                  },
+                                  child: Text(
+                                    'Ubah',
+                                    textAlign: TextAlign.right,
+                                    style: TextStyle(
+                                        color: Color(0xFF427CEF),
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
                         ],
                       ),
                     ),
@@ -1673,35 +1692,44 @@ class _PengajuanAmandemenSegmenUpdateState
                         dashPattern: [3.1],
                         color: Color(0xFFD3D3D3),
                         strokeWidth: 1,
-                        child: Container(
-                          height: 60,
-                          child: Center(
-                            child: GestureDetector(
-                              onTap: () {
-                                _pickFiles('npwp');
-                              },
-                              child: _fileName != null
-                                  ? Padding(
-                                      padding: const EdgeInsets.only(
-                                          left: 10, right: 10),
-                                      child: Text(
-                                        _fileName,
-                                        style: TextStyle(
-                                            color: Color(0xFF427CEF),
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    )
-                                  : Text(
-                                      'Unggah Foto NPWP',
-                                      style: TextStyle(
-                                          color: Color(0xFF427CEF),
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                            ),
-                          ),
-                        ),
+                        child: detailDatas.npwpFile == ""
+                            ? Container(
+                                height: 60,
+                                child: Center(
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      _pickFiles('npwp');
+                                    },
+                                    child: _fileName != null
+                                        ? Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 10, right: 10),
+                                            child: Text(
+                                              _fileName,
+                                              style: TextStyle(
+                                                  color: Color(0xFF427CEF),
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                          )
+                                        : Text(
+                                            'Unggah Foto NPWP',
+                                            style: TextStyle(
+                                                color: Color(0xFF427CEF),
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                  ),
+                                ),
+                              )
+                            : Container(
+                                height: 150,
+                                decoration: BoxDecoration(
+                                    color: Colors.black,
+                                    borderRadius: BorderRadius.circular(5),
+                                    image: DecorationImage(
+                                        fit: BoxFit.contain,
+                                        image: MemoryImage(image)))),
                       ),
                     ),
                     Padding(
@@ -2661,8 +2689,10 @@ class _PengajuanAmandemenSegmenUpdateState
         });
     print('GET DETAIL PEMASANGAN KEMBALI ${response.body}');
     DetailData detailData = DetailData.fromJson(json.decode(response.body));
-    // print('IMAGENYA  ${detailBerhetiBerlanggananData.sign}');
-    // var splitString = detailBerhetiBerlanggananData.sign.split(',');
+    if (detailData.npwpFile != "") {
+      splitString = detailData.npwpFile.split(',');
+      image = base64.decode(splitString[1]);
+    }
     setState(() {
       detailDatas = detailData;
       detailData.custEquip.datasEquip.forEach((e) {
@@ -2715,10 +2745,10 @@ class _PengajuanAmandemenSegmenUpdateState
             new TextEditingValue(text: detailData.reason))
         .value;
     ktpAddressCtrl.value = new TextEditingController.fromValue(
-            new TextEditingValue(text: detailData.ktpAddress))
+            new TextEditingValue(text: detailData.ktpAddress.toString()))
         .value;
     nomorNpwpCtrl.value = new TextEditingController.fromValue(
-            new TextEditingValue(text: detailData.npwpNumb))
+            new TextEditingValue(text: detailData.npwpNumb.toString()))
         .value;
     valueKelompokPelanggan = detailData.custSubGroup;
     volumeMinCtrl.value = new TextEditingController.fromValue(
@@ -2736,12 +2766,23 @@ class _PengajuanAmandemenSegmenUpdateState
     hariperMingguCtrl.value = new TextEditingController.fromValue(
             new TextEditingValue(text: detailData.dayWeek.toString()))
         .value;
+
     kabupatenCtrl.value = new TextEditingController.fromValue(
-            new TextEditingValue(text: detailData.kabupaten.toString()))
+            new TextEditingValue(text: detailData.kabupaten))
         .value;
   }
 
   void submitForm() async {
+    String encodedImageNPWP;
+    if (_fileName != null) {
+      Uint8List imageUnit8;
+      imageUnit8 = imgNPWP.readAsBytesSync();
+      String fileExt = imgNPWP.path.split('.').last;
+      encodedImageNPWP =
+          'data:image/$fileExt;base64,${base64Encode(imageUnit8)}';
+    } else {
+      encodedImageNPWP = detailDatas.npwpFile;
+    }
     final sign = _sign.currentState;
     final image = await sign.getData();
     var data = await image.toByteData(format: ui.ImageByteFormat.png);
@@ -2788,9 +2829,9 @@ class _PengajuanAmandemenSegmenUpdateState
       "operational_hour_day": int.parse(jamperHariCtrl.text),
       "operational_day_week": int.parse(hariperMingguCtrl.text),
       "customer_equipments": gasEquip,
-      "submission_gas_usage": jenisPemakianGas,
+      "gas_usage_type_submission": jenisPemakianGas,
       "reason": alasanCtrl.text,
-      "npwp_file": "url String",
+      "npwp_file": encodedImageNPWP,
       "npwp_number": nomorNpwpCtrl.text,
       "ktp_address": ktpAddressCtrl.text,
       "customer_signature": 'data:image/png;base64,$encoded',
@@ -2838,7 +2879,8 @@ class _PengajuanAmandemenSegmenUpdateState
 
   void _pickFiles(String status) async {
     _resetState();
-    FilePickerResult result = await FilePicker.platform.pickFiles();
+    FilePickerResult result = await FilePicker.platform.pickFiles(
+        type: FileType.custom, allowedExtensions: ['jpg', 'png', 'jpeg']);
 
     if (result != null) {
       File file = File(result.files.single.path.toString());
@@ -2850,6 +2892,7 @@ class _PengajuanAmandemenSegmenUpdateState
       } else {
         setState(() {
           _fileName = result.names.single;
+          imgNPWP = file;
           print('NAMA FILE : $_fileName');
         });
       }

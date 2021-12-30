@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:date_format/date_format.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:pgn_mobile/models/cust_invoice_model.dart';
 import 'package:pgn_mobile/models/url_cons.dart';
@@ -391,7 +390,7 @@ class BillDetailState extends State<InvoiceRTPK>
             margin: EdgeInsets.only(bottom: 10.0),
             child: Center(
               child: Text(
-                '${Translations.of(context).text('current_bill_date')} : ${DateFormat('dd MMMM yyyy').format(DateTime.parse(data.usagePeriod))}',
+                '${Translations.of(context).text('current_bill_date')} : ${DateFormat('dd MMMM yyyy').format(DateTime.parse(data.billDate))}',
                 style: TextStyle(
                     fontSize: 16.0,
                     fontWeight: FontWeight.bold,

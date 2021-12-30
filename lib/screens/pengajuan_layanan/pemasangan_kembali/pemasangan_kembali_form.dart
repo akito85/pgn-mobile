@@ -14,7 +14,6 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_signature_pad/flutter_signature_pad.dart';
 import 'dart:ui' as ui;
 import 'package:pgn_mobile/screens/otp/otp.dart';
-import 'package:pgn_mobile/screens/pengajuan_layanan/widgets/widget_biaya_admin.dart';
 import 'package:pgn_mobile/screens/pengajuan_layanan/widgets/widget_biaya_pemasangan_kembali.dart';
 import 'package:pgn_mobile/screens/register/widgets/map_point.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
@@ -50,6 +49,7 @@ class _PemasanganKembaliFormState extends State<PemasanganKembaliForm> {
   String email = '';
   String phoneNumb = '';
   String statusLokasi;
+  File imgNPWP;
 
   TextEditingController tempatLahirCtrl = new TextEditingController();
   TextEditingController nikCtrl = new TextEditingController();
@@ -568,7 +568,7 @@ class _PemasanganKembaliFormState extends State<PemasanganKembaliForm> {
                     Padding(
                       padding: EdgeInsets.only(top: 20, left: 16, right: 16),
                       child: Text(
-                        'Nomer Handphone',
+                        'Nomor Handphone',
                         style: TextStyle(
                             color: Color(0xFF455055),
                             fontWeight: FontWeight.bold),
@@ -1467,7 +1467,7 @@ class _PemasanganKembaliFormState extends State<PemasanganKembaliForm> {
                     Padding(
                       padding: EdgeInsets.only(top: 20, left: 16, right: 16),
                       child: Text(
-                        'Nomer NPWP',
+                        'Nomor NPWP',
                         style: TextStyle(
                             color: Color(0xFF455055),
                             fontWeight: FontWeight.bold),
@@ -1959,6 +1959,16 @@ class _PemasanganKembaliFormState extends State<PemasanganKembaliForm> {
   }
 
   void submitForm() async {
+    String encodedImageNPWP;
+    if (_fileName != null) {
+      Uint8List imageUnit8;
+      imageUnit8 = imgNPWP.readAsBytesSync();
+      String fileExt = imgNPWP.path.split('.').last;
+      encodedImageNPWP =
+          'data:image/$fileExt;base64,${base64Encode(imageUnit8)}';
+    } else {
+      encodedImageNPWP = "";
+    }
     final sign = _sign.currentState;
     final image = await sign.getData();
     var data = await image.toByteData(format: ui.ImageByteFormat.png);
@@ -2000,7 +2010,7 @@ class _PemasanganKembaliFormState extends State<PemasanganKembaliForm> {
       "reason": alasanCtrl.text,
       "npwp_number": numberNpwpCtrl.text,
       "ktp_address": ktpAddressCtrl.text,
-      "npwp_file": 'test',
+      "npwp_file": encodedImageNPWP,
       "customer_signature": 'data:image/png;base64,$encoded',
     });
     var response = await http.post(
@@ -2029,6 +2039,7 @@ class _PemasanganKembaliFormState extends State<PemasanganKembaliForm> {
       File file = File(result.files.single.path.toString());
       setState(() {
         _fileName = result.names.single;
+        imgNPWP = file;
         print('NAMA FILE : $_fileName');
       });
     } else {

@@ -29,6 +29,8 @@ class _KlaimAsuransiUpdateState extends State<KlaimAsuransiUpdate> {
   final int id;
   _KlaimAsuransiUpdateState({this.id});
   DetailData detailDatas = DetailData();
+  var splitString;
+  Uint8List image;
   List listGenderType = [
     "Laki-Laki",
     "Perempuan",
@@ -55,6 +57,8 @@ class _KlaimAsuransiUpdateState extends State<KlaimAsuransiUpdate> {
   String email = '';
   String phoneNumb = '';
   String statusLokasi;
+  File fileKlaim;
+  File imgNPWP;
 
   final storageCache = FlutterSecureStorage();
 
@@ -563,7 +567,7 @@ class _KlaimAsuransiUpdateState extends State<KlaimAsuransiUpdate> {
                     Padding(
                       padding: EdgeInsets.only(top: 20, left: 16, right: 16),
                       child: Text(
-                        'Nomer Handphone',
+                        'Nomor Handphone',
                         style: TextStyle(
                             color: Color(0xFF455055),
                             fontWeight: FontWeight.bold),
@@ -1460,7 +1464,7 @@ class _KlaimAsuransiUpdateState extends State<KlaimAsuransiUpdate> {
                   Padding(
                     padding: EdgeInsets.only(top: 20, left: 16, right: 16),
                     child: Text(
-                      'Nomer NPWP',
+                      'Nomor NPWP',
                       style: TextStyle(
                           color: Color(0xFF455055),
                           fontWeight: FontWeight.bold),
@@ -1516,20 +1520,36 @@ class _KlaimAsuransiUpdateState extends State<KlaimAsuransiUpdate> {
                                 fontWeight: FontWeight.bold),
                           ),
                         ),
-                        GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              _fileName = null;
-                            });
-                          },
-                          child: Text(
-                            'Hapus',
-                            textAlign: TextAlign.right,
-                            style: TextStyle(
-                                color: Color(0xFF427CEF),
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ),
+                        detailDatas.npwpFile == ""
+                            ? GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    _fileName = null;
+                                  });
+                                },
+                                child: Text(
+                                  'Hapus',
+                                  textAlign: TextAlign.right,
+                                  style: TextStyle(
+                                      color: Color(0xFF427CEF),
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              )
+                            : GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    detailDatas.npwpFile = "";
+                                  });
+                                  _pickFiles('NPWP');
+                                },
+                                child: Text(
+                                  'Ubah',
+                                  textAlign: TextAlign.right,
+                                  style: TextStyle(
+                                      color: Color(0xFF427CEF),
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
                       ],
                     ),
                   ),
@@ -1540,35 +1560,44 @@ class _KlaimAsuransiUpdateState extends State<KlaimAsuransiUpdate> {
                       dashPattern: [3.1],
                       color: Color(0xFFD3D3D3),
                       strokeWidth: 1,
-                      child: Container(
-                        height: 60,
-                        child: Center(
-                          child: GestureDetector(
-                            onTap: () {
-                              _pickFiles('NPWP');
-                            },
-                            child: _fileNameNPWP != null
-                                ? Padding(
-                                    padding: const EdgeInsets.only(
-                                        left: 10, right: 10),
-                                    child: Text(
-                                      _fileName,
-                                      style: TextStyle(
-                                          color: Color(0xFF427CEF),
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  )
-                                : Text(
-                                    'Unggah Foto NPWP',
-                                    style: TextStyle(
-                                        color: Color(0xFF427CEF),
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                          ),
-                        ),
-                      ),
+                      child: detailDatas.npwpFile == ""
+                          ? Container(
+                              height: 60,
+                              child: Center(
+                                child: GestureDetector(
+                                  onTap: () {
+                                    _pickFiles('NPWP');
+                                  },
+                                  child: _fileNameNPWP != null
+                                      ? Padding(
+                                          padding: const EdgeInsets.only(
+                                              left: 10, right: 10),
+                                          child: Text(
+                                            _fileNameNPWP,
+                                            style: TextStyle(
+                                                color: Color(0xFF427CEF),
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                        )
+                                      : Text(
+                                          'Unggah Foto NPWP',
+                                          style: TextStyle(
+                                              color: Color(0xFF427CEF),
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                ),
+                              ),
+                            )
+                          : Container(
+                              height: 150,
+                              decoration: BoxDecoration(
+                                  color: Colors.black,
+                                  borderRadius: BorderRadius.circular(5),
+                                  image: DecorationImage(
+                                      fit: BoxFit.contain,
+                                      image: MemoryImage(image)))),
                     ),
                   ),
                   Padding(
@@ -1582,41 +1611,90 @@ class _KlaimAsuransiUpdateState extends State<KlaimAsuransiUpdate> {
                     )),
                   ),
                   Padding(
+                    padding:
+                        const EdgeInsets.only(top: 30, left: 16, right: 16),
+                    child: GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          detailDatas.claimFile = "";
+                        });
+                      },
+                      child: Text(
+                        'Hapus',
+                        textAlign: TextAlign.right,
+                        style: TextStyle(
+                            color: Color(0xFF427CEF),
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ),
+                  Padding(
                     padding: EdgeInsets.only(
-                        top: 30, left: 16, right: 16, bottom: 30),
+                        top: 10, left: 16, right: 16, bottom: 30),
                     child: DottedBorder(
                       dashPattern: [3.1],
                       color: Color(0xFFD3D3D3),
                       strokeWidth: 1,
-                      child: Container(
-                        height: 60,
-                        child: Center(
-                          child: GestureDetector(
-                            onTap: () {
-                              _pickFiles('Dokumen');
-                            },
-                            child: _fileName != null
-                                ? Padding(
-                                    padding: const EdgeInsets.only(
-                                        left: 10, right: 10),
-                                    child: Text(
-                                      _fileName,
-                                      style: TextStyle(
-                                          color: Color(0xFF427CEF),
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  )
-                                : Text(
-                                    'Unggah Dokumen Klaim Asuransi dengan Materai',
-                                    style: TextStyle(
-                                        color: Color(0xFF427CEF),
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                          ),
-                        ),
-                      ),
+                      child: detailDatas.claimFile == ""
+                          ? Container(
+                              height: 60,
+                              child: Center(
+                                child: GestureDetector(
+                                  onTap: () {
+                                    _pickFiles('Dokumen');
+                                  },
+                                  child: _fileName != null
+                                      ? Padding(
+                                          padding: const EdgeInsets.only(
+                                              left: 10, right: 10),
+                                          child: Text(
+                                            _fileName,
+                                            style: TextStyle(
+                                                color: Color(0xFF427CEF),
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                        )
+                                      : Text(
+                                          'Unggah Dokumen Klaim Asuransi dengan Materai',
+                                          style: TextStyle(
+                                              color: Color(0xFF427CEF),
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                ),
+                              ),
+                            )
+                          : Container(
+                              height: 60,
+                              child: Center(
+                                child: GestureDetector(
+                                  onTap: () {
+                                    // _pickFiles('Dokumen');
+                                  },
+                                  child: _fileName != null
+                                      ? Padding(
+                                          padding: const EdgeInsets.only(
+                                              left: 10, right: 10),
+                                          child: Text(
+                                            _fileName,
+                                            style: TextStyle(
+                                                color: Color(0xFF427CEF),
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                        )
+                                      : Text(
+                                          detailDatas.claimFile,
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              color: Color(0xFF427CEF),
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                ),
+                              ),
+                            ),
                     ),
                   ),
 
@@ -1883,8 +1961,14 @@ class _KlaimAsuransiUpdateState extends State<KlaimAsuransiUpdate> {
     DetailData detailData = DetailData.fromJson(json.decode(response.body));
     // print('IMAGENYA  ${detailBerhetiBerlanggananData.sign}');
     // var splitString = detailBerhetiBerlanggananData.sign.split(',');
+    if (detailData.npwpFile != "") {
+      splitString = detailData.npwpFile.split(',');
+      image = base64.decode(splitString[1]);
+    }
     setState(() {
       detailDatas = detailData;
+      detailDatas.npwpFile = detailData.npwpFile;
+      detailDatas.claimFile = detailData.claimFile;
       // _byteImage = base64.decode(splitString[1]);
     });
     nikCtrl.value = new TextEditingController.fromValue(
@@ -1913,9 +1997,6 @@ class _KlaimAsuransiUpdateState extends State<KlaimAsuransiUpdate> {
     kecamatanCtrl.value = new TextEditingController.fromValue(
             new TextEditingValue(text: detailData.kecamatan))
         .value;
-    // kabupatenCtrl.value = new TextEditingController.fromValue(
-    //         new TextEditingValue(text: detailBerhetiBerlangganan.kabupaten))
-    // .value;
     provinsiCtrl.value = new TextEditingController.fromValue(
             new TextEditingValue(text: detailData.prov))
         .value;
@@ -1948,6 +2029,16 @@ class _KlaimAsuransiUpdateState extends State<KlaimAsuransiUpdate> {
   }
 
   void submitForm() async {
+    String encodedImageNPWP;
+    if (_fileNameNPWP != null) {
+      Uint8List imageUnit8;
+      imageUnit8 = imgNPWP.readAsBytesSync();
+      String fileExt = imgNPWP.path.split('.').last;
+      encodedImageNPWP =
+          'data:image/$fileExt;base64,${base64Encode(imageUnit8)}';
+    } else {
+      encodedImageNPWP = '';
+    }
     final sign = _sign.currentState;
     final image = await sign.getData();
     var data = await image.toByteData(format: ui.ImageByteFormat.png);
@@ -1963,43 +2054,84 @@ class _KlaimAsuransiUpdateState extends State<KlaimAsuransiUpdate> {
     print('INI LONG $long');
     print('GAMBARNYA  data:image/png;base64,$encoded} ');
     String accessToken = await storageCache.read(key: 'access_token');
-    var body = json.encode({
-      "customer_id": detailDatas.custId,
-      "customer_name": detailDatas.custName,
-      "gender": valueChoose,
-      "birth_place": tempatLahirCtrl.text,
-      "birth_date": DateFormat('yyy-MM-dd').format(selected),
-      "id_card_number": nikCtrl.text,
-      "email": detailDatas.email,
-      "phone_number": detailDatas.phoneNumb,
-      "address": alamatCtrl.text,
-      "street": perumahanCtrl.text,
-      "rt": rwCtrl.text,
-      "rw": rtCtrl.text,
-      "kelurahan": kelurahanCtrl.text,
-      "kecamatan": kecamatanCtrl.text,
-      "province": provinsiCtrl.text,
-      "postal_code": kodeposCtrl.text,
-      "kota_kabupaten": kabupatenCtrl.text,
-      "longitude": long,
-      "latitude": lat,
-      "person_in_location_status": statusLokasi,
-      "info_media": '',
-      "claim_file": 'test',
-      "npwp_number": numberNpwpCtrl.text,
-      "ktp_address": ktpAddressCtrl.text,
-      "npwp_file": 'test',
-      "customer_signature": 'data:image/png;base64,$encoded',
-    });
-    var response = await http.put(
-        '${UrlCons.mainProdUrl}customer-service/insurance-claim/$id',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer $accessToken'
-        },
-        body: body);
-    print('INI HASIL POST CREATE PENGALIRAN KEMBALI ${response.body}');
-    Create create = Create.fromJson(json.decode(response.body));
+    final multiFile = detailDatas.claimFile == ""
+        ? await http.MultipartFile.fromPath('claim_file', fileKlaim.path)
+        : "";
+    var responses = http.MultipartRequest(
+        "POST",
+        Uri.parse(
+            '${UrlCons.mainProdUrl}customer-service/insurance-claim/update/$id'));
+    responses.headers['Authorization'] = 'Bearer $accessToken';
+    // responses.headers['Content-Type'] = 'application/json';
+    detailDatas.claimFile == ""
+        ? responses.files.add(multiFile)
+        : responses.files.remove('claim_file');
+    responses.fields['customer_id'] = detailDatas.custId;
+    responses.fields['customer_name'] = detailDatas.custName;
+    responses.fields['gender'] = valueChoose;
+    responses.fields['birth_place'] = tempatLahirCtrl.text;
+    responses.fields['birth_date'] = DateFormat('yyy-MM-dd').format(selected);
+    responses.fields['id_card_number'] = nikCtrl.text;
+    responses.fields['email'] = detailDatas.email;
+    responses.fields['phone_number'] = detailDatas.phoneNumb;
+    responses.fields['address'] = alamatCtrl.text;
+    responses.fields['street'] = perumahanCtrl.text;
+    responses.fields['rt'] = rwCtrl.text;
+    responses.fields['rw'] = rtCtrl.text;
+    responses.fields['kelurahan'] = kelurahanCtrl.text;
+    responses.fields['kecamatan'] = kecamatanCtrl.text;
+    responses.fields['province'] = provinsiCtrl.text;
+    responses.fields['postal_code'] = kodeposCtrl.text;
+    responses.fields['kota_kabupaten'] = kabupatenCtrl.text;
+    responses.fields['longitude'] = long;
+    responses.fields['latitude'] = lat;
+    responses.fields['person_in_location_status'] = statusLokasi;
+    responses.fields['info_media'] = '';
+    responses.fields['npwp_number'] = numberNpwpCtrl.text;
+    responses.fields['ktp_address'] = ktpAddressCtrl.text;
+    detailDatas.npwpFile == ""
+        ? responses.fields['npwp_file'] = encodedImageNPWP
+        : responses.fields['npwp_file'] = detailDatas.npwpFile;
+    responses.fields['customer_signature'] = 'data:image/png;base64,$encoded';
+    http.StreamedResponse response = await responses.send();
+    final res = await http.Response.fromStream(response);
+    // var body = json.encode({
+    //   "customer_id": detailDatas.custId,
+    //   "customer_name": detailDatas.custName,
+    //   "gender": valueChoose,
+    //   "birth_place": tempatLahirCtrl.text,
+    //   "birth_date": DateFormat('yyy-MM-dd').format(selected),
+    //   "id_card_number": nikCtrl.text,
+    //   "email": detailDatas.email,
+    //   "phone_number": detailDatas.phoneNumb,
+    //   "address": alamatCtrl.text,
+    //   "street": perumahanCtrl.text,
+    //   "rt": rwCtrl.text,
+    //   "rw": rtCtrl.text,
+    //   "kelurahan": kelurahanCtrl.text,
+    //   "kecamatan": kecamatanCtrl.text,
+    //   "province": provinsiCtrl.text,
+    //   "postal_code": kodeposCtrl.text,
+    //   "kota_kabupaten": kabupatenCtrl.text,
+    //   "longitude": long,
+    //   "latitude": lat,
+    //   "person_in_location_status": statusLokasi,
+    //   "info_media": '',
+    //   "claim_file": 'test',
+    //   "npwp_number": numberNpwpCtrl.text,
+    //   "ktp_address": ktpAddressCtrl.text,
+    //   "npwp_file": 'test',
+    //   "customer_signature": 'data:image/png;base64,$encoded',
+    // });
+    // var response = await http.put(
+    //     '${UrlCons.mainProdUrl}customer-service/insurance-claim/$id',
+    //     headers: {
+    //       'Content-Type': 'application/json',
+    //       'Authorization': 'Bearer $accessToken'
+    //     },
+    //     body: body);
+    print('INI HASIL POST CREATE PENGALIRAN KEMBALI ${res.body}');
+    Create create = Create.fromJson(json.decode(res.body));
 
     if (response.statusCode == 200) {
       successAlert(create.dataCreate.message);
@@ -2018,8 +2150,10 @@ class _KlaimAsuransiUpdateState extends State<KlaimAsuransiUpdate> {
       setState(() {
         if (title == 'Dokumen') {
           _fileName = result.names.single;
+          fileKlaim = file;
         } else {
           _fileNameNPWP = result.names.single;
+          imgNPWP = file;
         }
 
         print('NAMA FILE : $_fileName');

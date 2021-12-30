@@ -19,7 +19,7 @@ class CustModel {
   final String payDate;
   final String payCurrCode;
   final String productId;
-  final int payAmt;
+  final String payAmt;
   final String payChannelId;
   final String payFlag;
   final String opFlag;

@@ -217,7 +217,7 @@ class _PembaruanDataiListState extends State<PembaruanDataiList> {
                                   children: [
                                     Container(
                                       width: 120,
-                                      child: Text('Nomer NPWP'),
+                                      child: Text('Nomor NPWP'),
                                     ),
                                     Container(
                                       margin: const EdgeInsets.only(left: 10),

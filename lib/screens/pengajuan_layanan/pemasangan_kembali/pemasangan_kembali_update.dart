@@ -31,6 +31,8 @@ class _PemasanganKembaliUpdateState extends State<PemasanganKembaliUpdate> {
   final int id;
   _PemasanganKembaliUpdateState({this.id});
   DetailData detailDatas = DetailData();
+  var splitString;
+  Uint8List image;
   List listGenderType = [
     "Laki-Laki",
     "Perempuan",
@@ -57,6 +59,7 @@ class _PemasanganKembaliUpdateState extends State<PemasanganKembaliUpdate> {
   String phoneNumb = '';
   String statusLokasi;
   String nik = '';
+  File imgNPWP;
 
   TextEditingController tempatLahirCtrl = new TextEditingController();
   TextEditingController nikCtrl = new TextEditingController();
@@ -576,7 +579,7 @@ class _PemasanganKembaliUpdateState extends State<PemasanganKembaliUpdate> {
                     Padding(
                       padding: EdgeInsets.only(top: 20, left: 16, right: 16),
                       child: Text(
-                        'Nomer Handphone',
+                        'Nomor Handphone',
                         style: TextStyle(
                             color: Color(0xFF455055),
                             fontWeight: FontWeight.bold),
@@ -1475,7 +1478,7 @@ class _PemasanganKembaliUpdateState extends State<PemasanganKembaliUpdate> {
                     Padding(
                       padding: EdgeInsets.only(top: 20, left: 16, right: 16),
                       child: Text(
-                        'Nomer NPWP',
+                        'Nomor NPWP',
                         style: TextStyle(
                             color: Color(0xFF455055),
                             fontWeight: FontWeight.bold),
@@ -1531,20 +1534,36 @@ class _PemasanganKembaliUpdateState extends State<PemasanganKembaliUpdate> {
                                   fontWeight: FontWeight.bold),
                             ),
                           ),
-                          GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                _fileName = null;
-                              });
-                            },
-                            child: Text(
-                              'Hapus',
-                              textAlign: TextAlign.right,
-                              style: TextStyle(
-                                  color: Color(0xFF427CEF),
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ),
+                          detailDatas.npwpFile == ""
+                              ? GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      _fileName = null;
+                                    });
+                                  },
+                                  child: Text(
+                                    'Hapus',
+                                    textAlign: TextAlign.right,
+                                    style: TextStyle(
+                                        color: Color(0xFF427CEF),
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                )
+                              : GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      detailDatas.npwpFile = "";
+                                    });
+                                    _pickFiles();
+                                  },
+                                  child: Text(
+                                    'Ubah',
+                                    textAlign: TextAlign.right,
+                                    style: TextStyle(
+                                        color: Color(0xFF427CEF),
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
                         ],
                       ),
                     ),
@@ -1555,35 +1574,44 @@ class _PemasanganKembaliUpdateState extends State<PemasanganKembaliUpdate> {
                         dashPattern: [3.1],
                         color: Color(0xFFD3D3D3),
                         strokeWidth: 1,
-                        child: Container(
-                          height: 60,
-                          child: Center(
-                            child: GestureDetector(
-                              onTap: () {
-                                _pickFiles();
-                              },
-                              child: _fileName != null
-                                  ? Padding(
-                                      padding: const EdgeInsets.only(
-                                          left: 10, right: 10),
-                                      child: Text(
-                                        _fileName,
-                                        style: TextStyle(
-                                            color: Color(0xFF427CEF),
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    )
-                                  : Text(
-                                      'Unggah Foto NPWP',
-                                      style: TextStyle(
-                                          color: Color(0xFF427CEF),
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                            ),
-                          ),
-                        ),
+                        child: detailDatas.npwpFile == ""
+                            ? Container(
+                                height: 60,
+                                child: Center(
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      _pickFiles();
+                                    },
+                                    child: _fileName != null
+                                        ? Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 10, right: 10),
+                                            child: Text(
+                                              _fileName,
+                                              style: TextStyle(
+                                                  color: Color(0xFF427CEF),
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                          )
+                                        : Text(
+                                            'Unggah Foto NPWP',
+                                            style: TextStyle(
+                                                color: Color(0xFF427CEF),
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                  ),
+                                ),
+                              )
+                            : Container(
+                                height: 150,
+                                decoration: BoxDecoration(
+                                    color: Colors.black,
+                                    borderRadius: BorderRadius.circular(5),
+                                    image: DecorationImage(
+                                        fit: BoxFit.contain,
+                                        image: MemoryImage(image)))),
                       ),
                     ),
                     Padding(
@@ -1970,8 +1998,10 @@ class _PemasanganKembaliUpdateState extends State<PemasanganKembaliUpdate> {
         });
     print('GET DETAIL PEMASANGAN KEMBALI ${response.body}');
     DetailData detailData = DetailData.fromJson(json.decode(response.body));
-    // print('IMAGENYA  ${detailBerhetiBerlanggananData.sign}');
-    // var splitString = detailBerhetiBerlanggananData.sign.split(',');
+    if (detailData.npwpFile != "") {
+      splitString = detailData.npwpFile.split(',');
+      image = base64.decode(splitString[1]);
+    }
     setState(() {
       detailDatas = detailData;
       nik = detailData.nik;
@@ -2041,6 +2071,16 @@ class _PemasanganKembaliUpdateState extends State<PemasanganKembaliUpdate> {
   }
 
   void submitForm() async {
+    String encodedImageNPWP;
+    if (_fileName != null) {
+      Uint8List imageUnit8;
+      imageUnit8 = imgNPWP.readAsBytesSync();
+      String fileExt = imgNPWP.path.split('.').last;
+      encodedImageNPWP =
+          'data:image/$fileExt;base64,${base64Encode(imageUnit8)}';
+    } else {
+      encodedImageNPWP = detailDatas.npwpFile;
+    }
     final sign = _sign.currentState;
     final image = await sign.getData();
     var data = await image.toByteData(format: ui.ImageByteFormat.png);
@@ -2054,7 +2094,6 @@ class _PemasanganKembaliUpdateState extends State<PemasanganKembaliUpdate> {
     var long = location[1].trim();
     print('INI LAT $lat');
     print('INI LONG $long');
-    print('GAMBARNYA  data:image/png;base64,$encoded} ');
     String accessToken = await storageCache.read(key: 'access_token');
     var body = json.encode({
       "customer_id": detailDatas.custId,
@@ -2082,7 +2121,7 @@ class _PemasanganKembaliUpdateState extends State<PemasanganKembaliUpdate> {
       "reason": alasanCtrl.text,
       "npwp_number": numberNpwpCtrl.text,
       "ktp_address": ktpAddressCtrl.text,
-      "npwp_file": 'test',
+      "npwp_file": encodedImageNPWP,
       "customer_signature": 'data:image/png;base64,$encoded',
     });
     var response = await http.put(
@@ -2111,6 +2150,7 @@ class _PemasanganKembaliUpdateState extends State<PemasanganKembaliUpdate> {
       File file = File(result.files.single.path.toString());
       setState(() {
         _fileName = result.names.single;
+        imgNPWP = file;
         print('NAMA FILE : $_fileName');
       });
     } else {

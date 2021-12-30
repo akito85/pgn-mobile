@@ -198,7 +198,7 @@ class DetailData {
       ktpAddress: json['ktp_address'],
       npwpFile: json['npwp_file'],
       npwpNumb: json['npwp_number'],
-      jenisPemakianGas: json['submission_gas_usage'],
+      jenisPemakianGas: json['gas_usage_type_submission'],
       custEquip: CustEquip.fromJson(json['customer_equipments']),
     );
   }

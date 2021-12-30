@@ -32,6 +32,8 @@ class _BerhentiBerlanggananUpdateState
   _BerhentiBerlanggananUpdateState({this.id});
   DetailBerhetiBerlangganan detailBerhetiBerlanggananData =
       new DetailBerhetiBerlangganan();
+  var splitString;
+  Uint8List image;
   List listGenderType = [
     "Laki-Laki",
     "Perempuan",
@@ -59,6 +61,7 @@ class _BerhentiBerlanggananUpdateState
   String phoneNumb = '';
   String statusLokasi;
   String nik = '';
+  File imgNPWP;
 
   TextEditingController tempatLahirCtrl = new TextEditingController();
   TextEditingController nikCtrl = new TextEditingController();
@@ -581,7 +584,7 @@ class _BerhentiBerlanggananUpdateState
                     Padding(
                       padding: EdgeInsets.only(top: 20, left: 16, right: 16),
                       child: Text(
-                        'Nomer Handphone',
+                        'Nomor Handphone',
                         style: TextStyle(
                             color: Color(0xFF455055),
                             fontWeight: FontWeight.bold),
@@ -1480,7 +1483,7 @@ class _BerhentiBerlanggananUpdateState
                     Padding(
                       padding: EdgeInsets.only(top: 20, left: 16, right: 16),
                       child: Text(
-                        'Nomer NPWP',
+                        'Nomor NPWP',
                         style: TextStyle(
                             color: Color(0xFF455055),
                             fontWeight: FontWeight.bold),
@@ -1536,20 +1539,37 @@ class _BerhentiBerlanggananUpdateState
                                   fontWeight: FontWeight.bold),
                             ),
                           ),
-                          GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                _fileName = null;
-                              });
-                            },
-                            child: Text(
-                              'Hapus',
-                              textAlign: TextAlign.right,
-                              style: TextStyle(
-                                  color: Color(0xFF427CEF),
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ),
+                          detailBerhetiBerlanggananData.npwpFile == ""
+                              ? GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      _fileName = null;
+                                    });
+                                  },
+                                  child: Text(
+                                    'Hapus',
+                                    textAlign: TextAlign.right,
+                                    style: TextStyle(
+                                        color: Color(0xFF427CEF),
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                )
+                              : GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      detailBerhetiBerlanggananData.npwpFile =
+                                          "";
+                                    });
+                                    _pickFiles();
+                                  },
+                                  child: Text(
+                                    'Ubah',
+                                    textAlign: TextAlign.right,
+                                    style: TextStyle(
+                                        color: Color(0xFF427CEF),
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
                         ],
                       ),
                     ),
@@ -1560,35 +1580,44 @@ class _BerhentiBerlanggananUpdateState
                         dashPattern: [3.1],
                         color: Color(0xFFD3D3D3),
                         strokeWidth: 1,
-                        child: Container(
-                          height: 60,
-                          child: Center(
-                            child: GestureDetector(
-                              onTap: () {
-                                _pickFiles();
-                              },
-                              child: _fileName != null
-                                  ? Padding(
-                                      padding: const EdgeInsets.only(
-                                          left: 10, right: 10),
-                                      child: Text(
-                                        _fileName,
-                                        style: TextStyle(
-                                            color: Color(0xFF427CEF),
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    )
-                                  : Text(
-                                      'Unggah Foto NPWP',
-                                      style: TextStyle(
-                                          color: Color(0xFF427CEF),
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                            ),
-                          ),
-                        ),
+                        child: detailBerhetiBerlanggananData.npwpFile == ""
+                            ? Container(
+                                height: 60,
+                                child: Center(
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      _pickFiles();
+                                    },
+                                    child: _fileName != null
+                                        ? Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 10, right: 10),
+                                            child: Text(
+                                              _fileName,
+                                              style: TextStyle(
+                                                  color: Color(0xFF427CEF),
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                          )
+                                        : Text(
+                                            'Unggah Foto NPWP',
+                                            style: TextStyle(
+                                                color: Color(0xFF427CEF),
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                  ),
+                                ),
+                              )
+                            : Container(
+                                height: 150,
+                                decoration: BoxDecoration(
+                                    color: Colors.black,
+                                    borderRadius: BorderRadius.circular(5),
+                                    image: DecorationImage(
+                                        fit: BoxFit.contain,
+                                        image: MemoryImage(image)))),
                       ),
                     ),
                     Padding(
@@ -1941,8 +1970,10 @@ class _BerhentiBerlanggananUpdateState
     DetailBerhetiBerlangganan detailBerhetiBerlangganan =
         DetailBerhetiBerlangganan.fromJson(
             json.decode(responseGetBerhentiBerlangganan.body));
-    // print('IMAGENYA  ${detailBerhetiBerlanggananData.sign}');
-    // var splitString = detailBerhetiBerlanggananData.sign.split(',');
+    if (detailBerhetiBerlangganan.npwpFile != "") {
+      splitString = detailBerhetiBerlangganan.npwpFile.split(',');
+      image = base64.decode(splitString[1]);
+    }
 
     setState(() {
       detailBerhetiBerlanggananData = detailBerhetiBerlangganan;
@@ -2007,6 +2038,16 @@ class _BerhentiBerlanggananUpdateState
   }
 
   void updateForm() async {
+    String encodedImageNPWP;
+    if (_fileName != null) {
+      Uint8List imageUnit8;
+      imageUnit8 = imgNPWP.readAsBytesSync();
+      String fileExt = imgNPWP.path.split('.').last;
+      encodedImageNPWP =
+          'data:image/$fileExt;base64,${base64Encode(imageUnit8)}';
+    } else {
+      encodedImageNPWP = detailBerhetiBerlanggananData.npwpFile;
+    }
     print('INI id $id');
     final sign = _sign.currentState;
     //retrieve image data, do whatever you want with it (send to server, save locally...)
@@ -2087,7 +2128,7 @@ class _BerhentiBerlanggananUpdateState
       "reason": alasanCtrl.text,
       "npwp_number": numberNpwpCtrl.text,
       "ktp_address": ktpAddressCtrl.text,
-      "npwp_file": 'test',
+      "npwp_file": encodedImageNPWP,
       "customer_signature": 'data:image/png;base64,$encoded',
     });
     var responseCreateBerhentiBerlangganan = await http.put(
@@ -2119,7 +2160,7 @@ class _BerhentiBerlanggananUpdateState
       File file = File(result.files.single.path.toString());
       setState(() {
         _fileName = result.names.single;
-        fileNPWP = file;
+        imgNPWP = file;
         print('NAMA FILE : $_fileName');
       });
     } else {

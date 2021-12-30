@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
@@ -33,6 +34,8 @@ class _PengembalianPembayaranUpdateState
   final int id;
   _PengembalianPembayaranUpdateState({this.id});
   DetailData detailDatas = DetailData();
+  var splitString;
+  Uint8List image;
   List listGenderType = [
     "Laki-Laki",
     "Perempuan",
@@ -58,6 +61,8 @@ class _PengembalianPembayaranUpdateState
   String email = '';
   String phoneNumb = '';
   String statusLokasi;
+  File fileKlaim;
+  File imgNPWP;
 
   TextEditingController tempatLahirCtrl = new TextEditingController();
   TextEditingController nikCtrl = new TextEditingController();
@@ -568,7 +573,7 @@ class _PengembalianPembayaranUpdateState
                     Padding(
                       padding: EdgeInsets.only(top: 20, left: 16, right: 16),
                       child: Text(
-                        'Nomer Handphone',
+                        'Nomor Handphone',
                         style: TextStyle(
                             color: Color(0xFF455055),
                             fontWeight: FontWeight.bold),
@@ -1467,7 +1472,7 @@ class _PengembalianPembayaranUpdateState
                     Padding(
                       padding: EdgeInsets.only(top: 20, left: 16, right: 16),
                       child: Text(
-                        'Nomer NPWP',
+                        'Nomor NPWP',
                         style: TextStyle(
                             color: Color(0xFF455055),
                             fontWeight: FontWeight.bold),
@@ -1523,20 +1528,36 @@ class _PengembalianPembayaranUpdateState
                                   fontWeight: FontWeight.bold),
                             ),
                           ),
-                          GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                _fileNameNPWP = null;
-                              });
-                            },
-                            child: Text(
-                              'Hapus',
-                              textAlign: TextAlign.right,
-                              style: TextStyle(
-                                  color: Color(0xFF427CEF),
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ),
+                          detailDatas.npwpFile == ""
+                              ? GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      _fileNameNPWP = null;
+                                    });
+                                  },
+                                  child: Text(
+                                    'Hapus',
+                                    textAlign: TextAlign.right,
+                                    style: TextStyle(
+                                        color: Color(0xFF427CEF),
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                )
+                              : GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      detailDatas.npwpFile = "";
+                                    });
+                                    _pickFiles('NPWP');
+                                  },
+                                  child: Text(
+                                    'Ubah',
+                                    textAlign: TextAlign.right,
+                                    style: TextStyle(
+                                        color: Color(0xFF427CEF),
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
                         ],
                       ),
                     ),
@@ -1547,35 +1568,44 @@ class _PengembalianPembayaranUpdateState
                         dashPattern: [3.1],
                         color: Color(0xFFD3D3D3),
                         strokeWidth: 1,
-                        child: Container(
-                          height: 60,
-                          child: Center(
-                            child: GestureDetector(
-                              onTap: () {
-                                _pickFiles('NPWP');
-                              },
-                              child: _fileNameNPWP != null
-                                  ? Padding(
-                                      padding: const EdgeInsets.only(
-                                          left: 10, right: 10),
-                                      child: Text(
-                                        _fileNameNPWP,
-                                        style: TextStyle(
-                                            color: Color(0xFF427CEF),
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    )
-                                  : Text(
-                                      'Unggah Foto NPWP',
-                                      style: TextStyle(
-                                          color: Color(0xFF427CEF),
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                            ),
-                          ),
-                        ),
+                        child: detailDatas.npwpFile == ""
+                            ? Container(
+                                height: 60,
+                                child: Center(
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      _pickFiles('NPWP');
+                                    },
+                                    child: _fileNameNPWP != null
+                                        ? Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 10, right: 10),
+                                            child: Text(
+                                              _fileNameNPWP,
+                                              style: TextStyle(
+                                                  color: Color(0xFF427CEF),
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                          )
+                                        : Text(
+                                            'Unggah Foto NPWP',
+                                            style: TextStyle(
+                                                color: Color(0xFF427CEF),
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                  ),
+                                ),
+                              )
+                            : Container(
+                                height: 150,
+                                decoration: BoxDecoration(
+                                    color: Colors.black,
+                                    borderRadius: BorderRadius.circular(5),
+                                    image: DecorationImage(
+                                        fit: BoxFit.contain,
+                                        image: MemoryImage(image)))),
                       ),
                     ),
                     Padding(
@@ -1638,7 +1668,7 @@ class _PengembalianPembayaranUpdateState
                     Padding(
                       padding: EdgeInsets.only(top: 20, left: 16, right: 16),
                       child: Text(
-                        'Nomer Rekening',
+                        'Nomor Rekening',
                         style: TextStyle(
                             color: Color(0xFF455055),
                             fontWeight: FontWeight.bold),
@@ -1778,42 +1808,93 @@ class _PengembalianPembayaranUpdateState
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.only(left: 16, right: 16, bottom: 20),
+                      padding:
+                          const EdgeInsets.only(top: 30, left: 16, right: 16),
+                      child: GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            detailDatas.bankFile = "";
+                          });
+                        },
+                        child: Text(
+                          'Hapus',
+                          textAlign: TextAlign.right,
+                          style: TextStyle(
+                              color: Color(0xFF427CEF),
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(
+                          top: 10, left: 16, right: 16, bottom: 30),
                       child: DottedBorder(
                         dashPattern: [3.1],
                         color: Color(0xFFD3D3D3),
                         strokeWidth: 1,
-                        child: Container(
-                          height: 60,
-                          child: Center(
-                            child: GestureDetector(
-                              onTap: () {
-                                _pickFiles('Dokumen');
-                              },
-                              child: _fileName != null
-                                  ? Padding(
-                                      padding: const EdgeInsets.only(
-                                          left: 10, right: 10),
-                                      child: Text(
-                                        _fileName,
-                                        style: TextStyle(
-                                            color: Color(0xFF427CEF),
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    )
-                                  : Text(
-                                      'Unggah Dokumen Surat Kuasa dengan Materai',
-                                      style: TextStyle(
-                                          color: Color(0xFF427CEF),
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                            ),
-                          ),
-                        ),
+                        child: detailDatas.bankFile == ""
+                            ? Container(
+                                height: 60,
+                                child: Center(
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      _pickFiles('Dokumen');
+                                    },
+                                    child: _fileName != null
+                                        ? Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 10, right: 10),
+                                            child: Text(
+                                              _fileName,
+                                              style: TextStyle(
+                                                  color: Color(0xFF427CEF),
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                          )
+                                        : Text(
+                                            'Unggah Dokumen Klaim Asuransi dengan Materai',
+                                            style: TextStyle(
+                                                color: Color(0xFF427CEF),
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                  ),
+                                ),
+                              )
+                            : Container(
+                                height: 60,
+                                child: Center(
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      // _pickFiles('Dokumen');
+                                    },
+                                    child: _fileName != null
+                                        ? Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 10, right: 10),
+                                            child: Text(
+                                              _fileName,
+                                              style: TextStyle(
+                                                  color: Color(0xFF427CEF),
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                          )
+                                        : Text(
+                                            detailDatas.bankFile,
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                                color: Color(0xFF427CEF),
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                  ),
+                                ),
+                              ),
                       ),
                     ),
+
                     Padding(
                       padding: EdgeInsets.only(left: 16, right: 16, bottom: 20),
                       child: Text(
@@ -2004,8 +2085,10 @@ class _PengembalianPembayaranUpdateState
         });
     print('GET DETAIL PEMASANGAN KEMBALI ${response.body}');
     DetailData detailData = DetailData.fromJson(json.decode(response.body));
-    // print('IMAGENYA  ${detailBerhetiBerlanggananData.sign}');
-    // var splitString = detailBerhetiBerlanggananData.sign.split(',');
+    if (detailData.npwpFile != "") {
+      splitString = detailData.npwpFile.split(',');
+      image = base64.decode(splitString[1]);
+    }
     setState(() {
       detailDatas = detailData;
       nik = detailData.nik;
@@ -2104,10 +2187,10 @@ class _PengembalianPembayaranUpdateState
       setState(() {
         if (title == 'Dokumen') {
           _fileName = result.names.single;
-          print('NAMA FILE : $_fileName');
+          fileKlaim = file;
         } else {
           _fileNameNPWP = result.names.single;
-          print('NAMA FILE : $_fileName');
+          imgNPWP = file;
         }
       });
     } else {
@@ -2211,6 +2294,16 @@ class _PengembalianPembayaranUpdateState
   }
 
   void submitForm() async {
+    String encodedImageNPWP;
+    if (_fileNameNPWP != null) {
+      Uint8List imageUnit8;
+      imageUnit8 = imgNPWP.readAsBytesSync();
+      String fileExt = imgNPWP.path.split('.').last;
+      encodedImageNPWP =
+          'data:image/$fileExt;base64,${base64Encode(imageUnit8)}';
+    } else {
+      encodedImageNPWP = '';
+    }
     final sign = _sign.currentState;
     final image = await sign.getData();
     var data = await image.toByteData(format: ui.ImageByteFormat.png);
@@ -2226,47 +2319,55 @@ class _PengembalianPembayaranUpdateState
     print('INI LONG $long');
     print('GAMBARNYA  data:image/png;base64,$encoded} ');
     String accessToken = await storageCache.read(key: 'access_token');
-    var body = json.encode({
-      "customer_id": detailDatas.custId,
-      "customer_name": detailDatas.custName,
-      "gender": valueChoose,
-      "birth_place": tempatLahirCtrl.text,
-      "birth_date": DateFormat('yyy-MM-dd').format(selected),
-      "id_card_number": nikCtrl.text,
-      "email": detailDatas.email,
-      "phone_number": detailDatas.phoneNumb,
-      "address": alamatCtrl.text,
-      "street": perumahanCtrl.text,
-      "rt": rwCtrl.text,
-      "rw": rtCtrl.text,
-      "kelurahan": kelurahanCtrl.text,
-      "kecamatan": kecamatanCtrl.text,
-      "province": provinsiCtrl.text,
-      "postal_code": kodeposCtrl.text,
-      "kota_kabupaten": kabupatenCtrl.text,
-      "longitude": long,
-      "latitude": lat,
-      "person_in_location_status": statusLokasi,
-      "info_media": '',
-      "account_bank_name": namaPemilikRekCtrl.text,
-      "account_bank_number": nomorRekCtrl.text,
-      "bank_name": namaBankCtrl.text,
-      "account_bank_branch": kantorCabangCtrl.text,
-      "account_bank_file": "tesing",
-      "npwp_number": numberNpwpCtrl.text,
-      "ktp_address": ktpAddressCtrl.text,
-      "npwp_file": 'test',
-      "customer_signature": 'data:image/png;base64,$encoded',
-    });
-    var response = await http.put(
-        '${UrlCons.mainProdUrl}customer-service/return-deposit/$id',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer $accessToken'
-        },
-        body: body);
-    print('INI HASIL POST UPDATE PPENGEMBALIAN PEMBAYARAN ${response.body}');
-    Create create = Create.fromJson(json.decode(response.body));
+    final multiFile = detailDatas.bankFile == ""
+        ? await http.MultipartFile.fromPath('account_bank_file', fileKlaim.path)
+        : "";
+    var responses = http.MultipartRequest(
+        "POST",
+        Uri.parse(
+            '${UrlCons.mainProdUrl}customer-service/return-deposit/update/$id'));
+    responses.headers['Authorization'] = 'Bearer $accessToken';
+    detailDatas.bankFile == ""
+        ? responses.files.add(multiFile)
+        : responses.files.remove('account_bank_file');
+    responses.fields['customer_id'] = detailDatas.custId;
+    responses.fields['customer_name'] = detailDatas.custName;
+    responses.fields['gender'] = valueChoose;
+    responses.fields['birth_place'] = tempatLahirCtrl.text;
+    responses.fields['birth_date'] = DateFormat('yyy-MM-dd').format(selected);
+    responses.fields['id_card_number'] = nikCtrl.text;
+    responses.fields['email'] = detailDatas.email;
+    responses.fields['phone_number'] = detailDatas.phoneNumb;
+    responses.fields['address'] = alamatCtrl.text;
+    responses.fields['street'] = perumahanCtrl.text;
+    responses.fields['rt'] = rwCtrl.text;
+    responses.fields['rw'] = rtCtrl.text;
+    responses.fields['kelurahan'] = kelurahanCtrl.text;
+    responses.fields['kecamatan'] = kecamatanCtrl.text;
+    responses.fields['province'] = provinsiCtrl.text;
+    responses.fields['postal_code'] = kodeposCtrl.text;
+    responses.fields['kota_kabupaten'] = kabupatenCtrl.text;
+    responses.fields['longitude'] = long;
+    responses.fields['latitude'] = lat;
+    responses.fields['person_in_location_status'] = statusLokasi;
+    responses.fields['info_media'] = '';
+
+    responses.fields['account_bank_name'] = namaPemilikRekCtrl.text;
+    responses.fields['account_bank_number'] = nomorRekCtrl.text;
+    responses.fields['bank_name'] = namaBankCtrl.text;
+    responses.fields['account_bank_branch'] = kantorCabangCtrl.text;
+
+    responses.fields['npwp_number'] = numberNpwpCtrl.text;
+    responses.fields['ktp_address'] = ktpAddressCtrl.text;
+    detailDatas.npwpFile == ""
+        ? responses.fields['npwp_file'] = encodedImageNPWP
+        : responses.fields['npwp_file'] = detailDatas.npwpFile;
+    responses.fields['customer_signature'] = 'data:image/png;base64,$encoded';
+    http.StreamedResponse response = await responses.send();
+    final res = await http.Response.fromStream(response);
+
+    print('INI HASIL POST UPDATE PPENGEMBALIAN PEMBAYARAN ${res.body}');
+    Create create = Create.fromJson(json.decode(res.body));
 
     if (response.statusCode == 200) {
       successAlert(create.dataCreate.message);

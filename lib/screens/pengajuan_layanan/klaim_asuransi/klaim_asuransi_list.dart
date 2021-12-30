@@ -252,21 +252,21 @@ class _KlaimAsuransiListState extends State<KlaimAsuransiList> {
                   ],
                 ),
                 onPressed: () {
-                  if (custID.contains('000')) {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => KlaimAsuransiForm(),
-                      ),
-                    ).then((value) => setState(() {
-                          datas.clear();
-                          nextPage = '';
-                          loadMore();
-                        }));
-                  } else {
-                    showToast(
-                        'Klaim asuransi hanya untuk pelanggan GPIR & GPIK');
-                  }
+                  // if (custID.contains('000')) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => KlaimAsuransiForm(),
+                    ),
+                  ).then((value) => setState(() {
+                        datas.clear();
+                        nextPage = '';
+                        loadMore();
+                      }));
+                  // } else {
+                  //   showToast(
+                  //       'Klaim asuransi hanya untuk pelanggan GPIR & GPIK');
+                  // }
                 },
               ),
             ),

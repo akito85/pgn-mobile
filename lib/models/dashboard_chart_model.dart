@@ -525,12 +525,13 @@ class DataHourlyUsage {
   DateDaily date;
   String meterId;
   Pressure pressure;
-  String cFactor;
+  dynamic cFactor;
   CIndex cIndex;
   UnCIndex unCIndex;
   Temp temp;
   Volume volume;
   Energy energy;
+  GHV ghv;
   MeterCap meterCap;
   MeterStat meterStat;
   String capPer;
@@ -547,13 +548,14 @@ class DataHourlyUsage {
       this.volume,
       this.meterCap,
       this.meterStat,
-      this.capPer});
+      this.capPer,
+      this.ghv});
 
   factory DataHourlyUsage.fromJson(Map<String, dynamic> json) {
     return DataHourlyUsage(
       // id: json['id'],
       date: DateDaily.fromJson(json['date']),
-      meterId: json['meter_id'],
+      meterId: json['asset_serial'],
       pressure: Pressure.fromJson(json['pressure']),
       cFactor: json['correction_factor'],
       cIndex: CIndex.fromJson(json['corrected_index']),
@@ -563,6 +565,7 @@ class DataHourlyUsage {
       energy: Energy.fromJson(json['energy']),
       meterCap: MeterCap.fromJson(json['meter_capacity']),
       meterStat: MeterStat.fromJson(json['meter_status']),
+      ghv: GHV.fromJson(json['ghv']),
       capPer: json['capacity_percentage'],
     );
   }
@@ -576,6 +579,20 @@ class MeterStat {
 
   factory MeterStat.fromJson(Map<String, dynamic> json) {
     return MeterStat(
+      value: json['value'],
+      display: json['display'],
+    );
+  }
+}
+
+class GHV {
+  int value;
+  String display;
+
+  GHV({this.display, this.value});
+
+  factory GHV.fromJson(Map<String, dynamic> json) {
+    return GHV(
       value: json['value'],
       display: json['display'],
     );

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:pgn_mobile/services/app_localizations.dart';
 import 'dart:async';
-
+import 'package:geolocator/geolocator.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class MapPoint extends StatefulWidget {
@@ -19,6 +19,7 @@ class MapPointState extends State<MapPoint> {
   String icon = "assets/currentlocation_icon.png";
 
   void _onMapCreated(GoogleMapController controller) {
+    _getCurrentLocation();
     _controller.complete(controller);
   }
 
@@ -37,6 +38,20 @@ class MapPointState extends State<MapPoint> {
     //   markers["1"] = marker.copyWith(
     //       positionParam: LatLng(newMarkerPosition.latitude, newMarkerPosition.longitude));
     // });
+  }
+
+  _getCurrentLocation() {
+    Geolocator.getCurrentPosition(
+            desiredAccuracy: LocationAccuracy.best,
+            forceAndroidLocationManager: true)
+        .then((Position position) {
+      setState(() {
+        lat = position.latitude;
+        lang = position.longitude;
+      });
+    }).catchError((e) {
+      print(e);
+    });
   }
 
   @override

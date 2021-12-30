@@ -67,6 +67,8 @@ dependencies:
   custom_switch: ^0.0.1
   google_fonts: ^1.1.2
   path_provider: ^2.0.4
+  geolocator: ^6.1.0
+  geocoding: ^1.0.5
   # webview_flutter: ^0.3.13
 
 dev_dependencies:

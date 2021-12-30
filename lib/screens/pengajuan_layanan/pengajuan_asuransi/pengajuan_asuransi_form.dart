@@ -57,6 +57,7 @@ class _PengajuanAsuransiFormState extends State<PengajuanAsuransiForm> {
   String email = '';
   String phoneNumb = '';
   String statusLokasi;
+  File imgNPWP;
 
   TextEditingController tempatLahirCtrl = new TextEditingController();
   TextEditingController nikCtrl = new TextEditingController();
@@ -575,7 +576,7 @@ class _PengajuanAsuransiFormState extends State<PengajuanAsuransiForm> {
                     Padding(
                       padding: EdgeInsets.only(top: 20, left: 16, right: 16),
                       child: Text(
-                        'Nomer Handphone',
+                        'Nomor Handphone',
                         style: TextStyle(
                             color: Color(0xFF455055),
                             fontWeight: FontWeight.bold),
@@ -1472,7 +1473,7 @@ class _PengajuanAsuransiFormState extends State<PengajuanAsuransiForm> {
                   Padding(
                     padding: EdgeInsets.only(top: 20, left: 16, right: 16),
                     child: Text(
-                      'Nomer NPWP',
+                      'Nomor NPWP',
                       style: TextStyle(
                           color: Color(0xFF455055),
                           fontWeight: FontWeight.bold),
@@ -2028,6 +2029,16 @@ class _PengajuanAsuransiFormState extends State<PengajuanAsuransiForm> {
   }
 
   void submitForm() async {
+    String encodedImageNPWP;
+    if (_fileName != null) {
+      Uint8List imageUnit8;
+      imageUnit8 = imgNPWP.readAsBytesSync();
+      String fileExt = imgNPWP.path.split('.').last;
+      encodedImageNPWP =
+          'data:image/$fileExt;base64,${base64Encode(imageUnit8)}';
+    } else {
+      encodedImageNPWP = "";
+    }
     final sign = _sign.currentState;
     final image = await sign.getData();
     var data = await image.toByteData(format: ui.ImageByteFormat.png);
@@ -2070,7 +2081,7 @@ class _PengajuanAsuransiFormState extends State<PengajuanAsuransiForm> {
       "submission_insurance_fee": dataPremi,
       "npwp_number": numberNpwpCtrl.text,
       "ktp_address": ktpAddressCtrl.text,
-      "npwp_file": 'test',
+      "npwp_file": encodedImageNPWP,
       "customer_signature": 'data:image/png;base64,$encoded',
     });
     var response = await http.post(
@@ -2113,6 +2124,7 @@ class _PengajuanAsuransiFormState extends State<PengajuanAsuransiForm> {
       File file = File(result.files.single.path.toString());
       setState(() {
         _fileName = result.names.single;
+        imgNPWP = file;
         print('NAMA FILE : $_fileName');
       });
     } else {

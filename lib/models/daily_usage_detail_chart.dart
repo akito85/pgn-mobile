@@ -37,6 +37,7 @@ class DataDailyUsageChart {
   MeterCap meterCap;
   MeterStat meterStat;
   String capPercentage;
+  GHV ghv;
 
   DataDailyUsageChart(
       {this.id,
@@ -51,7 +52,8 @@ class DataDailyUsageChart {
       this.capPercentage,
       this.energy,
       this.meterCap,
-      this.meterStat});
+      this.meterStat,
+      this.ghv});
 
   factory DataDailyUsageChart.fromJson(Map<String, dynamic> json) {
     return DataDailyUsageChart(
@@ -67,6 +69,7 @@ class DataDailyUsageChart {
         energy: Energy.fromJson(json['energy']),
         meterCap: MeterCap.fromJson(json['meter_capacity']),
         meterStat: MeterStat.fromJson(json['meter_status']),
+        ghv: GHV.fromJson(json['ghv']),
         capPercentage: json['capacity_percentage']);
   }
 }
@@ -79,6 +82,20 @@ class DateDetail {
 
   factory DateDetail.fromJson(Map<String, dynamic> json) {
     return DateDetail(value: json['value'], display: json['display']);
+  }
+}
+
+class GHV {
+  int value;
+  String display;
+
+  GHV({this.display, this.value});
+
+  factory GHV.fromJson(Map<String, dynamic> json) {
+    return GHV(
+      value: json['value'],
+      display: json['display'],
+    );
   }
 }
 

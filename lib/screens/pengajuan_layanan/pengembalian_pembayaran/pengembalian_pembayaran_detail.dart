@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -10,6 +11,7 @@ import 'package:http/http.dart' as http;
 import 'package:pgn_mobile/screens/otp/otp.dart';
 import 'package:pgn_mobile/screens/pengajuan_layanan/pengembalian_pembayaran/pengembalian_pembayaran_update.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class PengembalianPembayaranDetail extends StatefulWidget {
   final int id;
@@ -24,7 +26,8 @@ class _PengembalianPembayaranDetailState
   final int id;
   _PengembalianPembayaranDetailState({this.id});
   final storageCache = FlutterSecureStorage();
-
+  var splitString;
+  Uint8List image;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -65,6 +68,11 @@ class _PengembalianPembayaranDetailState
                   ),
                 ],
               );
+            if (snapshot.data.npwpFile != "") {
+              splitString = snapshot.data.npwpFile.split(',');
+              image = base64.decode(splitString[1]);
+            }
+
             return Stack(
               children: [
                 Container(
@@ -276,7 +284,7 @@ class _PengembalianPembayaranDetailState
                           children: [
                             Container(
                               width: 150,
-                              child: Text('Nomer Handphone'),
+                              child: Text('Nomor Handphone'),
                             ),
                             Container(
                               margin: const EdgeInsets.only(left: 10),
@@ -528,7 +536,7 @@ class _PengembalianPembayaranDetailState
                           children: [
                             Container(
                               width: 150,
-                              child: Text('Nomer NPWP'),
+                              child: Text('Nomor NPWP'),
                             ),
                             Container(
                               margin: const EdgeInsets.only(left: 10),
@@ -559,10 +567,57 @@ class _PengembalianPembayaranDetailState
                               width: 10,
                               child: Text(':'),
                             ),
+                            snapshot.data.npwpFile != ""
+                                ? Expanded(
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(left: 2),
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          _showDialog(context, image);
+                                        },
+                                        child: Container(
+                                            width: 100,
+                                            height: 100,
+                                            margin: EdgeInsets.only(
+                                                right: 15, left: 0),
+                                            decoration: BoxDecoration(
+                                                color: Colors.black,
+                                                borderRadius:
+                                                    BorderRadius.circular(5),
+                                                image: DecorationImage(
+                                                    fit: BoxFit.fill,
+                                                    image:
+                                                        MemoryImage(image)))),
+                                      ),
+                                    ),
+                                  )
+                                : Text('-'),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding:
+                            const EdgeInsets.only(left: 5, right: 5, top: 10),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              width: 150,
+                              child: Text('File Surat Kuasa'),
+                            ),
+                            Container(
+                              margin: const EdgeInsets.only(left: 10),
+                              width: 10,
+                              child: Text(':'),
+                            ),
                             Expanded(
                               child: Padding(
                                 padding: const EdgeInsets.only(left: 2),
-                                child: Text('${snapshot.data.npwpFile}'),
+                                child: GestureDetector(
+                                    onTap: () {
+                                      _launchURL(snapshot.data.bankFile);
+                                    },
+                                    child: Text('${snapshot.data.bankFile}')),
                               ),
                             ),
                           ],
@@ -600,7 +655,7 @@ class _PengembalianPembayaranDetailState
                           children: [
                             Container(
                               width: 150,
-                              child: Text('Nomer Rekening'),
+                              child: Text('Nomor Rekening'),
                             ),
                             Container(
                               margin: const EdgeInsets.only(left: 10),
@@ -821,5 +876,58 @@ class _PengembalianPembayaranDetailState
     } else {
       showToast(deleteFormId.dataCreate.message);
     }
+  }
+
+  void _showDialog(BuildContext context, Uint8List image) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          insetPadding: EdgeInsets.zero,
+          contentPadding: EdgeInsets.zero,
+          clipBehavior: Clip.antiAliasWithSaveLayer,
+          backgroundColor: Colors.transparent,
+          content: Container(
+            alignment: Alignment.center,
+            width: MediaQuery.of(context).size.width,
+            height: 500.0,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Container(
+                    width: 350,
+                    height: 400,
+                    margin: EdgeInsets.only(bottom: 10),
+                    decoration: BoxDecoration(
+                        color: Colors.black,
+                        borderRadius: BorderRadius.circular(10),
+                        image: DecorationImage(
+                            fit: BoxFit.fill, image: MemoryImage(image)))),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text(
+                    'Close',
+                    maxLines: 1,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: Colors.white),
+                  ),
+                )
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+}
+
+_launchURL(String url) async {
+  if (await canLaunch(url)) {
+    await launch(url);
+  } else {
+    throw 'Could not launch $url';
   }
 }

@@ -196,6 +196,7 @@ Future<HarianDetailCustDashboard> fetchPost(
       'Accept-Language': lang
     },
   );
+  print('INI PERIOD DETAIL ${responseDailyUsage.body}');
   HarianDetailCustDashboard detailCustDashboard =
       HarianDetailCustDashboard.fromJson(json.decode(responseDailyUsage.body));
 

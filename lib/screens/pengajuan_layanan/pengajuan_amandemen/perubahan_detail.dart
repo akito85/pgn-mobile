@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -8,7 +9,6 @@ import 'package:pgn_mobile/models/pengajuan_amendemen_segmen_model.dart';
 import 'package:pgn_mobile/models/url_cons.dart';
 import 'package:http/http.dart' as http;
 import 'package:pgn_mobile/screens/otp/otp.dart';
-import 'package:pgn_mobile/screens/pengajuan_layanan/berhenti_berlangganan/berhenti_berlangganan_update.dart';
 import 'package:pgn_mobile/screens/pengajuan_layanan/pengajuan_amandemen/penajuan_amendemen_segmen_update.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
@@ -23,6 +23,8 @@ class _SegmenDetailState extends State<SegmenDetail> {
   final int id;
   _SegmenDetailState({this.id});
   final storageCache = FlutterSecureStorage();
+  var splitString;
+  Uint8List image;
 
   @override
   Widget build(BuildContext context) {
@@ -64,6 +66,10 @@ class _SegmenDetailState extends State<SegmenDetail> {
                   ),
                 ],
               );
+            if (snapshot.data.npwpFile != "") {
+              splitString = snapshot.data.npwpFile.split(',');
+              image = base64.decode(splitString[1]);
+            }
             return Stack(
               children: [
                 Container(
@@ -275,7 +281,7 @@ class _SegmenDetailState extends State<SegmenDetail> {
                           children: [
                             Container(
                               width: 150,
-                              child: Text('Nomer Handphone'),
+                              child: Text('Nomor Handphone'),
                             ),
                             Container(
                               margin: const EdgeInsets.only(left: 10),
@@ -527,7 +533,7 @@ class _SegmenDetailState extends State<SegmenDetail> {
                           children: [
                             Container(
                               width: 150,
-                              child: Text('Nomer NPWP'),
+                              child: Text('Nomor NPWP'),
                             ),
                             Container(
                               margin: const EdgeInsets.only(left: 10),
@@ -558,12 +564,31 @@ class _SegmenDetailState extends State<SegmenDetail> {
                               width: 10,
                               child: Text(':'),
                             ),
-                            Expanded(
-                              child: Padding(
-                                padding: const EdgeInsets.only(left: 2),
-                                child: Text('${snapshot.data.npwpFile}'),
-                              ),
-                            ),
+                            snapshot.data.npwpFile != ""
+                                ? Expanded(
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(left: 2),
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          _showDialog(context, image);
+                                        },
+                                        child: Container(
+                                            width: 100,
+                                            height: 100,
+                                            margin: EdgeInsets.only(
+                                                right: 15, left: 0),
+                                            decoration: BoxDecoration(
+                                                color: Colors.black,
+                                                borderRadius:
+                                                    BorderRadius.circular(5),
+                                                image: DecorationImage(
+                                                    fit: BoxFit.fill,
+                                                    image:
+                                                        MemoryImage(image)))),
+                                      ),
+                                    ),
+                                  )
+                                : Text('-'),
                           ],
                         ),
                       ),
@@ -611,31 +636,6 @@ class _SegmenDetailState extends State<SegmenDetail> {
                               child: Padding(
                                 padding: const EdgeInsets.only(left: 2),
                                 child: Text('${snapshot.data.custGroup}'),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding:
-                            const EdgeInsets.only(left: 5, right: 5, top: 10),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                              width: 150,
-                              child: Text('Bulan berlaku yang diajukan'),
-                            ),
-                            Container(
-                              margin: const EdgeInsets.only(left: 10),
-                              width: 10,
-                              child: Text(':'),
-                            ),
-                            Expanded(
-                              child: Padding(
-                                padding: const EdgeInsets.only(left: 2),
-                                child: Text(
-                                    '${DateFormat('dd MMMM yyy').format(DateTime.parse(snapshot.data.subDate).toLocal())}'),
                               ),
                             ),
                           ],
@@ -1005,5 +1005,50 @@ class _SegmenDetailState extends State<SegmenDetail> {
     } else {
       showToast(deleteFormId.dataCreate.message);
     }
+  }
+
+  void _showDialog(BuildContext context, Uint8List image) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          insetPadding: EdgeInsets.zero,
+          contentPadding: EdgeInsets.zero,
+          clipBehavior: Clip.antiAliasWithSaveLayer,
+          backgroundColor: Colors.transparent,
+          content: Container(
+            alignment: Alignment.center,
+            width: MediaQuery.of(context).size.width,
+            height: 500.0,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Container(
+                    width: 350,
+                    height: 400,
+                    margin: EdgeInsets.only(bottom: 10),
+                    decoration: BoxDecoration(
+                        color: Colors.black,
+                        borderRadius: BorderRadius.circular(10),
+                        image: DecorationImage(
+                            fit: BoxFit.fill, image: MemoryImage(image)))),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text(
+                    'Close',
+                    maxLines: 1,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: Colors.white),
+                  ),
+                )
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
 }

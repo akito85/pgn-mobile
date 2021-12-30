@@ -26,7 +26,11 @@ class PengajuanLayanan extends StatelessWidget {
         children: [
           Container(
             height: 140,
-            color: Color(0xff427CEF),
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('assets/pengajuanBanner.jpeg'),
+              ),
+            ),
             margin: EdgeInsets.symmetric(vertical: 5, horizontal: 18),
           ),
           Padding(
@@ -70,6 +74,13 @@ class PengajuanLayanan extends StatelessWidget {
                       child: CircleAvatar(
                         backgroundColor: Color(0xFF427CEF),
                         radius: 15,
+                        child: Padding(
+                          padding: const EdgeInsets.all(2.0),
+                          child: Image.asset(
+                            'assets/doc-amandemen.png',
+                            color: Colors.white,
+                          ),
+                        ),
                       ),
                     ),
                   ),
@@ -101,6 +112,13 @@ class PengajuanLayanan extends StatelessWidget {
                       child: CircleAvatar(
                         backgroundColor: Color(0xFF427CEF),
                         radius: 15,
+                        child: Padding(
+                          padding: const EdgeInsets.all(2.0),
+                          child: Image.asset(
+                            'assets/doc-stop service.png',
+                            color: Colors.white,
+                          ),
+                        ),
                       ),
                     ),
                   ),
@@ -151,6 +169,13 @@ class PengajuanLayanan extends StatelessWidget {
                       child: CircleAvatar(
                         backgroundColor: Color(0xFF427CEF),
                         radius: 15,
+                        child: Padding(
+                          padding: const EdgeInsets.all(2.0),
+                          child: Image.asset(
+                            'assets/doc-pause.png',
+                            color: Colors.white,
+                          ),
+                        ),
                       ),
                     ),
                   ),
@@ -182,6 +207,13 @@ class PengajuanLayanan extends StatelessWidget {
                       child: CircleAvatar(
                         backgroundColor: Color(0xFF427CEF),
                         radius: 15,
+                        child: Padding(
+                          padding: const EdgeInsets.all(2.0),
+                          child: Image.asset(
+                            'assets/doc-run.png',
+                            color: Colors.white,
+                          ),
+                        ),
                       ),
                     ),
                   ),
@@ -213,6 +245,13 @@ class PengajuanLayanan extends StatelessWidget {
                       child: CircleAvatar(
                         backgroundColor: Color(0xFF427CEF),
                         radius: 15,
+                        child: Padding(
+                          padding: const EdgeInsets.all(2.0),
+                          child: Image.asset(
+                            'assets/doc-install.png',
+                            color: Colors.white,
+                          ),
+                        ),
                       ),
                     ),
                   ),
@@ -247,6 +286,13 @@ class PengajuanLayanan extends StatelessWidget {
                       child: CircleAvatar(
                         backgroundColor: Color(0xFF427CEF),
                         radius: 15,
+                        child: Padding(
+                          padding: const EdgeInsets.all(2.0),
+                          child: Image.asset(
+                            'assets/doc-technical.png',
+                            color: Colors.white,
+                          ),
+                        ),
                       ),
                     ),
                   ),
@@ -281,6 +327,13 @@ class PengajuanLayanan extends StatelessWidget {
                       child: CircleAvatar(
                         backgroundColor: Color(0xFF427CEF),
                         radius: 15,
+                        child: Padding(
+                          padding: const EdgeInsets.all(2.0),
+                          child: Image.asset(
+                            'assets/doc-technical.png',
+                            color: Colors.white,
+                          ),
+                        ),
                       ),
                     ),
                   ),
@@ -315,6 +368,13 @@ class PengajuanLayanan extends StatelessWidget {
                       child: CircleAvatar(
                         backgroundColor: Color(0xFF427CEF),
                         radius: 15,
+                        child: Padding(
+                          padding: const EdgeInsets.all(2.0),
+                          child: Image.asset(
+                            'assets/doc-technical.png',
+                            color: Colors.white,
+                          ),
+                        ),
                       ),
                     ),
                   ),
@@ -349,6 +409,13 @@ class PengajuanLayanan extends StatelessWidget {
                       child: CircleAvatar(
                         backgroundColor: Color(0xFF427CEF),
                         radius: 15,
+                        child: Padding(
+                          padding: const EdgeInsets.all(2.0),
+                          child: Image.asset(
+                            'assets/doc-technical.png',
+                            color: Colors.white,
+                          ),
+                        ),
                       ),
                     ),
                   ),
@@ -383,6 +450,13 @@ class PengajuanLayanan extends StatelessWidget {
                       child: CircleAvatar(
                         backgroundColor: Color(0xFF427CEF),
                         radius: 15,
+                        child: Padding(
+                          padding: const EdgeInsets.all(2.0),
+                          child: Image.asset(
+                            'assets/doc-technical.png',
+                            color: Colors.white,
+                          ),
+                        ),
                       ),
                     ),
                   ),
@@ -417,6 +491,13 @@ class PengajuanLayanan extends StatelessWidget {
                       child: CircleAvatar(
                         backgroundColor: Color(0xFF427CEF),
                         radius: 15,
+                        child: Padding(
+                          padding: const EdgeInsets.all(2.0),
+                          child: Image.asset(
+                            'assets/doc-technical.png',
+                            color: Colors.white,
+                          ),
+                        ),
                       ),
                     ),
                   ),
@@ -465,6 +546,13 @@ class PengajuanLayanan extends StatelessWidget {
                       child: CircleAvatar(
                         backgroundColor: Color(0xFF427CEF),
                         radius: 15,
+                        child: Padding(
+                          padding: const EdgeInsets.all(2.0),
+                          child: Image.asset(
+                            'assets/doc-update.png',
+                            color: Colors.white,
+                          ),
+                        ),
                       ),
                     ),
                   ),
@@ -496,6 +584,13 @@ class PengajuanLayanan extends StatelessWidget {
                       child: CircleAvatar(
                         backgroundColor: Color(0xFF427CEF),
                         radius: 15,
+                        child: Padding(
+                          padding: const EdgeInsets.all(2.0),
+                          child: Image.asset(
+                            'assets/doc-return.png',
+                            color: Colors.white,
+                          ),
+                        ),
                       ),
                     ),
                   ),
@@ -527,6 +622,13 @@ class PengajuanLayanan extends StatelessWidget {
                       child: CircleAvatar(
                         backgroundColor: Color(0xFF427CEF),
                         radius: 15,
+                        child: Padding(
+                          padding: const EdgeInsets.all(2.0),
+                          child: Image.asset(
+                            'assets/doc-insurance.png',
+                            color: Colors.white,
+                          ),
+                        ),
                       ),
                     ),
                   ),
@@ -559,6 +661,13 @@ class PengajuanLayanan extends StatelessWidget {
                       child: CircleAvatar(
                         backgroundColor: Color(0xFF427CEF),
                         radius: 15,
+                        child: Padding(
+                          padding: const EdgeInsets.all(2.0),
+                          child: Image.asset(
+                            'assets/doc-claim.png',
+                            color: Colors.white,
+                          ),
+                        ),
                       ),
                     ),
                   ),

@@ -36,9 +36,9 @@ class HarianDetailCustChartState extends State<HarianDetailCustChart> {
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
-        isLoading = true;
+        isLoading = false;
 
-        this.loadMore();
+        // this.loadMore();
       }
     });
   }
@@ -370,7 +370,7 @@ class Card1 extends StatelessWidget {
                               child: Container(
                                 margin: EdgeInsets.only(left: 5.0, top: 15),
                                 child: Text(
-                                  "-",
+                                  data.ghv.display ?? "-",
                                   style: TextStyle(
                                       fontSize: 13.0,
                                       fontWeight: FontWeight.w400,
@@ -580,7 +580,7 @@ class Card1 extends StatelessWidget {
                               child: Container(
                                 margin: EdgeInsets.only(left: 5.0, top: 15),
                                 child: Text(
-                                  "-",
+                                  data.ghv.display ?? "-",
                                   style: TextStyle(
                                       fontSize: 13.0,
                                       fontWeight: FontWeight.w400,
@@ -728,7 +728,7 @@ class Card1 extends StatelessWidget {
                               child: Container(
                                 margin: EdgeInsets.only(left: 5.0, top: 15),
                                 child: Text(
-                                  data.cFactor,
+                                  data.cFactor.toString(),
                                   style: TextStyle(
                                       fontSize: 13.0,
                                       fontWeight: FontWeight.w400,
