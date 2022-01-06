@@ -109,7 +109,7 @@ class HarianTabDetailState extends State<Harian> with TickerProviderStateMixin {
   bool vis5 = true;
   void getPeriod() {
     final now = DateTime.now();
-    final sixMonthAgo = now.subtract(Duration(days: 160));
+    final sixMonthAgo = now.subtract(Duration(days: 150));
     final sixMonthFromNow = DateTime(sixMonthAgo.year, sixMonthAgo.month + 6);
     DateTime date = sixMonthAgo;
     hintPeriod = now.toString();

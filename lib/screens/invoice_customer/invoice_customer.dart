@@ -28,164 +28,102 @@ class BillDetailState extends State<InvoiceCust>
   var prevMonth1, prevMonth2, prevMonth3;
   var currentDate = new DateTime.now();
   TabController _tabController;
-  List<String> listMenus = [];
-  final storageCache = new FlutterSecureStorage();
+
   @override
   void initState() {
     _tabController = new TabController(length: 3, vsync: this, initialIndex: 2);
     super.initState();
-    getCred(context);
   }
 
   Widget build(BuildContext context) {
-    prevMonth1 = currentDate.month - 1;
-    prevMonth2 = new DateTime(currentDate.month - 2);
-    prevMonth3 = new DateTime(currentDate.month - 3);
-    print('prevMonth1: ${currentDate.month - 1}');
-    int currentYear = DateTime.now().year;
-    int currentMonth = DateTime.now().month;
-    int month2 = currentMonth - 1;
-    int month3 = currentMonth - 2;
-    String y = "10";
-    String sNull = "0";
-    String month3S, month2S, currentMonthS;
-
-    if (currentMonth == 2) {
-      int currentYears = DateTime.now().year - 1;
-      String y1 = "12";
-      int y2 = 11;
-
-      String cal2 = '$currentYear$y1';
-      String cal1 = '$currentYears$y2';
-      currentMonthS = '01';
-      month2S = cal2;
-      month3S = cal1;
-    }
-    // else if (currentMonth == 3) {
-    //   int currentYears = DateTime.now().year - 1;
-    //   String y1 = "01";
-    //   int y2 = 12;
-
-    //   String cal2 = '$currentYear$y1';
-    //   String cal1 = '$currentYears$y2';
-    //   currentMonthS = '02';
-    //   month2S = cal2;
-    //   month3S = cal1;
-    // }
-    else if (currentMonth == 1) {
-      int currentYears = DateTime.now().year - 1;
-      int y1 = 11;
-      int y2 = 10;
-      String cal2 = '$currentYears$y1';
-      String cal1 = '$currentYears$y2';
-      currentMonthS = '12';
-      month2S = cal2;
-      month3S = cal1;
-    } else {
-      currentYear = DateTime.now().year;
-      if (currentMonth < 10) {
-        currentMonthS = '0$currentMonth$y';
-      } else {
-        currentMonthS = '${currentMonth.toString()}$y';
-      }
-      if (month2 < 10) {
-        month2S = '$currentYear$sNull$month2';
-      } else {
-        month2S = '$currentYear$month2';
-      }
-
-      if (month3 < 10) {
-        month3S = '$currentYear$sNull$month3';
-      } else {
-        month3S = '$currentYear$month3';
-      }
-    }
-    String dateformatCurrent =
-        '${currentYear.toString()}${currentMonthS.toString()}';
-    String dateformatCurrent2 = '${month2S.toString()}10';
-
-    String dateformatCurrent3 = '${month3S.toString()}10';
-
-    String formatDate =
-        DateFormat("yyyMM").format(DateTime.parse(dateformatCurrent));
-    String formatDate2 =
-        DateFormat("yyyMM").format(DateTime.parse(dateformatCurrent2));
-    String formatDate3 =
-        DateFormat("yyyMM").format(DateTime.parse(dateformatCurrent3));
-    // print(' DATE FORMAT TITLE CURRENT : $dateformatCurrent');
-    // print(' DATE FORMAT TITLE 2 : $dateformatCurrent2');
-    // print(' DATE FORMAT TITLE paling kiri : $dateformatCurrent3');
-    // print(' DATE FORMAT API CURRENT : $formatDate');
-    // print(' DATE FORMAT API 2 : $formatDate2');
-    // print(' DATE FORMAT API paling kiri : $formatDate3');
     return Scaffold(
       // backgroundColor: Colors.black,
       body: Stack(
         children: <Widget>[
-          DefaultTabController(
-            length: 3,
-            child: Scaffold(
-                // backgroundColor: Colors.black,
-                appBar: PreferredSize(
-                  preferredSize: Size.fromHeight(kToolbarHeight),
-                  child: Column(
+          FutureBuilder<CustomerInvoice>(
+              future: getCustomerInvoice(context, custID),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) return LinearProgressIndicator();
+                if (snapshot.data.message != null)
+                  return Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20.0),
-                          color: Colors.white,
+                        alignment: Alignment.center,
+                        child: Image.asset('assets/penggunaan_gas.png'),
+                      ),
+                      SizedBox(height: 20),
+                      Container(
+                        child: Text(
+                          snapshot.data.message,
+                          style: TextStyle(fontSize: 18),
                         ),
-                        height: 45,
-                        child: TabBar(
-                          controller: _tabController,
-                          isScrollable: true,
-                          indicatorColor: Color(0xff427CEF),
-                          indicatorWeight: 1,
-                          indicatorPadding:
-                              EdgeInsets.only(left: 15, right: 15),
-                          labelColor: Colors.white,
-                          unselectedLabelColor: Color(0xff427CEF),
-                          indicator: ShapeDecoration(
-                              color: Color(0xff427CEF),
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(15.0),
-                                  side: BorderSide(
+                      )
+                    ],
+                  );
+                return DefaultTabController(
+                  length: 3,
+                  child: Scaffold(
+                      // backgroundColor: Colors.black,
+                      appBar: PreferredSize(
+                        preferredSize: Size.fromHeight(kToolbarHeight),
+                        child: Column(
+                          children: <Widget>[
+                            Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20.0),
+                                color: Colors.white,
+                              ),
+                              height: 45,
+                              child: TabBar(
+                                controller: _tabController,
+                                isScrollable: true,
+                                indicatorColor: Color(0xff427CEF),
+                                indicatorWeight: 1,
+                                indicatorPadding:
+                                    EdgeInsets.only(left: 15, right: 15),
+                                labelColor: Colors.white,
+                                unselectedLabelColor: Color(0xff427CEF),
+                                indicator: ShapeDecoration(
                                     color: Color(0xff427CEF),
-                                  ))),
-                          tabs: [
-                            Tab(
-                                child: Padding(
-                              padding: const EdgeInsets.all(10.0),
-                              child: Text(
-                                '${DateFormat("MMMM").format(DateTime.parse(dateformatCurrent3))} ${DateFormat("yyy").format(DateTime.parse(dateformatCurrent3))}',
-                                style: TextStyle(fontSize: 15),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(15.0),
+                                        side: BorderSide(
+                                          color: Color(0xff427CEF),
+                                        ))),
+                                tabs: [
+                                  Tab(
+                                      child: Padding(
+                                    padding: const EdgeInsets.all(10.0),
+                                    child: Text(
+                                      '${snapshot.data.data[0].invoicePeriod.display}',
+                                      style: TextStyle(fontSize: 15),
+                                    ),
+                                  )),
+                                  Tab(
+                                      child: Padding(
+                                    padding: const EdgeInsets.all(10.0),
+                                    child: Text(
+                                      '${snapshot.data.data[1].invoicePeriod.display}',
+                                      style: TextStyle(fontSize: 15),
+                                    ),
+                                  )),
+                                  Tab(
+                                      child: Padding(
+                                    padding: const EdgeInsets.all(10.0),
+                                    child: Text(
+                                      '${snapshot.data.data[2].invoicePeriod.display}',
+                                      style: TextStyle(fontSize: 15),
+                                    ),
+                                  )),
+                                ],
                               ),
-                            )),
-                            Tab(
-                                child: Padding(
-                              padding: const EdgeInsets.all(10.0),
-                              child: Text(
-                                '${DateFormat("MMMM").format(DateTime.parse(dateformatCurrent2))} ${DateFormat("yyy").format(DateTime.parse(dateformatCurrent2))}',
-                                style: TextStyle(fontSize: 15),
-                              ),
-                            )),
-                            Tab(
-                                child: Padding(
-                              padding: const EdgeInsets.all(10.0),
-                              child: Text(
-                                '${DateFormat("MMMM").format(DateTime.parse(dateformatCurrent))} ${DateFormat("yyy").format(DateTime.parse(dateformatCurrent))}',
-                                style: TextStyle(fontSize: 15),
-                              ),
-                            )),
+                            ),
                           ],
                         ),
                       ),
-                    ],
-                  ),
-                ),
-                // ID MENU INVOICE 11
-                body: listMenus.contains('11')
-                    ? Stack(
+                      body: Stack(
                         children: <Widget>[
                           Container(
                             decoration: new BoxDecoration(
@@ -199,195 +137,87 @@ class BillDetailState extends State<InvoiceCust>
                           TabBarView(
                             controller: _tabController,
                             children: [
-                              _buildContent2(context, formatDate, custID),
-                              _buildContent1(context, formatDate2, custID),
-                              _buildContent0(context, formatDate3, custID),
+                              Column(
+                                children: <Widget>[
+                                  Expanded(
+                                    child: ListView.builder(
+                                      shrinkWrap: true,
+                                      // physics: NeverScrollableScrollPhysics(),
+                                      itemCount: 1,
+                                      itemBuilder: (context, i) {
+                                        return i < 1
+                                            ? Container(
+                                                margin: EdgeInsets.only(
+                                                    left: 10.0,
+                                                    right: 10.0,
+                                                    top: 10),
+                                                child: _buildRow(
+                                                    snapshot.data.data[0]))
+                                            : SizedBox(
+                                                height: 10.0,
+                                              );
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Column(
+                                children: <Widget>[
+                                  Expanded(
+                                    child: ListView.builder(
+                                      shrinkWrap: true,
+                                      // physics: NeverScrollableScrollPhysics(),
+                                      itemCount: 1,
+                                      itemBuilder: (context, i) {
+                                        return i < 1
+                                            ? Container(
+                                                margin: EdgeInsets.only(
+                                                    left: 10.0,
+                                                    right: 10.0,
+                                                    top: 10),
+                                                child: _buildRow(
+                                                    snapshot.data.data[1]))
+                                            : SizedBox(
+                                                height: 10.0,
+                                              );
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Column(
+                                children: <Widget>[
+                                  Expanded(
+                                    child: ListView.builder(
+                                      shrinkWrap: true,
+                                      // physics: NeverScrollableScrollPhysics(),
+                                      itemCount: 1,
+                                      itemBuilder: (context, i) {
+                                        return i < 1
+                                            ? Container(
+                                                margin: EdgeInsets.only(
+                                                    left: 10.0,
+                                                    right: 10.0,
+                                                    top: 10),
+                                                child: _buildRow(
+                                                    snapshot.data.data[2]))
+                                            : SizedBox(
+                                                height: 10.0,
+                                              );
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ],
                           ),
                         ],
-                      )
-                    : Stack(
-                        children: <Widget>[
-                          Container(
-                            decoration: new BoxDecoration(
-                              image: new DecorationImage(
-                                image:
-                                    new AssetImage("assets/new_backgound.jpeg"),
-                                fit: BoxFit.fill,
-                              ),
-                            ),
-                          ),
-                          Center(child: Text('SILAHKAN UPGRADE PRODUK ANDA'))
-                        ],
                       )),
-          ),
+                );
+              }),
         ],
       ),
     );
-  }
-
-  Widget _buildContent2(BuildContext context, String title, String custID) {
-    return ListView(
-      children: <Widget>[
-        Container(
-          margin: EdgeInsets.only(left: 10.0, right: 10.0, top: 10),
-          child: _buildCharContent2(
-              context, getCustomerInvoice(context, custID), title),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildCharContent2(
-      BuildContext context, Future<CustomerInvoice> getInvoiceData, title) {
-    return FutureBuilder<CustomerInvoice>(
-      future: getInvoiceData,
-      builder: (context, snapshot) {
-        if (!snapshot.hasData) return LinearProgressIndicator();
-        if (snapshot.data.message != null)
-          return Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Container(
-                alignment: Alignment.center,
-                child: Image.asset('assets/penggunaan_gas.png'),
-              ),
-              SizedBox(height: 20),
-              Container(
-                child: Text(
-                  snapshot.data.message,
-                  style: TextStyle(fontSize: 18),
-                ),
-              )
-            ],
-          );
-        return Column(
-          children: <Widget>[
-            ListView.builder(
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              itemCount: 1,
-              itemBuilder: (context, i) {
-                return i < 1
-                    ? _buildRow(snapshot.data.data[2])
-                    : SizedBox(
-                        height: 10.0,
-                      );
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  Widget _buildContent0(BuildContext context, String title, String custID) {
-    return ListView(
-      children: <Widget>[
-        Container(
-          margin: EdgeInsets.only(left: 10.0, right: 10.0, top: 10),
-          child: _buildCharContent0(
-              context, getCustomerInvoice(context, custID), title),
-        )
-      ],
-    );
-  }
-
-  Widget _buildCharContent0(
-      BuildContext context, Future<CustomerInvoice> getInvoiceData, title) {
-    return FutureBuilder<CustomerInvoice>(
-      future: getInvoiceData,
-      builder: (context, snapshot) {
-        if (!snapshot.hasData) return LinearProgressIndicator();
-        if (snapshot.data.message != null)
-          return Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Container(
-                alignment: Alignment.center,
-                child: Image.asset('assets/penggunaan_gas.png'),
-              ),
-              SizedBox(height: 20),
-              Container(
-                child: Text(
-                  snapshot.data.message,
-                  style: TextStyle(fontSize: 18),
-                ),
-              )
-            ],
-          );
-        return Column(
-          children: <Widget>[
-            ListView.builder(
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              itemCount: 1,
-              itemBuilder: (context, i) {
-                return i < 1
-                    ? _buildRow(snapshot.data.data[0])
-                    : SizedBox(
-                        height: 10.0,
-                      );
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  Widget _buildContent1(BuildContext context, String title, String custID) {
-    return ListView(
-      children: <Widget>[
-        Container(
-          margin: EdgeInsets.only(left: 10.0, right: 10.0, top: 10),
-          child: _buildCharContent1(
-              context, getCustomerInvoice(context, custID), title),
-        )
-      ],
-    );
-  }
-
-  Widget _buildCharContent1(
-      BuildContext context, Future<CustomerInvoice> getInvoiceData, title) {
-    return FutureBuilder<CustomerInvoice>(
-        future: getInvoiceData,
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) return LinearProgressIndicator();
-          if (snapshot.data.code == 435)
-            return Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Container(
-                  alignment: Alignment.center,
-                  child: Image.asset('assets/penggunaan_gas.png'),
-                ),
-                SizedBox(height: 20),
-                Container(
-                  child: Text(
-                    snapshot.data.message,
-                    style: TextStyle(fontSize: 18),
-                  ),
-                )
-              ],
-            );
-          return Column(
-            children: <Widget>[
-              ListView.builder(
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                itemCount: 1,
-                itemBuilder: (context, i) {
-                  return i < 1
-                      ? _buildRow(snapshot.data.data[1])
-                      : SizedBox(
-                          height: 10.0,
-                        );
-                },
-              ),
-            ],
-          );
-        });
   }
 
   Widget _buildRow(DataCustInvoice data) {
@@ -866,173 +696,16 @@ class BillDetailState extends State<InvoiceCust>
                     ],
                   ),
                   SizedBox(height: 10),
-                  // Row(
-                  //   crossAxisAlignment: CrossAxisAlignment.start,
-                  //   children: <Widget>[
-                  //     Container(
-                  //       width: 125,
-                  //       alignment: Alignment.topLeft,
-                  //       margin: EdgeInsets.only(left: 20.0),
-                  //       child: Text(
-                  //         Translations.of(context).text(
-                  //             'f_commercial_invoice_detail_tv_warranty_idr_label'),
-                  //         style: TextStyle(
-                  //             fontSize: 15.0,
-                  //             fontWeight: FontWeight.w400,
-                  //             color: Colors.grey[600]),
-                  //       ),
-                  //     ),
-                  //     Container(
-                  //       alignment: Alignment.topLeft,
-                  //       margin: EdgeInsets.only(left: 25.0),
-                  //       child: Text(
-                  //         ':',
-                  //         style: TextStyle(
-                  //             fontSize: 15.0,
-                  //             fontWeight: FontWeight.w400,
-                  //             color: Colors.grey[600]),
-                  //       ),
-                  //     ),
-                  //     Expanded(
-                  //       child: Container(
-                  //         alignment: Alignment.topLeft,
-                  //         margin: EdgeInsets.only(left: 5.0),
-                  //         child: Text(
-                  //           data.pGuaranteeIdr.display ?? "-",
-                  //           style: TextStyle(
-                  //               fontSize: 15.0,
-                  //               fontWeight: FontWeight.w400,
-                  //               color: Colors.grey[600]),
-                  //         ),
-                  //       ),
-                  //     )
-                  //   ],
-                  // ),
-                  // SizedBox(height: 10),
-                  // Row(
-                  //   crossAxisAlignment: CrossAxisAlignment.start,
-                  //   children: <Widget>[
-                  //     Container(
-                  //       alignment: Alignment.topLeft,
-                  //       width: 125,
-                  //       margin: EdgeInsets.only(left: 20.0),
-                  //       child: Text(
-                  //         Translations.of(context).text(
-                  //             'f_commercial_invoice_detail_tv_warranty_usd_label'),
-                  //         style: TextStyle(
-                  //             fontSize: 15.0,
-                  //             fontWeight: FontWeight.w400,
-                  //             color: Colors.grey[600]),
-                  //       ),
-                  //     ),
-                  //     Container(
-                  //       margin: EdgeInsets.only(left: 25.0),
-                  //       child: Text(
-                  //         ':',
-                  //         style: TextStyle(
-                  //             fontSize: 15.0,
-                  //             fontWeight: FontWeight.w500,
-                  //             color: Colors.grey[600]),
-                  //       ),
-                  //     ),
-                  //     Expanded(
-                  //       child: Container(
-                  //         margin: EdgeInsets.only(left: 5.0),
-                  //         child: Text(
-                  //           data.pGuaranteeUsd.display ?? "-",
-                  //           style: TextStyle(
-                  //               fontSize: 15.0,
-                  //               fontWeight: FontWeight.w400,
-                  //               color: Colors.grey[600]),
-                  //         ),
-                  //       ),
-                  //     )
-                  //   ],
-                  // ),
-                  // Row(
-                  //   children: <Widget>[
-                  //     Container(
-                  //       width: 125,
-                  //       margin: EdgeInsets.only(left: 20.0, top: 10.0),
-                  //       child: Text(
-                  //         Translations.of(context)
-                  //             .text('f_customer_guarantees_title'),
-                  //         style: TextStyle(
-                  //             fontSize: 15.0,
-                  //             fontWeight: FontWeight.w400,
-                  //             color: Colors.grey[600]),
-                  //       ),
-                  //     ),
-                  //     Container(
-                  //       margin: EdgeInsets.only(top: 10.0, left: 25.0),
-                  //       child: Text(
-                  //         ':',
-                  //         style: TextStyle(
-                  //             fontSize: 15.0,
-                  //             fontWeight: FontWeight.w400,
-                  //             color: Colors.grey[600]),
-                  //       ),
-                  //     ),
-                  //     Expanded(
-                  //       child: Container(
-                  //         margin: EdgeInsets.only(left: 5.0, top: 10.0),
-                  //         child: Text(
-                  //           "Rp.${data.pGuaranteeIdr ?? "-"}",
-                  //           style: TextStyle(
-                  //               fontSize: 15.0,
-                  //               fontWeight: FontWeight.w400,
-                  //               color: Colors.grey[600]),
-                  //         ),
-                  //       ),
-                  //     )
-                  //   ],
-                  // ),
                   Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Container(
                         width: 125,
-                        margin: EdgeInsets.only(left: 20.0, top: 10.0),
-                        child: Text(
-                          Translations.of(context)
-                              .text('f_commercial_invoice_detail_tv_denda'),
-                          style: TextStyle(
-                              fontSize: 15.0,
-                              fontWeight: FontWeight.w400,
-                              color: Colors.grey[600]),
-                        ),
-                      ),
-                      Container(
-                        margin: EdgeInsets.only(top: 10.0, left: 25.0),
-                        child: Text(
-                          ':',
-                          style: TextStyle(
-                              fontSize: 15.0,
-                              fontWeight: FontWeight.w400,
-                              color: Colors.grey[600]),
-                        ),
-                      ),
-                      Expanded(
-                        child: Container(
-                          margin: EdgeInsets.only(left: 5.0, top: 10.0),
-                          child: Text(
-                            "-",
-                            style: TextStyle(
-                                fontSize: 15.0,
-                                fontWeight: FontWeight.w400,
-                                color: Colors.grey[600]),
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                  Row(
-                    children: <Widget>[
-                      Container(
-                        width: 125,
-                        margin: EdgeInsets.only(left: 20.0, top: 10.0),
+                        alignment: Alignment.topLeft,
+                        margin: EdgeInsets.only(left: 20.0),
                         child: Text(
                           Translations.of(context).text(
-                              'f_commercial_invoice_detail_tv_b_pengaliran_kembali'),
+                              'f_commercial_invoice_detail_tv_warranty_idr_label'),
                           style: TextStyle(
                               fontSize: 15.0,
                               fontWeight: FontWeight.w400,
@@ -1040,7 +713,8 @@ class BillDetailState extends State<InvoiceCust>
                         ),
                       ),
                       Container(
-                        margin: EdgeInsets.only(top: 10.0, left: 25.0),
+                        alignment: Alignment.topLeft,
+                        margin: EdgeInsets.only(left: 25.0),
                         child: Text(
                           ':',
                           style: TextStyle(
@@ -1051,9 +725,10 @@ class BillDetailState extends State<InvoiceCust>
                       ),
                       Expanded(
                         child: Container(
-                          margin: EdgeInsets.only(left: 5.0, top: 10.0),
+                          alignment: Alignment.topLeft,
+                          margin: EdgeInsets.only(left: 5.0),
                           child: Text(
-                            "-",
+                            data.pGuaranteeIdr.display ?? "-",
                             style: TextStyle(
                                 fontSize: 15.0,
                                 fontWeight: FontWeight.w400,
@@ -1063,14 +738,17 @@ class BillDetailState extends State<InvoiceCust>
                       )
                     ],
                   ),
+                  SizedBox(height: 10),
                   Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Container(
+                        alignment: Alignment.topLeft,
                         width: 125,
-                        margin: EdgeInsets.only(left: 20.0, top: 10.0),
+                        margin: EdgeInsets.only(left: 20.0, bottom: 20),
                         child: Text(
                           Translations.of(context).text(
-                              'f_commercial_invoice_detail_tv_b_pemasangan_kembali'),
+                              'f_commercial_invoice_detail_tv_warranty_usd_label'),
                           style: TextStyle(
                               fontSize: 15.0,
                               fontWeight: FontWeight.w400,
@@ -1078,20 +756,20 @@ class BillDetailState extends State<InvoiceCust>
                         ),
                       ),
                       Container(
-                        margin: EdgeInsets.only(top: 10.0, left: 25.0),
+                        margin: EdgeInsets.only(left: 25.0, bottom: 20),
                         child: Text(
                           ':',
                           style: TextStyle(
                               fontSize: 15.0,
-                              fontWeight: FontWeight.w400,
+                              fontWeight: FontWeight.w500,
                               color: Colors.grey[600]),
                         ),
                       ),
                       Expanded(
                         child: Container(
-                          margin: EdgeInsets.only(left: 5.0, top: 10.0),
+                          margin: EdgeInsets.only(left: 5.0, bottom: 20),
                           child: Text(
-                            "-",
+                            data.pGuaranteeUsd.display ?? "-",
                             style: TextStyle(
                                 fontSize: 15.0,
                                 fontWeight: FontWeight.w400,
@@ -1101,121 +779,6 @@ class BillDetailState extends State<InvoiceCust>
                       )
                     ],
                   ),
-                  Row(
-                    children: <Widget>[
-                      Container(
-                        width: 125,
-                        margin: EdgeInsets.only(left: 20.0, top: 10.0),
-                        child: Text(
-                          Translations.of(context)
-                              .text('f_commercial_invoice_detail_tv_b_migrasi'),
-                          style: TextStyle(
-                              fontSize: 15.0,
-                              fontWeight: FontWeight.w400,
-                              color: Colors.grey[600]),
-                        ),
-                      ),
-                      Container(
-                        margin: EdgeInsets.only(top: 10.0, left: 25.0),
-                        child: Text(
-                          ':',
-                          style: TextStyle(
-                              fontSize: 15.0,
-                              fontWeight: FontWeight.w400,
-                              color: Colors.grey[600]),
-                        ),
-                      ),
-                      Expanded(
-                        child: Container(
-                          margin: EdgeInsets.only(left: 5.0, top: 10.0),
-                          child: Text(
-                            "-",
-                            style: TextStyle(
-                                fontSize: 15.0,
-                                fontWeight: FontWeight.w400,
-                                color: Colors.grey[600]),
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                  Row(
-                    children: <Widget>[
-                      Container(
-                        width: 125,
-                        margin: EdgeInsets.only(left: 20.0, top: 10.0),
-                        child: Text(
-                          Translations.of(context).text(
-                              'f_commercial_invoice_detail_tv_b_pelayanan'),
-                          style: TextStyle(
-                              fontSize: 15.0,
-                              fontWeight: FontWeight.w400,
-                              color: Colors.grey[600]),
-                        ),
-                      ),
-                      Container(
-                        margin: EdgeInsets.only(top: 10.0, left: 25.0),
-                        child: Text(
-                          ':',
-                          style: TextStyle(
-                              fontSize: 15.0,
-                              fontWeight: FontWeight.w400,
-                              color: Colors.grey[600]),
-                        ),
-                      ),
-                      Expanded(
-                        child: Container(
-                          margin: EdgeInsets.only(left: 5.0, top: 10.0),
-                          child: Text(
-                            "-",
-                            style: TextStyle(
-                                fontSize: 15.0,
-                                fontWeight: FontWeight.w400,
-                                color: Colors.grey[600]),
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                  Row(
-                    children: <Widget>[
-                      Container(
-                        width: 125,
-                        margin: EdgeInsets.only(left: 20.0, top: 10.0),
-                        child: Text(
-                          Translations.of(context)
-                              .text('f_commercial_invoice_detail_tv_b_sms'),
-                          style: TextStyle(
-                              fontSize: 15.0,
-                              fontWeight: FontWeight.w400,
-                              color: Colors.grey[600]),
-                        ),
-                      ),
-                      Container(
-                        margin: EdgeInsets.only(top: 10.0, left: 25.0),
-                        child: Text(
-                          ':',
-                          style: TextStyle(
-                              fontSize: 15.0,
-                              fontWeight: FontWeight.w400,
-                              color: Colors.grey[600]),
-                        ),
-                      ),
-                      Expanded(
-                        child: Container(
-                          margin: EdgeInsets.only(left: 5.0, top: 10.0),
-                          child: Text(
-                            "-",
-                            style: TextStyle(
-                                fontSize: 15.0,
-                                fontWeight: FontWeight.w400,
-                                color: Colors.grey[600]),
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                  SizedBox(height: 20),
                 ],
               ),
             ),
@@ -2075,7 +1638,7 @@ class BillDetailState extends State<InvoiceCust>
                       Container(
                         width: 125,
                         alignment: Alignment.topLeft,
-                        margin: EdgeInsets.only(left: 20.0),
+                        margin: EdgeInsets.only(left: 20.0, bottom: 20),
                         child: Text(
                           Translations.of(context).text(
                               'f_commercial_invoice_detail_tv_warranty_usd_label'),
@@ -2086,7 +1649,7 @@ class BillDetailState extends State<InvoiceCust>
                         ),
                       ),
                       Container(
-                        margin: EdgeInsets.only(left: 25.0),
+                        margin: EdgeInsets.only(left: 25.0, bottom: 20),
                         child: Text(
                           ':',
                           style: TextStyle(
@@ -2097,7 +1660,7 @@ class BillDetailState extends State<InvoiceCust>
                       ),
                       Expanded(
                         child: Container(
-                          margin: EdgeInsets.only(left: 5.0),
+                          margin: EdgeInsets.only(left: 5.0, bottom: 20),
                           child: Text(
                             data.pGuaranteeUsd.display ?? "-",
                             style: TextStyle(
@@ -2106,244 +1669,9 @@ class BillDetailState extends State<InvoiceCust>
                                 color: Colors.grey[600]),
                           ),
                         ),
-                      ),
+                      )
                     ],
                   ),
-                  // Row(
-                  //   children: <Widget>[
-                  //     Container(
-                  //       width: 125,
-                  //       margin: EdgeInsets.only(left: 20.0, top: 10.0),
-                  //       child: Text(
-                  //         Translations.of(context)
-                  //             .text('f_commercial_invoice_detail_tv_denda'),
-                  //         style: TextStyle(
-                  //             fontSize: 15.0,
-                  //             fontWeight: FontWeight.w400,
-                  //             color: Colors.grey[600]),
-                  //       ),
-                  //     ),
-                  //     Container(
-                  //       margin: EdgeInsets.only(top: 10.0, left: 25.0),
-                  //       child: Text(
-                  //         ':',
-                  //         style: TextStyle(
-                  //             fontSize: 15.0,
-                  //             fontWeight: FontWeight.w400,
-                  //             color: Colors.grey[600]),
-                  //       ),
-                  //     ),
-                  //     Expanded(
-                  //       child: Container(
-                  //         margin: EdgeInsets.only(left: 5.0, top: 10.0),
-                  //         child: Text(
-                  //           data.denda != "" ? data.denda : "-",
-                  //           style: TextStyle(
-                  //               fontSize: 15.0,
-                  //               fontWeight: FontWeight.w400,
-                  //               color: Colors.grey[600]),
-                  //         ),
-                  //       ),
-                  //     )
-                  //   ],
-                  // ),
-                  // Row(
-                  //   children: <Widget>[
-                  //     Container(
-                  //       width: 125,
-                  //       margin: EdgeInsets.only(left: 20.0, top: 10.0),
-                  //       child: Text(
-                  //         Translations.of(context).text(
-                  //             'f_commercial_invoice_detail_tv_b_pengaliran_kembali'),
-                  //         style: TextStyle(
-                  //             fontSize: 15.0,
-                  //             fontWeight: FontWeight.w400,
-                  //             color: Colors.grey[600]),
-                  //       ),
-                  //     ),
-                  //     Container(
-                  //       margin: EdgeInsets.only(top: 10.0, left: 25.0),
-                  //       child: Text(
-                  //         ':',
-                  //         style: TextStyle(
-                  //             fontSize: 15.0,
-                  //             fontWeight: FontWeight.w400,
-                  //             color: Colors.grey[600]),
-                  //       ),
-                  //     ),
-                  //     Expanded(
-                  //       child: Container(
-                  //         margin: EdgeInsets.only(left: 5.0, top: 10.0),
-                  //         child: Text(
-                  //           data.biayaPengaliran != ""
-                  //               ? data.biayaPengaliran
-                  //               : "-",
-                  //           style: TextStyle(
-                  //               fontSize: 15.0,
-                  //               fontWeight: FontWeight.w400,
-                  //               color: Colors.grey[600]),
-                  //         ),
-                  //       ),
-                  //     )
-                  //   ],
-                  // ),
-                  // Row(
-                  //   children: <Widget>[
-                  //     Container(
-                  //       width: 125,
-                  //       margin: EdgeInsets.only(left: 20.0, top: 10.0),
-                  //       child: Text(
-                  //         Translations.of(context).text(
-                  //             'f_commercial_invoice_detail_tv_b_pemasangan_kembali'),
-                  //         style: TextStyle(
-                  //             fontSize: 15.0,
-                  //             fontWeight: FontWeight.w400,
-                  //             color: Colors.grey[600]),
-                  //       ),
-                  //     ),
-                  //     Container(
-                  //       margin: EdgeInsets.only(top: 10.0, left: 25.0),
-                  //       child: Text(
-                  //         ':',
-                  //         style: TextStyle(
-                  //             fontSize: 15.0,
-                  //             fontWeight: FontWeight.w400,
-                  //             color: Colors.grey[600]),
-                  //       ),
-                  //     ),
-                  //     Expanded(
-                  //       child: Container(
-                  //         margin: EdgeInsets.only(left: 5.0, top: 10.0),
-                  //         child: Text(
-                  //           data.biayaPemasangan != ""
-                  //               ? data.biayaPemasangan
-                  //               : "-",
-                  //           style: TextStyle(
-                  //               fontSize: 15.0,
-                  //               fontWeight: FontWeight.w400,
-                  //               color: Colors.grey[600]),
-                  //         ),
-                  //       ),
-                  //     )
-                  //   ],
-                  // ),
-                  // Row(
-                  //   children: <Widget>[
-                  //     Container(
-                  //       width: 125,
-                  //       margin: EdgeInsets.only(left: 20.0, top: 10.0),
-                  //       child: Text(
-                  //         Translations.of(context)
-                  //             .text('f_commercial_invoice_detail_tv_b_migrasi'),
-                  //         style: TextStyle(
-                  //             fontSize: 15.0,
-                  //             fontWeight: FontWeight.w400,
-                  //             color: Colors.grey[600]),
-                  //       ),
-                  //     ),
-                  //     Container(
-                  //       margin: EdgeInsets.only(top: 10.0, left: 25.0),
-                  //       child: Text(
-                  //         ':',
-                  //         style: TextStyle(
-                  //             fontSize: 15.0,
-                  //             fontWeight: FontWeight.w400,
-                  //             color: Colors.grey[600]),
-                  //       ),
-                  //     ),
-                  //     Expanded(
-                  //       child: Container(
-                  //         margin: EdgeInsets.only(left: 5.0, top: 10.0),
-                  //         child: Text(
-                  //           data.biayaMigrasi != "" ? data.biayaMigrasi : "-",
-                  //           style: TextStyle(
-                  //               fontSize: 15.0,
-                  //               fontWeight: FontWeight.w400,
-                  //               color: Colors.grey[600]),
-                  //         ),
-                  //       ),
-                  //     )
-                  //   ],
-                  // ),
-                  // Row(
-                  //   children: <Widget>[
-                  //     Container(
-                  //       width: 125,
-                  //       margin: EdgeInsets.only(left: 20.0, top: 10.0),
-                  //       child: Text(
-                  //         Translations.of(context).text(
-                  //             'f_commercial_invoice_detail_tv_b_pelayanan'),
-                  //         style: TextStyle(
-                  //             fontSize: 15.0,
-                  //             fontWeight: FontWeight.w400,
-                  //             color: Colors.grey[600]),
-                  //       ),
-                  //     ),
-                  //     Container(
-                  //       margin: EdgeInsets.only(top: 10.0, left: 25.0),
-                  //       child: Text(
-                  //         ':',
-                  //         style: TextStyle(
-                  //             fontSize: 15.0,
-                  //             fontWeight: FontWeight.w400,
-                  //             color: Colors.grey[600]),
-                  //       ),
-                  //     ),
-                  //     Expanded(
-                  //       child: Container(
-                  //         margin: EdgeInsets.only(left: 5.0, top: 10.0),
-                  //         child: Text(
-                  //           data.biayaPelayanan != ""
-                  //               ? data.biayaPelayanan
-                  //               : "-",
-                  //           style: TextStyle(
-                  //               fontSize: 15.0,
-                  //               fontWeight: FontWeight.w400,
-                  //               color: Colors.grey[600]),
-                  //         ),
-                  //       ),
-                  //     )
-                  //   ],
-                  // ),
-                  // Row(
-                  //   children: <Widget>[
-                  //     Container(
-                  //       width: 125,
-                  //       margin: EdgeInsets.only(left: 20.0, top: 10.0),
-                  //       child: Text(
-                  //         Translations.of(context)
-                  //             .text('f_commercial_invoice_detail_tv_b_sms'),
-                  //         style: TextStyle(
-                  //             fontSize: 15.0,
-                  //             fontWeight: FontWeight.w400,
-                  //             color: Colors.grey[600]),
-                  //       ),
-                  //     ),
-                  //     Container(
-                  //       margin: EdgeInsets.only(top: 10.0, left: 25.0),
-                  //       child: Text(
-                  //         ':',
-                  //         style: TextStyle(
-                  //             fontSize: 15.0,
-                  //             fontWeight: FontWeight.w400,
-                  //             color: Colors.grey[600]),
-                  //       ),
-                  //     ),
-                  //     Expanded(
-                  //       child: Container(
-                  //         margin: EdgeInsets.only(left: 5.0, top: 10.0),
-                  //         child: Text(
-                  //           data.biayaSms != "" ? data.biayaSms : "-",
-                  //           style: TextStyle(
-                  //               fontSize: 15.0,
-                  //               fontWeight: FontWeight.w400,
-                  //               color: Colors.grey[600]),
-                  //         ),
-                  //       ),
-                  //     )
-                  //   ],
-                  // ),
-                  SizedBox(height: 20),
                 ],
               ),
             ),
@@ -2626,14 +1954,6 @@ class BillDetailState extends State<InvoiceCust>
           ],
         ),
       );
-  }
-
-  getCred(BuildContext context) async {
-    String listMenusString = await storageCache.read(key: 'list_menu') ?? "";
-
-    setState(() {
-      listMenus = listMenusString.split(',');
-    });
   }
 }
 

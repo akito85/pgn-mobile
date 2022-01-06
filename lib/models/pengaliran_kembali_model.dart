@@ -114,6 +114,7 @@ class DetailData {
   String npwpFile;
   String npwpNumb;
   String ktpAddress;
+  String ktpFile;
   DetailData(
       {this.address,
       this.bDate,
@@ -143,57 +144,188 @@ class DetailData {
       this.subDate,
       this.ktpAddress,
       this.npwpFile,
-      this.npwpNumb});
+      this.npwpNumb,
+      this.ktpFile});
   factory DetailData.fromJson(Map<String, dynamic> json) {
     return DetailData(
-      id: json['id'],
-      subDate: json['submission_date'],
-      status: json['progress_status'],
-      reason: json['reason'],
-      custId: json['customer_id'],
-      custName: json['customer_name'],
-      createdAt: json['created_at'],
-      bDate: json['birth_date'],
-      bPlace: json['birth_place'],
-      gender: json['gender'],
-      nik: json['id_card_number'],
-      lat: json['latitude'],
-      long: json['longitude'],
-      rt: json['rt'],
-      rw: json['rw'],
-      kabupaten: json['kota_kabupaten'],
-      sign: json['customer_signature'],
-      street: json['street'],
-      locStat: json['person_in_location_status'],
-      kecamatan: json['kecamatan'],
-      kelurahan: json['kelurahan'],
-      phoneNumb: json['phone_number'],
-      postalCode: json['postal_code'],
-      prov: json['province'],
-      address: json['address'],
-      email: json['email'],
-      npwpFile: json['npwp_file'],
-      npwpNumb: json['npwp_number'],
-      ktpAddress: json['ktp_address'],
-    );
+        id: json['id'],
+        subDate: json['submission_date'],
+        status: json['progress_status'],
+        reason: json['reason'],
+        custId: json['customer_id'],
+        custName: json['customer_name'],
+        createdAt: json['created_at'],
+        bDate: json['birth_date'],
+        bPlace: json['birth_place'],
+        gender: json['gender'],
+        nik: json['id_card_number'],
+        lat: json['latitude'],
+        long: json['longitude'],
+        rt: json['rt'],
+        rw: json['rw'],
+        kabupaten: json['kota_kabupaten'],
+        sign: json['customer_signature'],
+        street: json['street'],
+        locStat: json['person_in_location_status'],
+        kecamatan: json['kecamatan'],
+        kelurahan: json['kelurahan'],
+        phoneNumb: json['phone_number'],
+        postalCode: json['postal_code'],
+        prov: json['province'],
+        address: json['address'],
+        email: json['email'],
+        npwpFile: json['npwp_file'],
+        npwpNumb: json['npwp_number'],
+        ktpAddress: json['ktp_address'],
+        ktpFile: json['ktp_file']);
   }
 }
 
 class Biaya {
-  List<TitleData> titleData;
-  Biaya({this.titleData});
+  Area1 area1;
+  Area2 area2;
+  Area3 area3;
+  Area4 area4;
+  Biaya({this.area1, this.area2, this.area3, this.area4});
 
   factory Biaya.fromJson(Map<String, dynamic> json) {
     return Biaya(
-      titleData: parseDataTitle(json['RT']),
+      area1: Area1.fromJson(json['1']),
+      area2: Area2.fromJson(json['2']),
+      area3: Area3.fromJson(json['3']),
+      area4: Area4.fromJson(json['4']),
     );
   }
+}
 
-  static List<TitleData> parseDataTitle(datasJson) {
-    var list = datasJson as List;
-    List<TitleData> datasTitle =
-        list.map((data) => TitleData.fromJson(data)).toList();
-    return datasTitle;
+class Area1 {
+  String name;
+  DataRT dataRT;
+  DataPK dataPK;
+  Area1({this.name, this.dataPK, this.dataRT});
+  factory Area1.fromJson(Map<String, dynamic> json) {
+    return Area1(
+      name: json['name'],
+      dataRT: DataRT.fromJson(json['RT']),
+      dataPK: DataPK.fromJson(json['PK']),
+      // data: parseData(json['data']),
+    );
+  }
+}
+
+class Area2 {
+  String name;
+  DataRT dataRT;
+  DataPK dataPK;
+  Area2({this.name, this.dataPK, this.dataRT});
+  factory Area2.fromJson(Map<String, dynamic> json) {
+    return Area2(
+      name: json['name'],
+      dataRT: DataRT.fromJson(json['RT']),
+      dataPK: DataPK.fromJson(json['PK']),
+    );
+  }
+}
+
+class Area3 {
+  String name;
+  DataRT dataRT;
+  DataPK dataPK;
+  Area3({this.name, this.dataPK, this.dataRT});
+  factory Area3.fromJson(Map<String, dynamic> json) {
+    return Area3(
+      name: json['name'],
+      dataRT: DataRT.fromJson(json['RT']),
+      dataPK: DataPK.fromJson(json['PK']),
+    );
+  }
+}
+
+class Area4 {
+  String name;
+  DataRT dataRT;
+  DataPK dataPK;
+  Area4({this.name, this.dataPK, this.dataRT});
+  factory Area4.fromJson(Map<String, dynamic> json) {
+    return Area4(
+      name: json['name'],
+      dataRT: DataRT.fromJson(json['RT']),
+      dataPK: DataPK.fromJson(json['PK']),
+    );
+  }
+}
+
+class Data {
+  DataRT dataRT;
+  DataPK dataPK;
+
+  Data({this.dataPK, this.dataRT});
+
+  factory Data.fromJson(Map<String, dynamic> json) {
+    return Data(
+      dataRT: DataRT.fromJson(json['RT']),
+      dataPK: DataPK.fromJson(json['PK']),
+    );
+  }
+}
+
+class DataRT {
+  String areaName;
+  String type;
+  String costCode;
+  String currency;
+  String cost;
+  String taxCost;
+  String totalCost;
+
+  DataRT(
+      {this.areaName,
+      this.cost,
+      this.costCode,
+      this.currency,
+      this.taxCost,
+      this.totalCost,
+      this.type});
+  factory DataRT.fromJson(Map<String, dynamic> json) {
+    return DataRT(
+      areaName: json['area_name'],
+      cost: json['cost'],
+      currency: json['currency'],
+      costCode: json['cost_code'],
+      taxCost: json['tax_cost'],
+      type: json['type'],
+      totalCost: json['total_cost'],
+    );
+  }
+}
+
+class DataPK {
+  String areaName;
+  String type;
+  String costCode;
+  String currency;
+  String cost;
+  String taxCost;
+  String totalCost;
+
+  DataPK(
+      {this.areaName,
+      this.cost,
+      this.costCode,
+      this.currency,
+      this.taxCost,
+      this.totalCost,
+      this.type});
+  factory DataPK.fromJson(Map<String, dynamic> json) {
+    return DataPK(
+      areaName: json['area_name'],
+      cost: json['cost'],
+      currency: json['currency'],
+      costCode: json['cost_code'],
+      taxCost: json['tax_cost'],
+      type: json['type'],
+      totalCost: json['total_cost'],
+    );
   }
 }
 

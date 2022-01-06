@@ -1961,7 +1961,9 @@ class _BerhentiBerlanggananFormState extends State<BerhentiBerlanggananForm> {
       "latitude": lat,
       "person_in_location_status": statusLokasi,
       "info_media": '',
-      "submission_date": DateFormat('yyy-MM-dd').format(selectedPengajuan),
+      "submission_date": selectedPengajuan != null
+          ? DateFormat('yyy-MM-dd').format(selectedPengajuan)
+          : DateFormat('yyy-MM-dd').format(DateTime.now()),
       "reason": alasanCtrl.text,
       "npwp_number": numberNpwpCtrl.text,
       "ktp_address": ktpAddressCtrl.text,

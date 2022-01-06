@@ -1899,7 +1899,9 @@ class _PembaruanDPelangganFormState extends State<PembaruanDPelangganForm> {
       "customer_name": custName,
       "gender": valueChoose,
       "birth_place": tempatLahirCtrl.text,
-      "birth_date": DateFormat('yyy-MM-dd').format(selected),
+      "birth_date": selected != null
+          ? DateFormat('yyy-MM-dd').format(selected)
+          : DateFormat('yyy-MM-dd').format(DateTime.now()),
       "id_card_number": nikCtrl.text,
       "email": email,
       "phone_number": phoneNumb,

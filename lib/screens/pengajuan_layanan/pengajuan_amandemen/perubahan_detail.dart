@@ -25,6 +25,7 @@ class _SegmenDetailState extends State<SegmenDetail> {
   final storageCache = FlutterSecureStorage();
   var splitString;
   Uint8List image;
+  Uint8List imageKtp;
 
   @override
   Widget build(BuildContext context) {
@@ -69,6 +70,10 @@ class _SegmenDetailState extends State<SegmenDetail> {
             if (snapshot.data.npwpFile != "") {
               splitString = snapshot.data.npwpFile.split(',');
               image = base64.decode(splitString[1]);
+            }
+            if (snapshot.data.ktpFile != "") {
+              splitString = snapshot.data.ktpFile.split(',');
+              imageKtp = base64.decode(splitString[1]);
             }
             return Stack(
               children: [
@@ -522,6 +527,49 @@ class _SegmenDetailState extends State<SegmenDetail> {
                                 child: Text('${snapshot.data.ktpAddress}'),
                               ),
                             ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding:
+                            const EdgeInsets.only(left: 5, right: 5, top: 10),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              width: 150,
+                              child: Text('Foto KTP'),
+                            ),
+                            Container(
+                              margin: const EdgeInsets.only(left: 10),
+                              width: 10,
+                              child: Text(':'),
+                            ),
+                            snapshot.data.ktpFile != ""
+                                ? Expanded(
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(left: 2),
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          _showDialog(context, imageKtp);
+                                        },
+                                        child: Container(
+                                            width: 100,
+                                            height: 100,
+                                            margin: EdgeInsets.only(
+                                                right: 15, left: 0),
+                                            decoration: BoxDecoration(
+                                                color: Colors.black,
+                                                borderRadius:
+                                                    BorderRadius.circular(5),
+                                                image: DecorationImage(
+                                                    fit: BoxFit.fill,
+                                                    image: MemoryImage(
+                                                        imageKtp)))),
+                                      ),
+                                    ),
+                                  )
+                                : Text('-'),
                           ],
                         ),
                       ),

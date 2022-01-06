@@ -394,7 +394,7 @@
     "row_hourly_usage_tv_corrected_index_label": "Corrected Index",
     "row_hourly_usage_tv_uncorrected_index_label": "Uncorrected Index",
     "row_hourly_usage_tv_correction_factor_label": "Faktor Koreksi",
-    "row_hourly_usage_tv_temperature_label": "Temperatur",
+    "row_hourly_usage_tv_temperature_label": "Suhu",
     "row_hourly_usage_tv_pressure_label": "Tekanan",
     "row_hourly_usage_tv_usage_label": "Pemakaian",
     "row_hourly_usage_tv_time_label": "Tanggal, Jam",

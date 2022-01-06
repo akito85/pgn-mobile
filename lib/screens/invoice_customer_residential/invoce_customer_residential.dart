@@ -1511,7 +1511,7 @@ class BillDetailState extends State<InvoiceCustResidential>
                       child: Container(
                         margin: EdgeInsets.only(left: 5.0, top: 10.0),
                         child: Text(
-                          "-",
+                          custID,
                           style: TextStyle(
                               fontSize: 15.0,
                               fontWeight: FontWeight.w400,

@@ -142,7 +142,11 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
           ),
           ListTile(
             contentPadding: EdgeInsets.only(left: 20.0),
-            leading: Icon(Icons.exposure),
+            leading: Image.asset(
+              'assets/cm-visit.png',
+              height: 29,
+              color: Colors.grey,
+            ),
             title: Text(
               'CM Visit',
               style: TextStyle(
@@ -158,7 +162,11 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
           ),
           ListTile(
             contentPadding: EdgeInsets.only(left: 20.0),
-            leading: Icon(Icons.exposure),
+            leading: Image.asset(
+              'assets/installation-inspection.png',
+              height: 29,
+              color: Colors.grey,
+            ),
             title: Text(
               'Installation Inspection',
               style: TextStyle(
@@ -174,7 +182,11 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
           ),
           ListTile(
             contentPadding: EdgeInsets.only(left: 20.0),
-            leading: Icon(Icons.exposure),
+            leading: Image.asset(
+              'assets/object-calculator.png',
+              height: 29,
+              color: Colors.grey,
+            ),
             title: Text(
               Translations.of(context).text('a_home_tv_menu_calculator'),
               style: TextStyle(
@@ -238,7 +250,11 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
           ),
           ListTile(
             contentPadding: EdgeInsets.only(left: 20.0),
-            leading: Icon(Icons.exposure),
+            leading: Image.asset(
+              'assets/product-information.png',
+              height: 29,
+              color: Colors.grey,
+            ),
             title: Text(
               'Product Information',
               style: TextStyle(
@@ -254,7 +270,11 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
           ),
           ListTile(
             contentPadding: EdgeInsets.only(left: 20.0),
-            leading: Icon(Icons.exposure),
+            leading: Image.asset(
+              'assets/payment-confirmaiton.png',
+              height: 29,
+              color: Colors.grey,
+            ),
             title: Text(
               Translations.of(context).text('pc_tab_title'),
               style: TextStyle(
@@ -270,7 +290,11 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
           ),
           ListTile(
             contentPadding: EdgeInsets.only(left: 20.0),
-            leading: Icon(Icons.subscriptions_sharp),
+            leading: Image.asset(
+              'assets/meter.png',
+              height: 29,
+              color: Colors.grey,
+            ),
             title: Text(
               'Smartmeter',
               style: TextStyle(
@@ -505,7 +529,11 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
           customerGroupId == '3'
               ? ListTile(
                   contentPadding: EdgeInsets.only(left: 20.0),
-                  leading: Icon(Icons.subscriptions_sharp),
+                  leading: Image.asset(
+                    'assets/progress.png',
+                    height: 29,
+                    color: Colors.grey,
+                  ),
                   title: Text(
                     Translations.of(context).text('pb_tab_title'),
                     style: TextStyle(
@@ -523,7 +551,11 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
           listMenus.contains('3') && customerGroupId != '3'
               ? ListTile(
                   contentPadding: EdgeInsets.only(left: 20.0),
-                  leading: Icon(Icons.subscriptions_sharp),
+                  leading: Image.asset(
+                    'assets/progress.png',
+                    height: 29,
+                    color: Colors.grey,
+                  ),
                   title: Text(
                     Translations.of(context).text('pb_tab_title'),
                     style: TextStyle(
@@ -539,10 +571,14 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
                 )
               : SizedBox(),
           //  ID MENU KONFRIMASI PEMBAYARAN 22
-          listMenus.contains('22')
+          listMenus.contains('22') || customerGroupId == '3'
               ? ListTile(
                   contentPadding: EdgeInsets.only(left: 20.0),
-                  leading: Icon(Icons.subscriptions_sharp),
+                  leading: Image.asset(
+                    'assets/payment-confirmaiton.png',
+                    height: 29,
+                    color: Colors.grey,
+                  ),
                   title: Text(
                     Translations.of(context).text('pc_tab_title'),
                     style: TextStyle(
@@ -561,7 +597,11 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
           //     ?
           ListTile(
             contentPadding: EdgeInsets.only(left: 20.0),
-            leading: Icon(Icons.subscriptions_sharp),
+            leading: Image.asset(
+              'assets/meter.png',
+              height: 29,
+              color: Colors.grey,
+            ),
             title: Text(
               'Smartmeter',
               style: TextStyle(
@@ -578,7 +618,11 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
           // : SizedBox(),
           ListTile(
             contentPadding: EdgeInsets.only(left: 20.0),
-            leading: Icon(Icons.subscriptions_sharp),
+            leading: Image.asset(
+              'assets/service-request.png',
+              height: 29,
+              color: Colors.grey,
+            ),
             title: Text(
               'Pengajuan Layanan',
               style: TextStyle(
@@ -594,7 +638,7 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
           ),
           ListTile(
             contentPadding: EdgeInsets.only(left: 20.0),
-            leading: Icon(Icons.subscriptions_sharp),
+            leading: Icon(Icons.notifications),
             title: Text(
               'Inbox',
               style: TextStyle(

@@ -1656,7 +1656,7 @@ class _KlaimAsuransiUpdateState extends State<KlaimAsuransiUpdate> {
                                           ),
                                         )
                                       : Text(
-                                          'Unggah Dokumen Klaim Asuransi dengan Materai',
+                                          'Unggah Dokumen Klaim Asuransi',
                                           style: TextStyle(
                                               color: Color(0xFF427CEF),
                                               fontSize: 12,
@@ -2070,7 +2070,9 @@ class _KlaimAsuransiUpdateState extends State<KlaimAsuransiUpdate> {
     responses.fields['customer_name'] = detailDatas.custName;
     responses.fields['gender'] = valueChoose;
     responses.fields['birth_place'] = tempatLahirCtrl.text;
-    responses.fields['birth_date'] = DateFormat('yyy-MM-dd').format(selected);
+    responses.fields['birth_date'] = selected != null
+        ? DateFormat('yyy-MM-dd').format(selected)
+        : DateFormat('yyy-MM-dd').format(DateTime.now());
     responses.fields['id_card_number'] = nikCtrl.text;
     responses.fields['email'] = detailDatas.email;
     responses.fields['phone_number'] = detailDatas.phoneNumb;

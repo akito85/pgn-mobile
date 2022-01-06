@@ -1853,7 +1853,7 @@ class _PengembalianPembayaranUpdateState
                                             ),
                                           )
                                         : Text(
-                                            'Unggah Dokumen Klaim Asuransi dengan Materai',
+                                            'Unggah Dokumen Surat Kuasa dengan Materai',
                                             style: TextStyle(
                                                 color: Color(0xFF427CEF),
                                                 fontSize: 12,

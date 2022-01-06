@@ -321,8 +321,9 @@ class _PengajuanAsuransiListState extends State<PengajuanAsuransiList> {
     final storageCache = FlutterSecureStorage();
     String accessToken = await storageCache.read(key: 'access_token');
     String lang = await storageCache.read(key: 'lang');
+    String customerID = await storageCache.read(key: 'customer_id');
     var responseGetSubsProg = await http.get(
-        '${UrlCons.mainDevUrl}customer-service/fire-insurance-application?per_page=1000&next_page=$nextPage',
+        '${UrlCons.mainDevUrl}customer-service/fire-insurance-application/customer/$customerID?per_page=1000&next_page=$nextPage',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $accessToken',
@@ -342,8 +343,9 @@ class _PengajuanAsuransiListState extends State<PengajuanAsuransiList> {
   Future<PengajuanAsuransiModel> getFuturePengajuanAsuransiList() async {
     String accessToken = await storageCache.read(key: 'access_token');
     String lang = await storageCache.read(key: 'lang');
+    String customerID = await storageCache.read(key: 'customer_id');
     var response = await http.get(
-        '${UrlCons.mainDevUrl}customer-service/fire-insurance-application?per_page=1000',
+        '${UrlCons.mainDevUrl}customer-service/fire-insurance-application/customer/$customerID?per_page=1000',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $accessToken',

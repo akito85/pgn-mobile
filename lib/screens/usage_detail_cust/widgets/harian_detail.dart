@@ -386,7 +386,8 @@ class Card1 extends StatelessWidget {
                               width: 140,
                               margin: EdgeInsets.only(left: 20.0, top: 15),
                               child: Text(
-                                'Energi',
+                                Translations.of(context)
+                                    .text('row_daily_usage_tv_energy_label'),
                                 style: TextStyle(
                                     fontSize: 13.0,
                                     fontWeight: FontWeight.w400,
@@ -423,7 +424,8 @@ class Card1 extends StatelessWidget {
                               width: 140,
                               margin: EdgeInsets.only(left: 20.0, top: 15),
                               child: Text(
-                                'Tekanan',
+                                Translations.of(context)
+                                    .text('row_hourly_usage_tv_pressure_label'),
                                 style: TextStyle(
                                     fontSize: 13.0,
                                     fontWeight: FontWeight.w400,
@@ -460,7 +462,8 @@ class Card1 extends StatelessWidget {
                               width: 140,
                               margin: EdgeInsets.only(left: 20.0, top: 15),
                               child: Text(
-                                'Temperatur',
+                                Translations.of(context).text(
+                                    'row_hourly_usage_tv_temperature_label'),
                                 style: TextStyle(
                                     fontSize: 13.0,
                                     fontWeight: FontWeight.w400,
@@ -596,7 +599,8 @@ class Card1 extends StatelessWidget {
                               width: 140,
                               margin: EdgeInsets.only(left: 20.0, top: 15),
                               child: Text(
-                                'Energi',
+                                Translations.of(context)
+                                    .text('row_daily_usage_tv_energy_label'),
                                 style: TextStyle(
                                     fontSize: 13.0,
                                     fontWeight: FontWeight.w400,
@@ -633,7 +637,8 @@ class Card1 extends StatelessWidget {
                               width: 140,
                               margin: EdgeInsets.only(left: 20.0, top: 15),
                               child: Text(
-                                'Tekanan',
+                                Translations.of(context)
+                                    .text('row_hourly_usage_tv_pressure_label'),
                                 style: TextStyle(
                                     fontSize: 13.0,
                                     fontWeight: FontWeight.w400,
@@ -670,7 +675,8 @@ class Card1 extends StatelessWidget {
                               width: 140,
                               margin: EdgeInsets.only(left: 20.0, top: 15),
                               child: Text(
-                                'Temperatur',
+                                Translations.of(context).text(
+                                    'row_hourly_usage_tv_temperature_label'),
                                 style: TextStyle(
                                     fontSize: 13.0,
                                     fontWeight: FontWeight.w400,
@@ -728,7 +734,9 @@ class Card1 extends StatelessWidget {
                               child: Container(
                                 margin: EdgeInsets.only(left: 5.0, top: 15),
                                 child: Text(
-                                  data.cFactor.toString(),
+                                  data.cFactor == ""
+                                      ? '0'
+                                      : data.cFactor.toString(),
                                   style: TextStyle(
                                       fontSize: 13.0,
                                       fontWeight: FontWeight.w400,
@@ -775,117 +783,117 @@ class Card1 extends StatelessWidget {
                             )
                           ],
                         ),
-                        Row(
-                          children: <Widget>[
-                            Container(
-                              width: 140,
-                              margin: EdgeInsets.only(left: 20.0, top: 15),
-                              child: Text(
-                                'Corrected Index',
-                                style: TextStyle(
-                                    fontSize: 13.0,
-                                    fontWeight: FontWeight.w400,
-                                    color: Colors.grey[600]),
-                              ),
-                            ),
-                            Container(
-                              margin: EdgeInsets.only(left: 35.0, top: 15),
-                              child: Text(
-                                ':',
-                                style: TextStyle(
-                                    fontSize: 13.0,
-                                    fontWeight: FontWeight.w400,
-                                    color: Colors.grey[600]),
-                              ),
-                            ),
-                            Expanded(
-                              child: Container(
-                                margin: EdgeInsets.only(left: 5.0, top: 15),
-                                child: Text(
-                                  '${data.cIndex.display}',
-                                  style: TextStyle(
-                                      fontSize: 13.0,
-                                      fontWeight: FontWeight.w400,
-                                      color: Colors.grey[600]),
-                                ),
-                              ),
-                            )
-                          ],
-                        ),
-                        Row(
-                          children: <Widget>[
-                            Container(
-                              width: 140,
-                              margin: EdgeInsets.only(left: 20.0, top: 15),
-                              child: Text(
-                                'Kapasitas Meter',
-                                style: TextStyle(
-                                    fontSize: 13.0,
-                                    fontWeight: FontWeight.w400,
-                                    color: Colors.grey[600]),
-                              ),
-                            ),
-                            Container(
-                              margin: EdgeInsets.only(left: 35.0, top: 15),
-                              child: Text(
-                                ':',
-                                style: TextStyle(
-                                    fontSize: 13.0,
-                                    fontWeight: FontWeight.w400,
-                                    color: Colors.grey[600]),
-                              ),
-                            ),
-                            Expanded(
-                              child: Container(
-                                margin: EdgeInsets.only(left: 5.0, top: 15),
-                                child: Text(
-                                  '${data.meterCap.display}',
-                                  style: TextStyle(
-                                      fontSize: 13.0,
-                                      fontWeight: FontWeight.w400,
-                                      color: Colors.grey[600]),
-                                ),
-                              ),
-                            )
-                          ],
-                        ),
-                        Row(
-                          children: <Widget>[
-                            Container(
-                              width: 140,
-                              margin: EdgeInsets.only(left: 20.0, top: 15),
-                              child: Text(
-                                '% Kapasitas',
-                                style: TextStyle(
-                                    fontSize: 13.0,
-                                    fontWeight: FontWeight.w400,
-                                    color: Colors.grey[600]),
-                              ),
-                            ),
-                            Container(
-                              margin: EdgeInsets.only(left: 35.0, top: 15),
-                              child: Text(
-                                ':',
-                                style: TextStyle(
-                                    fontSize: 13.0,
-                                    fontWeight: FontWeight.w400,
-                                    color: Colors.grey[600]),
-                              ),
-                            ),
-                            Expanded(
-                              child: Container(
-                                margin: EdgeInsets.only(left: 5.0, top: 15),
-                                child: Text(
-                                  '${data.capPer} (${data.meterStat.display})',
-                                  style: TextStyle(
-                                      fontSize: 13.0,
-                                      fontWeight: FontWeight.w400,
-                                      color: Colors.grey[600]),
-                                ),
-                              ),
-                            )
-                          ],
-                        ),
+                        // Row(
+                        //   children: <Widget>[
+                        //     Container(
+                        //       width: 140,
+                        //       margin: EdgeInsets.only(left: 20.0, top: 15),
+                        //       child: Text(
+                        //         'Corrected Index',
+                        //         style: TextStyle(
+                        //             fontSize: 13.0,
+                        //             fontWeight: FontWeight.w400,
+                        //             color: Colors.grey[600]),
+                        //       ),
+                        //     ),
+                        //     Container(
+                        //       margin: EdgeInsets.only(left: 35.0, top: 15),
+                        //       child: Text(
+                        //         ':',
+                        //         style: TextStyle(
+                        //             fontSize: 13.0,
+                        //             fontWeight: FontWeight.w400,
+                        //             color: Colors.grey[600]),
+                        //       ),
+                        //     ),
+                        //     Expanded(
+                        //       child: Container(
+                        //         margin: EdgeInsets.only(left: 5.0, top: 15),
+                        //         child: Text(
+                        //           '${data.cIndex.display == "" ? 0 : data.cIndex.display}',
+                        //           style: TextStyle(
+                        //               fontSize: 13.0,
+                        //               fontWeight: FontWeight.w400,
+                        //               color: Colors.grey[600]),
+                        //         ),
+                        //       ),
+                        //     )
+                        //   ],
+                        // ),
+                        // Row(
+                        //   children: <Widget>[
+                        //     Container(
+                        //       width: 140,
+                        //       margin: EdgeInsets.only(left: 20.0, top: 15),
+                        //       child: Text(
+                        //         'Kapasitas Meter',
+                        //         style: TextStyle(
+                        //             fontSize: 13.0,
+                        //             fontWeight: FontWeight.w400,
+                        //             color: Colors.grey[600]),
+                        //       ),
+                        //     ),
+                        //     Container(
+                        //       margin: EdgeInsets.only(left: 35.0, top: 15),
+                        //       child: Text(
+                        //         ':',
+                        //         style: TextStyle(
+                        //             fontSize: 13.0,
+                        //             fontWeight: FontWeight.w400,
+                        //             color: Colors.grey[600]),
+                        //       ),
+                        //     ),
+                        //     Expanded(
+                        //       child: Container(
+                        //         margin: EdgeInsets.only(left: 5.0, top: 15),
+                        //         child: Text(
+                        //           '${data.meterCap.display}',
+                        //           style: TextStyle(
+                        //               fontSize: 13.0,
+                        //               fontWeight: FontWeight.w400,
+                        //               color: Colors.grey[600]),
+                        //         ),
+                        //       ),
+                        //     )
+                        //   ],
+                        // ),
+                        // Row(
+                        //   children: <Widget>[
+                        //     Container(
+                        //       width: 140,
+                        //       margin: EdgeInsets.only(left: 20.0, top: 15),
+                        //       child: Text(
+                        //         '% Kapasitas',
+                        //         style: TextStyle(
+                        //             fontSize: 13.0,
+                        //             fontWeight: FontWeight.w400,
+                        //             color: Colors.grey[600]),
+                        //       ),
+                        //     ),
+                        //     Container(
+                        //       margin: EdgeInsets.only(left: 35.0, top: 15),
+                        //       child: Text(
+                        //         ':',
+                        //         style: TextStyle(
+                        //             fontSize: 13.0,
+                        //             fontWeight: FontWeight.w400,
+                        //             color: Colors.grey[600]),
+                        //       ),
+                        //     ),
+                        //     Expanded(
+                        //       child: Container(
+                        //         margin: EdgeInsets.only(left: 5.0, top: 15),
+                        //         child: Text(
+                        //           '${data.capPer} (${data.meterStat.display})',
+                        //           style: TextStyle(
+                        //               fontSize: 13.0,
+                        //               fontWeight: FontWeight.w400,
+                        //               color: Colors.grey[600]),
+                        //         ),
+                        //       ),
+                        //     )
+                        //   ],
+                        // ),
                       ],
                     ),
                     builder: (_, collapsed, expanded) {

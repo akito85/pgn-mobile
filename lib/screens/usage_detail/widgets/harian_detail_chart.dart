@@ -643,7 +643,9 @@ class Card1 extends StatelessWidget {
                             child: Container(
                               margin: EdgeInsets.only(left: 5.0, top: 15),
                               child: Text(
-                                data.cFactor ?? "-",
+                                data.cFactor == ""
+                                    ? '0'
+                                    : data.cFactor.toString(),
                                 style: TextStyle(
                                     fontSize: 13.0,
                                     fontWeight: FontWeight.w400,
@@ -719,7 +721,9 @@ class Card1 extends StatelessWidget {
                             child: Container(
                               margin: EdgeInsets.only(left: 5.0, top: 15),
                               child: Text(
-                                data.cIndex.display ?? "-",
+                                data.cIndex.display == ""
+                                    ? '0'
+                                    : data.cIndex.display,
                                 style: TextStyle(
                                     fontSize: 13.0,
                                     fontWeight: FontWeight.w400,
@@ -729,85 +733,85 @@ class Card1 extends StatelessWidget {
                           )
                         ],
                       ),
-                      Row(
-                        children: <Widget>[
-                          Container(
-                            width: 125,
-                            margin: EdgeInsets.only(left: 20.0, top: 15),
-                            child: Text(
-                              Translations.of(context).text(
-                                  'row_daily_usage_tv_metercapacity_label'),
-                              style: TextStyle(
-                                  fontSize: 13.0,
-                                  fontWeight: FontWeight.w400,
-                                  color: Colors.grey[600]),
-                            ),
-                          ),
-                          Container(
-                            margin: EdgeInsets.only(left: 35.0, top: 15),
-                            child: Text(
-                              ':',
-                              style: TextStyle(
-                                  fontSize: 13.0,
-                                  fontWeight: FontWeight.w400,
-                                  color: Colors.grey[600]),
-                            ),
-                          ),
-                          Expanded(
-                            child: Container(
-                              margin: EdgeInsets.only(left: 5.0, top: 15),
-                              child: Text(
-                                data.meterCap.display ?? "-",
-                                style: TextStyle(
-                                    fontSize: 13.0,
-                                    fontWeight: FontWeight.w400,
-                                    color: Colors.grey[600]),
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                      Row(
-                        children: <Widget>[
-                          Container(
-                            width: 125,
-                            margin: EdgeInsets.only(
-                                left: 20.0, top: 15, bottom: 10),
-                            child: Text(
-                              Translations.of(context).text(
-                                  'row_daily_usage_tv_metercapacity_percentage_label'),
-                              style: TextStyle(
-                                  fontSize: 13.0,
-                                  fontWeight: FontWeight.w400,
-                                  color: Colors.grey[600]),
-                            ),
-                          ),
-                          Container(
-                            margin: EdgeInsets.only(
-                                left: 35.0, top: 15, bottom: 10),
-                            child: Text(
-                              ':',
-                              style: TextStyle(
-                                  fontSize: 13.0,
-                                  fontWeight: FontWeight.w400,
-                                  color: Colors.grey[600]),
-                            ),
-                          ),
-                          Expanded(
-                            child: Container(
-                              margin: EdgeInsets.only(
-                                  left: 5.0, top: 15, bottom: 10),
-                              child: Text(
-                                data.meterStat.display ?? "-",
-                                style: TextStyle(
-                                    fontSize: 13.0,
-                                    fontWeight: FontWeight.w400,
-                                    color: Colors.green[600]),
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
+                      // Row(
+                      //   children: <Widget>[
+                      //     Container(
+                      //       width: 125,
+                      //       margin: EdgeInsets.only(left: 20.0, top: 15),
+                      //       child: Text(
+                      //         Translations.of(context).text(
+                      //             'row_daily_usage_tv_metercapacity_label'),
+                      //         style: TextStyle(
+                      //             fontSize: 13.0,
+                      //             fontWeight: FontWeight.w400,
+                      //             color: Colors.grey[600]),
+                      //       ),
+                      //     ),
+                      //     Container(
+                      //       margin: EdgeInsets.only(left: 35.0, top: 15),
+                      //       child: Text(
+                      //         ':',
+                      //         style: TextStyle(
+                      //             fontSize: 13.0,
+                      //             fontWeight: FontWeight.w400,
+                      //             color: Colors.grey[600]),
+                      //       ),
+                      //     ),
+                      //     Expanded(
+                      //       child: Container(
+                      //         margin: EdgeInsets.only(left: 5.0, top: 15),
+                      //         child: Text(
+                      //           data.meterCap.display ?? "-",
+                      //           style: TextStyle(
+                      //               fontSize: 13.0,
+                      //               fontWeight: FontWeight.w400,
+                      //               color: Colors.grey[600]),
+                      //         ),
+                      //       ),
+                      //     )
+                      //   ],
+                      // ),
+                      // Row(
+                      //   children: <Widget>[
+                      //     Container(
+                      //       width: 125,
+                      //       margin: EdgeInsets.only(
+                      //           left: 20.0, top: 15, bottom: 10),
+                      //       child: Text(
+                      //         Translations.of(context).text(
+                      //             'row_daily_usage_tv_metercapacity_percentage_label'),
+                      //         style: TextStyle(
+                      //             fontSize: 13.0,
+                      //             fontWeight: FontWeight.w400,
+                      //             color: Colors.grey[600]),
+                      //       ),
+                      //     ),
+                      //     Container(
+                      //       margin: EdgeInsets.only(
+                      //           left: 35.0, top: 15, bottom: 10),
+                      //       child: Text(
+                      //         ':',
+                      //         style: TextStyle(
+                      //             fontSize: 13.0,
+                      //             fontWeight: FontWeight.w400,
+                      //             color: Colors.grey[600]),
+                      //       ),
+                      //     ),
+                      //     Expanded(
+                      //       child: Container(
+                      //         margin: EdgeInsets.only(
+                      //             left: 5.0, top: 15, bottom: 10),
+                      //         child: Text(
+                      //           data.meterStat.display ?? "-",
+                      //           style: TextStyle(
+                      //               fontSize: 13.0,
+                      //               fontWeight: FontWeight.w400,
+                      //               color: Colors.green[600]),
+                      //         ),
+                      //       ),
+                      //     )
+                      //   ],
+                      // ),
                     ],
                   ),
                   builder: (_, collapsed, expanded) {

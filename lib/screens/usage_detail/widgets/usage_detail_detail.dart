@@ -30,7 +30,7 @@ class UsageTabDetailState extends State<UsageTabDetail>
 
   @override
   void initState() {
-    _tabController = new TabController(length: 4, vsync: this, initialIndex: 2);
+    _tabController = new TabController(length: 3, vsync: this, initialIndex: 1);
     super.initState();
   }
 
@@ -54,7 +54,7 @@ class UsageTabDetailState extends State<UsageTabDetail>
       body: Stack(
         children: <Widget>[
           DefaultTabController(
-            length: 4,
+            length: 3,
             child: Scaffold(
               backgroundColor: Colors.white,
               appBar: PreferredSize(
@@ -68,7 +68,7 @@ class UsageTabDetailState extends State<UsageTabDetail>
                       ),
                       width: 380,
                       child: TabBar(
-                        isScrollable: true,
+                        isScrollable: false,
                         indicatorColor: Color(0xff427CEF),
                         controller: _tabController,
                         labelColor: Colors.white,
@@ -78,12 +78,12 @@ class UsageTabDetailState extends State<UsageTabDetail>
                           color: Color(0xFF4578EF),
                         ),
                         tabs: <Widget>[
-                          Padding(
-                            padding: const EdgeInsets.only(left: 10, right: 10),
-                            child: Tab(
-                              text: 'Realtime',
-                            ),
-                          ),
+                          // Padding(
+                          //   padding: const EdgeInsets.only(left: 10, right: 10),
+                          //   child: Tab(
+                          //     text: 'Realtime',
+                          //   ),
+                          // ),
                           Padding(
                             padding: const EdgeInsets.only(left: 10, right: 10),
                             child: Tab(
@@ -124,7 +124,7 @@ class UsageTabDetailState extends State<UsageTabDetail>
                   TabBarView(
                     controller: _tabController,
                     children: <Widget>[
-                      RealtimeMng(title: title, idCust: idCust),
+                      // RealtimeMng(title: title, idCust: idCust),
                       PerJamTabDetail(title: title, idCust: idCust),
                       HarianTabDetail(title: title, idCust: idCust),
                       BulananTabDetail(title, idCust),

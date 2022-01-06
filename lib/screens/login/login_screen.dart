@@ -154,7 +154,7 @@ class LoginScreenState extends State<LoginScreen> {
                 },
                 controller: usernameController,
                 decoration: InputDecoration(
-                  hintText: 'Email / Full Number',
+                  hintText: 'Email / Phone Number',
                   hintStyle: TextStyle(color: Colors.grey[500]),
                   contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
                   border: OutlineInputBorder(

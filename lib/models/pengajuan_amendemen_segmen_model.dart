@@ -121,6 +121,7 @@ class DetailData {
   String npwpNumb;
   String npwpFile;
   String ktpAddress;
+  String ktpFile;
   DetailData(
       {this.address,
       this.bDate,
@@ -159,7 +160,8 @@ class DetailData {
       this.ktpAddress,
       this.npwpFile,
       this.npwpNumb,
-      this.jenisPemakianGas});
+      this.jenisPemakianGas,
+      this.ktpFile});
   factory DetailData.fromJson(Map<String, dynamic> json) {
     return DetailData(
       id: json['id'],
@@ -198,6 +200,7 @@ class DetailData {
       ktpAddress: json['ktp_address'],
       npwpFile: json['npwp_file'],
       npwpNumb: json['npwp_number'],
+      ktpFile: json['ktp_file'],
       jenisPemakianGas: json['gas_usage_type_submission'],
       custEquip: CustEquip.fromJson(json['customer_equipments']),
     );

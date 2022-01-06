@@ -19,66 +19,254 @@ class WidgetReferensiBiayaTeknis extends StatelessWidget {
           style: TextStyle(color: Colors.black),
         ),
       ),
-      body: ListView(
-        children: [
-          Padding(
-            padding: EdgeInsets.only(left: 16, right: 16, top: 20),
-            child: Text(
-              'Provinsi Sumatera Utara, Riau, Kepulauan Riau, Jambi, Sumatera Selatan, Lampung, DKI Jakarta, Jawa Barat, Banten, Kalimantan Utara, Kalimantan Timur, Jawa Tengah, Jawa Timur, Sulawesi Selatan, Sulawesi Tenggara',
-              style: TextStyle(color: Color(0xFF5C727D), height: 2),
-            ),
-          ),
-          Container(
-            height: 45,
-            color: Color(0xFFF4F4F4),
-            margin: EdgeInsets.only(left: 16, right: 16, top: 10),
-            child: Row(
-              children: [
-                Container(
-                    width: 150,
-                    margin: EdgeInsets.only(left: 16, right: 16),
-                    child: Text('Area')),
-                Text('Pengaliran Kembali')
-              ],
-            ),
-          ),
-          FutureBuilder<Biaya>(
-            future: getLiability(),
-            builder: (context, snapshot) {
-              if (!snapshot.hasData) return LinearProgressIndicator();
-              return ListView.builder(
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                itemCount: snapshot.data.titleData.length,
-                itemBuilder: (context, i) {
-                  return Column(
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.only(left: 16, right: 16, top: 10),
-                        child: Row(
-                          children: [
-                            Container(
-                                width: 150,
-                                margin: EdgeInsets.only(left: 16, right: 16),
-                                child:
-                                    Text('${snapshot.data.titleData[i].area}')),
-                            Text('Rp ${snapshot.data.titleData[i].cost}')
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(left: 16, right: 16, top: 10),
-                        child: Divider(
-                          color: Colors.grey,
-                        ),
-                      ),
-                    ],
-                  );
-                },
-              );
-            },
-          ),
-        ],
+      body: FutureBuilder<Biaya>(
+        future: getLiability(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) return LinearProgressIndicator();
+          return ListView(
+            children: [
+              Padding(
+                padding: EdgeInsets.only(left: 16, right: 16, top: 20),
+                child: Text(
+                  snapshot.data.area1.name,
+                  style: TextStyle(color: Color(0xFF5C727D), height: 2),
+                ),
+              ),
+              Container(
+                height: 45,
+                color: Color(0xFFF4F4F4),
+                margin: EdgeInsets.only(left: 16, right: 16, top: 10),
+                child: Row(
+                  children: [
+                    Container(
+                        width: 150,
+                        margin: EdgeInsets.only(left: 16, right: 16),
+                        child: Text('Jenis Pelanggan')),
+                    Text('Pengaliran Kembali')
+                  ],
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(left: 16, right: 16, top: 10),
+                child: Row(
+                  children: [
+                    Container(
+                        width: 150,
+                        margin: EdgeInsets.only(left: 16, right: 16),
+                        child: Text('${snapshot.data.area1.dataRT.type}')),
+                    Text(
+                        '${snapshot.data.area1.dataRT.currency} ${snapshot.data.area1.dataRT.totalCost}')
+                  ],
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(left: 16, right: 16, top: 10),
+                child: Divider(
+                  color: Colors.grey,
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(left: 16, right: 16, top: 10),
+                child: Row(
+                  children: [
+                    Container(
+                        width: 150,
+                        margin: EdgeInsets.only(left: 16, right: 16),
+                        child: Text('${snapshot.data.area1.dataPK.type}')),
+                    Text(
+                        '${snapshot.data.area1.dataPK.currency} ${snapshot.data.area1.dataPK.totalCost}')
+                  ],
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(left: 16, right: 16, top: 10),
+                child: Divider(
+                  color: Colors.grey,
+                ),
+              ),
+              ////////////// 2
+              Padding(
+                padding: EdgeInsets.only(left: 16, right: 16, top: 20),
+                child: Text(
+                  snapshot.data.area2.name,
+                  style: TextStyle(color: Color(0xFF5C727D), height: 2),
+                ),
+              ),
+              Container(
+                height: 45,
+                color: Color(0xFFF4F4F4),
+                margin: EdgeInsets.only(left: 16, right: 16, top: 10),
+                child: Row(
+                  children: [
+                    Container(
+                        width: 150,
+                        margin: EdgeInsets.only(left: 16, right: 16),
+                        child: Text('Jenis Pelanggan')),
+                    Text('Pengaliran Kembali')
+                  ],
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(left: 16, right: 16, top: 10),
+                child: Row(
+                  children: [
+                    Container(
+                        width: 150,
+                        margin: EdgeInsets.only(left: 16, right: 16),
+                        child: Text('${snapshot.data.area2.dataRT.type}')),
+                    Text(
+                        '${snapshot.data.area2.dataRT.currency} ${snapshot.data.area2.dataRT.totalCost}')
+                  ],
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(left: 16, right: 16, top: 10),
+                child: Divider(
+                  color: Colors.grey,
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(left: 16, right: 16, top: 10),
+                child: Row(
+                  children: [
+                    Container(
+                        width: 150,
+                        margin: EdgeInsets.only(left: 16, right: 16),
+                        child: Text('${snapshot.data.area2.dataPK.type}')),
+                    Text(
+                        '${snapshot.data.area2.dataPK.currency} ${snapshot.data.area2.dataPK.totalCost}')
+                  ],
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(left: 16, right: 16, top: 10),
+                child: Divider(
+                  color: Colors.grey,
+                ),
+              ),
+              ////////////// 3
+              Padding(
+                padding: EdgeInsets.only(left: 16, right: 16, top: 20),
+                child: Text(
+                  snapshot.data.area3.name,
+                  style: TextStyle(color: Color(0xFF5C727D), height: 2),
+                ),
+              ),
+              Container(
+                height: 45,
+                color: Color(0xFFF4F4F4),
+                margin: EdgeInsets.only(left: 16, right: 16, top: 10),
+                child: Row(
+                  children: [
+                    Container(
+                        width: 150,
+                        margin: EdgeInsets.only(left: 16, right: 16),
+                        child: Text('Jenis Pelanggan')),
+                    Text('Pengaliran Kembali')
+                  ],
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(left: 16, right: 16, top: 10),
+                child: Row(
+                  children: [
+                    Container(
+                        width: 150,
+                        margin: EdgeInsets.only(left: 16, right: 16),
+                        child: Text('${snapshot.data.area3.dataRT.type}')),
+                    Text(
+                        '${snapshot.data.area3.dataRT.currency} ${snapshot.data.area3.dataRT.totalCost}')
+                  ],
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(left: 16, right: 16, top: 10),
+                child: Divider(
+                  color: Colors.grey,
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(left: 16, right: 16, top: 10),
+                child: Row(
+                  children: [
+                    Container(
+                        width: 150,
+                        margin: EdgeInsets.only(left: 16, right: 16),
+                        child: Text('${snapshot.data.area3.dataPK.type}')),
+                    Text(
+                        '${snapshot.data.area3.dataPK.currency} ${snapshot.data.area3.dataPK.totalCost}')
+                  ],
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(left: 16, right: 16, top: 10),
+                child: Divider(
+                  color: Colors.grey,
+                ),
+              ),
+              ////////////// 4
+              Padding(
+                padding: EdgeInsets.only(left: 16, right: 16, top: 20),
+                child: Text(
+                  snapshot.data.area4.name,
+                  style: TextStyle(color: Color(0xFF5C727D), height: 2),
+                ),
+              ),
+              Container(
+                height: 45,
+                color: Color(0xFFF4F4F4),
+                margin: EdgeInsets.only(left: 16, right: 16, top: 10),
+                child: Row(
+                  children: [
+                    Container(
+                        width: 150,
+                        margin: EdgeInsets.only(left: 16, right: 16),
+                        child: Text('Jenis Pelanggan')),
+                    Text('Pengaliran Kembali')
+                  ],
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(left: 16, right: 16, top: 10),
+                child: Row(
+                  children: [
+                    Container(
+                        width: 150,
+                        margin: EdgeInsets.only(left: 16, right: 16),
+                        child: Text('${snapshot.data.area4.dataRT.type}')),
+                    Text(
+                        '${snapshot.data.area4.dataRT.currency} ${snapshot.data.area4.dataRT.totalCost}')
+                  ],
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(left: 16, right: 16, top: 10),
+                child: Divider(
+                  color: Colors.grey,
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(left: 16, right: 16, top: 10),
+                child: Row(
+                  children: [
+                    Container(
+                        width: 150,
+                        margin: EdgeInsets.only(left: 16, right: 16),
+                        child: Text('${snapshot.data.area4.dataPK.type}')),
+                    Text(
+                        '${snapshot.data.area4.dataPK.currency} ${snapshot.data.area4.dataPK.totalCost}')
+                  ],
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(left: 16, right: 16, top: 10),
+                child: Divider(
+                  color: Colors.grey,
+                ),
+              ),
+            ],
+          );
+        },
       ),
     );
   }
@@ -86,12 +274,11 @@ class WidgetReferensiBiayaTeknis extends StatelessWidget {
   Future<Biaya> getLiability() async {
     final storageCache = FlutterSecureStorage();
     String accessToken = await storageCache.read(key: 'access_token');
-    var response = await http.get(
-        '${UrlCons.mainProdUrl}customer-service/reflow-cost?per_page=10000',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer $accessToken'
-        });
+    var response = await http
+        .get('${UrlCons.mainProdUrl}customer-service/reflow-cost', headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $accessToken'
+    });
     Biaya getBiaya;
     getBiaya = Biaya.fromJson(json.decode(response.body));
     return getBiaya;

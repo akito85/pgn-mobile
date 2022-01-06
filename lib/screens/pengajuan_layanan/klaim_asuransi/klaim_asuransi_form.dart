@@ -39,10 +39,12 @@ class _KlaimAsuransiFormState extends State<KlaimAsuransiForm> {
   DateTime selected = DateTime.now();
   DateTime selectedPengajuan = DateTime.now();
   String valueChoose;
-  bool visibleDataDiri = true;
+  bool visiblePetunjuk = true;
+  bool visibleDataDiri = false;
   bool visibleAlamat = false;
   bool visibleDataPelengkap = false;
   bool visibleReview = false;
+
   String _fileName;
   String _fileNameNPWP;
 
@@ -118,7 +120,7 @@ class _KlaimAsuransiFormState extends State<KlaimAsuransiForm> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  visibleDataDiri == true
+                  visiblePetunjuk == true
                       ? Padding(
                           padding: EdgeInsets.only(right: 15),
                           child: Row(
@@ -128,6 +130,47 @@ class _KlaimAsuransiFormState extends State<KlaimAsuransiForm> {
                                 backgroundColor: Colors.white,
                                 child: Text(
                                   '1',
+                                  style: TextStyle(color: Color(0xFF427CEF)),
+                                ),
+                              ),
+                              SizedBox(width: 10),
+                              Text(
+                                'Petunjuk',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(left: 5),
+                                child: SizedBox(
+                                    width: 20,
+                                    child: Divider(
+                                      color: Colors.white,
+                                      thickness: 2,
+                                    )),
+                              )
+                            ],
+                          ),
+                        )
+                      : Padding(
+                          padding: EdgeInsets.only(right: 15),
+                          child: CircleAvatar(
+                            radius: 15,
+                            backgroundColor: Color(0xFF8EB3FC),
+                            child: Text(
+                              '1',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
+                        ),
+                  visibleDataDiri == true
+                      ? Padding(
+                          padding: EdgeInsets.only(right: 15),
+                          child: Row(
+                            children: [
+                              CircleAvatar(
+                                radius: 15,
+                                backgroundColor: Colors.white,
+                                child: Text(
+                                  '2',
                                   style: TextStyle(color: Color(0xFF427CEF)),
                                 ),
                               ),
@@ -154,7 +197,7 @@ class _KlaimAsuransiFormState extends State<KlaimAsuransiForm> {
                             radius: 15,
                             backgroundColor: Color(0xFF8EB3FC),
                             child: Text(
-                              '1',
+                              '2',
                               style: TextStyle(color: Colors.white),
                             ),
                           ),
@@ -168,7 +211,7 @@ class _KlaimAsuransiFormState extends State<KlaimAsuransiForm> {
                                 radius: 15,
                                 backgroundColor: Colors.white,
                                 child: Text(
-                                  '2',
+                                  '3',
                                   style: TextStyle(color: Color(0xFF427CEF)),
                                 ),
                               ),
@@ -195,7 +238,7 @@ class _KlaimAsuransiFormState extends State<KlaimAsuransiForm> {
                             radius: 15,
                             backgroundColor: Color(0xFF8EB3FC),
                             child: Text(
-                              '2',
+                              '3',
                               style: TextStyle(color: Colors.white),
                             ),
                           ),
@@ -209,7 +252,7 @@ class _KlaimAsuransiFormState extends State<KlaimAsuransiForm> {
                                 radius: 15,
                                 backgroundColor: Colors.white,
                                 child: Text(
-                                  '3',
+                                  '4',
                                   style: TextStyle(color: Color(0xFF427CEF)),
                                 ),
                               ),
@@ -236,11 +279,242 @@ class _KlaimAsuransiFormState extends State<KlaimAsuransiForm> {
                             radius: 15,
                             backgroundColor: Color(0xFF8EB3FC),
                             child: Text(
-                              '3',
+                              '4',
                               style: TextStyle(color: Colors.white),
                             ),
                           ),
                         ),
+                ],
+              ),
+            ),
+          ),
+          Visibility(
+            visible: visiblePetunjuk,
+            child: Container(
+              alignment: Alignment.bottomCenter,
+              margin: EdgeInsets.only(top: 100),
+              padding: EdgeInsets.only(left: 18, right: 18, top: 10),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(25),
+                    topRight: Radius.circular(25)),
+              ),
+              child: ListView(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(top: 20, left: 5, right: 5),
+                    child: Text(
+                      'Petunjuk Pengajuan Klaim Asuransi',
+                      style: TextStyle(
+                          color: Color(0xFF427CEF),
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 20, left: 5, right: 5),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          width: 30,
+                          child: Text(
+                            '1.',
+                            style: TextStyle(color: Colors.black, fontSize: 14),
+                          ),
+                        ),
+                        Expanded(
+                          child: Text(
+                            'Silahkan unduh dan lengkapi terlebih dahulu form Klaim Asuransi berikut.',
+                            style: TextStyle(color: Colors.black, fontSize: 14),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    height: 45,
+                    margin: EdgeInsets.only(
+                        top: 20, left: 16, right: 16, bottom: 20),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(5),
+                      border: Border.all(
+                        color: Color(0xFF427CEF),
+                        width: 2,
+                      ),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.download_rounded,
+                          color: Color(0xFF427CEF),
+                        ),
+                        Text(
+                          '  Unduh Template Surat Klaim Asuransi',
+                          style: TextStyle(
+                              color: Color(0xFF427CEF),
+                              fontSize: 12,
+                              height: 1.5,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(left: 5, right: 5),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          width: 30,
+                          child: Text(
+                            '2.',
+                            style: TextStyle(
+                                color: Colors.black, fontSize: 14, height: 1.5),
+                          ),
+                        ),
+                        Expanded(
+                          child: Text(
+                            'Apabila form sudah dilengkapi, silahkan unggah form yang sudah dilengkapi dibawah ini dan klik tombol LANJUTKAN dibagian bawah halaman ini.',
+                            style: TextStyle(
+                                color: Colors.black, fontSize: 14, height: 1.5),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(
+                        top: 30, left: 16, right: 16, bottom: 30),
+                    child: DottedBorder(
+                      dashPattern: [3.1],
+                      color: Color(0xFFD3D3D3),
+                      strokeWidth: 1,
+                      child: Container(
+                        height: 60,
+                        child: Center(
+                          child: GestureDetector(
+                            onTap: () {
+                              _pickFiles('Dokumen');
+                            },
+                            child: _fileName != null
+                                ? Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 10, right: 10),
+                                    child: Text(
+                                      _fileName,
+                                      style: TextStyle(
+                                          color: Color(0xFF427CEF),
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  )
+                                : Text(
+                                    'Unggah Dokumen Klaim Asuransi',
+                                    style: TextStyle(
+                                        color: Color(0xFF427CEF),
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(left: 5, right: 5),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          width: 30,
+                          child: Text(
+                            '3.',
+                            style: TextStyle(
+                                color: Colors.black, fontSize: 14, height: 1.5),
+                          ),
+                        ),
+                        Expanded(
+                          child: Text(
+                            'Lengkapi informasi yang diminta menggunakan data yang sesuai dan terkini.',
+                            style: TextStyle(
+                                color: Colors.black, fontSize: 14, height: 1.5),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(
+                        top: 20, left: 16, right: 16, bottom: 20),
+                    child: Divider(
+                      color: Colors.grey,
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(left: 16, right: 16, bottom: 45),
+                    child: Text(
+                      'Bersama ini menyatakan bertanggung jawab terhadap kebenaran data tersebut dan bersedia memenuhi segala persyaratan & kewajiban yang telah ditetapkan oleh PT Perusahaan Gas Negara Tbk.',
+                      style: TextStyle(
+                        height: 1.5,
+                      ),
+                    ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(left: 16, right: 16, bottom: 20),
+                    child: Row(
+                      children: [
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          style: ElevatedButton.styleFrom(
+                              primary: Color(0xFFEFEFEF),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(5)))),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 16, horizontal: 5),
+                            child: Text(
+                              'Kembali',
+                              style: TextStyle(color: Color(0xFF828388)),
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: 15),
+                        Expanded(
+                          child: ElevatedButton(
+                            onPressed: () {
+                              if (_fileName != null) {
+                                setState(() {
+                                  visiblePetunjuk = false;
+                                  visibleDataDiri = true;
+                                  visibleAlamat = false;
+                                  visibleDataPelengkap = false;
+                                });
+                              } else if (valueChoose == null) {
+                                showToast(
+                                    'Dokumen Klaim Asuransi Belum di ungah !');
+                              }
+                            },
+                            style: ElevatedButton.styleFrom(
+                                primary: Color(0xFF427CEF),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(5)))),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 16, horizontal: 5),
+                              child: Text('Selanjutnya'),
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -606,7 +880,12 @@ class _KlaimAsuransiFormState extends State<KlaimAsuransiForm> {
                         children: [
                           ElevatedButton(
                             onPressed: () {
-                              Navigator.pop(context);
+                              setState(() {
+                                visiblePetunjuk = true;
+                                visibleDataDiri = false;
+                                visibleAlamat = false;
+                                visibleDataPelengkap = false;
+                              });
                             },
                             style: ElevatedButton.styleFrom(
                                 primary: Color(0xFFEFEFEF),
@@ -629,8 +908,10 @@ class _KlaimAsuransiFormState extends State<KlaimAsuransiForm> {
                                 if (_formKeyDataDiri.currentState.validate() &&
                                     valueChoose != null) {
                                   setState(() {
+                                    visiblePetunjuk = false;
                                     visibleDataDiri = false;
                                     visibleAlamat = true;
+                                    visibleDataPelengkap = false;
                                   });
                                 } else if (valueChoose == null) {
                                   showToast('Jenis Kelamin belum dipilih');
@@ -1296,9 +1577,10 @@ class _KlaimAsuransiFormState extends State<KlaimAsuransiForm> {
                           ElevatedButton(
                             onPressed: () {
                               setState(() {
-                                visibleDataPelengkap = false;
-                                visibleAlamat = false;
+                                visiblePetunjuk = false;
                                 visibleDataDiri = true;
+                                visibleAlamat = false;
+                                visibleDataPelengkap = false;
                               });
                             },
                             style: ElevatedButton.styleFrom(
@@ -1323,9 +1605,12 @@ class _KlaimAsuransiFormState extends State<KlaimAsuransiForm> {
                                 if (_formKeyAlamat.currentState.validate() &&
                                     statusLokasi != null) {
                                   setState(() {
-                                    visibleDataDiri = false;
-                                    visibleAlamat = false;
-                                    visibleDataPelengkap = true;
+                                    setState(() {
+                                      visiblePetunjuk = false;
+                                      visibleDataDiri = false;
+                                      visibleAlamat = false;
+                                      visibleDataPelengkap = true;
+                                    });
                                   });
                                 } else if (statusLokasi == null) {
                                   showToast(
@@ -1578,65 +1863,9 @@ class _KlaimAsuransiFormState extends State<KlaimAsuransiForm> {
                           fontWeight: FontWeight.bold),
                     )),
                   ),
+
                   Padding(
-                    padding: EdgeInsets.only(
-                        top: 30, left: 16, right: 16, bottom: 30),
-                    child: DottedBorder(
-                      dashPattern: [3.1],
-                      color: Color(0xFFD3D3D3),
-                      strokeWidth: 1,
-                      child: Container(
-                        height: 60,
-                        child: Center(
-                          child: GestureDetector(
-                            onTap: () {
-                              _pickFiles('Dokumen');
-                            },
-                            child: _fileName != null
-                                ? Padding(
-                                    padding: const EdgeInsets.only(
-                                        left: 10, right: 10),
-                                    child: Text(
-                                      _fileName,
-                                      style: TextStyle(
-                                          color: Color(0xFF427CEF),
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  )
-                                : Text(
-                                    'Unggah Dokumen Klaim Asuransi dengan Materai',
-                                    style: TextStyle(
-                                        color: Color(0xFF427CEF),
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(left: 16, right: 16, bottom: 20),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.download_rounded,
-                          color: Color(0xFF427CEF),
-                        ),
-                        Text(
-                          '  Unduh Template Surat Klaim Asuransi',
-                          style: TextStyle(
-                              color: Color(0xFF427CEF),
-                              fontSize: 12,
-                              fontWeight: FontWeight.bold),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 20, left: 16, right: 16),
+                    padding: EdgeInsets.only(top: 30, left: 16, right: 16),
                     child: Text(
                       'Tanda Tangan Anda',
                       style: TextStyle(
@@ -1731,10 +1960,12 @@ class _KlaimAsuransiFormState extends State<KlaimAsuransiForm> {
                         ElevatedButton(
                           onPressed: () {
                             setState(() {
-                              visibleDataPelengkap = false;
-
-                              visibleDataDiri = false;
-                              visibleAlamat = true;
+                              setState(() {
+                                visiblePetunjuk = false;
+                                visibleDataDiri = false;
+                                visibleAlamat = true;
+                                visibleDataPelengkap = false;
+                              });
                             });
                           },
                           style: ElevatedButton.styleFrom(
@@ -1897,7 +2128,7 @@ class _KlaimAsuransiFormState extends State<KlaimAsuransiForm> {
     var lat = location[0].trim();
     var long = location[1].trim();
     print('INI LAT $lat');
-    print('INI LONG $long');
+    print('INI LONG $selected');
     print('GAMBARNYA  data:image/png;base64,$encoded} ');
     String accessToken = await storageCache.read(key: 'access_token');
     final multiFile =
@@ -1911,7 +2142,9 @@ class _KlaimAsuransiFormState extends State<KlaimAsuransiForm> {
     responses.fields['customer_name'] = custName;
     responses.fields['gender'] = valueChoose;
     responses.fields['birth_place'] = tempatLahirCtrl.text;
-    responses.fields['birth_date'] = DateFormat('yyy-MM-dd').format(selected);
+    responses.fields['birth_date'] = selected != null
+        ? DateFormat('yyy-MM-dd').format(selected)
+        : DateFormat('yyy-MM-dd').format(DateTime.now());
     responses.fields['id_card_number'] = nikCtrl.text;
     responses.fields['email'] = email;
     responses.fields['phone_number'] = phoneNumb;

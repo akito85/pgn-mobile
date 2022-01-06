@@ -341,18 +341,31 @@ class _CustomerPaymentConfirmation extends State<CustomerPaymentConfirmation>
                             color: Colors.grey[600]),
                       ),
                     ),
-                    Expanded(
-                      child: Container(
-                        margin: EdgeInsets.only(left: 5.0, top: 10.0),
-                        child: Text(
-                          model.ca != "" ? model.ca : "-",
-                          style: TextStyle(
-                              fontSize: 15.0,
-                              fontWeight: FontWeight.w400,
-                              color: Colors.grey[600]),
-                        ),
-                      ),
-                    )
+                    model.ca != ""
+                        ? Expanded(
+                            child: Container(
+                              margin: EdgeInsets.only(left: 5.0, top: 10.0),
+                              child: Text(
+                                model.ca != "" ? model.ca : "-",
+                                style: TextStyle(
+                                    fontSize: 15.0,
+                                    fontWeight: FontWeight.w400,
+                                    color: Colors.grey[600]),
+                              ),
+                            ),
+                          )
+                        : Expanded(
+                            child: Container(
+                              margin: EdgeInsets.only(left: 5.0, top: 10.0),
+                              child: Text(
+                                '${model.payChannelId} ${model.bank}',
+                                style: TextStyle(
+                                    fontSize: 15.0,
+                                    fontWeight: FontWeight.w400,
+                                    color: Colors.grey[600]),
+                              ),
+                            ),
+                          ),
                   ],
                 ),
                 Row(

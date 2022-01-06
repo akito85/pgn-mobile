@@ -19,6 +19,7 @@ class _CustomerPaymentConfirmation extends State<CustomerPaymentConfirmation>
   TabController _tabController;
   String nameCust = "";
   String idCust = "";
+  String custGroup = "";
 
   @override
   void initState() {
@@ -332,7 +333,7 @@ class _CustomerPaymentConfirmation extends State<CustomerPaymentConfirmation>
                   children: <Widget>[
                     Container(
                       width: 120,
-                      child: Text('Information Date',
+                      child: Text('Payment Date',
                           style: TextStyle(
                               color: Colors.grey[600],
                               fontWeight: FontWeight.w400,
@@ -363,40 +364,75 @@ class _CustomerPaymentConfirmation extends State<CustomerPaymentConfirmation>
                     )
                   ],
                 ),
-                Row(
-                  children: <Widget>[
-                    Container(
-                        width: 120,
-                        margin: EdgeInsets.only(top: 10.0),
-                        child: Text('Channel',
-                            style: TextStyle(
-                                color: Colors.grey[600],
-                                fontWeight: FontWeight.w400,
-                                fontSize: 15.0))),
-                    Container(
-                      margin: EdgeInsets.only(left: 10.0, top: 10.0),
-                      child: Text(
-                        ':',
-                        style: TextStyle(
-                            fontSize: 15.0,
-                            fontWeight: FontWeight.w400,
-                            color: Colors.grey[600]),
+                custGroup == "3"
+                    ? Row(
+                        children: <Widget>[
+                          Container(
+                              width: 120,
+                              margin: EdgeInsets.only(top: 10.0),
+                              child: Text('Channel',
+                                  style: TextStyle(
+                                      color: Colors.grey[600],
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 15.0))),
+                          Container(
+                            margin: EdgeInsets.only(left: 10.0, top: 10.0),
+                            child: Text(
+                              ':',
+                              style: TextStyle(
+                                  fontSize: 15.0,
+                                  fontWeight: FontWeight.w400,
+                                  color: Colors.grey[600]),
+                            ),
+                          ),
+                          Expanded(
+                            child: Container(
+                              margin: EdgeInsets.only(left: 5.0, top: 10.0),
+                              child: Text(
+                                model.ca ?? "-",
+                                style: TextStyle(
+                                    fontSize: 15.0,
+                                    fontWeight: FontWeight.w400,
+                                    color: Colors.grey[600]),
+                              ),
+                            ),
+                          )
+                        ],
+                      )
+                    : Row(
+                        children: <Widget>[
+                          Container(
+                              width: 120,
+                              margin: EdgeInsets.only(top: 10.0),
+                              child: Text('Channel',
+                                  style: TextStyle(
+                                      color: Colors.grey[600],
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 15.0))),
+                          Container(
+                            margin: EdgeInsets.only(left: 10.0, top: 10.0),
+                            child: Text(
+                              ':',
+                              style: TextStyle(
+                                  fontSize: 15.0,
+                                  fontWeight: FontWeight.w400,
+                                  color: Colors.grey[600]),
+                            ),
+                          ),
+                          Expanded(
+                            child: Container(
+                              margin: EdgeInsets.only(left: 5.0, top: 10.0),
+                              child: Text(
+                                '${model.payChannelId} ${model.bank}',
+                                style: TextStyle(
+                                    fontSize: 15.0,
+                                    fontWeight: FontWeight.w400,
+                                    color: Colors.grey[600]),
+                              ),
+                            ),
+                          )
+                        ],
                       ),
-                    ),
-                    Expanded(
-                      child: Container(
-                        margin: EdgeInsets.only(left: 5.0, top: 10.0),
-                        child: Text(
-                          model.ca ?? "-",
-                          style: TextStyle(
-                              fontSize: 15.0,
-                              fontWeight: FontWeight.w400,
-                              color: Colors.grey[600]),
-                        ),
-                      ),
-                    )
-                  ],
-                ),
                 Row(
                   children: <Widget>[
                     Container(
@@ -479,9 +515,11 @@ class _CustomerPaymentConfirmation extends State<CustomerPaymentConfirmation>
     final storageCache = FlutterSecureStorage();
     String nameCusts = await storageCache.read(key: 'user_name_cust');
     String idCusts = await storageCache.read(key: 'customer_id') ?? "";
+    String custGroupString = await storageCache.read(key: 'customer_groupId');
     setState(() {
       nameCust = nameCusts;
       idCust = idCusts;
+      custGroup = custGroupString;
     });
   }
 }

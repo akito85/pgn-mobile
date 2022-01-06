@@ -34,7 +34,10 @@ class _PengajuanAmandemenSegmenUpdateState
   _PengajuanAmandemenSegmenUpdateState({this.id});
   DetailData detailDatas = DetailData();
   var splitString;
-  Uint8List image;
+  Uint8List image = base64.decode(
+      "iVBORw0KGgoAAAANSUhEUgAAAMgAAADICAMAAACahl6sAAACzVBMVEUAAAAAAAAAAAAAAABAQEAzMzMrKyskJCQgICAcHBwaGhouLi4rKysnJyckJCQiIiIgICAtLS0rKysoKCgmJiYkJCQjIyMhISErKyspKSknJycmJiYkJCQjIyMiIiIpKSkoKCgnJycmJiYkJCQjIyMpKSkoKCgnJycmJiYlJSUkJCQkJCQpKSkoKCgnJycmJiYlJSUkJCQkJCQoKCgnJycmJiYmJiYlJSUkJCQkJCQoKCgnJycmJiYmJiYlJSUkJCQoKCgnJycmJiYmJiYlJSUkJCQoKCgnJycmJiYmJiYlJSUlJSUnJycnJycmJiYmJiYlJSUlJSUnJycnJycmJiYmJiYlJSUlJSUnJycnJycmJiYmJiYlJSUnJycnJycmJiYmJiYmJiYlJSUlJSUnJycmJiYmJiYmJiYlJSUnJycnJycmJiYmJiYmJiYlJSUlJSUnJycnJycmJiYmJiYmJiYlJSUnJycmJiYmJiYmJiYnJycnJycmJiYmJiYmJiYlJSUnJycnJycmJiYmJiYmJiYlJSUnJycmJiYmJiYmJiYmJiYlJSUlJSUnJycmJiYmJiYmJiYmJiYlJSUnJycmJiYmJiYmJiYmJiYmJiYlJSUnJycmJiYmJiYmJiYmJiYmJiYlJSUnJycmJiYmJiYmJiYmJiYlJSUnJycmJiYmJiYmJiYmJiYmJiYlJSUmJiYmJiYmJiYmJiYnJycmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYnJycmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYlJSUmJiYmJiYmJiYmJiYmJiYmJiYnJycmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYnJycmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJib///9SC2xrAAAA7XRSTlMAAQIDBAUGBwgJCgsMDQ4PEBESExQVFhcYGRobHB0eHyAhIiMkJSYnKCkqKywtLi8wMTIzNDU2Nzg5Ojs8PT4/QEFDREVGR0hJSktMTk9QUVJTVFVXWFlaW1xdXmFiY2RlZmdoaWprbG5vcHFyc3R1dnd4eXp7fX5/gIOEhoeIiYqL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");
+  Uint8List imageKTP = base64.decode(
+      "iVBORw0KGgoAAAANSUhEUgAAAMgAAADICAMAAACahl6sAAACzVBMVEUAAAAAAAAAAAAAAABAQEAzMzMrKyskJCQgICAcHBwaGhouLi4rKysnJyckJCQiIiIgICAtLS0rKysoKCgmJiYkJCQjIyMhISErKyspKSknJycmJiYkJCQjIyMiIiIpKSkoKCgnJycmJiYkJCQjIyMpKSkoKCgnJycmJiYlJSUkJCQkJCQpKSkoKCgnJycmJiYlJSUkJCQkJCQoKCgnJycmJiYmJiYlJSUkJCQkJCQoKCgnJycmJiYmJiYlJSUkJCQoKCgnJycmJiYmJiYlJSUkJCQoKCgnJycmJiYmJiYlJSUlJSUnJycnJycmJiYmJiYlJSUlJSUnJycnJycmJiYmJiYlJSUlJSUnJycnJycmJiYmJiYlJSUnJycnJycmJiYmJiYmJiYlJSUlJSUnJycmJiYmJiYmJiYlJSUnJycnJycmJiYmJiYmJiYlJSUlJSUnJycnJycmJiYmJiYmJiYlJSUnJycmJiYmJiYmJiYnJycnJycmJiYmJiYmJiYlJSUnJycnJycmJiYmJiYmJiYlJSUnJycmJiYmJiYmJiYmJiYlJSUlJSUnJycmJiYmJiYmJiYmJiYlJSUnJycmJiYmJiYmJiYmJiYmJiYlJSUnJycmJiYmJiYmJiYmJiYmJiYlJSUnJycmJiYmJiYmJiYmJiYlJSUnJycmJiYmJiYmJiYmJiYmJiYlJSUmJiYmJiYmJiYmJiYnJycmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYnJycmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYlJSUmJiYmJiYmJiYmJiYmJiYmJiYnJycmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYnJycmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJib///9SC2xrAAAA7XRSTlMAAQIDBAUGBwgJCgsMDQ4PEBESExQVFhcYGRobHB0eHyAhIiMkJSYnKCkqKywtLi8wMTIzNDU2Nzg5Ojs8PT4/QEFDREVGR0hJSktMTk9QUVJTVFVXWFlaW1xdXmFiY2RlZmdoaWprbG5vcHFyc3R1dnd4eXp7fX5/gIOEhoeIiYqL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");
   List listGenderType = [
     "Laki-Laki",
     "Perempuan",
@@ -78,6 +81,7 @@ class _PengajuanAmandemenSegmenUpdateState
   String statusLokasi;
   String jenisPemakianGas;
   File imgNPWP;
+  File imgKTP;
 
   List<Map<String, dynamic>> gasEquip = [];
   TextEditingController tempatLahirCtrl = new TextEditingController();
@@ -112,6 +116,7 @@ class _PengajuanAmandemenSegmenUpdateState
   final _formKeyPelengkapSegmen = GlobalKey<FormState>();
 
   String _fileName;
+  String _fileNameKtp;
   Future _showDatePicker() async {
     dynamic selectedPicker = await showDatePicker(
       context: context,
@@ -1595,6 +1600,98 @@ class _PengajuanAmandemenSegmenUpdateState
                     ),
                     Padding(
                       padding: EdgeInsets.only(top: 20, left: 16, right: 16),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              'Foto KTP',
+                              style: TextStyle(
+                                  color: Color(0xFF455055),
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          detailDatas.ktpFile == ""
+                              ? GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      _fileNameKtp = null;
+                                    });
+                                  },
+                                  child: Text(
+                                    'Hapus',
+                                    textAlign: TextAlign.right,
+                                    style: TextStyle(
+                                        color: Color(0xFF427CEF),
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                )
+                              : GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      detailDatas.ktpFile = "";
+                                    });
+                                    _pickFiles('KTP');
+                                  },
+                                  child: Text(
+                                    'Ubah',
+                                    textAlign: TextAlign.right,
+                                    style: TextStyle(
+                                        color: Color(0xFF427CEF),
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(
+                          left: 16, right: 16, top: 20, bottom: 10),
+                      child: DottedBorder(
+                        dashPattern: [3.1],
+                        color: Color(0xFFD3D3D3),
+                        strokeWidth: 1,
+                        child: detailDatas.ktpFile == ""
+                            ? Container(
+                                height: 60,
+                                child: Center(
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      _pickFiles('KTP');
+                                    },
+                                    child: _fileNameKtp != null
+                                        ? Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 10, right: 10),
+                                            child: Text(
+                                              _fileNameKtp,
+                                              style: TextStyle(
+                                                  color: Color(0xFF427CEF),
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                          )
+                                        : Text(
+                                            'Unggah Foto KTP',
+                                            style: TextStyle(
+                                                color: Color(0xFF427CEF),
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                  ),
+                                ),
+                              )
+                            : Container(
+                                height: 150,
+                                decoration: BoxDecoration(
+                                    color: Colors.black,
+                                    borderRadius: BorderRadius.circular(5),
+                                    image: DecorationImage(
+                                        fit: BoxFit.contain,
+                                        image: MemoryImage(imageKTP)))),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(top: 20, left: 16, right: 16),
                       child: Text(
                         'Nomor NPWP',
                         style: TextStyle(
@@ -2693,6 +2790,10 @@ class _PengajuanAmandemenSegmenUpdateState
       splitString = detailData.npwpFile.split(',');
       image = base64.decode(splitString[1]);
     }
+    if (detailData.ktpFile != "") {
+      splitString = detailData.ktpFile.split(',');
+      imageKTP = base64.decode(splitString[1]);
+    }
     setState(() {
       detailDatas = detailData;
       detailData.custEquip.datasEquip.forEach((e) {
@@ -2774,6 +2875,7 @@ class _PengajuanAmandemenSegmenUpdateState
 
   void submitForm() async {
     String encodedImageNPWP;
+    String encodedImageKTP;
     if (_fileName != null) {
       Uint8List imageUnit8;
       imageUnit8 = imgNPWP.readAsBytesSync();
@@ -2782,6 +2884,15 @@ class _PengajuanAmandemenSegmenUpdateState
           'data:image/$fileExt;base64,${base64Encode(imageUnit8)}';
     } else {
       encodedImageNPWP = detailDatas.npwpFile;
+    }
+    if (_fileNameKtp != null) {
+      Uint8List imageUnit8;
+      imageUnit8 = imgKTP.readAsBytesSync();
+      String fileExt = imgKTP.path.split('.').last;
+      encodedImageKTP =
+          'data:image/$fileExt;base64,${base64Encode(imageUnit8)}';
+    } else {
+      encodedImageKTP = detailDatas.ktpFile;
     }
     final sign = _sign.currentState;
     final image = await sign.getData();
@@ -2833,6 +2944,7 @@ class _PengajuanAmandemenSegmenUpdateState
       "reason": alasanCtrl.text,
       "npwp_file": encodedImageNPWP,
       "npwp_number": nomorNpwpCtrl.text,
+      "ktp_file": encodedImageKTP,
       "ktp_address": ktpAddressCtrl.text,
       "customer_signature": 'data:image/png;base64,$encoded',
     });
@@ -2884,11 +2996,12 @@ class _PengajuanAmandemenSegmenUpdateState
 
     if (result != null) {
       File file = File(result.files.single.path.toString());
-      if (status == 'rekListrik') {
-        // setState(() {
-        //   _fileNameRekListrik = result.names.single;
-        //   print('NAMA FILE : $_fileName');
-        // });
+      if (status == 'KTP') {
+        setState(() {
+          _fileNameKtp = result.names.single;
+          imgKTP = file;
+          print('NAMA FILE KTP : $_fileNameKtp');
+        });
       } else {
         setState(() {
           _fileName = result.names.single;

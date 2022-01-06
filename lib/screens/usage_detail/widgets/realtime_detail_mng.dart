@@ -33,7 +33,7 @@ class RealtimeDetailMngChartState extends State<RealtimeDetailMngChart> {
         elevation: 0,
         backgroundColor: Colors.white,
         title: Text(
-          Translations.of(context).text('title_bar_gu_daily_list'),
+          'Realtime Detail',
           style: TextStyle(color: Colors.black),
         ),
       ),

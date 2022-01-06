@@ -29,6 +29,7 @@ class _PengajuanAmandemenFormState extends State<PengajuanAmandemenForm> {
   var splitString;
   Uint8List imageNpwp;
   Uint8List imageRek;
+  Uint8List imageKTP;
   List listGenderType = [
     "Laki-Laki",
     "Perempuan",
@@ -77,6 +78,7 @@ class _PengajuanAmandemenFormState extends State<PengajuanAmandemenForm> {
   String jenisPemakianGas;
   File imgNPWP;
   File imgRek;
+  File imgKTP;
 
   List<Map<String, dynamic>> gasEquip = [
     {"Name": "Kompor 1 Tungku", "Value": 0},
@@ -121,6 +123,7 @@ class _PengajuanAmandemenFormState extends State<PengajuanAmandemenForm> {
 
   String _fileName;
   String _fileNameRekListrik;
+  String _fileNameKtp;
   Future _showDatePicker() async {
     dynamic selectedPicker = await showDatePicker(
       context: context,
@@ -1780,6 +1783,74 @@ class _PengajuanAmandemenFormState extends State<PengajuanAmandemenForm> {
                           Padding(
                             padding:
                                 EdgeInsets.only(top: 20, left: 16, right: 16),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    'Foto KTP',
+                                    style: TextStyle(
+                                        color: Color(0xFF455055),
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      _fileNameKtp = null;
+                                    });
+                                  },
+                                  child: Text(
+                                    'Hapus',
+                                    textAlign: TextAlign.right,
+                                    style: TextStyle(
+                                        color: Color(0xFF427CEF),
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(
+                                left: 16, right: 16, top: 20, bottom: 10),
+                            child: DottedBorder(
+                              dashPattern: [3.1],
+                              color: Color(0xFFD3D3D3),
+                              strokeWidth: 1,
+                              child: Container(
+                                height: 60,
+                                child: Center(
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      _pickFiles('KTP');
+                                    },
+                                    child: _fileNameKtp != null
+                                        ? Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 10, right: 10),
+                                            child: Text(
+                                              _fileNameKtp,
+                                              style: TextStyle(
+                                                  color: Color(0xFF427CEF),
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                          )
+                                        : Text(
+                                            'Unggah Foto KTP',
+                                            style: TextStyle(
+                                                color: Color(0xFF427CEF),
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding:
+                                EdgeInsets.only(top: 20, left: 16, right: 16),
                             child: Text(
                               'Nomor NPWP',
                               style: TextStyle(
@@ -1964,8 +2035,11 @@ class _PengajuanAmandemenFormState extends State<PengajuanAmandemenForm> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [
-                                Text(DateFormat('d MMM yyy')
-                                    .format(selectedPengajuan)),
+                                Text(selectedPengajuan != null
+                                    ? DateFormat('d MMM yyy')
+                                        .format(selectedPengajuan)
+                                    : DateFormat('d MMM yyy')
+                                        .format(DateTime.now())),
                                 Expanded(
                                   child: Container(
                                     alignment: Alignment.centerRight,
@@ -2294,6 +2368,74 @@ class _PengajuanAmandemenFormState extends State<PengajuanAmandemenForm> {
                           Padding(
                             padding:
                                 EdgeInsets.only(top: 20, left: 16, right: 16),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    'Foto KTP',
+                                    style: TextStyle(
+                                        color: Color(0xFF455055),
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      _fileNameKtp = null;
+                                    });
+                                  },
+                                  child: Text(
+                                    'Hapus',
+                                    textAlign: TextAlign.right,
+                                    style: TextStyle(
+                                        color: Color(0xFF427CEF),
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(
+                                left: 16, right: 16, top: 20, bottom: 10),
+                            child: DottedBorder(
+                              dashPattern: [3.1],
+                              color: Color(0xFFD3D3D3),
+                              strokeWidth: 1,
+                              child: Container(
+                                height: 60,
+                                child: Center(
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      _pickFiles('KTP');
+                                    },
+                                    child: _fileNameKtp != null
+                                        ? Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 10, right: 10),
+                                            child: Text(
+                                              _fileNameKtp,
+                                              style: TextStyle(
+                                                  color: Color(0xFF427CEF),
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                          )
+                                        : Text(
+                                            'Unggah Foto KTP',
+                                            style: TextStyle(
+                                                color: Color(0xFF427CEF),
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding:
+                                EdgeInsets.only(top: 20, left: 16, right: 16),
                             child: Text(
                               'Nomor NPWP',
                               style: TextStyle(
@@ -2441,8 +2583,11 @@ class _PengajuanAmandemenFormState extends State<PengajuanAmandemenForm> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [
-                                Text(DateFormat('d MMM yyy')
-                                    .format(selectedPengajuan)),
+                                Text(selectedPengajuan != null
+                                    ? DateFormat('d MMM yyy')
+                                        .format(selectedPengajuan)
+                                    : DateFormat('d MMM yyy')
+                                        .format(DateTime.now())),
                                 Expanded(
                                   child: Container(
                                     alignment: Alignment.centerRight,
@@ -3381,6 +3526,7 @@ class _PengajuanAmandemenFormState extends State<PengajuanAmandemenForm> {
   void submitFormBBG() async {
     String encodedImageNPWP;
     String encodedImageRek;
+    String encodedImageKTP;
     if (_fileName != null) {
       Uint8List imageUnit8;
       imageUnit8 = imgNPWP.readAsBytesSync();
@@ -3398,6 +3544,15 @@ class _PengajuanAmandemenFormState extends State<PengajuanAmandemenForm> {
           'data:image/$fileExt;base64,${base64Encode(imageUnit8)}';
     } else {
       encodedImageRek = "";
+    }
+    if (_fileNameKtp != null) {
+      Uint8List imageUnit8;
+      imageUnit8 = imgKTP.readAsBytesSync();
+      String fileExt = imgKTP.path.split('.').last;
+      encodedImageKTP =
+          'data:image/$fileExt;base64,${base64Encode(imageUnit8)}';
+    } else {
+      encodedImageKTP = "";
     }
     final sign = _sign.currentState;
     final image = await sign.getData();
@@ -3419,7 +3574,9 @@ class _PengajuanAmandemenFormState extends State<PengajuanAmandemenForm> {
       "customer_name": custName,
       "gender": valueChoose,
       "birth_place": tempatLahirCtrl.text,
-      "birth_date": DateFormat('yyy-MM-dd').format(selected),
+      "birth_date": selected != null
+          ? DateFormat('yyy-MM-dd').format(selected)
+          : DateFormat('yyy-MM-dd').format(DateTime.now()),
       "id_card_number": nikCtrl.text,
       "email": email,
       "phone_number": phoneNumb,
@@ -3436,7 +3593,9 @@ class _PengajuanAmandemenFormState extends State<PengajuanAmandemenForm> {
       "latitude": lat,
       "person_in_location_status": statusLokasi,
       "info_media": valueMediaType,
-      "submission_date": DateFormat('yyy-MM-dd').format(selectedPengajuan),
+      "submission_date": selectedPengajuan != null
+          ? DateFormat('yyy-MM-dd').format(selectedPengajuan)
+          : DateFormat('yyy-MM-dd').format(DateTime.now()),
       "reason": alasanCtrl.text,
       "customer_group": custGroup,
       "electrical_power": dayaCtrl.text,
@@ -3444,6 +3603,7 @@ class _PengajuanAmandemenFormState extends State<PengajuanAmandemenForm> {
       "npwp_file": encodedImageNPWP,
       "npwp_number": nomorNpwpCtrl.text,
       "ktp_address": ktpAddressCtrl.text,
+      "ktp_file": encodedImageKTP,
       "customer_signature": 'data:image/png;base64,$encoded',
     });
     var response = await http.post(
@@ -3466,6 +3626,7 @@ class _PengajuanAmandemenFormState extends State<PengajuanAmandemenForm> {
 
   void submitForm() async {
     String encodedImageNPWP;
+    String encodedImageKTP;
     if (_fileName != null) {
       Uint8List imageUnit8;
       imageUnit8 = imgNPWP.readAsBytesSync();
@@ -3474,6 +3635,15 @@ class _PengajuanAmandemenFormState extends State<PengajuanAmandemenForm> {
           'data:image/$fileExt;base64,${base64Encode(imageUnit8)}';
     } else {
       encodedImageNPWP = "";
+    }
+    if (_fileNameKtp != null) {
+      Uint8List imageUnit8;
+      imageUnit8 = imgKTP.readAsBytesSync();
+      String fileExt = imgKTP.path.split('.').last;
+      encodedImageKTP =
+          'data:image/$fileExt;base64,${base64Encode(imageUnit8)}';
+    } else {
+      encodedImageKTP = "";
     }
     final sign = _sign.currentState;
     final image = await sign.getData();
@@ -3495,7 +3665,9 @@ class _PengajuanAmandemenFormState extends State<PengajuanAmandemenForm> {
       "customer_name": custName,
       "gender": valueChoose,
       "birth_place": tempatLahirCtrl.text,
-      "birth_date": DateFormat('yyy-MM-dd').format(selected),
+      "birth_date": selected != null
+          ? DateFormat('yyy-MM-dd').format(selected)
+          : DateFormat('yyy-MM-dd').format(DateTime.now()),
       "id_card_number": nikCtrl.text,
       "email": email,
       "phone_number": phoneNumb,
@@ -3513,7 +3685,9 @@ class _PengajuanAmandemenFormState extends State<PengajuanAmandemenForm> {
       "person_in_location_status": statusLokasi,
       "info_media": valueMediaType,
       "customer_group": custGroup,
-      "submission_date": DateFormat('yyy-MM-dd').format(selectedPengajuan),
+      "submission_date": selectedPengajuan != null
+          ? DateFormat('yyy-MM-dd').format(selectedPengajuan)
+          : DateFormat('yyy-MM-dd').format(DateTime.now()),
       "submission_customer_group": valueKelompokPelanggan,
       "minimum_volume_month": int.parse(volumeMinCtrl.text),
       "maximum_volume_month": int.parse(volumeMaxCtrl.text),
@@ -3526,6 +3700,7 @@ class _PengajuanAmandemenFormState extends State<PengajuanAmandemenForm> {
       "npwp_number": nomorNpwpCtrl.text,
       "ktp_address": ktpAddressCtrl.text,
       "gas_usage_type_submission": jenisPemakianGas,
+      "ktp_file": encodedImageKTP,
       "customer_signature": 'data:image/png;base64,$encoded',
     });
     print('SEGMEN BODY POST $body');
@@ -3581,6 +3756,12 @@ class _PengajuanAmandemenFormState extends State<PengajuanAmandemenForm> {
           _fileNameRekListrik = result.names.single;
           imgRek = file;
           print('NAMA FILE : $_fileName');
+        });
+      } else if (status == 'KTP') {
+        setState(() {
+          _fileNameKtp = result.names.single;
+          imgKTP = file;
+          print('NAMA FILE KTP : $_fileNameKtp');
         });
       } else {
         setState(() {

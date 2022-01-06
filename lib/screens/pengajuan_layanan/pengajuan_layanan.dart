@@ -1,4 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:pgn_mobile/models/pengajuan_teknis_model.dart';
+import 'package:pgn_mobile/models/url_cons.dart';
+import 'package:pgn_mobile/screens/pengajuan_layanan/cicilan/cicilan_list.dart';
 import 'package:pgn_mobile/screens/pengajuan_layanan/klaim_asuransi/klaim_asuransi_list.dart';
 import 'package:pgn_mobile/screens/pengajuan_layanan/pemasangan_kembali/pemasangan_kembali_list.dart';
 import 'package:pgn_mobile/screens/pengajuan_layanan/pembaruan_data/pembaruan_data_list.dart';
@@ -9,11 +15,27 @@ import 'package:pgn_mobile/screens/pengajuan_layanan/pengaliran_kembali/pengalir
 import 'package:pgn_mobile/screens/pengajuan_layanan/berhenti_berlangganan/berhenti_berlangganan_list.dart';
 import 'package:pgn_mobile/screens/pengajuan_layanan/pengembalian_pembayaran/pengembalian_pembayaran_list.dart';
 import 'package:pgn_mobile/screens/pengajuan_layanan/penghentian_sementara/penghentian_sementara_list.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
+import 'package:http/http.dart' as http;
 
-class PengajuanLayanan extends StatelessWidget {
+class PengajuanLayanan extends StatefulWidget {
+  @override
+  _PengajuanLayananState createState() => _PengajuanLayananState();
+}
+
+class _PengajuanLayananState extends State<PengajuanLayanan> {
+  String custID = '';
+  final storageCache = FlutterSecureStorage();
+
+  void initState() {
+    super.initState();
+    getDataCred();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.white,
@@ -264,251 +286,63 @@ class PengajuanLayanan extends StatelessWidget {
               ),
             ),
           ),
-          GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => PengajuanTeknisList(
-                    techId: 33,
-                    techName: 'Pemasangan PGN Meter',
-                  ),
-                ),
-              );
-            },
-            child: Padding(
-              padding: EdgeInsets.only(left: 34, right: 18, top: 20),
-              child: Row(
-                children: [
-                  Center(
-                    child: Padding(
-                      padding: EdgeInsets.only(right: 12.0),
-                      child: CircleAvatar(
-                        backgroundColor: Color(0xFF427CEF),
-                        radius: 15,
-                        child: Padding(
-                          padding: const EdgeInsets.all(2.0),
-                          child: Image.asset(
-                            'assets/doc-technical.png',
-                            color: Colors.white,
+          FutureBuilder<PengajuanTeknisTypeModel>(
+            future: getFutureKlaimAsuransiList(),
+            builder: (context, snapshot) {
+              if (!snapshot.hasData)
+                return Padding(
+                  padding: const EdgeInsets.only(left: 18, right: 18, top: 5),
+                  child: LinearProgressIndicator(),
+                );
+              if (snapshot.data.code != null) return SizedBox();
+              return ListView.builder(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemCount: snapshot.data.data.length,
+                  itemBuilder: (context, i) {
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => PengajuanTeknisList(
+                              techId: snapshot.data.data[i].id,
+                              techName: snapshot.data.data[i].name,
+                            ),
                           ),
+                        );
+                      },
+                      child: Padding(
+                        padding: EdgeInsets.only(left: 34, right: 18, top: 20),
+                        child: Row(
+                          children: [
+                            Center(
+                              child: Padding(
+                                padding: EdgeInsets.only(right: 12.0),
+                                child: CircleAvatar(
+                                  backgroundColor: Color(0xFF427CEF),
+                                  radius: 15,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(2.0),
+                                    child: Image.asset(
+                                      'assets/doc-technical.png',
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              child: Padding(
+                                  padding: const EdgeInsets.only(left: 5),
+                                  child: Text(snapshot.data.data[i].name)),
+                            ),
+                          ],
                         ),
                       ),
-                    ),
-                  ),
-                  Expanded(
-                    child: Padding(
-                        padding: const EdgeInsets.only(left: 5),
-                        child: Text('Pemasangan PGN Meter')),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => PengajuanTeknisList(
-                    techId: 34,
-                    techName: 'Pemasangan Pipa Instalasi per meter',
-                  ),
-                ),
-              );
+                    );
+                  });
             },
-            child: Padding(
-              padding: EdgeInsets.only(left: 34, right: 18, top: 20),
-              child: Row(
-                children: [
-                  Center(
-                    child: Padding(
-                      padding: EdgeInsets.only(right: 12.0),
-                      child: CircleAvatar(
-                        backgroundColor: Color(0xFF427CEF),
-                        radius: 15,
-                        child: Padding(
-                          padding: const EdgeInsets.all(2.0),
-                          child: Image.asset(
-                            'assets/doc-technical.png',
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    child: Padding(
-                        padding: const EdgeInsets.only(left: 5),
-                        child: Text('Pemasangan Pipa Instalasi per meter')),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => PengajuanTeknisList(
-                    techId: 35,
-                    techName: 'Pasang Water Heater Rinnai',
-                  ),
-                ),
-              );
-            },
-            child: Padding(
-              padding: EdgeInsets.only(left: 34, right: 18, top: 20),
-              child: Row(
-                children: [
-                  Center(
-                    child: Padding(
-                      padding: EdgeInsets.only(right: 12.0),
-                      child: CircleAvatar(
-                        backgroundColor: Color(0xFF427CEF),
-                        radius: 15,
-                        child: Padding(
-                          padding: const EdgeInsets.all(2.0),
-                          child: Image.asset(
-                            'assets/doc-technical.png',
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    child: Padding(
-                        padding: const EdgeInsets.only(left: 5),
-                        child: Text('Pasang Water Heater Rinnai')),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => PengajuanTeknisList(
-                    techId: 36,
-                    techName: 'Pembersihan Tungku Kompor',
-                  ),
-                ),
-              );
-            },
-            child: Padding(
-              padding: EdgeInsets.only(left: 34, right: 18, top: 20),
-              child: Row(
-                children: [
-                  Center(
-                    child: Padding(
-                      padding: EdgeInsets.only(right: 12.0),
-                      child: CircleAvatar(
-                        backgroundColor: Color(0xFF427CEF),
-                        radius: 15,
-                        child: Padding(
-                          padding: const EdgeInsets.all(2.0),
-                          child: Image.asset(
-                            'assets/doc-technical.png',
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    child: Padding(
-                        padding: const EdgeInsets.only(left: 5),
-                        child: Text('Pembersihan Tungku Kompor')),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => PengajuanTeknisList(
-                    techId: 37,
-                    techName: 'Penambahan Pipa Instalasi',
-                  ),
-                ),
-              );
-            },
-            child: Padding(
-              padding: EdgeInsets.only(left: 34, right: 18, top: 20),
-              child: Row(
-                children: [
-                  Center(
-                    child: Padding(
-                      padding: EdgeInsets.only(right: 12.0),
-                      child: CircleAvatar(
-                        backgroundColor: Color(0xFF427CEF),
-                        radius: 15,
-                        child: Padding(
-                          padding: const EdgeInsets.all(2.0),
-                          child: Image.asset(
-                            'assets/doc-technical.png',
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    child: Padding(
-                        padding: const EdgeInsets.only(left: 5),
-                        child: Text('Penambahan Pipa Instalasi')),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => PengajuanTeknisList(
-                    techId: 38,
-                    techName: 'Perbaikan Pipa Instalasi',
-                  ),
-                ),
-              );
-            },
-            child: Padding(
-              padding: EdgeInsets.only(left: 34, right: 18, top: 20),
-              child: Row(
-                children: [
-                  Center(
-                    child: Padding(
-                      padding: EdgeInsets.only(right: 12.0),
-                      child: CircleAvatar(
-                        backgroundColor: Color(0xFF427CEF),
-                        radius: 15,
-                        child: Padding(
-                          padding: const EdgeInsets.all(2.0),
-                          child: Image.asset(
-                            'assets/doc-technical.png',
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    child: Padding(
-                        padding: const EdgeInsets.only(left: 5),
-                        child: Text('Perbaikan Pipa Instalasi')),
-                  ),
-                ],
-              ),
-            ),
           ),
           Padding(
             padding: EdgeInsets.only(left: 18, right: 18, top: 44),
@@ -565,12 +399,50 @@ class PengajuanLayanan extends StatelessWidget {
               ),
             ),
           ),
+          // GestureDetector(
+          //   onTap: () {
+          //     Navigator.push(
+          //       context,
+          //       MaterialPageRoute(
+          //         builder: (context) => PengembalianPembayaranList(),
+          //       ),
+          //     );
+          //   },
+          //   child: Padding(
+          //     padding: EdgeInsets.only(left: 34, right: 18, top: 20),
+          //     child: Row(
+          //       children: [
+          //         Center(
+          //           child: Padding(
+          //             padding: EdgeInsets.only(right: 12.0),
+          //             child: CircleAvatar(
+          //               backgroundColor: Color(0xFF427CEF),
+          //               radius: 15,
+          //               child: Padding(
+          //                 padding: const EdgeInsets.all(2.0),
+          //                 child: Image.asset(
+          //                   'assets/doc-return.png',
+          //                   color: Colors.white,
+          //                 ),
+          //               ),
+          //             ),
+          //           ),
+          //         ),
+          //         Expanded(
+          //           child: Padding(
+          //               padding: const EdgeInsets.only(left: 5),
+          //               child: Text('Pengembalian Sisa Jaminan')),
+          //         ),
+          //       ],
+          //     ),
+          //   ),
+          // ),
           GestureDetector(
             onTap: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => PengembalianPembayaranList(),
+                  builder: (context) => CicilanList(),
                 ),
               );
             },
@@ -597,7 +469,7 @@ class PengajuanLayanan extends StatelessWidget {
                   Expanded(
                     child: Padding(
                         padding: const EdgeInsets.only(left: 5),
-                        child: Text('Pengembalian Sisa Jaminan')),
+                        child: Text('Pengajuan Layanan Cicilan JP/Piutang')),
                   ),
                 ],
               ),
@@ -605,12 +477,16 @@ class PengajuanLayanan extends StatelessWidget {
           ),
           GestureDetector(
             onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => PengajuanAsuransiList(),
-                ),
-              );
+              if (custID.contains('000')) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => PengajuanAsuransiList(),
+                  ),
+                );
+              } else {
+                successAlert(context, 'Pengajuan Asuransi Kebakaran');
+              }
             },
             child: Padding(
               padding: EdgeInsets.only(left: 34, right: 18, top: 20),
@@ -643,12 +519,16 @@ class PengajuanLayanan extends StatelessWidget {
           ),
           GestureDetector(
             onTap: () {
+              // if (custID.contains('000')) {
               Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (context) => KlaimAsuransiList(),
                 ),
               );
+              // } else {
+              //   successAlert(context, 'Klaim Asuransi');
+              // }
             },
             child: Padding(
               padding:
@@ -683,5 +563,76 @@ class PengajuanLayanan extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  void getDataCred() async {
+    String custIDString = await storageCache.read(key: 'customer_id');
+    setState(() {
+      custID = custIDString;
+    });
+  }
+
+  Future<bool> successAlert(BuildContext context, String title) {
+    var alertStyle = AlertStyle(
+      animationType: AnimationType.fromTop,
+      isCloseButton: false,
+      isOverlayTapDismiss: false,
+      descStyle: TextStyle(fontWeight: FontWeight.bold),
+      animationDuration: Duration(milliseconds: 400),
+      alertBorder: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(0.0),
+        side: BorderSide(
+          color: Colors.grey,
+        ),
+      ),
+      titleStyle: TextStyle(
+        color: Colors.black,
+      ),
+    );
+    return Alert(
+      context: context,
+      style: alertStyle,
+      title: "Informasi !",
+      content: Column(
+        children: <Widget>[
+          SizedBox(height: 5),
+          Text(
+            'Pengajuan Layanan $title hanya untuk pelanggan GPIR & GPIK',
+            style: TextStyle(
+                // color: painting.Color.fromRGBO(255, 255, 255, 0),
+                fontSize: 17,
+                fontWeight: FontWeight.w400),
+            textAlign: TextAlign.center,
+          ),
+          SizedBox(height: 10)
+        ],
+      ),
+      buttons: [
+        DialogButton(
+          width: 130,
+          onPressed: () async {
+            Navigator.pop(context);
+          },
+          color: Colors.green,
+          child: Text(
+            "Ok",
+            style: TextStyle(
+                color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
+          ),
+        )
+      ],
+    ).show();
+  }
+
+  Future<PengajuanTeknisTypeModel> getFutureKlaimAsuransiList() async {
+    String accessToken = await storageCache.read(key: 'access_token');
+    var response = await http.get(
+        '${UrlCons.mainDevUrl}customer-service/technical-service-job-type',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $accessToken',
+        });
+    print('GET LIST JENIS LAYANAN TEKNIS ${response.body}');
+    return PengajuanTeknisTypeModel.fromJson(json.decode(response.body));
   }
 }

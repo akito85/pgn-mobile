@@ -176,6 +176,7 @@ class RegistCustState extends State<RegisterCustomer> {
                             controller: phoneNumb,
                             keyboardType: TextInputType.number,
                             decoration: InputDecoration(
+                              hintText: '82212345678',
                               labelText: 'Phone Number',
                             ),
                           ),

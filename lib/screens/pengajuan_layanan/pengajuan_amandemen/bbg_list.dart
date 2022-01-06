@@ -307,9 +307,10 @@ class _BBGListState extends State<BBGList> {
   void loadMore() async {
     final storageCache = FlutterSecureStorage();
     String accessToken = await storageCache.read(key: 'access_token');
+    String customerID = await storageCache.read(key: 'customer_id');
     String lang = await storageCache.read(key: 'lang');
     var responseGetSubsProg = await http.get(
-        '${UrlCons.mainDevUrl}customer-service/pengalihan-bbg?per_page=10000&next_page=$nextPage',
+        '${UrlCons.mainDevUrl}customer-service/pengalihan-bbg/customer/$customerID?per_page=10000&next_page=$nextPage',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $accessToken',
@@ -329,8 +330,9 @@ class _BBGListState extends State<BBGList> {
   Future<BBGModel> getFutureBBGList() async {
     String accessToken = await storageCache.read(key: 'access_token');
     String lang = await storageCache.read(key: 'lang');
+    String customerID = await storageCache.read(key: 'customer_id');
     var response = await http.get(
-        '${UrlCons.mainDevUrl}customer-service/pengalihan-bbg?per_page=1000',
+        '${UrlCons.mainDevUrl}customer-service/pengalihan-bbg/customer/$customerID?per_page=1000',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $accessToken',

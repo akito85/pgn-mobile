@@ -353,6 +353,7 @@ class _PengajuanTeknisListState extends State<PengajuanTeknisList> {
     final storageCache = FlutterSecureStorage();
     String accessToken = await storageCache.read(key: 'access_token');
     String lang = await storageCache.read(key: 'lang');
+    String customerID = await storageCache.read(key: 'customer_id');
     var responseGetSubsProg = await http.get(
         '${UrlCons.mainDevUrl}customer-service/technical-service?per_page=1000&filter_technical_type_id=$techId&next_page=$nextPage',
         headers: {
@@ -374,6 +375,7 @@ class _PengajuanTeknisListState extends State<PengajuanTeknisList> {
   Future<PengajuanTeknisModel> getFuturePengajuanTeknisList() async {
     String accessToken = await storageCache.read(key: 'access_token');
     String lang = await storageCache.read(key: 'lang');
+    String customerID = await storageCache.read(key: 'customer_id');
     var response = await http.get(
         '${UrlCons.mainDevUrl}customer-service/technical-service?per_page=1000&filter_technical_type_id=$techId',
         headers: {

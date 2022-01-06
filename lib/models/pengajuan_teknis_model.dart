@@ -117,6 +117,7 @@ class DetailData {
   String npwpFile;
   String npwpNumb;
   String ktpAddress;
+  String ktpFile;
   DetailData(
       {this.address,
       this.bDate,
@@ -148,7 +149,8 @@ class DetailData {
       this.ktpAddress,
       this.npwpFile,
       this.npwpNumb,
-      this.techId});
+      this.techId,
+      this.ktpFile});
   factory DetailData.fromJson(Map<String, dynamic> json) {
     return DetailData(
       id: json['id'],
@@ -182,6 +184,7 @@ class DetailData {
       npwpNumb: json['npwp_number'],
       ktpAddress: json['ktp_address'],
       techId: json['technical_type_id'],
+      ktpFile: json['ktp_file'],
     );
   }
 }
@@ -246,6 +249,43 @@ class TitleData {
       area: json['area'],
       cost: json['cost'],
       meterType: json['meter_type'],
+    );
+  }
+}
+
+class PengajuanTeknisTypeModel {
+  List<DataType> data;
+  String message;
+  int code;
+  PengajuanTeknisTypeModel({this.code, this.data, this.message});
+  factory PengajuanTeknisTypeModel.fromJson(Map<String, dynamic> json) {
+    if (json['code'] != null) {
+      return PengajuanTeknisTypeModel(
+          code: json['code'], message: json['message']);
+    } else {
+      return PengajuanTeknisTypeModel(
+        data: parsedDataPengajuanTeknisType(json['data']),
+      );
+    }
+  }
+
+  static List<DataType> parsedDataPengajuanTeknisType(dataJson) {
+    var list = dataJson as List;
+    List<DataType> datas = list.map((data) => DataType.fromJson(data)).toList();
+    return datas;
+  }
+}
+
+class DataType {
+  int id;
+  String name;
+
+  DataType({this.id, this.name});
+
+  factory DataType.fromJson(Map<String, dynamic> json) {
+    return DataType(
+      id: json['id'],
+      name: json['name'],
     );
   }
 }

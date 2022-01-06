@@ -79,6 +79,7 @@ class ChangeNumbState extends State<ChangeNumb> {
                         keyboardType: TextInputType.number,
                         decoration: InputDecoration(
                           labelText: 'Phone Number',
+                          hintText: '82212345678',
                           fillColor: Color(0xFF427CEF),
                         ),
                       ),
