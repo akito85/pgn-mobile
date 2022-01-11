@@ -770,7 +770,7 @@
     "cmm_stand_awal": "Stand Awal",
     "cmm_stand_akhir": "Stand Akhir",
     "cmm_stand_akhir_end": "Stand Akhir",
-    "cmm_record_meter": "Metode Pencatatan Meter",
+    "cmm_record_meter": "Metode Perhitungan Gas",
     "cmm_record_status": "Status Meter",
     "cmm_selisih_stand": "Selisih Stand",
     "cmm_upload_photo": "Unggah Foto Meter",
@@ -806,5 +806,8 @@
     "total_tagihan": "Tagihan Total",
     "ppn": "Termasuk PPN",
     "payment_code": "Kode Bayar",
-    "payment_desc": "Apabila total tagihan bernilai negatif maka Anda tidak perlu melakuakan pembayaran tagihan dan memiliki deposit untuk pembayaran tagihan berikutnya."
+    "payment_desc": "Apabila total tagihan bernilai negatif maka Anda tidak perlu melakuakan pembayaran tagihan dan memiliki deposit untuk pembayaran tagihan berikutnya.",
+    "total_other": "Total Tagihan Lain-Lain",
+    "vat": "PPN",
+    "total_tax": "Dasar Pengenaan Pajak"
 }

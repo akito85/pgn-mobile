@@ -695,7 +695,6 @@ class BillDetailState extends State<InvoiceCustResidential>
                     )
                   ],
                 ),
-
                 ListView.builder(
                   itemCount: data.cmm.length,
                   shrinkWrap: true,
@@ -869,7 +868,6 @@ class BillDetailState extends State<InvoiceCustResidential>
                     );
                   },
                 ),
-
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
@@ -1026,318 +1024,6 @@ class BillDetailState extends State<InvoiceCustResidential>
                     )
                   ],
                 ),
-
-                // Row(
-                //   children: <Widget>[
-                //     Container(
-                //       width: 125,
-                //       margin: EdgeInsets.only(left: 20.0, top: 10.0),
-                //       child: Text(
-                //         Translations.of(context)
-                //             .text('f_customer_guarantees_title'),
-                //         style: TextStyle(
-                //             fontSize: 15.0,
-                //             fontWeight: FontWeight.w400,
-                //             color: Colors.grey[600]),
-                //       ),
-                //     ),
-                //     Container(
-                //       margin: EdgeInsets.only(top: 10.0, left: 25.0),
-                //       child: Text(
-                //         ':',
-                //         style: TextStyle(
-                //             fontSize: 15.0,
-                //             fontWeight: FontWeight.w400,
-                //             color: Colors.grey[600]),
-                //       ),
-                //     ),
-                //     Expanded(
-                //       child: Container(
-                //         margin: EdgeInsets.only(left: 5.0, top: 10.0),
-                //         child: Text(
-                //           "Rp.${data.pGuaranteeIdr ?? "-"}",
-                //           style: TextStyle(
-                //               fontSize: 15.0,
-                //               fontWeight: FontWeight.w400,
-                //               color: Colors.grey[600]),
-                //         ),
-                //       ),
-                //     )
-                //   ],
-                // ),
-                // Row(
-                //   children: <Widget>[
-                //     Container(
-                //       width: 125,
-                //       margin: EdgeInsets.only(left: 20.0, top: 10.0),
-                //       child: Text(
-                //         Translations.of(context)
-                //             .text('f_commercial_invoice_detail_tv_denda'),
-                //         style: TextStyle(
-                //             fontSize: 15.0,
-                //             fontWeight: FontWeight.w400,
-                //             color: Colors.grey[600]),
-                //       ),
-                //     ),
-                //     Container(
-                //       margin: EdgeInsets.only(top: 10.0, left: 25.0),
-                //       child: Text(
-                //         ':',
-                //         style: TextStyle(
-                //             fontSize: 15.0,
-                //             fontWeight: FontWeight.w400,
-                //             color: Colors.grey[600]),
-                //       ),
-                //     ),
-                //     Expanded(
-                //       child: Container(
-                //         margin: EdgeInsets.only(left: 5.0, top: 10.0),
-                //         child: Text(
-                //           data.denda != "" ? data.denda : "-",
-                //           style: TextStyle(
-                //               fontSize: 15.0,
-                //               fontWeight: FontWeight.w400,
-                //               color: Colors.grey[600]),
-                //         ),
-                //       ),
-                //     )
-                //   ],
-                // ),
-                // Row(
-                //   children: <Widget>[
-                //     Container(
-                //       width: 125,
-                //       margin: EdgeInsets.only(left: 20.0, top: 10.0),
-                //       child: Text(
-                //         Translations.of(context).text(
-                //             'f_commercial_invoice_detail_tv_b_pengaliran_kembali'),
-                //         style: TextStyle(
-                //             fontSize: 15.0,
-                //             fontWeight: FontWeight.w400,
-                //             color: Colors.grey[600]),
-                //       ),
-                //     ),
-                //     Container(
-                //       margin: EdgeInsets.only(top: 10.0, left: 25.0),
-                //       child: Text(
-                //         ':',
-                //         style: TextStyle(
-                //             fontSize: 15.0,
-                //             fontWeight: FontWeight.w400,
-                //             color: Colors.grey[600]),
-                //       ),
-                //     ),
-                //     Expanded(
-                //       child: Container(
-                //         margin: EdgeInsets.only(left: 5.0, top: 10.0),
-                //         child: Text(
-                //           data.biayaPengaliran != ""
-                //               ? data.biayaPengaliran
-                //               : "-",
-                //           style: TextStyle(
-                //               fontSize: 15.0,
-                //               fontWeight: FontWeight.w400,
-                //               color: Colors.grey[600]),
-                //         ),
-                //       ),
-                //     )
-                //   ],
-                // ),
-                // Row(
-                //   children: <Widget>[
-                //     Container(
-                //       width: 125,
-                //       margin: EdgeInsets.only(left: 20.0, top: 10.0),
-                //       child: Text(
-                //         Translations.of(context).text(
-                //             'f_commercial_invoice_detail_tv_b_pemasangan_kembali'),
-                //         style: TextStyle(
-                //             fontSize: 15.0,
-                //             fontWeight: FontWeight.w400,
-                //             color: Colors.grey[600]),
-                //       ),
-                //     ),
-                //     Container(
-                //       margin: EdgeInsets.only(top: 10.0, left: 25.0),
-                //       child: Text(
-                //         ':',
-                //         style: TextStyle(
-                //             fontSize: 15.0,
-                //             fontWeight: FontWeight.w400,
-                //             color: Colors.grey[600]),
-                //       ),
-                //     ),
-                //     Expanded(
-                //       child: Container(
-                //         margin: EdgeInsets.only(left: 5.0, top: 10.0),
-                //         child: Text(
-                //           data.biayaPemasangan != ""
-                //               ? data.biayaPemasangan
-                //               : "-",
-                //           style: TextStyle(
-                //               fontSize: 15.0,
-                //               fontWeight: FontWeight.w400,
-                //               color: Colors.grey[600]),
-                //         ),
-                //       ),
-                //     )
-                //   ],
-                // ),
-                // Row(
-                //   children: <Widget>[
-                //     Container(
-                //       width: 125,
-                //       margin: EdgeInsets.only(left: 20.0, top: 10.0),
-                //       child: Text(
-                //         Translations.of(context)
-                //             .text('f_commercial_invoice_detail_tv_b_migrasi'),
-                //         style: TextStyle(
-                //             fontSize: 15.0,
-                //             fontWeight: FontWeight.w400,
-                //             color: Colors.grey[600]),
-                //       ),
-                //     ),
-                //     Container(
-                //       margin: EdgeInsets.only(top: 10.0, left: 25.0),
-                //       child: Text(
-                //         ':',
-                //         style: TextStyle(
-                //             fontSize: 15.0,
-                //             fontWeight: FontWeight.w400,
-                //             color: Colors.grey[600]),
-                //       ),
-                //     ),
-                //     Expanded(
-                //       child: Container(
-                //         margin: EdgeInsets.only(left: 5.0, top: 10.0),
-                //         child: Text(
-                //           data.biayaMigrasi != "" ? data.biayaMigrasi : "-",
-                //           style: TextStyle(
-                //               fontSize: 15.0,
-                //               fontWeight: FontWeight.w400,
-                //               color: Colors.grey[600]),
-                //         ),
-                //       ),
-                //     )
-                //   ],
-                // ),
-                // Row(
-                //   children: <Widget>[
-                //     Container(
-                //       width: 125,
-                //       margin: EdgeInsets.only(left: 20.0, top: 10.0),
-                //       child: Text(
-                //         Translations.of(context)
-                //             .text('f_commercial_invoice_detail_tv_b_pelayanan'),
-                //         style: TextStyle(
-                //             fontSize: 15.0,
-                //             fontWeight: FontWeight.w400,
-                //             color: Colors.grey[600]),
-                //       ),
-                //     ),
-                //     Container(
-                //       margin: EdgeInsets.only(top: 10.0, left: 25.0),
-                //       child: Text(
-                //         ':',
-                //         style: TextStyle(
-                //             fontSize: 15.0,
-                //             fontWeight: FontWeight.w400,
-                //             color: Colors.grey[600]),
-                //       ),
-                //     ),
-                //     Expanded(
-                //       child: Container(
-                //         margin: EdgeInsets.only(left: 5.0, top: 10.0),
-                //         child: Text(
-                //           data.biayaPelayanan != "" ? data.biayaPelayanan : "-",
-                //           style: TextStyle(
-                //               fontSize: 15.0,
-                //               fontWeight: FontWeight.w400,
-                //               color: Colors.grey[600]),
-                //         ),
-                //       ),
-                //     )
-                //   ],
-                // ),
-                // Row(
-                //   children: <Widget>[
-                //     Container(
-                //       width: 125,
-                //       margin: EdgeInsets.only(left: 20.0, top: 10.0),
-                //       child: Text(
-                //         Translations.of(context)
-                //             .text('f_commercial_invoice_detail_tv_b_sms'),
-                //         style: TextStyle(
-                //             fontSize: 15.0,
-                //             fontWeight: FontWeight.w400,
-                //             color: Colors.grey[600]),
-                //       ),
-                //     ),
-                //     Container(
-                //       margin: EdgeInsets.only(top: 10.0, left: 25.0),
-                //       child: Text(
-                //         ':',
-                //         style: TextStyle(
-                //             fontSize: 15.0,
-                //             fontWeight: FontWeight.w400,
-                //             color: Colors.grey[600]),
-                //       ),
-                //     ),
-                //     Expanded(
-                //       child: Container(
-                //         margin: EdgeInsets.only(left: 5.0, top: 10.0),
-                //         child: Text(
-                //           data.biayaSms != "" ? data.biayaSms : "-",
-                //           style: TextStyle(
-                //               fontSize: 15.0,
-                //               fontWeight: FontWeight.w400,
-                //               color: Colors.grey[600]),
-                //         ),
-                //       ),
-                //     )
-                //   ],
-                // ),
-                // Row(
-                //   children: <Widget>[
-                //     Container(
-                //       width: 125,
-                //       margin:
-                //           EdgeInsets.only(left: 20.0, top: 10.0, bottom: 20),
-                //       child: Text(
-                //         Translations.of(context)
-                //             .text('f_customer_issue_arrears_title'),
-                //         style: TextStyle(
-                //             fontSize: 15.0,
-                //             fontWeight: FontWeight.w400,
-                //             color: Colors.grey[600]),
-                //       ),
-                //     ),
-                //     Container(
-                //       margin:
-                //           EdgeInsets.only(top: 10.0, left: 25.0, bottom: 20),
-                //       child: Text(
-                //         ':',
-                //         style: TextStyle(
-                //             fontSize: 15.0,
-                //             fontWeight: FontWeight.w500,
-                //             color: Colors.grey[600]),
-                //       ),
-                //     ),
-                //     Expanded(
-                //       child: Container(
-                //         margin:
-                //             EdgeInsets.only(left: 5.0, top: 10.0, bottom: 20),
-                //         child: Text(
-                //           "Rp.${data.arrersIdr ?? "-"}",
-                //           style: TextStyle(
-                //               fontSize: 15.0,
-                //               fontWeight: FontWeight.w400,
-                //               color: Colors.grey[600]),
-                //         ),
-                //       ),
-                //     )
-                //   ],
-                // ),
               ],
             ),
           ),
@@ -1413,6 +1099,120 @@ class BillDetailState extends State<InvoiceCustResidential>
                               ],
                             );
                           }),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Container(
+                            width: 125,
+                            margin: EdgeInsets.only(left: 20.0, top: 10.0),
+                            child: Text(
+                              Translations.of(context).text('total_tax'),
+                              style: TextStyle(
+                                  fontSize: 15.0,
+                                  fontWeight: FontWeight.w400,
+                                  color: Colors.grey[600]),
+                            ),
+                          ),
+                          Container(
+                            margin: EdgeInsets.only(top: 10.0, left: 25.0),
+                            child: Text(
+                              ':',
+                              style: TextStyle(
+                                  fontSize: 15.0,
+                                  fontWeight: FontWeight.w400,
+                                  color: Colors.grey[600]),
+                            ),
+                          ),
+                          Expanded(
+                            child: Container(
+                              margin: EdgeInsets.only(left: 5.0, top: 10.0),
+                              child: Text(
+                                data.taxBase.idr,
+                                style: TextStyle(
+                                    fontSize: 15.0,
+                                    fontWeight: FontWeight.w400,
+                                    color: Colors.grey[600]),
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Container(
+                            width: 125,
+                            margin: EdgeInsets.only(left: 20.0, top: 10.0),
+                            child: Text(
+                              Translations.of(context).text('vat'),
+                              style: TextStyle(
+                                  fontSize: 15.0,
+                                  fontWeight: FontWeight.w400,
+                                  color: Colors.grey[600]),
+                            ),
+                          ),
+                          Container(
+                            margin: EdgeInsets.only(top: 10.0, left: 25.0),
+                            child: Text(
+                              ':',
+                              style: TextStyle(
+                                  fontSize: 15.0,
+                                  fontWeight: FontWeight.w400,
+                                  color: Colors.grey[600]),
+                            ),
+                          ),
+                          Expanded(
+                            child: Container(
+                              margin: EdgeInsets.only(left: 5.0, top: 10.0),
+                              child: Text(
+                                data.vat.idr,
+                                style: TextStyle(
+                                    fontSize: 15.0,
+                                    fontWeight: FontWeight.w400,
+                                    color: Colors.grey[600]),
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Container(
+                            width: 125,
+                            margin: EdgeInsets.only(left: 20.0, top: 10.0),
+                            child: Text(
+                              Translations.of(context).text('total_other'),
+                              style: TextStyle(
+                                  fontSize: 15.0,
+                                  fontWeight: FontWeight.w400,
+                                  color: Colors.grey[600]),
+                            ),
+                          ),
+                          Container(
+                            margin: EdgeInsets.only(top: 10.0, left: 25.0),
+                            child: Text(
+                              ':',
+                              style: TextStyle(
+                                  fontSize: 15.0,
+                                  fontWeight: FontWeight.w400,
+                                  color: Colors.grey[600]),
+                            ),
+                          ),
+                          Expanded(
+                            child: Container(
+                              margin: EdgeInsets.only(left: 5.0, top: 10.0),
+                              child: Text(
+                                data.totalOther.idr,
+                                style: TextStyle(
+                                    fontSize: 15.0,
+                                    fontWeight: FontWeight.w400,
+                                    color: Colors.grey[600]),
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
                       SizedBox(
                         height: 20,
                       ),
@@ -1473,7 +1273,7 @@ class BillDetailState extends State<InvoiceCustResidential>
                         margin:
                             EdgeInsets.only(left: 5.0, top: 20.0, right: 20),
                         child: Text(
-                          "${data.tBillIdr ?? "-"} IDR (${Translations.of(context).text('ppn')})",
+                          "${data.tBillIdr ?? "-"} IDR",
                           style: TextStyle(
                               fontSize: 15.0,
                               fontWeight: FontWeight.w400,
@@ -1511,7 +1311,7 @@ class BillDetailState extends State<InvoiceCustResidential>
                       child: Container(
                         margin: EdgeInsets.only(left: 5.0, top: 10.0),
                         child: Text(
-                          custID,
+                          data.custInvoiceId.toString(),
                           style: TextStyle(
                               fontSize: 15.0,
                               fontWeight: FontWeight.w400,
@@ -1532,92 +1332,6 @@ class BillDetailState extends State<InvoiceCustResidential>
                         color: Colors.black),
                   ),
                 ),
-                // if (data.isPaid == 1)
-                //   Row(
-                //     children: <Widget>[
-                //       Container(
-                //         width: 125,
-                //         margin:
-                //             EdgeInsets.only(left: 20.0, top: 10.0, bottom: 20),
-                //         child: Text(
-                //           Translations.of(context).text(
-                //               'f_household_invoice_detail_tv_payment_status'),
-                //           style: TextStyle(
-                //               fontSize: 15.0,
-                //               fontWeight: FontWeight.w400,
-                //               color: Colors.grey[600]),
-                //         ),
-                //       ),
-                //       Container(
-                //         margin:
-                //             EdgeInsets.only(top: 10.0, left: 25.0, bottom: 20),
-                //         child: Text(
-                //           ':',
-                //           style: TextStyle(
-                //               fontSize: 15.0,
-                //               fontWeight: FontWeight.w400,
-                //               color: Colors.grey[600]),
-                //         ),
-                //       ),
-                //       Expanded(
-                //         child: Container(
-                //           margin:
-                //               EdgeInsets.only(left: 5.0, top: 10.0, bottom: 20),
-                //           child: Text(
-                //             Translations.of(context).text(
-                //                 'f_commercial_invoice_detail_tv_payment_status_paid'),
-                //             style: TextStyle(
-                //                 fontSize: 15.0,
-                //                 fontWeight: FontWeight.w400,
-                //                 color: Colors.grey[600]),
-                //           ),
-                //         ),
-                //       )
-                //     ],
-                //   ),
-                // if (data.isPaid == 0)
-                //   Row(
-                //     children: <Widget>[
-                //       Container(
-                //         width: 125,
-                //         margin:
-                //             EdgeInsets.only(left: 20.0, top: 10.0, bottom: 20),
-                //         child: Text(
-                //           Translations.of(context).text(
-                //               'f_household_invoice_detail_tv_payment_status'),
-                //           style: TextStyle(
-                //               fontSize: 15.0,
-                //               fontWeight: FontWeight.w400,
-                //               color: Colors.grey[600]),
-                //         ),
-                //       ),
-                //       Container(
-                //         margin:
-                //             EdgeInsets.only(top: 10.0, left: 25.0, bottom: 20),
-                //         child: Text(
-                //           ':',
-                //           style: TextStyle(
-                //               fontSize: 15.0,
-                //               fontWeight: FontWeight.w400,
-                //               color: Colors.grey[600]),
-                //         ),
-                //       ),
-                //       Expanded(
-                //         child: Container(
-                //           margin:
-                //               EdgeInsets.only(left: 5.0, top: 10.0, bottom: 20),
-                //           child: Text(
-                //             Translations.of(context).text(
-                //                 'f_commercial_invoice_detail_tv_payment_status_unpaid'),
-                //             style: TextStyle(
-                //                 fontSize: 15.0,
-                //                 fontWeight: FontWeight.w400,
-                //                 color: Colors.grey[600]),
-                //           ),
-                //         ),
-                //       )
-                //     ],
-                //   ),
               ],
             ),
           ),

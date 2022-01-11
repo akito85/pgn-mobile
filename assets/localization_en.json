@@ -790,7 +790,7 @@
     "cmm_stand_awal": "Initial Stand",
     "cmm_stand_akhir_end": "End Stand",
     "cmm_stand_akhir": "Final Stand",
-    "cmm_record_meter": "Meter Recording Method",
+    "cmm_record_meter": "Gas Calculation Method",
     "cmm_record_status": "Meter Status",
     "cmm_selisih_stand": "Stand Difference",
     "cmm_upload_photo": "Upload Meter Photo",
@@ -826,5 +826,8 @@
     "total_tagihan": "Total Invoice",
     "ppn": "Include PPN",
     "payment_code": "Payment Code",
-    "payment_desc": "If the total amount is negative, then customer do not need to pay bill and have a deposit for the next invoice."
+    "payment_desc": "If the total amount is negative, then customer do not need to pay bill and have a deposit for the next invoice.",
+    "total_other": "Total Others Invoice",
+    "vat": "VAT",
+    "total_tax": "*)Tax Base"
 }

@@ -42,6 +42,9 @@ class DataCustInvoiceResidential {
   String invoicePeriod;
   String custInvoicePeriod;
   String type;
+  TotalOther totalOther;
+  TaxBase taxBase;
+  Vat vat;
   List<CMM> cmm;
   List<Others> others;
 
@@ -65,7 +68,10 @@ class DataCustInvoiceResidential {
       this.volumeOverUsage,
       this.volumeUsage,
       this.others,
-      this.billDate});
+      this.billDate,
+      this.taxBase,
+      this.totalOther,
+      this.vat});
 
   factory DataCustInvoiceResidential.fromJson(Map<String, dynamic> json) {
     return DataCustInvoiceResidential(
@@ -88,6 +94,9 @@ class DataCustInvoiceResidential {
       availableGuarantee: json['available_guarantee'],
       paymentGuatantee: json['payment_guarantee'],
       billDate: json['bill_date'],
+      totalOther: TotalOther.fromJson(json['total_other']),
+      taxBase: TaxBase.fromJson(json['tax_base']),
+      vat: Vat.fromJson(json['vat']),
       cmm: parseDataCMM(json['cmm']),
     );
   }
@@ -102,6 +111,30 @@ class DataCustInvoiceResidential {
     var list = datasJson as List;
     List<CMM> datasCmm = list.map((data) => CMM.fromJson(data)).toList();
     return datasCmm;
+  }
+}
+
+class TotalOther {
+  String idr;
+  TotalOther({this.idr});
+  factory TotalOther.fromJson(Map<String, dynamic> json) {
+    return TotalOther(idr: json['IDR']);
+  }
+}
+
+class Vat {
+  String idr;
+  Vat({this.idr});
+  factory Vat.fromJson(Map<String, dynamic> json) {
+    return Vat(idr: json['IDR']);
+  }
+}
+
+class TaxBase {
+  String idr;
+  TaxBase({this.idr});
+  factory TaxBase.fromJson(Map<String, dynamic> json) {
+    return TaxBase(idr: json['IDR']);
   }
 }
 
