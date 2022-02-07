@@ -93,7 +93,7 @@ class JenisPeralatanState extends State<JenisPeralatan> {
               //     Map<String, dynamic> fuelID = {"fuel_id":"1"};
               //     // gasToolUsageIndustrialVal.removeWhere((item) => item['fuel_id']);
               //     gasToolUsageIndustrialVal.add(fuelID);
-              //     print("Isi Usage Tool INDUSTRIAL Fuel ID: $gasToolUsageIndustrialVal");
+              //     //print("Isi Usage Tool INDUSTRIAL Fuel ID: $gasToolUsageIndustrialVal");
               //   });
               // },
               controller: jenisBahanBakarCtrl,
@@ -109,9 +109,9 @@ class JenisPeralatanState extends State<JenisPeralatan> {
                     // // gasToolUsageIndustrialVal.removeWhere((item) => item['fuel_id']);
                     // gasToolUsageIndustrialVal.add(fuelID);
 
-                    // print("Isi Usage Tool INDUSTRIAL Fuel ID: $gasToolUsageIndustrialVal");
+                    // //print("Isi Usage Tool INDUSTRIAL Fuel ID: $gasToolUsageIndustrialVal");
                     _nextScreen(context);
-                    print('FUEL ID');
+                    //print('FUEL ID');
                   },
                 ),
               ),
@@ -132,7 +132,7 @@ class JenisPeralatanState extends State<JenisPeralatan> {
                 //     Map<String, dynamic> fuelPerMonth = {"fuel_consumption_per_month":"$value"};
                 //     // gasToolUsageIndustrialVal.removeWhere((item) => item['fuel_consumption_per_month']);
                 //     gasToolUsageIndustrialVal.add(fuelPerMonth);
-                //     print("Isi Usage Tool INDUSTRIAL Fuel Per Month: $gasToolUsageIndustrialVal");
+                //     //print("Isi Usage Tool INDUSTRIAL Fuel Per Month: $gasToolUsageIndustrialVal");
                 //   });
                 // },
                 controller: perMonthCtrl,
@@ -151,7 +151,7 @@ class JenisPeralatanState extends State<JenisPeralatan> {
                   //     Map<String, dynamic> fuelPerMonth = {"fuel_consumption_per_month":"$value"};
                   //     gasToolUsageIndustrialVal.removeWhere((item) => item['fuel_consumption_per_month']);
                   //     gasToolUsageIndustrialVal.add(fuelPerMonth);
-                  //     print("Isi Usage Tool INDUSTRIAL Tekanan: $gasToolUsageIndustrialVal");
+                  //     //print("Isi Usage Tool INDUSTRIAL Tekanan: $gasToolUsageIndustrialVal");
                   //   });
                   // },
                   controller: satuanBBakarCtrl,
@@ -174,7 +174,7 @@ class JenisPeralatanState extends State<JenisPeralatan> {
                 //     Map<String, dynamic> tekanan = {"pressure":"$value"};
                 //     // gasToolUsageIndustrialVal.removeWhere((item) => item['pressure']);
                 //     gasToolUsageIndustrialVal.add(tekanan);
-                //     print("Isi Usage Tool INDUSTRIAL Tekanan: $gasToolUsageIndustrialVal");
+                //     //print("Isi Usage Tool INDUSTRIAL Tekanan: $gasToolUsageIndustrialVal");
                 //   });
                 // },
                 controller: tekananOprasiCtrl,
@@ -199,13 +199,13 @@ class JenisPeralatanState extends State<JenisPeralatan> {
                           // Map<String, dynamic> tekananID = {"pressure_unit_id":"11"};
                           // // gasToolUsageIndustrialVal.removeWhere((item) => item['pressure_unit_id']);
                           // gasToolUsageIndustrialVal.add(tekananID);
-                          // print("Isi Usage Tool INDUSTRIAL Tekanan ID: $gasToolUsageIndustrialVal");
+                          // //print("Isi Usage Tool INDUSTRIAL Tekanan ID: $gasToolUsageIndustrialVal");
                         } else {
                           valTekananOprasi = "12";
                           // Map<String, dynamic> tekananID = {"pressure_unit_id":"12"};
                           // // gasToolUsageIndustrialVal.removeWhere((item) => item['pressure_unit_id']);
                           // gasToolUsageIndustrialVal.add(tekananID);
-                          // print("Isi Usage Tool INDUSTRIAL Tekanan ID: $gasToolUsageIndustrialVal");
+                          // //print("Isi Usage Tool INDUSTRIAL Tekanan ID: $gasToolUsageIndustrialVal");
                         }
                       });
                     },
@@ -241,7 +241,7 @@ class JenisPeralatanState extends State<JenisPeralatan> {
               //     Map<String, dynamic> workPerDays = {"total_work_days":"$value"};
               //     // gasToolUsageIndustrialVal.removeWhere((item) => item['total_work_days']);
               //     gasToolUsageIndustrialVal.add(workPerDays);
-              //     print("Isi Usage Tool INDUSTRIAL Work Per Days: $gasToolUsageIndustrialVal");
+              //     //print("Isi Usage Tool INDUSTRIAL Work Per Days: $gasToolUsageIndustrialVal");
               //   });
               // },
               enabled: true,
@@ -276,8 +276,8 @@ class JenisPeralatanState extends State<JenisPeralatan> {
                   };
                   // gasToolUsageIndustrialVal.removeWhere((item) => item['total_work_hours']);
                   gasToolUsageIndustrialVal.add(workPerDays);
-                  print(
-                      "Isi Usage Tool INDUSTRIAL Work Per Hours: $gasToolUsageIndustrialVal");
+                  //print(
+                  // "Isi Usage Tool INDUSTRIAL Work Per Hours: $gasToolUsageIndustrialVal");
                 });
               },
               controller: jKerjaPerMingguCtrl,
@@ -349,7 +349,7 @@ class JenisPeralatanState extends State<JenisPeralatan> {
                 //     "$selectedDate"));
                 // // gasToolUsageIndustrialVal.clear();
                 // // gasToolUsageIndustrialVal.removeWhere((item) => item['name'] == latest);
-                // print(
+                // //print(
                 //     "INI GAS USAGE TOOL JENIS PERALATAN: ${equipmentData.length}");
                 if (satuanTekananOprasiCtrl.text == "BarG") {
                   valTekananOprasi = "11";
@@ -391,7 +391,7 @@ class JenisPeralatanState extends State<JenisPeralatan> {
       satuanBBakarCtrl.text = result;
     });
     final _provRegIndustrial = Provider.of<RegistResidential>(context);
-    print("ini${_provRegIndustrial.jenisBahanBakarBisnisId}");
+    //print("ini${_provRegIndustrial.jenisBahanBakarBisnisId}");
   }
 
   Widget _showDialogMinggu(BuildContext context) {

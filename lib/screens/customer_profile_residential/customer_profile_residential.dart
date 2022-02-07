@@ -134,7 +134,7 @@ class _MyProfileCustResidentialState extends State<MyProfileCustResidential> {
       product = products == "" ? "-" : products;
       listMenus = listMenusString.split(',');
       custGroupId = custGroupIds;
-      print('ID PROD : $custGroupId');
+      //print('ID PROD : $custGroupId');
     });
   }
 }

@@ -1355,7 +1355,7 @@ class _CicilanUpdateState extends State<CicilanUpdate> {
                           Expanded(
                             child: ElevatedButton(
                               onPressed: () {
-                                print('STATUS LOKASI $statusLokasi');
+                                //print('STATUS LOKASI $statusLokasi');
                                 if (_formKeyAlamat.currentState.validate() &&
                                     statusLokasi != null) {
                                   setState(() {
@@ -2338,7 +2338,7 @@ class _CicilanUpdateState extends State<CicilanUpdate> {
   }
 
   void getData() async {
-    print('ID Nya ${widget.id}');
+    //print('ID Nya ${widget.id}');
     String accessToken = await storageCache.read(key: 'access_token');
     String lang = await storageCache.read(key: 'lang');
     var response = await http.get(
@@ -2348,9 +2348,9 @@ class _CicilanUpdateState extends State<CicilanUpdate> {
           'Authorization': 'Bearer $accessToken',
           'Accept-Language': lang,
         });
-    print('GET DETAIL PEMBARUAN DATA ${response.body}');
+    //print('GET DETAIL PEMBARUAN DATA ${response.body}');
     DetailData detailData = DetailData.fromJson(json.decode(response.body));
-    print('NPWP FILE : ${detailData.npwpFile}');
+    //print('NPWP FILE : ${detailData.npwpFile}');
     if (detailData.npwpFile != "") {
       splitString = detailData.npwpFile.split(',');
       image = base64.decode(splitString[1]);
@@ -2431,7 +2431,7 @@ class _CicilanUpdateState extends State<CicilanUpdate> {
   void _nextLokasiPesangan(BuildContext context) async {
     final result = await Navigator.push(
         context, MaterialPageRoute(builder: (context) => MapPoint()));
-    print('INI RESULT LAT LANG $result');
+    //print('INI RESULT LAT LANG $result');
     setState(() {
       locationCtrl.text = result;
     });
@@ -2469,9 +2469,9 @@ class _CicilanUpdateState extends State<CicilanUpdate> {
     var location = locationCtrl.text.split(',');
     var lat = location[0].trim();
     var long = location[1].trim();
-    print('INI LAT $lat');
-    print('INI LONG $long');
-    print('GAMBARNYA  data:image/png;base64,$encoded} ');
+    //print('INI LAT $lat');
+    //print('INI LONG $long');
+    //print('GAMBARNYA  data:image/png;base64,$encoded} ');
     String accessToken = await storageCache.read(key: 'access_token');
     var body = json.encode({
       "customer_id": detailDatas.custId,
@@ -2512,7 +2512,7 @@ class _CicilanUpdateState extends State<CicilanUpdate> {
       "npwp_file": encodedImageNPWP,
       "customer_signature": 'data:image/png;base64,$encoded',
     });
-    print('INI BODY POST CREATE CICILAN ${body}');
+    //print('INI BODY POST CREATE CICILAN ${body}');
     var response = await http.post(
         '${UrlCons.mainProdUrl}customer-service/loan/update/$id',
         headers: {
@@ -2520,7 +2520,7 @@ class _CicilanUpdateState extends State<CicilanUpdate> {
           'Authorization': 'Bearer $accessToken'
         },
         body: body);
-    print('INI HASIL POST UPDATE CICILAN ${response.body}');
+    //print('INI HASIL POST UPDATE CICILAN ${response.body}');
     Create create = Create.fromJson(json.decode(response.body));
 
     if (response.statusCode == 200) {
@@ -2542,13 +2542,13 @@ class _CicilanUpdateState extends State<CicilanUpdate> {
         setState(() {
           _fileName = result.names.single;
           imgNPWP = file;
-          print('NAMA FILE : $_fileName');
+          //print('NAMA FILE : $_fileName');
         });
       } else {
         setState(() {
           _fileNameKtp = result.names.single;
           imgKTP = file;
-          print('NAMA FILE KTP : $_fileNameKtp');
+          //print('NAMA FILE KTP : $_fileNameKtp');
         });
       }
     } else {

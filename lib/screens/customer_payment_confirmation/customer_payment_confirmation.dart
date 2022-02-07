@@ -60,7 +60,7 @@ class _CustomerPaymentConfirmation extends State<CustomerPaymentConfirmation>
 
       if (currentMonth < 10) {
         currentMonthS = '0$currentMonth';
-        print('MASUK SINI KAH : $currentMonthS');
+        //print('MASUK SINI KAH : $currentMonthS');
       } else {
         currentMonthS = currentMonth.toString();
       }
@@ -218,8 +218,8 @@ class _CustomerPaymentConfirmation extends State<CustomerPaymentConfirmation>
       'Content-Type': 'application/json',
       'Authorization': 'Bearer $accessToken'
     });
-    print('HASIL GET PAYMENT ${responseCustomerInvoice.body}');
-    print('PERIOD PAYMENT $period');
+    //print('HASIL GET PAYMENT ${responseCustomerInvoice.body}');
+    //print('PERIOD PAYMENT $period');
     return PaymentModel.fromJson(json.decode(responseCustomerInvoice.body));
   }
 

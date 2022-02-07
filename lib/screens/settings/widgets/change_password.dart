@@ -187,8 +187,8 @@ class ChangePasswordState extends State<ChangePassword> {
                               encrypter.encrypt(oldPassCtrl.text, iv: iv);
                           final encryptedValidatePass = encrypter
                               .encrypt(newValidatePassCtrl.text, iv: iv);
-                          print('Pass sekarang: ${encryptedOldPass.base64}');
-                          print('Pas validate ${encryptedValidatePass.base64}');
+                          //print('Pass sekarang: ${encryptedOldPass.base64}');
+                          //print('Pas validate ${encryptedValidatePass.base64}');
                           textPassVisible = false;
                           setState(() {
                             btnSave = false;
@@ -225,7 +225,7 @@ class ChangePasswordState extends State<ChangePassword> {
         '${UrlCons.mainProdUrl}change-password',
         headers: {'Authorization': 'Bearer $accessToken'},
         body: {'old_password': oldPassword, 'new_password': validatePass});
-    print('STATUS ${responseChangePass.body}');
+    //print('STATUS ${responseChangePass.body}');
     if (responseChangePass.contentLength == 0) {
       setState(() {
         btnSave = true;

@@ -336,10 +336,10 @@ class CMMState extends State<CMM> with SingleTickerProviderStateMixin {
 
   Widget _buildRow(List<DataListCMM> data, String message, String statusCMM,
       String dateMonth, String year) {
-    print('STATUS CMM : $statusCMM');
+    //print('STATUS CMM : $statusCMM');
     DateTime dateTime;
     DateFormat dateFormat = DateFormat("yyyy-MM-dd");
-    print('MASUK: ${data.length} ');
+    //print('MASUK: ${data.length} ');
     if (data.length == 0)
       return Container(
         margin: EdgeInsets.only(top: 10.0, right: 5.0, left: 5.0, bottom: 10.0),
@@ -869,7 +869,7 @@ class CMMState extends State<CMM> with SingleTickerProviderStateMixin {
     final storageCache = FlutterSecureStorage();
     String accessToken = await storageCache.read(key: 'access_token');
     currentLang = await storageCache.read(key: 'lang');
-    print("ACCESS TOKEN: ${period.toUpperCase()}");
+    //print("ACCESS TOKEN: ${period.toUpperCase()}");
     var responseCMMList = await http.get(
         '${UrlCons.mainProdUrl}giore?P_PERIOD=${period.toUpperCase()}',
         headers: {
@@ -878,9 +878,9 @@ class CMMState extends State<CMM> with SingleTickerProviderStateMixin {
           'Accept-Language': currentLang,
           // 'Authorization': 'Bearer 0Dz4C3O9flOerWWYUaFFFQXYbwKr9tlHc60k4MVa',
         });
-    // print(
+    // //print(
     //     'ALAMAT CMM LIST :ttps://devapi-mobile.pgn.co.id/v2/giore?P_PERIOD=${period.toUpperCase()}');
-    print('Data CMM LIST : ${responseCMMList.body}');
+    //print('Data CMM LIST : ${responseCMMList.body}');
     CMMModel _cmmList = CMMModel.fromJson(json.decode(responseCMMList.body));
     if (responseCMMList.statusCode == 200) {
       _cmmList.dataListCMM.forEach((x) {

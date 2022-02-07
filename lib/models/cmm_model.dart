@@ -9,7 +9,6 @@ class CMMModel {
     if (json['message'] != null) {
       return CMMModel(message: json['message']);
     } else {
-      print('mASUK ');
       return CMMModel(dataListCMM: parseDataListCMM(json['data']));
     }
   }

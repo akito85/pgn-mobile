@@ -247,7 +247,7 @@ class _CMVisitFormState extends State<CMVisitForm> {
         if (pickedFile != null) {
           _image = File(pickedFile.path);
         } else {
-          print('No image selected.');
+          //print('No image selected.');
         }
       });
     } else if (images == '2') {
@@ -260,7 +260,7 @@ class _CMVisitFormState extends State<CMVisitForm> {
         if (pickedFile != null) {
           _image2 = File(pickedFile.path);
         } else {
-          print('No image selected.');
+          //print('No image selected.');
         }
       });
     } else if (images == '3') {
@@ -273,7 +273,7 @@ class _CMVisitFormState extends State<CMVisitForm> {
         if (pickedFile != null) {
           _image3 = File(pickedFile.path);
         } else {
-          print('No image selected.');
+          //print('No image selected.');
         }
       });
     }
@@ -316,7 +316,7 @@ class _CMVisitFormState extends State<CMVisitForm> {
         isVisibleCustomerEmail = false;
         isVisibleReports = false;
       });
-      print('MASUK SCREEN 1');
+      //print('MASUK SCREEN 1');
     } else if (valueChoose.isEmpty) {
       setState(() {
         isVisibleVisitType = true;
@@ -330,7 +330,7 @@ class _CMVisitFormState extends State<CMVisitForm> {
         // isVisibleCustomerEmail = false;
         // isVisibleReports = false;
       });
-      print('MASUK SCREEN 2');
+      //print('MASUK SCREEN 2');
     } else if (activityChoose.isEmpty) {
       setState(() {
         // isVisibleVisitType = false;
@@ -357,7 +357,7 @@ class _CMVisitFormState extends State<CMVisitForm> {
         // isVisibleCustomerEmail = false;
         // isVisibleReports = false;
       });
-      print('MASUK SCREEN 3');
+      //print('MASUK SCREEN 3');
     } else if (customerId.text == "") {
       setState(() {
         // isVisibleVisitType = false;
@@ -371,7 +371,7 @@ class _CMVisitFormState extends State<CMVisitForm> {
         // isVisibleCustomerEmail = false;
         // isVisibleReports = false;
       });
-      print('MASUK SCREEN 4');
+      //print('MASUK SCREEN 4');
     } else if (address.text == "") {
       setState(() {
         // isVisibleVisitType = false;
@@ -398,7 +398,7 @@ class _CMVisitFormState extends State<CMVisitForm> {
         // isVisibleCustomerEmail = false;
         // isVisibleReports = false;
       });
-      print('MASUK SCREEN 5');
+      //print('MASUK SCREEN 5');
     } else if (emailAddress.text == "") {
       setState(() {
         // isVisibleVisitType = false;
@@ -413,7 +413,7 @@ class _CMVisitFormState extends State<CMVisitForm> {
         // isVisibleReports = false;
       });
     } else if (reports.text == "") {
-      print('MASUK SCREEN 6');
+      //print('MASUK SCREEN 6');
       setState(() {
         // isVisibleVisitType = false;
         // isVisibleDate = false;
@@ -437,7 +437,7 @@ class _CMVisitFormState extends State<CMVisitForm> {
       isVisiblePhoneNumber = false;
       isVisibleCustomerEmail = false;
       isVisibleReports = false;
-      print('MASUK SCREEN');
+      //print('MASUK SCREEN');
       _showAlertDialog(context);
     }
   }
@@ -1206,7 +1206,7 @@ class _CMVisitFormState extends State<CMVisitForm> {
                                         color: Colors.white,
                                         fontWeight: FontWeight.w600)),
                                 onPressed: () {
-                                  print('VISIT TYPE : $visitTypeChoose');
+                                  //print('VISIT TYPE : $visitTypeChoose');
                                   _setValidation();
                                 }),
                           ),
@@ -1456,7 +1456,7 @@ class _CMVisitFormState extends State<CMVisitForm> {
                             _image != null
                                 ? imageUnit8 = _image.readAsBytesSync()
                                 : _image = _image;
-                            print('MAsuk IMage $_image');
+                            //print('MAsuk IMage $_image');
                             String fileExt1 = _image != null
                                 ? _image.path.split('.').last
                                 : '';
@@ -1548,8 +1548,8 @@ class _CMVisitFormState extends State<CMVisitForm> {
                 TextEditingController.fromValue(
                         new TextEditingValue(text: customerName.text))
                     .value
-            : print('selected ${customerName.text}');
-        fetchSearch(context, fieldTextEditingController.text);
+            : //print('selected ${customerName.text}');
+            fetchSearch(context, fieldTextEditingController.text);
         return TextFormField(
           minLines: 1,
           maxLines: 10,
@@ -1573,38 +1573,31 @@ class _CMVisitFormState extends State<CMVisitForm> {
       onSelected: (DataListCust selection) {
         setState(() {
           selection.name != null || selection.name != ""
-              ? customerName.value = TextEditingController.fromValue(
-                      new TextEditingValue(text: selection.name))
-                  .value
-              : print('selected ${selection.name}');
-          selection.id != null || selection.id != ""
-              ? customerId.value = new TextEditingController.fromValue(
-                      new TextEditingValue(text: selection.id))
-                  .value
-              : print('selected ${selection.id}');
-          selection.cPersonName != null || selection.cPersonName != ""
-              ? contactPerson.value = new TextEditingController.fromValue(
-                      new TextEditingValue(text: selection.cPersonName))
-                  .value
-              : print('selected ${selection.cPersonName}');
-          selection.address != null || selection.address != ""
-              ? address.value = new TextEditingController.fromValue(
-                      new TextEditingValue(text: selection.address))
-                  .value
-              : print('selected ${selection.address}');
-          selection.cPersonMobPhone != null || selection.cPersonMobPhone != ""
-              ? phoneNumber.value = new TextEditingController.fromValue(
-                      new TextEditingValue(
-                          text: selection.cPersonMobPhone.startsWith("+62")
-                              ? selection.cPersonMobPhone.substring(3)
-                              : selection.cPersonMobPhone))
-                  .value
-              : print('selected ${selection.cPersonMobPhone}');
-          selection.cPersonEmail != null || selection.cPersonEmail != ""
-              ? emailAddress.value = new TextEditingController.fromValue(
-                      new TextEditingValue(text: selection.cPersonEmail))
-                  .value
-              : print('selected ${selection.cPersonEmail}');
+              ? customerName.value =
+                  TextEditingController.fromValue(new TextEditingValue(text: selection.name))
+                      .value
+              : //print('selected ${selection.name}');
+              selection.id != null || selection.id != ""
+                  ? customerId.value = new TextEditingController.fromValue(
+                          new TextEditingValue(text: selection.id))
+                      .value
+                  : //print('selected ${selection.id}');
+                  selection.cPersonName != null || selection.cPersonName != ""
+                      ? contactPerson.value = new TextEditingController.fromValue(
+                              new TextEditingValue(text: selection.cPersonName))
+                          .value
+                      : //print('selected ${selection.cPersonName}');
+                      selection.address != null || selection.address != ""
+                          ? address.value = new TextEditingController.fromValue(
+                                  new TextEditingValue(text: selection.address))
+                              .value
+                          : //print('selected ${selection.address}');
+                          selection.cPersonMobPhone != null || selection.cPersonMobPhone != ""
+                              ? phoneNumber.value = new TextEditingController.fromValue(new TextEditingValue(text: selection.cPersonMobPhone.startsWith("+62") ? selection.cPersonMobPhone.substring(3) : selection.cPersonMobPhone)).value
+                              : //print('selected ${selection.cPersonMobPhone}');
+                              selection.cPersonEmail != null || selection.cPersonEmail != ""
+                                  ? emailAddress.value = new TextEditingController.fromValue(new TextEditingValue(text: selection.cPersonEmail)).value
+                                  : print('selected ${selection.cPersonEmail}');
         });
       },
       optionsViewBuilder: (BuildContext context,
@@ -1661,17 +1654,17 @@ class _CMVisitFormState extends State<CMVisitForm> {
     final storageCache = FlutterSecureStorage();
     String accessToken = await storageCache.read(key: 'access_token');
     List<String> listImages = [];
-    print('VisitType $visitType');
+    //print('VisitType $visitType');
     if (foto1 != '') {
-      print('FOTO 1 $foto1');
+      //print('FOTO 1 $foto1');
       listImages.add(foto1);
     }
     if (foto2 != '') {
-      print('FOTO 2 $foto2');
+      //print('FOTO 2 $foto2');
       listImages.add(foto2);
     }
     if (foto3 != '') {
-      print('FOTO 3 $foto3');
+      //print('FOTO 3 $foto3');
       listImages.add(foto3);
     }
     var body = json.encode({
@@ -1696,8 +1689,8 @@ class _CMVisitFormState extends State<CMVisitForm> {
               'Content-Type': 'application/json',
             },
             body: body);
-    print('HASIL RETURNYA BODY  $body');
-    print('HASIL RETURNYA  ${responsePostCmVisitForm.body.toString()}');
+    //print('HASIL RETURNYA BODY  $body');
+    //print('HASIL RETURNYA  ${responsePostCmVisitForm.body.toString()}');
     if (responsePostCmVisitForm.statusCode == 200) {
       setState(() {
         _showDialogSuccessSubmit(context);
@@ -1711,7 +1704,7 @@ class _CMVisitFormState extends State<CMVisitForm> {
       });
     } else {
       setState(() {
-        print('responsebody' + responsePostCmVisitForm.body.trim().toString());
+        //print('responsebody' + responsePostCmVisitForm.body.trim().toString());
       });
     }
     return CmVisitReponse.fromJson(json.decode(responsePostCmVisitForm.body));
@@ -1767,7 +1760,7 @@ class _CMVisitFormState extends State<CMVisitForm> {
               'Content-Type': 'application/json',
             },
             body: body);
-    print('status code' + responsePostCmVisitForm.statusCode.toString());
+    //print('status code' + responsePostCmVisitForm.statusCode.toString());
     if (responsePostCmVisitForm.statusCode == 200) {
       setState(() {
         _showDialogSuccessSubmit(context);
@@ -1781,7 +1774,7 @@ class _CMVisitFormState extends State<CMVisitForm> {
       });
     } else {
       setState(() {
-        print('responsebody' + responsePostCmVisitForm.body.trim().toString());
+        //print('responsebody' + responsePostCmVisitForm.body.trim().toString());
       });
     }
     return CmVisitReponse.fromJson(json.decode(responsePostCmVisitForm.body));
@@ -1840,8 +1833,8 @@ class _CMVisitFormState extends State<CMVisitForm> {
       'Authorization': 'Bearer $accessToken',
       'Accept-Language': lang
     });
-    print('MASUK QUERY:  $query');
-    print('MASUK GASZ:  ${responseGetCustList.body}');
+    //print('MASUK QUERY:  $query');
+    //print('MASUK GASZ:  ${responseGetCustList.body}');
     CustListModel getListCust =
         CustListModel.fromJson(json.decode(responseGetCustList.body));
     setState(() {

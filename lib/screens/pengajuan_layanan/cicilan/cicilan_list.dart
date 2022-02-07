@@ -403,7 +403,7 @@ class _CicilanListState extends State<CicilanList> {
           'Authorization': 'Bearer $accessToken',
           'Accept-Language': lang,
         });
-    print('GET LIST CICILAN  ${response.body}');
+    //print('GET LIST CICILAN  ${response.body}');
     return CicilanModel.fromJson(json.decode(response.body));
   }
 }

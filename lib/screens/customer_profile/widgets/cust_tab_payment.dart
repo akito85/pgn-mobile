@@ -206,7 +206,7 @@ class Card1 extends StatelessWidget {
       status = Colors.green;
       gStatus = 'Active';
     }
-    print('COLORS : $status');
+    //print('COLORS : $status');
     DateTime pGEndDate =
         DateTime.parse("${dataCustGuarantees.gStartDate} 00:00:04");
     DateTime pGEffectiveDate =

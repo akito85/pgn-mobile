@@ -1353,7 +1353,7 @@ class _PengajuanAsuransiUpdateState extends State<PengajuanAsuransiUpdate> {
                           Expanded(
                             child: ElevatedButton(
                               onPressed: () {
-                                print('STATUS LOKASI $statusLokasi');
+                                //print('STATUS LOKASI $statusLokasi');
                                 if (_formKeyAlamat.currentState.validate() &&
                                     statusLokasi != null) {
                                   setState(() {
@@ -1829,7 +1829,7 @@ class _PengajuanAsuransiUpdateState extends State<PengajuanAsuransiUpdate> {
                           dataPremi = data.cost;
                         });
 
-                        print(data);
+                        //print(data);
                       },
                       label: dataLia,
                       hint: dataLia,
@@ -2155,7 +2155,7 @@ class _PengajuanAsuransiUpdateState extends State<PengajuanAsuransiUpdate> {
   }
 
   void getData() async {
-    print('ID Nya ${widget.id}');
+    //print('ID Nya ${widget.id}');
     String accessToken = await storageCache.read(key: 'access_token');
     String lang = await storageCache.read(key: 'lang');
     var response = await http.get(
@@ -2165,7 +2165,7 @@ class _PengajuanAsuransiUpdateState extends State<PengajuanAsuransiUpdate> {
           'Authorization': 'Bearer $accessToken',
           'Accept-Language': lang,
         });
-    print('GET DETAIL PEMASANGAN KEMBALI ${response.body}');
+    //print('GET DETAIL PEMASANGAN KEMBALI ${response.body}');
     DetailData detailData = DetailData.fromJson(json.decode(response.body));
     if (detailData.npwpFile != "") {
       splitString = detailData.npwpFile.split(',');
@@ -2239,7 +2239,7 @@ class _PengajuanAsuransiUpdateState extends State<PengajuanAsuransiUpdate> {
   void _nextLokasiPesangan(BuildContext context) async {
     final result = await Navigator.push(
         context, MaterialPageRoute(builder: (context) => MapPoint()));
-    print('INI RESULT LAT LANG $result');
+    //print('INI RESULT LAT LANG $result');
     setState(() {
       locationCtrl.text = result;
     });
@@ -2277,9 +2277,9 @@ class _PengajuanAsuransiUpdateState extends State<PengajuanAsuransiUpdate> {
     var location = locationCtrl.text.split(',');
     var lat = location[0].trim();
     var long = location[1].trim();
-    print('INI LAT $lat');
-    print('INI LONG $long');
-    print('GAMBARNYA  data:image/png;base64,$encoded} ');
+    //print('INI LAT $lat');
+    //print('INI LONG $long');
+    //print('GAMBARNYA  data:image/png;base64,$encoded} ');
     String accessToken = await storageCache.read(key: 'access_token');
     var body = json.encode({
       "customer_id": detailDatas.custId,
@@ -2323,7 +2323,7 @@ class _PengajuanAsuransiUpdateState extends State<PengajuanAsuransiUpdate> {
           'Authorization': 'Bearer $accessToken'
         },
         body: body);
-    print('INI HASIL POST UPDATE PENGALIRAN KEMBALI ${response.body}');
+    //print('INI HASIL POST UPDATE PENGALIRAN KEMBALI ${response.body}');
     Create create = Create.fromJson(json.decode(response.body));
 
     if (response.statusCode == 200) {
@@ -2359,13 +2359,13 @@ class _PengajuanAsuransiUpdateState extends State<PengajuanAsuransiUpdate> {
         setState(() {
           _fileName = result.names.single;
           imgNPWP = file;
-          print('NAMA FILE : $_fileName');
+          //print('NAMA FILE : $_fileName');
         });
       } else {
         setState(() {
           _fileNameKtp = result.names.single;
           imgKTP = file;
-          print('NAMA FILE KTP : $_fileNameKtp');
+          //print('NAMA FILE KTP : $_fileNameKtp');
         });
       }
     } else {

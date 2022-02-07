@@ -562,6 +562,6 @@ Future<GetEquipCust> getCustomerGuarantees(
   });
   GetEquipCust _getGuarantees =
       GetEquipCust.fromJson(json.decode(responseGuaranteesCust.body));
-  print("GET Equip ${responseGuaranteesCust.body}");
+  //print("GET Equip ${responseGuaranteesCust.body}");
   return _getGuarantees;
 }

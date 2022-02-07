@@ -29,7 +29,7 @@ class DashboardCustAddState extends State<DashboardCustAdd> {
   @override
   initState() {
     super.initState();
-    // print('Masuk kondisi ini : $_image');
+    // //print('Masuk kondisi ini : $_image');
   }
 
   Future getImage(String title, String containerImg, String statusTake) async {
@@ -64,7 +64,7 @@ class DashboardCustAddState extends State<DashboardCustAdd> {
         statusStepImg = 'done';
         _imageSelfie = File(pickedFile.path);
       } else {
-        print('No image selected.');
+        //print('No image selected.');
       }
     });
   }
@@ -72,7 +72,7 @@ class DashboardCustAddState extends State<DashboardCustAdd> {
   @override
   Widget build(BuildContext context) {
     if (statusStepImg == 'selfie') {
-      print('Masuk kondisi Satu ');
+      //print('Masuk kondisi Satu ');
     }
     return statusStepImg == 'done'
         ? Scaffold(

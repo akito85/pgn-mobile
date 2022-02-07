@@ -50,7 +50,7 @@ class CalConversionState extends State<CalConversion> {
   Widget build(BuildContext context) {
     final _prov = Provider.of<CalculatorsEnergy>(context);
     final _lang = Provider.of<Language>(context);
-    print('ni hasil provnya : ${_prov.twoValConv}');
+    //print('ni hasil provnya : ${_prov.twoValConv}');
     setState(() {
       _oneCtlr.text = _prov.oneValConv ?? 'Batu Bara';
       _twoCtlr.text = _prov.twoValConv ?? '5100';
@@ -67,7 +67,7 @@ class CalConversionState extends State<CalConversion> {
       _sevenUnit = _prov.sevenUnit;
       _eightUnit = _prov.eightUnit;
       _eightCtlr.text = "Kurs";
-      print('ininininin : $sendBackData');
+      //print('ininininin : $sendBackData');
     });
 
     return Form(

@@ -632,7 +632,7 @@ class _PengajuanLayananState extends State<PengajuanLayanan> {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $accessToken',
         });
-    print('GET LIST JENIS LAYANAN TEKNIS ${response.body}');
+    //print('GET LIST JENIS LAYANAN TEKNIS ${response.body}');
     return PengajuanTeknisTypeModel.fromJson(json.decode(response.body));
   }
 }

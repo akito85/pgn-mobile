@@ -9,6 +9,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
 import 'package:pgn_mobile/models/cicilan_model.dart';
+import 'package:pgn_mobile/models/form_customer_cred_model.dart';
 import 'package:pgn_mobile/models/url_cons.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_signature_pad/flutter_signature_pad.dart';
@@ -1342,7 +1343,7 @@ class _CicilanFormState extends State<CicilanForm> {
                           Expanded(
                             child: ElevatedButton(
                               onPressed: () {
-                                print('STATUS LOKASI $statusLokasi');
+                                //print('STATUS LOKASI $statusLokasi');
                                 if (_formKeyAlamat.currentState.validate() &&
                                     statusLokasi != null) {
                                   setState(() {
@@ -2254,6 +2255,23 @@ class _CicilanFormState extends State<CicilanForm> {
     String emailString = await storageCache.read(key: 'user_email');
     String userPhoneString = await storageCache.read(key: 'user_mobile_otp');
     String custGroupString = await storageCache.read(key: 'customer_groupId');
+
+    var body = json.encode({"P_CUST_NUMBER": custNameString});
+
+    var responseDataCust =
+        await http.post('https://api.pgn.co.id/customers/profile',
+            headers: {
+              'Content-Type': 'application/json',
+              'PGN-Key': '743c3a53b47744789cb564702170c294',
+              'Ocp-Apim-Trace': 'true'
+            },
+            body: body);
+    //print('BODY GET CUSTOMER CRED $body');
+    //print('HASIL GET CUSTOMER CRED ${responseDataCust.body}');
+
+    FormCustomerCredModel formCustomerCredModel =
+        FormCustomerCredModel.fromJson(json.decode(responseDataCust.body));
+
     setState(() {
       custID = custNameString;
       custName = custIDString;
@@ -2267,13 +2285,41 @@ class _CicilanFormState extends State<CicilanForm> {
       } else if (custGroupString == '2') {
         custGroup = 'Bulk';
       }
+      if (formCustomerCredModel.custProfileDataOutput != null) {
+        nikCtrl.value = new TextEditingController.fromValue(
+                new TextEditingValue(
+                    text: formCustomerCredModel.custProfileDataOutput[0].nik))
+            .value;
+        ktpAddressCtrl.value = new TextEditingController.fromValue(
+                new TextEditingValue(
+                    text: formCustomerCredModel
+                        .custProfileDataOutput[0].addressNpwpKtp))
+            .value;
+        alamatCtrl.value = new TextEditingController.fromValue(
+                new TextEditingValue(
+                    text: formCustomerCredModel
+                        .custProfileDataOutput[0].addressMeter))
+            .value;
+        kecamatanCtrl
+            .value = new TextEditingController.fromValue(new TextEditingValue(
+                text: formCustomerCredModel.custProfileDataOutput[0].kecamatan))
+            .value;
+        kelurahanCtrl
+            .value = new TextEditingController.fromValue(new TextEditingValue(
+                text: formCustomerCredModel.custProfileDataOutput[0].kelurahan))
+            .value;
+        kabupatenCtrl.value = new TextEditingController.fromValue(
+                new TextEditingValue(
+                    text: formCustomerCredModel.custProfileDataOutput[0].kota))
+            .value;
+      }
     });
   }
 
   void _nextLokasiPesangan(BuildContext context) async {
     final result = await Navigator.push(
         context, MaterialPageRoute(builder: (context) => MapPoint()));
-    print('INI RESULT LAT LANG $result');
+    //print('INI RESULT LAT LANG $result');
     setState(() {
       locationCtrl.text = result;
     });
@@ -2311,9 +2357,9 @@ class _CicilanFormState extends State<CicilanForm> {
     var location = locationCtrl.text.split(',');
     var lat = location[0].trim();
     var long = location[1].trim();
-    print('INI LAT $lat');
-    print('INI LONG $long');
-    print('GAMBARNYA  data:image/png;base64,$encoded} ');
+    //print('INI LAT $lat');
+    //print('INI LONG $long');
+    //print('GAMBARNYA  data:image/png;base64,$encoded} ');
     String accessToken = await storageCache.read(key: 'access_token');
     var body = json.encode({
       "customer_id": custID,
@@ -2354,7 +2400,7 @@ class _CicilanFormState extends State<CicilanForm> {
       "npwp_file": encodedImageNPWP,
       "customer_signature": 'data:image/png;base64,$encoded',
     });
-    print('INI BODY POST CREATE CICILAN ${body}');
+    //print('INI BODY POST CREATE CICILAN ${body}');
     var response = await http.post(
         '${UrlCons.mainProdUrl}customer-service/loan',
         headers: {
@@ -2362,7 +2408,7 @@ class _CicilanFormState extends State<CicilanForm> {
           'Authorization': 'Bearer $accessToken'
         },
         body: body);
-    print('INI HASIL POST CREATE CICILAN ${response.body}');
+    //print('INI HASIL POST CREATE CICILAN ${response.body}');
     Create create = Create.fromJson(json.decode(response.body));
 
     if (response.statusCode == 200) {
@@ -2384,13 +2430,13 @@ class _CicilanFormState extends State<CicilanForm> {
         setState(() {
           _fileName = result.names.single;
           imgNPWP = file;
-          print('NAMA FILE : $_fileName');
+          //print('NAMA FILE : $_fileName');
         });
       } else {
         setState(() {
           _fileNameKtp = result.names.single;
           imgKTP = file;
-          print('NAMA FILE KTP : $_fileNameKtp');
+          //print('NAMA FILE KTP : $_fileNameKtp');
         });
       }
     } else {

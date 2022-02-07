@@ -216,7 +216,7 @@ class BillDetailState extends State<BillDetail>
   }
 
   Widget _buildContent2(BuildContext context, String title, String custID) {
-    print('INI CONTENT @ : $title');
+    //print('INI CONTENT @ : $title');
     return ListView(
       children: <Widget>[
         Container(
@@ -383,7 +383,7 @@ class BillDetailState extends State<BillDetail>
   }
 
   Widget _buildRow(DataCustInvoice data) {
-    print('${data.paymentStatus.id}');
+    //print('${data.paymentStatus.id}');
     return Container(
       margin: EdgeInsets.only(top: 10.0, right: 5.0, left: 5.0, bottom: 10.0),
       child: Column(
@@ -1450,6 +1450,6 @@ Future<CustomerInvoice> getCustomerInvoice(
   });
   CustomerInvoice _customerInvoice =
       CustomerInvoice.fromJson(json.decode(responseCustomerInvoice.body));
-  print('Data Invoice: ${responseCustomerInvoice.body}');
+  //print('Data Invoice: ${responseCustomerInvoice.body}');
   return _customerInvoice;
 }

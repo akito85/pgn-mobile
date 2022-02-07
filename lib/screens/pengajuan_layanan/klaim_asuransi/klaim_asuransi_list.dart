@@ -315,7 +315,7 @@ class _KlaimAsuransiListState extends State<KlaimAsuransiList> {
           'Authorization': 'Bearer $accessToken',
           'Accept-Language': lang,
         });
-    print('GET LIST PENGALIRAN KEMBALI ${response.body}');
+    //print('GET LIST PENGALIRAN KEMBALI ${response.body}');
     return KlaimAsuransiModel.fromJson(json.decode(response.body));
   }
 }

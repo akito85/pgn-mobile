@@ -51,7 +51,7 @@ class HarianDetailCustChartState extends State<HarianDetailCustChart> {
 
   @override
   Widget build(BuildContext context) {
-    print('INI PERIODNYA : $period');
+    //print('INI PERIODNYA : $period');
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -246,8 +246,8 @@ Future<HarianDetailCustDashboard> fetchPost(
       'Accept-Language': lang
     },
   );
-  print('response daily usage ${title}');
-  print('response daily usage ${responseDailyUsage.body}');
+  //print('response daily usage ${title}');
+  //print('response daily usage ${responseDailyUsage.body}');
   HarianDetailCustDashboard detailCustDashboard =
       HarianDetailCustDashboard.fromJson(json.decode(responseDailyUsage.body));
 

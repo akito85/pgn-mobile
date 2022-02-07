@@ -1257,12 +1257,12 @@ class _BerhentiBerlanggananFormState extends State<BerhentiBerlanggananForm> {
 
                         onFind: (String filter) => getOwnerTypes(),
                         itemAsString: (DataProvinces u) => u.name,
-                        // onChanged: (DataRejectType data) => print(data),
+                        // onChanged: (DataRejectType data) => //print(data),
                         onChanged: (DataProvinces data) {
                           setState(() {
                             statusLokasi = data.name;
                           });
-                          print(data);
+                          //print(data);
                         },
                         label: "",
                         hint: "Pilih Status Kepemilikan",
@@ -1312,7 +1312,7 @@ class _BerhentiBerlanggananFormState extends State<BerhentiBerlanggananForm> {
                           Expanded(
                             child: ElevatedButton(
                               onPressed: () {
-                                print('STATUS LOKASI $statusLokasi');
+                                //print('STATUS LOKASI $statusLokasi');
                                 if (_formKeyAlamat.currentState.validate() &&
                                     statusLokasi != '') {
                                   setState(() {
@@ -1694,7 +1694,7 @@ class _BerhentiBerlanggananFormState extends State<BerhentiBerlanggananForm> {
   void _nextLokasiPesangan(BuildContext context) async {
     final result = await Navigator.push(
         context, MaterialPageRoute(builder: (context) => MapPoint()));
-    print('INI RESULT LAT LANG $result');
+    //print('INI RESULT LAT LANG $result');
     setState(() {
       locationCtrl.text = result;
     });
@@ -1713,9 +1713,9 @@ class _BerhentiBerlanggananFormState extends State<BerhentiBerlanggananForm> {
     var location = locationCtrl.text.split(',');
     var lat = location[0].trim();
     var long = location[1].trim();
-    print('INI LAT $lat');
-    print('INI LONG $long');
-    print('GAMBARNYA  data:image/png;base64,$encoded} ');
+    //print('INI LAT $lat');
+    //print('INI LONG $long');
+    //print('GAMBARNYA  data:image/png;base64,$encoded} ');
     String accessToken = await storageCache.read(key: 'access_token');
     var body = json.encode({
       "customer_id": custID,
@@ -1749,8 +1749,8 @@ class _BerhentiBerlanggananFormState extends State<BerhentiBerlanggananForm> {
           'Authorization': 'Bearer $accessToken'
         },
         body: body);
-    print(
-        'INI HASIL POST CREATE BERLANGGANAN ${responseCreateBerhentiBerlangganan.body}');
+    //print(
+    // 'INI HASIL POST CREATE BERLANGGANAN ${responseCreateBerhentiBerlangganan.body}');
     CreateBerhentiBerlangganan createBerhentiBerlangganan =
         CreateBerhentiBerlangganan.fromJson(
             json.decode(responseCreateBerhentiBerlangganan.body));

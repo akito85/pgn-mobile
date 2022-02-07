@@ -678,7 +678,7 @@ Future<HarianDetailCustDashboard> fetchPost(BuildContext context) async {
   }
   String dateformatCurrent =
       '${currentYear.toString()}${currentMonthS.toString()}';
-  print('DATE FORMAT CURREN ${dateformatCurrent}');
+  //print('DATE FORMAT CURREN ${dateformatCurrent}');
   // String formatDate =
   //     DateFormat("yyyMM").format(DateTime.parse(dateformatCurrent));
 
@@ -690,7 +690,7 @@ Future<HarianDetailCustDashboard> fetchPost(BuildContext context) async {
       'Accept-Language': lang,
     },
   );
-  print('DATA RESPONSENYA ${responseHourlyUsage.body}');
+  //print('DATA RESPONSENYA ${responseHourlyUsage.body}');
   return HarianDetailCustDashboard.fromJson(
       json.decode(responseHourlyUsage.body));
 }

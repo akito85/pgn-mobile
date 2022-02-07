@@ -829,5 +829,6 @@
     "payment_desc": "If the total amount is negative, then customer do not need to pay bill and have a deposit for the next invoice.",
     "total_other": "Total Others Invoice",
     "vat": "VAT",
-    "total_tax": "*)Tax Base"
+    "total_tax": "*)Tax Base",
+    "piutang": "Debt"
 }

@@ -122,13 +122,13 @@ class HarianTabDetailState extends State<HarianTabDetail>
         DateFormat("yyyMM").format(DateTime.parse(dateformatCurrent2));
     String formatDate3 =
         DateFormat("yyyMM").format(DateTime.parse(dateformatCurrent3));
-    // print('Date Format 3: $dateformatCurrent3');
-    // print('Date Format 2: $dateformatCurrent2');
-    // print('Date Format 1: $dateformatCurrent');
+    // //print('Date Format 3: $dateformatCurrent3');
+    // //print('Date Format 2: $dateformatCurrent2');
+    // //print('Date Format 1: $dateformatCurrent');
 
-    // print("Format Monthnya: $formatDate");
-    // print("Format Monthnya2: $formatDate2");
-    // print("Format Monthnya3: $formatDate3");
+    // //print("Format Monthnya: $formatDate");
+    // //print("Format Monthnya2: $formatDate2");
+    // //print("Format Monthnya3: $formatDate3");
     return ListView(
       children: <Widget>[
         Material(

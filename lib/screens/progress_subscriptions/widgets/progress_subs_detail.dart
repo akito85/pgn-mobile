@@ -737,7 +737,7 @@ class ProgressSubsDetail extends StatelessWidget {
           'Authorization': 'Bearer $accessToken',
           'Accept-Language': lang,
         });
-    print('HASILNYA ${responseGetSubsProgDetail.body}');
+    //print('HASILNYA ${responseGetSubsProgDetail.body}');
     return SubsProgDetail.fromJson(json.decode(responseGetSubsProgDetail.body));
   }
 }

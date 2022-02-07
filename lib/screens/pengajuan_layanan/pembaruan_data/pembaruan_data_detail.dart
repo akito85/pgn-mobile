@@ -749,7 +749,7 @@ class _PembaruanDataDetailState extends State<PembaruanDataDetail> {
           'Authorization': 'Bearer $accessToken',
           'Accept-Language': lang,
         });
-    print('GET DETAIL PEMBARUAN DATA ${response.body}');
+    //print('GET DETAIL PEMBARUAN DATA ${response.body}');
     return DetailData.fromJson(json.decode(response.body));
   }
 

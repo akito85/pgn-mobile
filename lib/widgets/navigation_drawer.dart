@@ -45,9 +45,9 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
   @override
   Widget build(BuildContext context) {
     final _prov = Provider.of<UserCred>(context);
-    // print('USER GROUP IDNYA : ${_prov.customerGroupId}');
-    // print('USER GROUP ID : ${customerGroupId}');
-    // print('USER TYPES ID : ${userTypes}');
+    // //print('USER GROUP IDNYA : ${_prov.customerGroupId}');
+    // //print('USER GROUP ID : ${customerGroupId}');
+    // //print('USER TYPES ID : ${userTypes}');
     if (userTypes != '2')
       return Container(
         color: Colors.white,
@@ -672,7 +672,7 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
       listMenus = listMenusString.split(',');
       userGroupId = userGroupIds;
     });
-    print('HASIL LIST MENU LENGHT = ${listMenus.length}');
+    //print('HASIL LIST MENU LENGHT = ${listMenus.length}');
   }
 
   goToCustomerUsadeDetail(BuildContext context) async {
@@ -714,7 +714,7 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
       // Navigator.push(
       //     context,
       //     MaterialPageRoute(builder: (context) => InvoiceCust(data: _customerInvoice, custID: "02200001")));
-      //     print('USERGROUP Is');
+      //     //print('USERGROUP Is');
     }
   }
 

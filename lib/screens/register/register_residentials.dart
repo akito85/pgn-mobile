@@ -293,7 +293,7 @@ class RegisterResidentialsState extends State<RegisterResidentials>
 
   Widget _addressResi(BuildContext context) {
     final _prov = Provider.of<RegistResidential>(context);
-    print('ini hasil backnya: ${_prov.province_name ?? _province} ');
+    //print('ini hasil backnya: ${_prov.province_name ?? _province} ');
     setState(
       () {
         provinceCtrl.text = _prov.province_name ?? '';
@@ -302,7 +302,7 @@ class RegisterResidentialsState extends State<RegisterResidentials>
         villageCtrl.text = _prov.villageName ?? '';
         buildingTypeCtrl.text = _prov.buildingTypeName ?? '';
         ownerCtrl.text = _prov.ownershipName ?? '';
-        print("");
+        //print("");
       },
     );
     return Padding(
@@ -325,7 +325,7 @@ class RegisterResidentialsState extends State<RegisterResidentials>
             InkWell(
               onTap: () {
                 fetchPostReg(context);
-                print('ini data dari regis: $getProvinces');
+                //print('ini data dari regis: $getProvinces');
                 _nextScreen(context);
               },
               child: Container(
@@ -341,7 +341,7 @@ class RegisterResidentialsState extends State<RegisterResidentials>
                           color: Color(0XFF427CEF)),
                       iconSize: 28.0,
                       onPressed: () {
-                        print('ini data dari regis: $getProvinces');
+                        //print('ini data dari regis: $getProvinces');
                         _nextScreen(context);
                       },
                     ),
@@ -362,7 +362,7 @@ class RegisterResidentialsState extends State<RegisterResidentials>
                           color: Color(0XFF427CEF)),
                       iconSize: 28.0,
                       onPressed: () {
-                        print("NEXT CITY");
+                        //print("NEXT CITY");
                         _nextScreenCity(context, _prov.province_id);
                       },
                     ),
@@ -370,7 +370,7 @@ class RegisterResidentialsState extends State<RegisterResidentials>
                 ),
               ),
               onTap: () {
-                print("NEXT CITY");
+                //print("NEXT CITY");
                 _nextScreenCity(context, _prov.province_id);
               },
             ),
@@ -539,15 +539,15 @@ class RegisterResidentialsState extends State<RegisterResidentials>
                     activeColor: Color(0xFF427CEF),
                     value: isSwitched,
                     onChanged: (value) {
-                      print("VALUE : $value");
+                      //print("VALUE : $value");
                       setState(() {
                         isSwitched = value;
                         if (isSwitched == true) {
                           valueSwitch = "1";
-                          print("SWITCH kepemilikan pemerintah: $valueSwitch");
+                          //print("SWITCH kepemilikan pemerintah: $valueSwitch");
                         } else {
                           valueSwitch = "0";
-                          print("SWITCH kepemilikan pemerintah: $valueSwitch");
+                          //print("SWITCH kepemilikan pemerintah: $valueSwitch");
                         }
                       });
                     },
@@ -1060,8 +1060,8 @@ class RegisterResidentialsState extends State<RegisterResidentials>
                               (item) => item['gas_tool_id'] == "1");
                           gasToolUsage.add(kompor2);
                           _countKOmpor2 = int.parse(_countKOmpor2Ctrl.text);
-                          print(
-                              "Isi Gas Tool Usage Kompor 2 Min: $gasToolUsage");
+                          //print(
+                          // "Isi Gas Tool Usage Kompor 2 Min: $gasToolUsage");
                           _prov.komVal2 = _countKOmpor2.toString();
                           _prov.komName2 = 'Kompor 2 Tungku';
                         }
@@ -1511,7 +1511,7 @@ class RegisterResidentialsState extends State<RegisterResidentials>
 
   Widget _reviewResi(BuildContext context) {
     final _prov = Provider.of<RegistResidential>(context);
-    print('ini hasil backnya: ${_prov.province_name ?? _province} ');
+    //print('ini hasil backnya: ${_prov.province_name ?? _province} ');
     return Container(
       margin: EdgeInsets.only(left: 5, right: 5, top: 10),
       child: Form(
@@ -2685,7 +2685,7 @@ class RegisterResidentialsState extends State<RegisterResidentials>
   }
 
   void _nextScreenBuildingType(BuildContext context) async {
-    print('MASUK');
+    //print('MASUK');
     final result = await Navigator.push(
         context,
         MaterialPageRoute(
@@ -2717,7 +2717,7 @@ class RegisterResidentialsState extends State<RegisterResidentials>
       'client_secret': '0DTuUFYRPtWUFN2UbzSvzqZMzNsW4kAl4t4PTrtC',
       'grant_type': 'client_credentials'
     });
-    print('AccessTokens ${responseTokenBarrer.body}');
+    //print('AccessTokens ${responseTokenBarrer.body}');
     AuthSalesRegit _auth =
         AuthSalesRegit.fromJson(json.decode(responseTokenBarrer.body));
     var body = json.encode({
@@ -2859,7 +2859,7 @@ Future<AuthSales> fetchPostReg(BuildContext context) async {
     'client_secret': '0DTuUFYRPtWUFN2UbzSvzqZMzNsW4kAl4t4PTrtC',
     'grant_type': 'client_credentials'
   });
-  print('AccessTokens ${responseTokenBarrer.body}');
+  //print('AccessTokens ${responseTokenBarrer.body}');
 
   AuthSalesRegit _auth =
       AuthSalesRegit.fromJson(json.decode(responseTokenBarrer.body));
@@ -2915,7 +2915,7 @@ Future<GetProvinces> getCity(BuildContext context, String provID) async {
     'client_secret': '0DTuUFYRPtWUFN2UbzSvzqZMzNsW4kAl4t4PTrtC',
     'grant_type': 'client_credentials'
   });
-  print('AccessTokens ${responseTokenBarrer.body}');
+  //print('AccessTokens ${responseTokenBarrer.body}');
   AuthSalesRegit _auth =
       AuthSalesRegit.fromJson(json.decode(responseTokenBarrer.body));
 
@@ -2925,7 +2925,7 @@ Future<GetProvinces> getCity(BuildContext context, String provID) async {
     'Authorization': 'Bearer ${_auth.accessToken}'
   });
 
-  print('Provinces ${responseCity.body}');
+  //print('Provinces ${responseCity.body}');
   return GetProvinces.fromJson(json.decode(responseCity.body));
 }
 
@@ -2936,7 +2936,7 @@ Future<GetProvinces> getDistrict(BuildContext context, String townID) async {
     'client_secret': '0DTuUFYRPtWUFN2UbzSvzqZMzNsW4kAl4t4PTrtC',
     'grant_type': 'client_credentials'
   });
-  print('AccessTokens ${responseTokenBarrer.body}');
+  //print('AccessTokens ${responseTokenBarrer.body}');
   AuthSalesRegit _auth =
       AuthSalesRegit.fromJson(json.decode(responseTokenBarrer.body));
 
@@ -2946,7 +2946,7 @@ Future<GetProvinces> getDistrict(BuildContext context, String townID) async {
     'Authorization': 'Bearer ${_auth.accessToken}'
   });
 
-  print('Provinces ${responseDistrict.body}');
+  //print('Provinces ${responseDistrict.body}');
   return GetProvinces.fromJson(json.decode(responseDistrict.body));
 }
 
@@ -2970,7 +2970,7 @@ Future<GetProvinces> getVillage(BuildContext context, String distID) async {
 }
 
 Future<GetProvinces> getBuildingType(BuildContext context) async {
-  print('mASUKKAH');
+  //print('mASUKKAH');
   var responseTokenBarrer =
       await http.post('${UrlCons.prodRelyonUrl}oauth/access_token', body: {
     'client_id': '0dUIDb81bBUsGDfDsYYHQ9wBujfjL9XWfH0ZoAzi',

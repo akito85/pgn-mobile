@@ -7,8 +7,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class Translations {
   Translations(Locale locale) {
-    print('ini local Msuk: $locale');
-
     this.locale = locale;
     _localizedValues = null;
   }

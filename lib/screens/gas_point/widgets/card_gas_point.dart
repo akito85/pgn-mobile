@@ -161,7 +161,6 @@ class _CardGasPointState extends State<CardGaspoint> {
             ),
           ),
         ),
-
         FutureBuilder<GasPointHistoryModel>(
           future: getFutureGasPointHistory(context),
           builder: (context, snapshot) {
@@ -297,7 +296,7 @@ class _CardGasPointState extends State<CardGaspoint> {
           'Authorization': 'Bearer $accessToken',
         });
 
-    print('HASILNYA GAS POINT Scroll : ${responseGetHistoryGasPoint.body}');
+    //print('HASILNYA GAS POINT Scroll : ${responseGetHistoryGasPoint.body}');
 
     if (responseGetHistoryGasPoint.statusCode == 200) {
       GasPointHistoryModel returnGetPointHistory =
@@ -312,7 +311,7 @@ class _CardGasPointState extends State<CardGaspoint> {
       } else {}
     } else {
       if (responseGetHistoryGasPoint.statusCode == 401) {
-        print('MASUK 3');
+        //print('MASUK 3');
         accessTokenAlert(context,
             "Session expired or account changed to other device, please Login again.");
       }
@@ -332,7 +331,7 @@ Future<VirtualCardGasPoint> getVirtualCardGasPoint(BuildContext context) async {
     'Accept-Language': lang,
   });
 
-  print('HASILNYA : ${responseGetVCGasPoint.body}');
+  //print('HASILNYA : ${responseGetVCGasPoint.body}');
   if (responseGetVCGasPoint.statusCode == 200) {
     return VirtualCardGasPoint.fromJson(
         json.decode(responseGetVCGasPoint.body));
@@ -353,7 +352,7 @@ Future<GasPointHistoryModel> getFutureGasPointHistory(
     'Accept-Language': lang,
   });
 
-  print('HASILNYA GAS POINT : ${responseGetHistoryGasPoint.body}');
+  //print('HASILNYA GAS POINT : ${responseGetHistoryGasPoint.body}');
   // if (responseGetHistoryGasPoint.statusCode == 200) {
   return GasPointHistoryModel.fromJson(
       json.decode(responseGetHistoryGasPoint.body));

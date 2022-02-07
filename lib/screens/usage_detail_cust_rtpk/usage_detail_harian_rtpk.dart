@@ -25,7 +25,7 @@ class HarianDetailRTPKChartState extends State<HarianDetailRTPKChart> {
 
   @override
   Widget build(BuildContext context) {
-    print('INI PERIODNYA : $period');
+    // //print('INI PERIODNYA : $period');
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(

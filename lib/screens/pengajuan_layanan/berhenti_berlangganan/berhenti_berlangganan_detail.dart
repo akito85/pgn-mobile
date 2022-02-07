@@ -778,8 +778,8 @@ class _BerhentiBerlanggananDetailState
           'Authorization': 'Bearer $accessToken',
           'Accept-Language': lang,
         });
-    print(
-        'GET DETAIL BERHENTI BERLANGGANAN ${responseGetBerhentiBerlangganan.body}');
+    //print(
+    // 'GET DETAIL BERHENTI BERLANGGANAN ${responseGetBerhentiBerlangganan.body}');
     return DetailBerhetiBerlangganan.fromJson(
         json.decode(responseGetBerhentiBerlangganan.body));
   }

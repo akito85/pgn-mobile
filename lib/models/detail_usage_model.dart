@@ -7,7 +7,7 @@ class UsageDetails {
   UsageDetails({this.paging, this.data, this.meta, this.message});
 
   factory UsageDetails.fromJson(Map<String, dynamic> json) {
-    print("INI PAGING ${json['paging']}");
+    //print("INI PAGING ${json['paging']}");
     if (json['data'] != null)
       return UsageDetails(
           data: parseUsageDetail(json['data']),

@@ -42,7 +42,7 @@ class InvoiceCustGPIRnGPIKState extends State<InvoiceCustGPIRnGPIK>
     prevMonth2 = new DateTime(currentDate.month - 2);
     prevMonth3 = new DateTime(currentDate.month - 3);
     // DateTime newone = DateFormat("MMMM").parse(prevMonth1);
-    print('prevMonth1: ${currentDate.month - 1}');
+    //print('prevMonth1: ${currentDate.month - 1}');
     int currentYear = DateTime.now().year;
     int currentMonth = DateTime.now().month;
     int month2 = currentMonth - 1;
@@ -123,12 +123,12 @@ class InvoiceCustGPIRnGPIKState extends State<InvoiceCustGPIRnGPIK>
         DateFormat("yyyMM").format(DateTime.parse(dateformatCurrent2));
     String formatDate3 =
         DateFormat("yyyMM").format(DateTime.parse(dateformatCurrent3));
-    // print(' DATE FORMAT TITLE CURRENT : $dateformatCurrent');
-    // print(' DATE FORMAT TITLE 2 : $dateformatCurrent2');
-    // print(' DATE FORMAT TITLE paling kiri : $dateformatCurrent3');
-    // print(' DATE FORMAT API CURRENT : $formatDate');
-    // print(' DATE FORMAT API 2 : $formatDate2');
-    // print(' DATE FORMAT API paling kiri : $formatDate3');
+    // //print(' DATE FORMAT TITLE CURRENT : $dateformatCurrent');
+    // //print(' DATE FORMAT TITLE 2 : $dateformatCurrent2');
+    // //print(' DATE FORMAT TITLE paling kiri : $dateformatCurrent3');
+    // //print(' DATE FORMAT API CURRENT : $formatDate');
+    // //print(' DATE FORMAT API 2 : $formatDate2');
+    // //print(' DATE FORMAT API paling kiri : $formatDate3');
     return Scaffold(
       // backgroundColor: Colors.black,
       body: Stack(
@@ -387,7 +387,7 @@ class InvoiceCustGPIRnGPIKState extends State<InvoiceCustGPIRnGPIK>
   }
 
   Widget _buildRow(DataCustInvoice data) {
-    // print('ID STATUSNYA : ${data.paymentStatus.id}');
+    // //print('ID STATUSNYA : ${data.paymentStatus.id}');
     if (userid == "17" && data.paymentStatus.display == 'Unpaid' ||
         data.paymentStatus.display == 'Belum Bayar')
       return Container(
@@ -1937,7 +1937,7 @@ Future<CustomerInvoice> getCustomerInvoice(
     'Authorization': 'Bearer $accessToken',
     'Accept-Language': lang,
   });
-  print('INI INVOICENYA : ${responseCustomerInvoice.body}');
+  //print('INI INVOICENYA : ${responseCustomerInvoice.body}');
   // List<dynamic> list = json.decode(responseCustomerInvoice.body);
   // CustomerInvoice _customerInvoice = CustomerInvoice.fromJson(list[0]);
   CustomerInvoice _customerInvoice =

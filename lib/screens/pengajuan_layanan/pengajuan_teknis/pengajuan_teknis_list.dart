@@ -383,7 +383,7 @@ class _PengajuanTeknisListState extends State<PengajuanTeknisList> {
           'Authorization': 'Bearer $accessToken',
           'Accept-Language': lang,
         });
-    print('GET LIST PENGAJUAN TEKNIS ${response.body}');
+    //print('GET LIST PENGAJUAN TEKNIS ${response.body}');
     return PengajuanTeknisModel.fromJson(json.decode(response.body));
   }
 }

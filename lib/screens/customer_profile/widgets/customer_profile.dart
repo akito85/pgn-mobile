@@ -531,7 +531,7 @@ class _CustomersTabDetailState extends State<CustomersTabDetail> {
     final storageCache = FlutterSecureStorage();
 
     String products = await storageCache.read(key: 'products');
-    print('INI PROD $products');
+    //print('INI PROD $products');
     setState(() {
       product = products;
     });

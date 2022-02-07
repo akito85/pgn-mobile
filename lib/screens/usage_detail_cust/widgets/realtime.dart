@@ -356,7 +356,6 @@ class RealtimeState extends State<Realtime> with TickerProviderStateMixin {
                   ),
                 ),
                 onTap: () {
-                  print('ini titlenyaaa : $title');
                   Navigator.push(
                       context,
                       MaterialPageRoute(

@@ -610,7 +610,7 @@ Future<DetaiPaymentPlan> getPaymentPlanDetail(
     'Content-Type': 'application/json',
     'Authorization': 'Bearer $accessToken'
   });
-  print('DATA DETAIL ${accessToken}');
+  //print('DATA DETAIL ${accessToken}');
   DetaiPaymentPlan _detailPayment =
       DetaiPaymentPlan.fromJson(json.decode(responseDetailPayment.body));
   return _detailPayment;

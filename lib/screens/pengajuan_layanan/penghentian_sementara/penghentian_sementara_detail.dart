@@ -850,8 +850,8 @@ class _PenghentianSementaraDetailState
           'Authorization': 'Bearer $accessToken',
           'Accept-Language': lang,
         });
-    print(
-        'GET DETAIL PENGHENTIAN SEMENTARA ${responseGetPenghentianSementara.body}');
+    //print(
+    // 'GET DETAIL PENGHENTIAN SEMENTARA ${responseGetPenghentianSementara.body}');
     return DetailPenghentianSementara.fromJson(
         json.decode(responseGetPenghentianSementara.body));
   }

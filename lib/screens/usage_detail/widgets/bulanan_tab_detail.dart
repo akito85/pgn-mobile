@@ -28,7 +28,7 @@ class BulananTabDetail extends StatelessWidget {
       var month = formatDate((todayDate), [m]);
       var year = formatDate((todayDate), [yyyy]);
       var day = formatDate((todayDate), [dd]);
-      print('ini data ENERGI : $month ${itemData.usageDetailMonthly.value}');
+      //print('ini data ENERGI : $month ${itemData.usageDetailMonthly.value}');
       myFakeDesktopData.add(LinearSales(
           DateTime(int.parse(year), int.parse(month), int.parse(day), 17, 30),
           itemData.usageDetailMonthly.value));
@@ -415,7 +415,7 @@ Future<ChartUsageDetailMonthly> fetchGetCharMonth(
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $accessToken'
       });
-  print('HASIL CHART MONTHLY : ${responseUsageCharMonth.body}');
+  //print('HASIL CHART MONTHLY : ${responseUsageCharMonth.body}');
   ChartUsageDetailMonthly _getContract = ChartUsageDetailMonthly.fromJson(
       json.decode(responseUsageCharMonth.body));
 

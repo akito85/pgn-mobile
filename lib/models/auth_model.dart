@@ -26,7 +26,7 @@ class AuthSales {
 
   factory AuthSales.fromJson(Map<String, dynamic> json) {
     if (json['customer'] != null) {
-      print("ISI CUSTOMER DARI MODEL: ${json['customer']}");
+      //print("ISI CUSTOMER DARI MODEL: ${json['customer']}");
       return AuthSales(
         accessToken: json['access_token'],
         tokenType: json['token_type'],
@@ -43,8 +43,8 @@ class AuthSales {
     } else if (json['message'] != null) {
       return AuthSales(message: json['message']);
     } else {
-      print("Tanpa CUSTOMER");
-      print("Customer dari MODEL: ${json['customer']}");
+      //print("Tanpa CUSTOMER");
+      //print("Customer dari MODEL: ${json['customer']}");
       return AuthSales(
         accessToken: json['access_token'],
         tokenType: json['token_type'],
@@ -149,7 +149,7 @@ class Customer {
       this.custName});
 
   factory Customer.fromJson(Map<String, dynamic> json) {
-    print("CUST ID DARI MODEL: ${json['id']}");
+    //print("CUST ID DARI MODEL: ${json['id']}");
     return Customer(
         custId: json['id'],
         custName: json['name'],

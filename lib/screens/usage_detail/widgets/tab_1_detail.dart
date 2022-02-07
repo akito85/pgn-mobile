@@ -88,11 +88,11 @@ class FirstTabState extends State<FirstTab> {
                         onPressed: () {
                           // _focusNode.requestFocus();
                           if (_searchQuery.text.isNotEmpty) {
-                            print('masuk kali 1');
+                            //print('masuk kali 1');
                             return _buildContent(
                                 context, fetchPost(context, _searchQuery.text));
                           } else {
-                            print('masuk kali 2');
+                            //print('masuk kali 2');
                             return _buildContent(
                                 context, fetchPost(context, ""));
                           }
@@ -119,10 +119,10 @@ class FirstTabState extends State<FirstTab> {
 
   // Widget _buildChild(String _searchQuery) {
   //   // if (_searchQuery.isNotEmpty) {
-  //   //   print('masuk kali 1');
+  //   //   //print('masuk kali 1');
   //   //   return _buildContent(context, fetchPost(context, _searchQuery));
   //   // } else {
-  //   //   print('masuk kali 2');
+  //   //   //print('masuk kali 2');
   //   //   return _buildContent(context, fetchPost(context, ""));
   //   // }
   //   return _buildContent(context, fetchPost(context, ""));
@@ -133,7 +133,7 @@ class FirstTabState extends State<FirstTab> {
     return FutureBuilder<UsageDetails>(
       future: getDetailUsage,
       builder: (context, snapshot) {
-        print('message $messageErrorData');
+        //print('message $messageErrorData');
         if (!snapshot.hasData) return LinearProgressIndicator();
         if (messageErrorData != "")
           return Column(
@@ -224,10 +224,10 @@ class FirstTabState extends State<FirstTab> {
 
     UsageDetails returnGetUsageDetail =
         UsageDetails.fromJson(json.decode(responseGetUsageDetail.body));
-    print('isinya1 ${responseGetUsageDetail.body}');
-    print('masuk kah');
+    //print('isinya1 ${responseGetUsageDetail.body}');
+    //print('masuk kah');
     if (nextPage == "") {
-      print('masuk kah 1 ');
+      //print('masuk kah 1 ');
       setState(() {
         returnGetUsageDetails.clear();
         returnGetUsageDetails.addAll(returnGetUsageDetail.data);
@@ -235,14 +235,14 @@ class FirstTabState extends State<FirstTab> {
       });
     } else if (returnGetUsageDetail.data.length == 0 &&
         returnGetUsageDetail.message != null) {
-      print('masuk kah 3 ');
+      //print('masuk kah 3 ');
       setState(() {
         messageErrorData = returnGetUsageDetail.message;
         returnGetUsageDetails.clear();
       });
     } else if (nextPage != "" && keywoard != "") {
       if (returnGetUsageDetail.data != null) {
-        print('masuk kah 2 ');
+        //print('masuk kah 2 ');
         setState(() {
           // messageErrorData = returnGetUsageDetail.message;
           returnGetUsageDetails.clear();
@@ -275,7 +275,7 @@ class FirstTabState extends State<FirstTab> {
 
     UsageDetails returnGetUsageDetail =
         UsageDetails.fromJson(json.decode(responseGetUsageDetail.body));
-    print('isinya ${returnGetUsageDetail.message}');
+    //print('isinya ${returnGetUsageDetail.message}');
     if (nextPage != returnGetUsageDetail.paging.next) {
       setState(() {
         nextPage = returnGetUsageDetail.paging.next;

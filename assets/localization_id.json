@@ -809,5 +809,6 @@
     "payment_desc": "Apabila total tagihan bernilai negatif maka Anda tidak perlu melakuakan pembayaran tagihan dan memiliki deposit untuk pembayaran tagihan berikutnya.",
     "total_other": "Total Tagihan Lain-Lain",
     "vat": "PPN",
-    "total_tax": "Dasar Pengenaan Pajak"
+    "total_tax": "Dasar Pengenaan Pajak",
+    "piutang": "Utang"
 }

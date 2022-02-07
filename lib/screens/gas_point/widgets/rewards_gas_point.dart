@@ -442,7 +442,7 @@ class _RewardsGasPointState extends State<RewardsGasPoint> {
     final storageCache = FlutterSecureStorage();
     String accessToken = await storageCache.read(key: 'access_token');
     String lang = await storageCache.read(key: 'lang');
-    print('AKSES ID : $id');
+    //print('AKSES ID : $id');
     var responsePostRedeemGasPoint =
         await http.post('${UrlCons.mainDevUrl}users/rewards/$id', headers: {
       'Content-Type': 'application/json',
@@ -450,12 +450,12 @@ class _RewardsGasPointState extends State<RewardsGasPoint> {
       'Accept-Language': lang,
     });
 
-    print('HASILNYA Post Redeem: ${responsePostRedeemGasPoint.body}');
+    //print('HASILNYA Post Redeem: ${responsePostRedeemGasPoint.body}');
     // if (responsePostRedeemGasPoint.statusCode == 200) {
     PostRedeemModel postRedeemGasPoint =
         PostRedeemModel.fromJson(json.decode(responsePostRedeemGasPoint.body));
     if (postRedeemGasPoint.message == null) {
-      print('MASUK SINI ${postRedeemGasPoint.dataPostRedeem.message}');
+      //print('MASUK SINI ${postRedeemGasPoint.dataPostRedeem.message}');
       setState(() {
         idRewards = '';
         pointGasPoint = remainingPoint.toString();
@@ -541,7 +541,7 @@ class _RewardsGasPointState extends State<RewardsGasPoint> {
       'Authorization': 'Bearer $accessToken',
     });
 
-    print('HASILNYA : ${responseGetVCGasPoint.body}');
+    //print('HASILNYA : ${responseGetVCGasPoint.body}');
     if (responseGetVCGasPoint.statusCode == 200) {
       VirtualCardGasPoint virtualCardGasPoint =
           VirtualCardGasPoint.fromJson(json.decode(responseGetVCGasPoint.body));
@@ -557,7 +557,7 @@ class _RewardsGasPointState extends State<RewardsGasPoint> {
     final storageCache = FlutterSecureStorage();
     String accessToken = await storageCache.read(key: 'access_token');
     String lang = await storageCache.read(key: 'lang');
-    print('AKSES TOKEN : $accessToken');
+    //print('AKSES TOKEN : $accessToken');
     var responseGetRewardsGasPoint = await http
         .get('${UrlCons.mainDevUrl}rewards?cursor=$nextPage', headers: {
       'Content-Type': 'application/json',
@@ -565,7 +565,7 @@ class _RewardsGasPointState extends State<RewardsGasPoint> {
       'Accept-Language': lang,
     });
 
-    print('HASILNYA Get Rewards: ${responseGetRewardsGasPoint.body}');
+    //print('HASILNYA Get Rewards: ${responseGetRewardsGasPoint.body}');
     // if (responseGetRewardsGasPoint.statusCode == 200) {
     GetRewardsModel returnGetRewardsModel =
         GetRewardsModel.fromJson(json.decode(responseGetRewardsGasPoint.body));
@@ -587,7 +587,7 @@ Future<GetRewardsModel> getRewards(BuildContext context) async {
   final storageCache = FlutterSecureStorage();
   String accessToken = await storageCache.read(key: 'access_token');
   String lang = await storageCache.read(key: 'lang');
-  print('AKSES TOKEN : $accessToken');
+  //print('AKSES TOKEN : $accessToken');
   var responseGetRewardsGasPoint =
       await http.get('${UrlCons.mainDevUrl}rewards', headers: {
     'Content-Type': 'application/json',
@@ -595,7 +595,7 @@ Future<GetRewardsModel> getRewards(BuildContext context) async {
     'Accept-Language': lang,
   });
 
-  print('HASILNYA Get Rewards: ${responseGetRewardsGasPoint.body}');
+  //print('HASILNYA Get Rewards: ${responseGetRewardsGasPoint.body}');
   // if (responseGetRewardsGasPoint.statusCode == 200) {
   return GetRewardsModel.fromJson(json.decode(responseGetRewardsGasPoint.body));
   // } else {

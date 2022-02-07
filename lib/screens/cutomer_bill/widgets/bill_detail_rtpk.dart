@@ -682,9 +682,11 @@ class BillDetailState extends State<InvoiceRTPK>
                       child: Container(
                         margin: EdgeInsets.only(left: 5.0, top: 10.0),
                         child: Text(
-                          DateFormat('dd MMMM yyyy')
-                                  .format(DateTime.parse(data.usagePeriod)) ??
-                              "-",
+                          data.usagePeriod != ""
+                              ? DateFormat('dd MMMM yyyy').format(
+                                      DateTime.parse(data.usagePeriod)) ??
+                                  "-"
+                              : "-",
                           style: TextStyle(
                               fontSize: 15.0,
                               fontWeight: FontWeight.w400,
@@ -990,7 +992,7 @@ class BillDetailState extends State<InvoiceRTPK>
                       margin:
                           EdgeInsets.only(left: 20.0, top: 10.0, bottom: 20),
                       child: Text(
-                        Translations.of(context).text('gas_bill'),
+                        '${Translations.of(context).text('gas_bill')} ${data.billTypeDesc != "" ? (data.billTypeDesc) : ""}',
                         style: TextStyle(
                             fontSize: 15.0,
                             fontWeight: FontWeight.w400,
@@ -1218,6 +1220,84 @@ class BillDetailState extends State<InvoiceRTPK>
                     ],
                   ),
                 )
+              : SizedBox(),
+          data.piutang.length != 0
+              ? Card(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  margin: EdgeInsets.only(top: 10),
+                  elevation: 5,
+                  child: Column(
+                    children: [
+                      Row(
+                        children: <Widget>[
+                          Container(
+                            width: 125,
+                            margin: EdgeInsets.only(
+                                left: 20.0, top: 21.0, bottom: 10),
+                            child: Text(
+                              Translations.of(context).text('piutang'),
+                              style: TextStyle(
+                                  fontSize: 16.0,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.blue[600]),
+                            ),
+                          ),
+                        ],
+                      ),
+                      ListView.builder(
+                          itemCount: data.piutang.length,
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          itemBuilder: (context, i) {
+                            return Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Container(
+                                  width: 125,
+                                  margin:
+                                      EdgeInsets.only(left: 20.0, top: 10.0),
+                                  child: Text(
+                                    '${Translations.of(context).text('piutang')} ${data.piutang[i].period}',
+                                    style: TextStyle(
+                                        fontSize: 15.0,
+                                        fontWeight: FontWeight.w400,
+                                        color: Colors.grey[600]),
+                                  ),
+                                ),
+                                Container(
+                                  margin:
+                                      EdgeInsets.only(top: 10.0, left: 25.0),
+                                  child: Text(
+                                    ':',
+                                    style: TextStyle(
+                                        fontSize: 15.0,
+                                        fontWeight: FontWeight.w400,
+                                        color: Colors.grey[600]),
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Container(
+                                    margin: EdgeInsets.only(
+                                        left: 5.0, top: 10.0, right: 20),
+                                    child: Text(
+                                      data.piutang[i].idr,
+                                      style: TextStyle(
+                                          fontSize: 15.0,
+                                          fontWeight: FontWeight.w400,
+                                          color: Colors.grey[600]),
+                                    ),
+                                  ),
+                                )
+                              ],
+                            );
+                          }),
+                      SizedBox(
+                        height: 20,
+                      ),
+                    ],
+                  ))
               : SizedBox(),
           Card(
             shape: RoundedRectangleBorder(

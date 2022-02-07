@@ -26,7 +26,6 @@ class RealtimeDetailCustChartState extends State<RealtimeDetailCustChart> {
   RealtimeDetailCustChartState(this.title, this.period);
   @override
   Widget build(BuildContext context) {
-    print('INI PERIODNYA : $period');
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -355,7 +354,6 @@ Future<ChartUsageDetailRealtimeDetail> fetchPost(
       'Accept-Language': lang
     },
   );
-  print('HASIL GET LIST HARIAN : ${responseDailyUsage.body}');
   return ChartUsageDetailRealtimeDetail.fromJson(
       json.decode(responseDailyUsage.body));
 }

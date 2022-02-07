@@ -350,7 +350,7 @@ class _PembaruanDataiListState extends State<PembaruanDataiList> {
           'Authorization': 'Bearer $accessToken',
           'Accept-Language': lang,
         });
-    print('GET LIST PEMBARUAN DATA ${response.body}');
+    //print('GET LIST PEMBARUAN DATA ${response.body}');
     return PembaruanDataModel.fromJson(json.decode(response.body));
   }
 }

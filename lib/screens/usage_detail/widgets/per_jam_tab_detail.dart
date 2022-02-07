@@ -209,7 +209,7 @@ class PerJamTabDetailState extends State<PerJamTabDetail> {
     final storageCache = FlutterSecureStorage();
     String accessToken = await storageCache.read(key: 'access_token');
     String lang = await storageCache.read(key: 'lang');
-    print('INI URL : ${idCust}');
+    //print('INI URL : ${idCust}');
     var responseHourlyUsage = await http.get(
         '${UrlCons.getDataCustomerMng}$idCust/gas-usages/hourly-list?cursor=$nextPage',
         headers: {

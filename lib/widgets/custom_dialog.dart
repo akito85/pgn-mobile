@@ -50,7 +50,7 @@ class CustomDialogNotif extends StatelessWidget {
                   ),
                   onTap: () {},
                   onLongPress: () {
-                    print('INI HASIL FCMTOKENYA : $fcmToken');
+                    // //print('INI HASIL FCMTOKENYA : $fcmToken');
 
                     Clipboard.setData(ClipboardData(
                       text: fcmToken,

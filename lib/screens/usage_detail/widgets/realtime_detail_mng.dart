@@ -26,7 +26,7 @@ class RealtimeDetailMngChartState extends State<RealtimeDetailMngChart> {
   RealtimeDetailMngChartState(this.title, this.custID);
   @override
   Widget build(BuildContext context) {
-    print('INI PERIODNYA : $custID');
+    //print('INI PERIODNYA : $custID');
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -355,7 +355,7 @@ Future<ChartUsageDetailRealtimeDetail> fetchPost(
       'Accept-Language': lang
     },
   );
-  print('HASIL GET LIST HARIAN : ${responseDailyUsage.body}');
+  //print('HASIL GET LIST HARIAN : ${responseDailyUsage.body}');
   return ChartUsageDetailRealtimeDetail.fromJson(
       json.decode(responseDailyUsage.body));
 }

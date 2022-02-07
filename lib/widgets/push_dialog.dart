@@ -10,7 +10,7 @@ class CustomDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("INI REDIRET URL: $redirectURL");
+    // //print("INI REDIRET URL: $redirectURL");
     return Dialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
       elevation: 0.0,

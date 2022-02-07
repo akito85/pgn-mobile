@@ -1332,7 +1332,7 @@ class _PengembalianPembayaranUpdateState
                           Expanded(
                             child: ElevatedButton(
                               onPressed: () {
-                                print('STATUS LOKASI $statusLokasi');
+                                //print('STATUS LOKASI $statusLokasi');
                                 if (_formKeyAlamat.currentState.validate() &&
                                     statusLokasi != null) {
                                   setState(() {
@@ -2073,7 +2073,7 @@ class _PengembalianPembayaranUpdateState
   }
 
   void getData() async {
-    print('ID Nya ${widget.id}');
+    //print('ID Nya ${widget.id}');
     String accessToken = await storageCache.read(key: 'access_token');
     String lang = await storageCache.read(key: 'lang');
     var response = await http.get(
@@ -2083,7 +2083,7 @@ class _PengembalianPembayaranUpdateState
           'Authorization': 'Bearer $accessToken',
           'Accept-Language': lang,
         });
-    print('GET DETAIL PEMASANGAN KEMBALI ${response.body}');
+    //print('GET DETAIL PEMASANGAN KEMBALI ${response.body}');
     DetailData detailData = DetailData.fromJson(json.decode(response.body));
     if (detailData.npwpFile != "") {
       splitString = detailData.npwpFile.split(',');
@@ -2287,7 +2287,7 @@ class _PengembalianPembayaranUpdateState
   void _nextLokasiPesangan(BuildContext context) async {
     final result = await Navigator.push(
         context, MaterialPageRoute(builder: (context) => MapPoint()));
-    print('INI RESULT LAT LANG $result');
+    //print('INI RESULT LAT LANG $result');
     setState(() {
       locationCtrl.text = result;
     });
@@ -2315,9 +2315,9 @@ class _PengembalianPembayaranUpdateState
     var location = locationCtrl.text.split(',');
     var lat = location[0].trim();
     var long = location[1].trim();
-    print('INI LAT $lat');
-    print('INI LONG $long');
-    print('GAMBARNYA  data:image/png;base64,$encoded} ');
+    //print('INI LAT $lat');
+    //print('INI LONG $long');
+    //print('GAMBARNYA  data:image/png;base64,$encoded} ');
     String accessToken = await storageCache.read(key: 'access_token');
     final multiFile = detailDatas.bankFile == ""
         ? await http.MultipartFile.fromPath('account_bank_file', fileKlaim.path)
@@ -2366,7 +2366,7 @@ class _PengembalianPembayaranUpdateState
     http.StreamedResponse response = await responses.send();
     final res = await http.Response.fromStream(response);
 
-    print('INI HASIL POST UPDATE PPENGEMBALIAN PEMBAYARAN ${res.body}');
+    //print('INI HASIL POST UPDATE PPENGEMBALIAN PEMBAYARAN ${res.body}');
     Create create = Create.fromJson(json.decode(res.body));
 
     if (response.statusCode == 200) {

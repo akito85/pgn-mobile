@@ -54,7 +54,7 @@ class OTPRegisterFormState extends State<OTPRegisterForm> {
     var duration = interval;
     _timer = Timer.periodic(duration, (timer) {
       setState(() {
-        print(timer.tick);
+        //print(timer.tick);
         currentSeconds = timer.tick;
         if (timer.tick >= timerMaxSeconds) timer.cancel();
       });
@@ -80,10 +80,10 @@ class OTPRegisterFormState extends State<OTPRegisterForm> {
     setState(() {
       // numberPhone = numberPhones;
       newNumber = numberPhone;
-      print('USRER TYPE GET AUTH : $numberPhone');
+      //print('USRER TYPE GET AUTH : $numberPhone');
       for (int i = 0; i < 8; i++) {
         newNumber = replaceCharAt(newNumber, i, "*");
-        print("PHONE_NUMBER_LOOP:$newNumber");
+        //print("PHONE_NUMBER_LOOP:$newNumber");
       }
     });
   }
@@ -130,11 +130,11 @@ class OTPRegisterFormState extends State<OTPRegisterForm> {
           //       style: TextStyle(fontSize: 17),
           //       onChanged: (pin) {
           //         otpCtrl.text = pin;
-          //         print("Changed: " + pin);
+          //         //print("Changed: " + pin);
           //       },
           //       onCompleted: (pin) {
           //         otpCtrl.text = pin;
-          //         print("Completed: " + pin);
+          //         //print("Completed: " + pin);
           //       },
           //     ),
           //   ),
@@ -178,16 +178,16 @@ class OTPRegisterFormState extends State<OTPRegisterForm> {
                 controller: otpCtrl,
                 keyboardType: TextInputType.number,
                 onCompleted: (v) {
-                  print("Completed");
+                  //print("Completed");
                 },
                 onChanged: (value) {
-                  print(value);
+                  //print(value);
                   setState(() {
                     currentText = value;
                   });
                 },
                 beforeTextPaste: (text) {
-                  print("Allowing to paste $text");
+                  //print("Allowing to paste $text");
                   //if you return true then it will show the paste confirmation dialog. Otherwise if false, then nothing will happen.
                   //but you can show anything you want here, like your pop up saying wrong paste format or etc
                   return true;
@@ -270,7 +270,7 @@ class OTPRegisterFormState extends State<OTPRegisterForm> {
                     ),
                   ),
                   onPressed: () {
-                    print('INI PIN NYA ${otpCtrl.text}');
+                    //print('INI PIN NYA ${otpCtrl.text}');
                     postOtpForm(context, currentText);
                     setState(() {
                       visible = true;
@@ -290,7 +290,7 @@ class OTPRegisterFormState extends State<OTPRegisterForm> {
     // final storageCache = FlutterSecureStorage();
 
     // String accessToken = await storageCache.read(key: 'access_token');
-    print('ACCESS TOKEN : $accessToken');
+    //print('ACCESS TOKEN : $accessToken');
     String devicesId = await storageCache.read(key: 'devices_id');
     var bodySentTrans5 = json.encode({
       "customer_id": idCust,
@@ -307,7 +307,7 @@ class OTPRegisterFormState extends State<OTPRegisterForm> {
               'X-Pgn-Device-Id': devicesId,
             },
             body: bodySentTrans5);
-    print('HASIL RESEND : ${responseSentOTPRegisResidential.body}');
+    //print('HASIL RESEND : ${responseSentOTPRegisResidential.body}');
     if (responseSentOTPRegisResidential.statusCode == 200) {
       showToast('Resend Succed !');
     }
@@ -317,7 +317,7 @@ class OTPRegisterFormState extends State<OTPRegisterForm> {
     final storageCache = FlutterSecureStorage();
 
     // String accessToken = await storageCache.read(key: 'access_token');
-    // print('ACCESS TOKEN : $accessToken');
+    // //print('ACCESS TOKEN : $accessToken');
     String devicesId = await storageCache.read(key: 'devices_id');
 
     var body = json.encode({
@@ -335,9 +335,9 @@ class OTPRegisterFormState extends State<OTPRegisterForm> {
               'X-Pgn-Device-Id': devicesId,
             },
             body: body);
-    // print('HASIL OTP : ${responseSentOTPRegisResidential.body}');
-    // print('RE CODE : $requestCode');
-    // print('Dev id : $devicesId');
+    // //print('HASIL OTP : ${responseSentOTPRegisResidential.body}');
+    // //print('RE CODE : $requestCode');
+    // //print('Dev id : $devicesId');
     PostDataRegisterPGNUser postOTPRegisterResidential =
         PostDataRegisterPGNUser.fromJson(
             json.decode(responseSentOTPRegisResidential.body));

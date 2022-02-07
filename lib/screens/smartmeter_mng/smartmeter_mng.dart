@@ -160,12 +160,12 @@ class SmartmeterMngState extends State<SmartmeterMng> {
         'Accept-Language': lang,
       },
     );
-    print('RETURN DATA SMART METER ${responseUsageChar.body}');
+    //print('RETURN DATA SMART METER ${responseUsageChar.body}');
     ChartUsageDetailSmartmeter _getSmartmeter =
         ChartUsageDetailSmartmeter.fromJson(
             json.decode(responseUsageChar.body));
-    print('RETURN DATA MODEL ${_getSmartmeter.data.length}');
-    // print('TIPENYA : ${_customerInvoice.data[0].type}');
+    //print('RETURN DATA MODEL ${_getSmartmeter.data.length}');
+    // //print('TIPENYA : ${_customerInvoice.data[0].type}');
     if (responseUsageChar.statusCode != 200) {
       setState(() {
         visible = false;

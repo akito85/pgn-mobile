@@ -941,7 +941,7 @@ class _BBGDetailState extends State<BBGDetail> {
           'Authorization': 'Bearer $accessToken',
           'Accept-Language': lang,
         });
-    print('GET DETAIL PENGALIRAN KEMBALI ${response.body}');
+    //print('GET DETAIL PENGALIRAN KEMBALI ${response.body}');
     return DetailData.fromJson(json.decode(response.body));
   }
 

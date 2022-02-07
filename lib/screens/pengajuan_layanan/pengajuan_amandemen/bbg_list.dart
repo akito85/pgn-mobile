@@ -338,7 +338,7 @@ class _BBGListState extends State<BBGList> {
           'Authorization': 'Bearer $accessToken',
           'Accept-Language': lang,
         });
-    print('GET LIST PENGALIRAN KEMBALI ${response.body}');
+    //print('GET LIST PENGALIRAN KEMBALI ${response.body}');
     return BBGModel.fromJson(json.decode(response.body));
   }
 }

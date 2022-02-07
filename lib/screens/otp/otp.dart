@@ -46,7 +46,7 @@ class OTPFormState extends State<OTPForm> {
     var duration = interval;
     _timer = Timer.periodic(duration, (timer) {
       setState(() {
-        print(timer.tick);
+        //print(timer.tick);
         currentSeconds = timer.tick;
         if (timer.tick >= timerMaxSeconds) timer.cancel();
       });
@@ -72,10 +72,10 @@ class OTPFormState extends State<OTPForm> {
     setState(() {
       numberPhone = numberPhones;
       newNumber = numberPhone;
-      print('USRER TYPE GET AUTH : $numberPhone');
+      //print('USRER TYPE GET AUTH : $numberPhone');
       for (int i = 0; i < 8; i++) {
         newNumber = replaceCharAt(newNumber, i, "*");
-        print("PHONE_NUMBER_LOOP:$newNumber");
+        //print("PHONE_NUMBER_LOOP:$newNumber");
       }
     });
   }
@@ -129,11 +129,11 @@ class OTPFormState extends State<OTPForm> {
           //       style: TextStyle(fontSize: 17),
           //       onChanged: (pin) {
           //         otpCtrl.text = pin;
-          //         print("Changed: " + pin);
+          //         //print("Changed: " + pin);
           //       },
           //       // onCompleted: (pin) {
           //       //   otpCtrl.text = pin;
-          //       //   print("Completed: " + pin);
+          //       //   //print("Completed: " + pin);
           //       // },
           //     ),
           //   ),
@@ -177,16 +177,16 @@ class OTPFormState extends State<OTPForm> {
                 controller: textEditingController,
                 keyboardType: TextInputType.number,
                 onCompleted: (v) {
-                  print("Completed");
+                  //print("Completed");
                 },
                 onChanged: (value) {
-                  print(value);
+                  //print(value);
                   setState(() {
                     currentText = value;
                   });
                 },
                 beforeTextPaste: (text) {
-                  print("Allowing to paste $text");
+                  //print("Allowing to paste $text");
                   //if you return true then it will show the paste confirmation dialog. Otherwise if false, then nothing will happen.
                   //but you can show anything you want here, like your pop up saying wrong paste format or etc
                   return true;
@@ -269,7 +269,7 @@ class OTPFormState extends State<OTPForm> {
                   ),
                 ),
                 onPressed: () {
-                  print('INI PIN NYA ${otpCtrl.text}');
+                  //print('INI PIN NYA ${otpCtrl.text}');
                   setState(() {
                     visible = true;
                     btnVisible = false;
@@ -322,7 +322,7 @@ class OTPFormState extends State<OTPForm> {
     final storageCache = FlutterSecureStorage();
 
     String accessToken = await storageCache.read(key: 'access_token');
-    print('ACCESS TOKEN : $accessToken');
+    //print('ACCESS TOKEN : $accessToken');
     String devicesId = await storageCache.read(key: 'devices_id');
     String userName = await storageCache.read(key: 'user_name_login');
     String pass = await storageCache.read(key: 'pass_login');
@@ -338,7 +338,7 @@ class OTPFormState extends State<OTPForm> {
       'username': userName,
       'password': pass
     });
-    print('HASIL RESEND : ${responseTokenBarrer.body}');
+    //print('HASIL RESEND : ${responseTokenBarrer.body}');
     if (responseTokenBarrer.statusCode == 200) {
       showToast('Resend Succed !');
     }
@@ -348,7 +348,7 @@ class OTPFormState extends State<OTPForm> {
     final storageCache = FlutterSecureStorage();
 
     String accessToken = await storageCache.read(key: 'access_token');
-    print('ACCESS TOKEN : $accessToken');
+    //print('ACCESS TOKEN : $accessToken');
     String devicesId = await storageCache.read(key: 'devices_id');
     String requestCode = await storageCache.read(key: 'request_code');
     String nextOtpTypeId = await storageCache.read(key: 'next_otp_type_id');
@@ -365,10 +365,10 @@ class OTPFormState extends State<OTPForm> {
       'code': '$codeotp',
       'request_code': '$requestCode'
     });
-    // print('HASIL OTP : ${responseOtpForm.body}');
-    // print('RE CODE : $requestCode');
-    // print('Dev id : $devicesId');
-    // print('Next OTP : $nextOtpTypeId');
+    // //print('HASIL OTP : ${responseOtpForm.body}');
+    // //print('RE CODE : $requestCode');
+    // //print('Dev id : $devicesId');
+    // //print('Next OTP : $nextOtpTypeId');
     setState(() {
       visible = false;
       btnVisible = true;

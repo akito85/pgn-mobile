@@ -59,7 +59,7 @@ class _CustomerPaymentConfirmation extends State<CustomerPaymentConfirmation>
 
       if (currentMonth < 10) {
         currentMonthS = '0$currentMonth';
-        print('MASUK SINI KAH : $currentMonthS');
+        //print('MASUK SINI KAH : $currentMonthS');
       } else {
         currentMonthS = currentMonth.toString();
       }

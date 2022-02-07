@@ -155,10 +155,10 @@ class MngPaymentConfState extends State<MngPaymentConf> {
       'Authorization': 'Bearer $accessToken',
       'Accept-Language': lang
     });
-    print('RETURN BODY : ${responseCustomerPayment.body}');
+    //print('RETURN BODY : ${responseCustomerPayment.body}');
     MngPaymentModel _customerPayment =
         MngPaymentModel.fromJson(json.decode(responseCustomerPayment.body));
-    // print('TIPENYA : ${_customerInvoice.data[0].type}');
+    // //print('TIPENYA : ${_customerInvoice.data[0].type}');
     if (responseCustomerPayment.statusCode != 200) {
       setState(() {
         visible = false;

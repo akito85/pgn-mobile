@@ -47,7 +47,7 @@ class HarianTabDetailState extends State<Harian> with TickerProviderStateMixin {
     final myFakeDesktopData = List<LinearSalesDateTime>();
 
     data.forEach((itemData) {
-      print('INI DATANYA ${itemData.date.value}');
+      //print('INI DATANYA ${itemData.date.value}');
       DateTime todayDate = DateTime.parse(itemData.date.value);
       myFakeDesktopData
           .add(LinearSalesDateTime(todayDate, itemData.usage.value));
@@ -180,7 +180,7 @@ class HarianTabDetailState extends State<Harian> with TickerProviderStateMixin {
                         fontWeight: FontWeight.normal),
                     value: periodSelected,
                     onChanged: (newValue) {
-                      print('SELECTEDs $newValue');
+                      //print('SELECTEDs $newValue');
                       setState(() {
                         periodSelected = newValue;
                         indexDropDown = listPeriod.indexOf(newValue);
@@ -229,7 +229,7 @@ class HarianTabDetailState extends State<Harian> with TickerProviderStateMixin {
                         }
                       });
 
-                      print('SELECTED $periodSelected');
+                      //print('SELECTED $periodSelected');
                     },
                     items: listPeriod.map((valueItem) {
                       DateTime date = DateTime.parse(valueItem);
@@ -286,7 +286,7 @@ class HarianTabDetailState extends State<Harian> with TickerProviderStateMixin {
 
   Widget _buildCharContent(BuildContext context,
       Future<ChartUsageDetail> getChartUsageDetail, String period) {
-    print('PERIOD CHANGE $period');
+    //print('PERIOD CHANGE $period');
 
     return FutureBuilder<ChartUsageDetail>(
         future: getChartUsageDetail,
@@ -470,7 +470,7 @@ class HarianTabDetailState extends State<Harian> with TickerProviderStateMixin {
                                     ),
                                   ),
                                   onTap: () {
-                                    print('ini titlenyaaa : $title');
+                                    //print('ini titlenyaaa : $title');
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(
@@ -497,7 +497,7 @@ class HarianTabDetailState extends State<Harian> with TickerProviderStateMixin {
 
   Widget _buildCharContent6(BuildContext context,
       Future<ChartUsageDetail> getChartUsageDetail, String period) {
-    print('PERIOD CHANGE $period');
+    //print('PERIOD CHANGE $period');
 
     return FutureBuilder<ChartUsageDetail>(
         future: getChartUsageDetail,
@@ -681,7 +681,7 @@ class HarianTabDetailState extends State<Harian> with TickerProviderStateMixin {
                                     ),
                                   ),
                                   onTap: () {
-                                    print('ini titlenyaaa : $title');
+                                    //print('ini titlenyaaa : $title');
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(
@@ -708,7 +708,7 @@ class HarianTabDetailState extends State<Harian> with TickerProviderStateMixin {
 
   Widget _buildCharContent2(BuildContext context,
       Future<ChartUsageDetail> getChartUsageDetail, String period) {
-    print('PERIOD CHANGE $period');
+    //print('PERIOD CHANGE $period');
 
     return FutureBuilder<ChartUsageDetail>(
         future: getChartUsageDetail,
@@ -892,7 +892,7 @@ class HarianTabDetailState extends State<Harian> with TickerProviderStateMixin {
                                     ),
                                   ),
                                   onTap: () {
-                                    print('ini titlenyaaa : $title');
+                                    //print('ini titlenyaaa : $title');
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(
@@ -919,7 +919,7 @@ class HarianTabDetailState extends State<Harian> with TickerProviderStateMixin {
 
   Widget _buildCharContent3(BuildContext context,
       Future<ChartUsageDetail> getChartUsageDetail, String period) {
-    print('PERIOD CHANGE $period');
+    //print('PERIOD CHANGE $period');
 
     return FutureBuilder<ChartUsageDetail>(
         future: getChartUsageDetail,
@@ -1103,7 +1103,7 @@ class HarianTabDetailState extends State<Harian> with TickerProviderStateMixin {
                                     ),
                                   ),
                                   onTap: () {
-                                    print('ini titlenyaaa : $title');
+                                    //print('ini titlenyaaa : $title');
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(
@@ -1130,7 +1130,7 @@ class HarianTabDetailState extends State<Harian> with TickerProviderStateMixin {
 
   Widget _buildCharContent4(BuildContext context,
       Future<ChartUsageDetail> getChartUsageDetail, String period) {
-    print('PERIOD CHANGE $period');
+    //print('PERIOD CHANGE $period');
 
     return FutureBuilder<ChartUsageDetail>(
         future: getChartUsageDetail,
@@ -1314,7 +1314,7 @@ class HarianTabDetailState extends State<Harian> with TickerProviderStateMixin {
                                     ),
                                   ),
                                   onTap: () {
-                                    print('ini titlenyaaa : $title');
+                                    //print('ini titlenyaaa : $title');
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(
@@ -1341,7 +1341,7 @@ class HarianTabDetailState extends State<Harian> with TickerProviderStateMixin {
 
   Widget _buildCharContent5(BuildContext context,
       Future<ChartUsageDetail> getChartUsageDetail, String period) {
-    print('PERIOD CHANGE $period');
+    //print('PERIOD CHANGE $period');
 
     return FutureBuilder<ChartUsageDetail>(
         future: getChartUsageDetail,
@@ -1525,7 +1525,7 @@ class HarianTabDetailState extends State<Harian> with TickerProviderStateMixin {
                                     ),
                                   ),
                                   onTap: () {
-                                    print('ini titlenyaaa : $title');
+                                    //print('ini titlenyaaa : $title');
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(
@@ -1551,8 +1551,8 @@ class HarianTabDetailState extends State<Harian> with TickerProviderStateMixin {
   }
 
   Widget _buildRow(List<UsageDetailChar> data) {
-    print('DATANYA ${data[0].date.display}');
-    print('INDEXNYA  $indexDropDown');
+    //print('DATANYA ${data[0].date.display}');
+    //print('INDEXNYA  $indexDropDown');
     return indexDropDown == 0
         ? Container(
             height: 212,
@@ -2077,7 +2077,7 @@ Future<ChartUsageDetail> fetchGetChar(
   final storageCache = FlutterSecureStorage();
   String accessToken = await storageCache.read(key: 'access_token');
   String lang = await storageCache.read(key: 'lang');
-  print('PERIOD NYA $period');
+  //print('PERIOD NYA $period');
   DateTime date = DateTime.parse(period);
   String periodDate = DateFormat("yyyyMM").format(date).toString();
 
@@ -2089,8 +2089,8 @@ Future<ChartUsageDetail> fetchGetChar(
       'Accept-Language': lang,
     },
   );
-  print('TITLE PERIOD : $period');
-  print('HASIL GET USAGE : ${responseUsageChar.body}');
+  //print('TITLE PERIOD : $period');
+  //print('HASIL GET USAGE : ${responseUsageChar.body}');
   ChartUsageDetail _getContract =
       ChartUsageDetail.fromJson(json.decode(responseUsageChar.body));
 
@@ -2102,7 +2102,7 @@ Future<ChartUsageDetail> fetchGetChar0(
   final storageCache = FlutterSecureStorage();
   String accessToken = await storageCache.read(key: 'access_token');
   String lang = await storageCache.read(key: 'lang');
-  print('PERIOD NYA $period');
+  //print('PERIOD NYA $period');
   DateTime date = DateTime.parse(period);
   String periodDate = DateFormat("yyyyMM").format(date).toString();
 
@@ -2114,8 +2114,8 @@ Future<ChartUsageDetail> fetchGetChar0(
       'Accept-Language': lang,
     },
   );
-  print('TITLE PERIOD : $period');
-  print('HASIL GET USAGE : ${responseUsageChar.body}');
+  //print('TITLE PERIOD : $period');
+  //print('HASIL GET USAGE : ${responseUsageChar.body}');
   ChartUsageDetail _getContract =
       ChartUsageDetail.fromJson(json.decode(responseUsageChar.body));
 
@@ -2127,7 +2127,7 @@ Future<ChartUsageDetail> fetchGetChar6(
   final storageCache = FlutterSecureStorage();
   String accessToken = await storageCache.read(key: 'access_token');
   String lang = await storageCache.read(key: 'lang');
-  print('PERIOD NYA $period');
+  //print('PERIOD NYA $period');
   DateTime date = DateTime.parse(period);
   String periodDate = DateFormat("yyyyMM").format(date).toString();
 
@@ -2139,8 +2139,8 @@ Future<ChartUsageDetail> fetchGetChar6(
       'Accept-Language': lang,
     },
   );
-  print('TITLE PERIOD : $period');
-  print('HASIL GET USAGE : ${responseUsageChar.body}');
+  //print('TITLE PERIOD : $period');
+  //print('HASIL GET USAGE : ${responseUsageChar.body}');
   ChartUsageDetail _getContract =
       ChartUsageDetail.fromJson(json.decode(responseUsageChar.body));
 
@@ -2152,7 +2152,7 @@ Future<ChartUsageDetail> fetchGetChar2(
   final storageCache = FlutterSecureStorage();
   String accessToken = await storageCache.read(key: 'access_token');
   String lang = await storageCache.read(key: 'lang');
-  print('PERIOD NYA $period');
+  //print('PERIOD NYA $period');
   DateTime date = DateTime.parse(period);
   String periodDate = DateFormat("yyyyMM").format(date).toString();
 
@@ -2164,8 +2164,8 @@ Future<ChartUsageDetail> fetchGetChar2(
       'Accept-Language': lang,
     },
   );
-  print('TITLE PERIOD : $period');
-  print('HASIL GET USAGE : ${responseUsageChar.body}');
+  //print('TITLE PERIOD : $period');
+  //print('HASIL GET USAGE : ${responseUsageChar.body}');
   ChartUsageDetail _getContract =
       ChartUsageDetail.fromJson(json.decode(responseUsageChar.body));
 
@@ -2177,7 +2177,7 @@ Future<ChartUsageDetail> fetchGetChar3(
   final storageCache = FlutterSecureStorage();
   String accessToken = await storageCache.read(key: 'access_token');
   String lang = await storageCache.read(key: 'lang');
-  print('PERIOD NYA $period');
+  //print('PERIOD NYA $period');
   DateTime date = DateTime.parse(period);
   String periodDate = DateFormat("yyyyMM").format(date).toString();
 
@@ -2189,8 +2189,8 @@ Future<ChartUsageDetail> fetchGetChar3(
       'Accept-Language': lang,
     },
   );
-  print('TITLE PERIOD : $period');
-  print('HASIL GET USAGE : ${responseUsageChar.body}');
+  //print('TITLE PERIOD : $period');
+  //print('HASIL GET USAGE : ${responseUsageChar.body}');
   ChartUsageDetail _getContract =
       ChartUsageDetail.fromJson(json.decode(responseUsageChar.body));
 
@@ -2202,7 +2202,7 @@ Future<ChartUsageDetail> fetchGetChar4(
   final storageCache = FlutterSecureStorage();
   String accessToken = await storageCache.read(key: 'access_token');
   String lang = await storageCache.read(key: 'lang');
-  print('PERIOD NYA $period');
+  //print('PERIOD NYA $period');
   DateTime date = DateTime.parse(period);
   String periodDate = DateFormat("yyyyMM").format(date).toString();
 
@@ -2214,8 +2214,8 @@ Future<ChartUsageDetail> fetchGetChar4(
       'Accept-Language': lang,
     },
   );
-  print('TITLE PERIOD : $period');
-  print('HASIL GET USAGE : ${responseUsageChar.body}');
+  //print('TITLE PERIOD : $period');
+  //print('HASIL GET USAGE : ${responseUsageChar.body}');
   ChartUsageDetail _getContract =
       ChartUsageDetail.fromJson(json.decode(responseUsageChar.body));
 
@@ -2227,7 +2227,7 @@ Future<ChartUsageDetail> fetchGetChar5(
   final storageCache = FlutterSecureStorage();
   String accessToken = await storageCache.read(key: 'access_token');
   String lang = await storageCache.read(key: 'lang');
-  print('PERIOD NYA $period');
+  //print('PERIOD NYA $period');
   DateTime date = DateTime.parse(period);
   String periodDate = DateFormat("yyyyMM").format(date).toString();
 
@@ -2239,8 +2239,8 @@ Future<ChartUsageDetail> fetchGetChar5(
       'Accept-Language': lang,
     },
   );
-  print('TITLE PERIOD : $period');
-  print('HASIL GET USAGE : ${responseUsageChar.body}');
+  //print('TITLE PERIOD : $period');
+  //print('HASIL GET USAGE : ${responseUsageChar.body}');
   ChartUsageDetail _getContract =
       ChartUsageDetail.fromJson(json.decode(responseUsageChar.body));
 

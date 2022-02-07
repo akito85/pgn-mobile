@@ -27,13 +27,13 @@ class SearchDDState extends State<SearchDropDown> {
   }
 
   void filterSearchResults(String query, Future<GetProvinces> getProvince) {
-    print('ini query: $query');
+    //print('ini query: $query');
     List<DataProvinces> dummySearchList = List<DataProvinces>();
     dummySearchList.addAll(duplicateItems);
     if (query.isNotEmpty) {
-      print('masuk ke sini, query not null: ${duplicateItems.length}');
+      //print('masuk ke sini, query not null: ${duplicateItems.length}');
       List<DataProvinces> dummyListData = List<DataProvinces>();
-      print('sampai kesini: ${dummyListData.length}');
+      //print('sampai kesini: ${dummyListData.length}');
 
       FutureBuilder<GetProvinces>(
           future: getProvince,
@@ -48,8 +48,8 @@ class SearchDDState extends State<SearchDropDown> {
               shrinkWrap: true,
               itemBuilder: (context, i) {
                 if (snapshot.data.data[i].name.contains(query)) {
-                  print(
-                      'ini hasil dari query list: ${snapshot.data.data[i].name}');
+                  //print(
+                  // 'ini hasil dari query list: ${snapshot.data.data[i].name}');
                   setState(() {
                     return i < snapshot.data.data.length
                         ? _buildRow(snapshot.data.data[i])
@@ -62,7 +62,7 @@ class SearchDDState extends State<SearchDropDown> {
             );
           });
       // dataProvinces.forEach((item) {
-      //   print('item dummy data: ${item.name}');
+      //   //print('item dummy data: ${item.name}');
       //   if(item.name.contains(query)) {
       //     dummyListData.add(item);
       //   }
@@ -102,7 +102,7 @@ class SearchDDState extends State<SearchDropDown> {
               child: TextField(
                 onChanged: (value) {
                   filterSearchResults(value, data);
-                  print("ini value searchnya $value");
+                  //print("ini value searchnya $value");
                 },
                 controller: editingController,
                 decoration: InputDecoration(
@@ -145,7 +145,7 @@ class SearchDDState extends State<SearchDropDown> {
   }
 
   Widget _buildRow(DataProvinces data) {
-    print('inihasil provinsi : ${data.name}');
+    //print('inihasil provinsi : ${data.name}');
     return ListTile(
       contentPadding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 1.0),
       title: Text(
@@ -202,12 +202,12 @@ class SearchDDState extends State<SearchDropDown> {
           );
           Navigator.pop(context, sendBack);
         } else if (title == 'Jenis bahan bakar') {
-          print('id fuel : ${data.id}');
+          //print('id fuel : ${data.id}');
           Provider.of<RegistResidential>(context).jenisBahanBakarBisnis(
             jBahanBakarBisnisName: data.name,
             jBahanBakarBisnisId: data.id,
           );
-          // print('id fuel : ${data.id}');
+          // //print('id fuel : ${data.id}');
           Navigator.pop(context, sendBack);
         } else if (title == 'Penggunaan Listrik') {
           // Provider.of<RegistResidential>(context).jenisBahanBakarBisnis(
@@ -247,13 +247,13 @@ class SearchElectryState extends State<SearchDropDownElectry> {
   }
 
   void filterSearchResults(String query, Future<GetProvinces> getProvince) {
-    print('ini query: $query');
+    //print('ini query: $query');
     List<DataProvinces> dummySearchList = List<DataProvinces>();
     dummySearchList.addAll(duplicateItems);
     if (query.isNotEmpty) {
-      print('masuk ke sini, query not null: ${duplicateItems.length}');
+      //print('masuk ke sini, query not null: ${duplicateItems.length}');
       List<DataProvinces> dummyListData = List<DataProvinces>();
-      print('sampai kesini: ${dummyListData.length}');
+      //print('sampai kesini: ${dummyListData.length}');
 
       FutureBuilder<GetProvinces>(
           future: getProvince,

@@ -322,7 +322,7 @@ class _SimpleLineChartState extends State<SimpleLineChart> {
               //   pointerValue = model.selectedSeries[0]
               //       .measureFn(model.selectedDatum[0].index)
               //       .toString();
-              // print("MASUK GA SIH $pointerValue");
+              // //print("MASUK GA SIH $pointerValue");
               setState(() {
                 valueText =
                     '${model.selectedSeries[0].measureFn(model.selectedDatum[0].index)}';

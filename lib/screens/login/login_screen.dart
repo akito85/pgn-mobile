@@ -82,11 +82,11 @@ class LoginScreenState extends State<LoginScreen> {
     String fcmTokens = await _firebaseMessaging.getToken().then((token) {
       // setState(() {
       //   fcmTokens = token;
-      //   print('INI FCM TOKEN $fcmTokens');
+      //   //print('INI FCM TOKEN $fcmTokens');
       // });
       // fcmTokens = token;
 
-      print('INI TOKEN DARI FCM $token');
+      //print('INI TOKEN DARI FCM $token');
 
       return token;
     });
@@ -247,7 +247,7 @@ class LoginScreenState extends State<LoginScreen> {
                     } else {
                       final encrypted =
                           encrypter.encrypt(passwordController.text, iv: iv);
-                      print('PASSWORD : ${encrypted.base64}');
+                      //print('PASSWORD : ${encrypted.base64}');
                       setState(() {
                         visible = true;
                         btnVisible = false;
@@ -318,13 +318,13 @@ class LoginScreenState extends State<LoginScreen> {
       BuildContext context, String password, String username) async {
     String deviceId = await storageCache.read(key: 'devices_id');
     String usernames = '';
-    print('MASUK SINI USERNAMEs ${username[0]}');
+    //print('MASUK SINI USERNAMEs ${username[0]}');
     if (username[0] == '0') {
-      print('MASUK SINI USERNAME');
+      //print('MASUK SINI USERNAME');
       usernames = '62${username.substring(1)}';
-      print('INI USERNYA : $usernames');
+      //print('INI USERNYA : $usernames');
     } else {
-      print('MASUK SINI USERNAMEs');
+      //print('MASUK SINI USERNAMEs');
       usernames = username;
     }
     var responseTokenBarrer =
@@ -338,7 +338,7 @@ class LoginScreenState extends State<LoginScreen> {
       'username': usernames,
       'password': password
     });
-    print('HASIL LOGIN ${responseTokenBarrer.body}');
+    //print('HASIL LOGIN ${responseTokenBarrer.body}');
     if (responseTokenBarrer.statusCode == 401) {
       setState(() {
         visible = false;
@@ -384,13 +384,13 @@ class LoginScreenState extends State<LoginScreen> {
           _listMenus.add(i.id.toString());
         });
         String listMenuString = _listMenus.join(',');
-        print('HASIL MENU LIST TO STRING $listMenuString');
+        //print('HASIL MENU LIST TO STRING $listMenuString');
         await storageCache.write(key: 'list_menu', value: listMenuString);
       } else {
         await storageCache.write(key: 'list_menu', value: '-');
       }
       if (_auth.user.userType == 2 && _auth.user.userGroupId == "11") {
-        // print('1. MASUK KE SINI ${_auth.customer.custName}');
+        // //print('1. MASUK KE SINI ${_auth.customer.custName}');
 
         await storageCache.write(
             key: 'lang', value: ui.window.locale.languageCode);
@@ -476,8 +476,8 @@ class LoginScreenState extends State<LoginScreen> {
                 key: 'fcm_token', value: await _getFCMToken());
             await storageCache.write(
                 key: 'message_fcm', value: responseFCMNew.body);
-            print('HASIL BODY FCM $body');
-            print('HASIL RESPONSE FCM ${responseFCMNew.body}');
+            //print('HASIL BODY FCM $body');
+            //print('HASIL RESPONSE FCM ${responseFCMNew.body}');
           });
         } else {
           SchedulerBinding.instance.addPostFrameCallback((_) async {
@@ -492,7 +492,7 @@ class LoginScreenState extends State<LoginScreen> {
             _auth.user.userGroupId == "10" ||
             _auth.user.userGroupId == "3") {
           if (_auth.user.userType == 2 && _auth.customerId != null) {
-            // print('2. MASUK KE SINI ${_auth.customer.custName}');
+            // //print('2. MASUK KE SINI ${_auth.customer.custName}');
             await storageCache.write(
                 key: 'user_name_cust', value: _auth.customer.custName);
             await storageCache.write(
@@ -545,7 +545,7 @@ class LoginScreenState extends State<LoginScreen> {
                   key: 'fcm_token', value: await _getFCMToken());
               await storageCache.write(
                   key: 'message_fcm', value: responseFCMNew.body);
-              print('HASIL RESPONSE FCM ${responseFCMNew.body}');
+              //print('HASIL RESPONSE FCM ${responseFCMNew.body}');
             });
           } else if (_auth.user.userType == 2 && _auth.customerId == null) {
             await storageCache.write(
@@ -591,7 +591,7 @@ class LoginScreenState extends State<LoginScreen> {
             key: 'usergroup_id', value: _auth.user.userGroupId);
         setState(() {
           if (_auth.user.userType == 2 && _auth.customerId == null) {
-            print('MASUK 1');
+            //print('MASUK 1');
             Provider.of<UserCred>(context).userCred(
               customerGroupId: '0',
               accessToken: _auth.accessToken,
@@ -606,7 +606,7 @@ class LoginScreenState extends State<LoginScreen> {
               userGroupId: _auth.user.userGroupId,
             );
           } else if (_auth.user.userType == 2) {
-            print('MASUK 2');
+            //print('MASUK 2');
 
             Provider.of<UserCred>(context).userCred(
                 accessToken: _auth.accessToken,
@@ -623,7 +623,7 @@ class LoginScreenState extends State<LoginScreen> {
                 userType: _auth.user.userType.toString(),
                 userGroupId: _auth.user.userGroupId);
           } else {
-            print('MASUK 3');
+            //print('MASUK 3');
             Provider.of<UserCred>(context).userCred(
                 accessToken: _auth.accessToken,
                 tokenType: _auth.tokenType,
@@ -638,7 +638,7 @@ class LoginScreenState extends State<LoginScreen> {
           }
         });
       } else {
-        // print('3. MASUK KE SINI ${_auth.customer.custName}');
+        // //print('3. MASUK KE SINI ${_auth.customer.custName}');
         await storageCache.write(key: 'user_id', value: _auth.user.userID);
 
         await storageCache.write(
@@ -709,7 +709,7 @@ class LoginScreenState extends State<LoginScreen> {
             arguments: numbPhone,
           );
         } else {
-          print('Masuk Kesini ;');
+          //print('Masuk Kesini ;');
           await storageCache.write(key: 'auth_status', value: 'Logout');
           Navigator.pushReplacementNamed(
             context,
@@ -776,7 +776,7 @@ class LoginScreenState extends State<LoginScreen> {
 
   Future<customer.Customer> getCustomerProfile(BuildContext context) async {
     String accessToken = await storageCache.read(key: 'access_token');
-    print('Access TOKEN GetCustLogin : $accessToken');
+    //print('Access TOKEN GetCustLogin : $accessToken');
     var responseCustomer = await http.get('${UrlCons.mainProdUrl}customers/me',
         headers: {
           'Content-Type': 'application/json',

@@ -108,7 +108,7 @@ class _UsageDetailRTPKState extends State<UsageDetailRTPK>
 
       if (currentMonth < 10) {
         currentMonthS = '0$currentMonth';
-        print('MASUK SINI KAH : $currentMonthS');
+        //print('MASUK SINI KAH : $currentMonthS');
         monthSelected = currentMonth;
       } else {
         currentMonthS = currentMonth.toString();
@@ -458,7 +458,7 @@ class _UsageDetailRTPKState extends State<UsageDetailRTPK>
                 )
               ],
             );
-          print('PERIOD DARI API ${snapshot.data.data[0].date.display}');
+          //print('PERIOD DARI API ${snapshot.data.data[0].date.display}');
           return Column(
             children: <Widget>[
               ListView.builder(
@@ -512,7 +512,7 @@ class _UsageDetailRTPKState extends State<UsageDetailRTPK>
                       ),
                     ),
                     onTap: () {
-                      print('ini titlenyaaas : $period');
+                      //print('ini titlenyaaas : $period');
                       Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -559,7 +559,7 @@ class _UsageDetailRTPKState extends State<UsageDetailRTPK>
                 )
               ],
             );
-          print('PERIOD DARI API ${snapshot.data.data[0].date.display}');
+          //print('PERIOD DARI API ${snapshot.data.data[0].date.display}');
           return Column(
             children: <Widget>[
               ListView.builder(
@@ -613,7 +613,7 @@ class _UsageDetailRTPKState extends State<UsageDetailRTPK>
                       ),
                     ),
                     onTap: () {
-                      print('ini titlenyaaa : $title');
+                      //print('ini titlenyaaa : $title');
                       Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -660,7 +660,7 @@ class _UsageDetailRTPKState extends State<UsageDetailRTPK>
                 )
               ],
             );
-          print('PERIOD DARI API ${snapshot.data.data[0].date.display}');
+          //print('PERIOD DARI API ${snapshot.data.data[0].date.display}');
           return Column(
             children: <Widget>[
               ListView.builder(
@@ -714,7 +714,7 @@ class _UsageDetailRTPKState extends State<UsageDetailRTPK>
                       ),
                     ),
                     onTap: () {
-                      print('ini titlenyaaa : $title');
+                      //print('ini titlenyaaa : $title');
                       Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -746,7 +746,7 @@ class _UsageDetailRTPKState extends State<UsageDetailRTPK>
     final storageCache = FlutterSecureStorage();
     String accessToken = await storageCache.read(key: 'access_token');
     String lang = await storageCache.read(key: 'lang');
-    print('INI PERIODNYA $accessToken');
+    //print('INI PERIODNYA $accessToken');
     var responseUsageChar = await http.get(
       '${UrlCons.mainProdUrl}customers/me/gas-usages/smart-meter-chart/$title',
       headers: {
@@ -755,11 +755,11 @@ class _UsageDetailRTPKState extends State<UsageDetailRTPK>
         'Accept-Language': lang,
       },
     );
-    print('RETURN DATA SMART METER ${responseUsageChar.body}');
+    //print('RETURN DATA SMART METER ${responseUsageChar.body}');
     ChartUsageDetailSmartmeter _getContract =
         ChartUsageDetailSmartmeter.fromJson(
             json.decode(responseUsageChar.body));
-    // print('RETURN DATA MODEL ${_getContract.data.length}');
+    // //print('RETURN DATA MODEL ${_getContract.data.length}');
     return _getContract;
   }
 
@@ -768,7 +768,7 @@ class _UsageDetailRTPKState extends State<UsageDetailRTPK>
     final storageCache = FlutterSecureStorage();
     String accessToken = await storageCache.read(key: 'access_token');
     String lang = await storageCache.read(key: 'lang');
-    print('INI PERIODNYA $accessToken');
+    //print('INI PERIODNYA $accessToken');
     var responseUsageChar = await http.get(
       '${UrlCons.mainProdUrl}customers/me/gas-usages/smart-meter-chart/$title',
       headers: {
@@ -777,11 +777,11 @@ class _UsageDetailRTPKState extends State<UsageDetailRTPK>
         'Accept-Language': lang,
       },
     );
-    print('RETURN DATA SMART METER ${responseUsageChar.body}');
+    //print('RETURN DATA SMART METER ${responseUsageChar.body}');
     ChartUsageDetailSmartmeter _getContract =
         ChartUsageDetailSmartmeter.fromJson(
             json.decode(responseUsageChar.body));
-    // print('RETURN DATA MODEL ${_getContract.data.length}');
+    // //print('RETURN DATA MODEL ${_getContract.data.length}');
     return _getContract;
   }
 
@@ -790,7 +790,7 @@ class _UsageDetailRTPKState extends State<UsageDetailRTPK>
     final storageCache = FlutterSecureStorage();
     String accessToken = await storageCache.read(key: 'access_token');
     String lang = await storageCache.read(key: 'lang');
-    print('INI PERIODNYA $accessToken');
+    //print('INI PERIODNYA $accessToken');
     var responseUsageChar = await http.get(
       '${UrlCons.mainProdUrl}customers/me/gas-usages/smart-meter-chart/$title',
       headers: {
@@ -799,11 +799,11 @@ class _UsageDetailRTPKState extends State<UsageDetailRTPK>
         'Accept-Language': lang,
       },
     );
-    print('RETURN DATA SMART METER ${responseUsageChar.body}');
+    //print('RETURN DATA SMART METER ${responseUsageChar.body}');
     ChartUsageDetailSmartmeter _getContract =
         ChartUsageDetailSmartmeter.fromJson(
             json.decode(responseUsageChar.body));
-    print('RETURN DATA MODEL ${_getContract.data.length}');
+    //print('RETURN DATA MODEL ${_getContract.data.length}');
     return _getContract;
   }
 }
@@ -839,8 +839,8 @@ class SimpleLineChart extends State<SimpleLineCharts> {
   @override
   void initState() {
     super.initState();
-    print('SELECTED YEAR : $selectedYear');
-    print('SELECTED MONTH : $monthSelected');
+    //print('SELECTED YEAR : $selectedYear');
+    //print('SELECTED MONTH : $monthSelected');
     setState(() {
       _timeSeriesChart = charts.TimeSeriesChart(
         seriesList,

@@ -147,7 +147,7 @@ class Card1 extends StatelessWidget {
   }
 
   Widget _buildRow(BuildContext context, DataCustInvoice data) {
-    print('INI DATA DARI INVOICE CUST : ${data.invoiceId}');
+    //print('INI DATA DARI INVOICE CUST : ${data.invoiceId}');
     if (data.isPaid == 0) {
       return Card(
         shape: RoundedRectangleBorder(

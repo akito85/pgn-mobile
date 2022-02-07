@@ -142,7 +142,7 @@ class _GasPointState extends State<GasPoint> with TickerProviderStateMixin {
         FutureBuilder<VirtualCardGasPoint>(
           future: getVirtualCardGasPoint(context),
           builder: (context, snapshot) {
-            // print('HASIL SNAP ${snapshot.data.message}');
+            // //print('HASIL SNAP ${snapshot.data.message}');
             if (!snapshot.hasData)
               return Container(
                 decoration: BoxDecoration(
@@ -458,7 +458,7 @@ Future<GasPointHistoryModel> getFutureGasPointHistory(
     'Accept-Language': lang,
   });
 
-  print('HASILNYA GAS POINT : ${responseGetHistoryGasPoint.body}');
+  //print('HASILNYA GAS POINT : ${responseGetHistoryGasPoint.body}');
   // if (responseGetHistoryGasPoint.statusCode == 200) {
   return GasPointHistoryModel.fromJson(
       json.decode(responseGetHistoryGasPoint.body));
@@ -478,7 +478,7 @@ Future<VirtualCardGasPoint> getVirtualCardGasPoint(BuildContext context) async {
     'Accept-Language': lang,
   });
 
-  print('HASILNYA : ${responseGetVCGasPoint.body}');
+  //print('HASILNYA : ${responseGetVCGasPoint.body}');
   // if (responseGetVCGasPoint.statusCode == 200) {
   return VirtualCardGasPoint.fromJson(json.decode(responseGetVCGasPoint.body));
   // } else {

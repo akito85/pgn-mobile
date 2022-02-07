@@ -122,7 +122,7 @@ class DataCustInvoice {
       this.usagePeriodRT});
 
   factory DataCustInvoice.fromJson(Map<String, dynamic> json) {
-    print('INI JSON NYA ${json['type']}');
+    //print('INI JSON NYA ${json['type']}');
     if (json['type'] == 'commercial') {
       return DataCustInvoice(
           invoiceId: json['id'],

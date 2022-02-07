@@ -40,7 +40,7 @@ class CalListrictState extends State<CalListrict> {
   @override
   Widget build(BuildContext context) {
     final _prov = Provider.of<CalculatorsEnergy>(context);
-    print('ni hasil provnya : ${_prov.nineListVal}');
+    //print('ni hasil provnya : ${_prov.nineListVal}');
     setState(() {
       // _oneCtrl.text = _prov.oneLisVal;
       _eightCtlr.text = _prov.eightLisVal ?? 'Batu Bara';
@@ -217,7 +217,7 @@ class CalListrictState extends State<CalListrict> {
                   _fiveCtrl.text = "1";
                 } else {
                   hariOprasi = double.parse(_fiveCtrl.text);
-                  print('HARI OPRASI: $hariOprasi');
+                  //print('HARI OPRASI: $hariOprasi');
                 }
                 jamOprasi = double.parse(_fiveCtrl.text);
               });
@@ -452,7 +452,7 @@ class CalListrictState extends State<CalListrict> {
               onChanged: (value) {
                 setState(() {
                   kurs = double.parse(value);
-                  print('KURS: $kurs');
+                  //print('KURS: $kurs');
                 });
               },
               keyboardType: TextInputType.numberWithOptions(),
@@ -488,7 +488,7 @@ class CalListrictState extends State<CalListrict> {
             onChanged: (value) {
               setState(() {
                 efesiensiMesin = double.parse(_elevenCtrl.text);
-                print('HARGA KONVERSI: $efesiensiMesin');
+                //print('HARGA KONVERSI: $efesiensiMesin');
               });
             },
             keyboardType: TextInputType.numberWithOptions(),

@@ -338,7 +338,7 @@ class _SegmenListState extends State<SegmenList> {
           'Authorization': 'Bearer $accessToken',
           'Accept-Language': lang,
         });
-    print('GET LIST PENGALIRAN KEMBALI ${response.body}');
+    //print('GET LIST PENGALIRAN KEMBALI ${response.body}');
     return SegmenModel.fromJson(json.decode(response.body));
   }
 }

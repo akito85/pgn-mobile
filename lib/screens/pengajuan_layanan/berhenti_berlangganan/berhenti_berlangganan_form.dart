@@ -9,6 +9,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
 import 'package:pgn_mobile/models/berhenti_berlangganan_model.dart';
+import 'package:pgn_mobile/models/form_customer_cred_model.dart';
 import 'package:pgn_mobile/models/url_cons.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_signature_pad/flutter_signature_pad.dart';
@@ -1327,7 +1328,7 @@ class _BerhentiBerlanggananFormState extends State<BerhentiBerlanggananForm> {
                           Expanded(
                             child: ElevatedButton(
                               onPressed: () {
-                                print('STATUS LOKASI $statusLokasi');
+                                // print('STATUS LOKASI $statusLokasi');
                                 if (_formKeyAlamat.currentState.validate() &&
                                     statusLokasi != null) {
                                   setState(() {
@@ -1894,11 +1895,56 @@ class _BerhentiBerlanggananFormState extends State<BerhentiBerlanggananForm> {
     String custIDString = await storageCache.read(key: 'user_name_cust');
     String emailString = await storageCache.read(key: 'user_email');
     String userPhoneString = await storageCache.read(key: 'user_mobile_otp');
+
+    var body = json.encode({"P_CUST_NUMBER": custNameString});
+
+    var responseDataCust =
+        await http.post('https://api.pgn.co.id/customers/profile',
+            headers: {
+              'Content-Type': 'application/json',
+              'PGN-Key': '743c3a53b47744789cb564702170c294',
+              'Ocp-Apim-Trace': 'true'
+            },
+            body: body);
+    // print('BODY GET CUSTOMER CRED $body');
+    // print('HASIL GET CUSTOMER CRED ${responseDataCust.body}');
+
+    FormCustomerCredModel formCustomerCredModel =
+        FormCustomerCredModel.fromJson(json.decode(responseDataCust.body));
+
     setState(() {
       custID = custNameString;
       custName = custIDString;
       email = emailString;
       phoneNumb = userPhoneString;
+      if (formCustomerCredModel.custProfileDataOutput != null) {
+        nikCtrl.value = new TextEditingController.fromValue(
+                new TextEditingValue(
+                    text: formCustomerCredModel.custProfileDataOutput[0].nik))
+            .value;
+        ktpAddressCtrl.value = new TextEditingController.fromValue(
+                new TextEditingValue(
+                    text: formCustomerCredModel
+                        .custProfileDataOutput[0].addressNpwpKtp))
+            .value;
+        alamatCtrl.value = new TextEditingController.fromValue(
+                new TextEditingValue(
+                    text: formCustomerCredModel
+                        .custProfileDataOutput[0].addressMeter))
+            .value;
+        kecamatanCtrl
+            .value = new TextEditingController.fromValue(new TextEditingValue(
+                text: formCustomerCredModel.custProfileDataOutput[0].kecamatan))
+            .value;
+        kelurahanCtrl
+            .value = new TextEditingController.fromValue(new TextEditingValue(
+                text: formCustomerCredModel.custProfileDataOutput[0].kelurahan))
+            .value;
+        kabupatenCtrl.value = new TextEditingController.fromValue(
+                new TextEditingValue(
+                    text: formCustomerCredModel.custProfileDataOutput[0].kota))
+            .value;
+      }
     });
   }
 
@@ -1935,9 +1981,7 @@ class _BerhentiBerlanggananFormState extends State<BerhentiBerlanggananForm> {
     var location = locationCtrl.text.split(',');
     var lat = location[0].trim();
     var long = location[1].trim();
-    print('INI LAT $lat');
-    print('INI LONG $long');
-    print('GAMBARNYA  data:image/png;base64,$encoded} ');
+
     String accessToken = await storageCache.read(key: 'access_token');
     var body = json.encode({
       "customer_id": custID,
@@ -1977,8 +2021,8 @@ class _BerhentiBerlanggananFormState extends State<BerhentiBerlanggananForm> {
           'Authorization': 'Bearer $accessToken'
         },
         body: body);
-    print(
-        'INI HASIL POST CREATE BERLANGGANAN ${responseCreateBerhentiBerlangganan.body}');
+    // print(
+    //     'INI HASIL POST CREATE BERLANGGANAN ${responseCreateBerhentiBerlangganan.body}');
     CreateBerhentiBerlangganan createBerhentiBerlangganan =
         CreateBerhentiBerlangganan.fromJson(
             json.decode(responseCreateBerhentiBerlangganan.body));
@@ -2001,7 +2045,7 @@ class _BerhentiBerlanggananFormState extends State<BerhentiBerlanggananForm> {
       setState(() {
         _fileName = result.names.single;
         imgNPWP = file;
-        print('NAMA FILE : $_fileName');
+        // print('NAMA FILE : $_fileName');
       });
     } else {
       // User canceled the picker

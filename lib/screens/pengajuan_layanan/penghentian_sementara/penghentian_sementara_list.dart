@@ -384,8 +384,8 @@ class _PenghentianSementaraListState extends State<PenghentianSementaraList> {
           'Authorization': 'Bearer $accessToken',
           'Accept-Language': lang,
         });
-    print(
-        'GET LIST PENGHENTIAN SEMENTARA ${responseGetPenghentianSementara.body}');
+    //print(
+    // 'GET LIST PENGHENTIAN SEMENTARA ${responseGetPenghentianSementara.body}');
     return PenghentianSementaraModel.fromJson(
         json.decode(responseGetPenghentianSementara.body));
   }

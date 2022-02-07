@@ -33,7 +33,7 @@ class DashDetailState extends State<DashboardDetail>
     prevMonth1 = currentDate.month - 1;
     prevMonth2 = new DateTime(currentDate.month - 2);
     prevMonth3 = new DateTime(currentDate.month - 3);
-    print('prevMonth1: ${currentDate.month - 1}');
+    //print('prevMonth1: ${currentDate.month - 1}');
     int currentYear = DateTime.now().year;
     int currentMonth = DateTime.now().month - 1;
     int month2 = currentMonth - 1;
@@ -115,12 +115,12 @@ class DashDetailState extends State<DashboardDetail>
     String formatDate3 =
         DateFormat("yyyMM").format(DateTime.parse(dateformatCurrent3));
 
-    // print(' DATE FORMAT TITLE CURRENT : $dateformatCurrent');
-    // print(' DATE FORMAT TITLE 2 : $dateformatCurrent2');
-    // print(' DATE FORMAT TITLE paling kiri : $dateformatCurrent3');
-    // print(' DATE FORMAT API CURRENT : $formatDate');
-    // print(' DATE FORMAT API 2 : $formatDate2');
-    // print(' DATE FORMAT API paling kiri : $formatDate3');
+    // //print(' DATE FORMAT TITLE CURRENT : $dateformatCurrent');
+    // //print(' DATE FORMAT TITLE 2 : $dateformatCurrent2');
+    // //print(' DATE FORMAT TITLE paling kiri : $dateformatCurrent3');
+    // //print(' DATE FORMAT API CURRENT : $formatDate');
+    // //print(' DATE FORMAT API 2 : $formatDate2');
+    // //print(' DATE FORMAT API paling kiri : $formatDate3');
 
     return Scaffold(
       appBar: AppBar(

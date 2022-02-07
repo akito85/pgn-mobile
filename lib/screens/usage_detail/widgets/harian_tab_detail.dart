@@ -148,7 +148,7 @@ class HarianTabDetailState extends State<HarianTabDetail>
                         fontWeight: FontWeight.normal),
                     value: periodSelected,
                     onChanged: (newValue) {
-                      print('SELECTEDs $newValue');
+                      //print('SELECTEDs $newValue');
                       setState(() {
                         periodSelected = newValue;
                         indexDropDown = listPeriod.indexOf(newValue);
@@ -197,7 +197,7 @@ class HarianTabDetailState extends State<HarianTabDetail>
                         }
                       });
 
-                      print('SELECTED $periodSelected');
+                      //print('SELECTED $periodSelected');
                     },
                     items: listPeriod.map((valueItem) {
                       DateTime date = DateTime.parse(valueItem);
@@ -1572,10 +1572,9 @@ Future<ChartUsageDetail> fetchGetChar(
         'Authorization': 'Bearer $accessToken',
         'Accept-Language': lang,
       });
-  print('ACCESS TOKEN : $accessToken');
-  print(
-      'URL :${UrlCons.mainProdUrl}customers/$custID/gas-usages/daily-chart/$periodDate ');
-  print('HASIL USAGE : ${responseUsageChar.body}');
+  //print(
+  // 'URL :${UrlCons.mainProdUrl}customers/$custID/gas-usages/daily-chart/$periodDate ');
+  //print('HASIL USAGE : ${responseUsageChar.body}');
   ChartUsageDetail _getContract =
       ChartUsageDetail.fromJson(json.decode(responseUsageChar.body));
 
@@ -1598,10 +1597,9 @@ Future<ChartUsageDetail> fetchGetChar2(
         'Authorization': 'Bearer $accessToken',
         'Accept-Language': lang,
       });
-  print('ACCESS TOKEN : $accessToken');
-  print(
-      'URL :${UrlCons.mainProdUrl}customers/$custID/gas-usages/daily-chart/$periodDate ');
-  print('HASIL USAGE : ${responseUsageChar.body}');
+  //print(
+  // 'URL :${UrlCons.mainProdUrl}customers/$custID/gas-usages/daily-chart/$periodDate ');
+  //print('HASIL USAGE : ${responseUsageChar.body}');
   ChartUsageDetail _getContract =
       ChartUsageDetail.fromJson(json.decode(responseUsageChar.body));
 
@@ -1624,10 +1622,9 @@ Future<ChartUsageDetail> fetchGetChar3(
         'Authorization': 'Bearer $accessToken',
         'Accept-Language': lang,
       });
-  print('ACCESS TOKEN : $accessToken');
-  print(
-      'URL :${UrlCons.mainProdUrl}customers/$custID/gas-usages/daily-chart/$periodDate ');
-  print('HASIL USAGE : ${responseUsageChar.body}');
+  //print(
+  // 'URL :${UrlCons.mainProdUrl}customers/$custID/gas-usages/daily-chart/$periodDate ');
+  //print('HASIL USAGE : ${responseUsageChar.body}');
   ChartUsageDetail _getContract =
       ChartUsageDetail.fromJson(json.decode(responseUsageChar.body));
 
@@ -1650,10 +1647,10 @@ Future<ChartUsageDetail> fetchGetChar4(
         'Authorization': 'Bearer $accessToken',
         'Accept-Language': lang,
       });
-  print('ACCESS TOKEN : $accessToken');
-  print(
-      'URL :${UrlCons.mainProdUrl}customers/$custID/gas-usages/daily-chart/$periodDate ');
-  print('HASIL USAGE : ${responseUsageChar.body}');
+
+  //print(
+  // 'URL :${UrlCons.mainProdUrl}customers/$custID/gas-usages/daily-chart/$periodDate ');
+  //print('HASIL USAGE : ${responseUsageChar.body}');
   ChartUsageDetail _getContract =
       ChartUsageDetail.fromJson(json.decode(responseUsageChar.body));
 
@@ -1676,10 +1673,10 @@ Future<ChartUsageDetail> fetchGetChar5(
         'Authorization': 'Bearer $accessToken',
         'Accept-Language': lang,
       });
-  print('ACCESS TOKEN : $accessToken');
-  print(
-      'URL :${UrlCons.mainProdUrl}customers/$custID/gas-usages/daily-chart/$periodDate ');
-  print('HASIL USAGE : ${responseUsageChar.body}');
+  //print('ACCESS TOKEN : $accessToken');
+  //print(
+  // 'URL :${UrlCons.mainProdUrl}customers/$custID/gas-usages/daily-chart/$periodDate ');
+  //print('HASIL USAGE : ${responseUsageChar.body}');
   ChartUsageDetail _getContract =
       ChartUsageDetail.fromJson(json.decode(responseUsageChar.body));
 
@@ -1702,10 +1699,10 @@ Future<ChartUsageDetail> fetchGetChar6(
         'Authorization': 'Bearer $accessToken',
         'Accept-Language': lang,
       });
-  print('ACCESS TOKEN : $accessToken');
-  print(
-      'URL :${UrlCons.mainProdUrl}customers/$custID/gas-usages/daily-chart/$periodDate ');
-  print('HASIL USAGE : ${responseUsageChar.body}');
+  //print('ACCESS TOKEN : $accessToken');
+  //print(
+  // 'URL :${UrlCons.mainProdUrl}customers/$custID/gas-usages/daily-chart/$periodDate ');
+  //print('HASIL USAGE : ${responseUsageChar.body}');
   ChartUsageDetail _getContract =
       ChartUsageDetail.fromJson(json.decode(responseUsageChar.body));
 

@@ -67,7 +67,7 @@ class _KlaimAsuransiDetailState extends State<KlaimAsuransiDetail> {
                   ),
                 ],
               );
-            // print('FILE NPWP NYA ${snapshot.data.npwpFile}');
+            // //print('FILE NPWP NYA ${snapshot.data.npwpFile}');
             if (snapshot.data.npwpFile != "") {
               splitString = snapshot.data.npwpFile.split(',');
               image = base64.decode(splitString[1]);
@@ -755,7 +755,7 @@ class _KlaimAsuransiDetailState extends State<KlaimAsuransiDetail> {
           'Authorization': 'Bearer $accessToken',
           'Accept-Language': lang,
         });
-    print('GET DETAIL PENGALIRAN KEMBALI ${response.body}');
+    //print('GET DETAIL PENGALIRAN KEMBALI ${response.body}');
     return DetailData.fromJson(json.decode(response.body));
   }
 

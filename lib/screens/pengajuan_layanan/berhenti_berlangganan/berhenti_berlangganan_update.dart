@@ -1347,7 +1347,7 @@ class _BerhentiBerlanggananUpdateState
                           Expanded(
                             child: ElevatedButton(
                               onPressed: () {
-                                print('STATUS LOKASI $statusLokasi');
+                                //print('STATUS LOKASI $statusLokasi');
                                 if (_formKeyAlamat.currentState.validate() &&
                                     statusLokasi != null) {
                                   setState(() {
@@ -1953,7 +1953,7 @@ class _BerhentiBerlanggananUpdateState
   void _nextLokasiPesangan(BuildContext context) async {
     final result = await Navigator.push(
         context, MaterialPageRoute(builder: (context) => MapPoint()));
-    print('INI RESULT LAT LANG $result');
+    //print('INI RESULT LAT LANG $result');
     setState(() {
       locationCtrl.text = result;
     });
@@ -1969,8 +1969,8 @@ class _BerhentiBerlanggananUpdateState
           'Authorization': 'Bearer $accessToken',
           'Accept-Language': lang,
         });
-    print(
-        'GET DETAIL BERHENTI BERLANGGANAN ${responseGetBerhentiBerlangganan.body}');
+    //print(
+    // 'GET DETAIL BERHENTI BERLANGGANAN ${responseGetBerhentiBerlangganan.body}');
     DetailBerhetiBerlangganan detailBerhetiBerlangganan =
         DetailBerhetiBerlangganan.fromJson(
             json.decode(responseGetBerhentiBerlangganan.body));
@@ -2052,7 +2052,7 @@ class _BerhentiBerlanggananUpdateState
     } else {
       encodedImageNPWP = detailBerhetiBerlanggananData.npwpFile;
     }
-    print('INI id $id');
+    //print('INI id $id');
     final sign = _sign.currentState;
     //retrieve image data, do whatever you want with it (send to server, save locally...)
     final image = await sign.getData();
@@ -2065,9 +2065,9 @@ class _BerhentiBerlanggananUpdateState
     var location = locationCtrl.text.split(',');
     var lat = location[0].trim();
     var long = location[1].trim();
-    print('INI id $id');
-    print('INI LONG $long');
-    print('GAMBARNYA  data:image/png;base64,$encoded} ');
+    //print('INI id $id');
+    //print('INI LONG $long');
+    //print('GAMBARNYA  data:image/png;base64,$encoded} ');
     String accessToken = await storageCache.read(key: 'access_token');
     // final multiFile =
     //     await http.MultipartFile.fromPath('npwp_file', fileNPWP.path);
@@ -2146,8 +2146,8 @@ class _BerhentiBerlanggananUpdateState
           'Authorization': 'Bearer $accessToken'
         },
         body: body);
-    print(
-        'INI HASIL POST UPDATE BERLANGGANAN ${responseCreateBerhentiBerlangganan.body}');
+    //print(
+    // 'INI HASIL POST UPDATE BERLANGGANAN ${responseCreateBerhentiBerlangganan.body}');
     CreateBerhentiBerlangganan createBerhentiBerlangganan =
         CreateBerhentiBerlangganan.fromJson(
             json.decode(responseCreateBerhentiBerlangganan.body));
@@ -2169,7 +2169,7 @@ class _BerhentiBerlanggananUpdateState
       setState(() {
         _fileName = result.names.single;
         imgNPWP = file;
-        print('NAMA FILE : $_fileName');
+        //print('NAMA FILE : $_fileName');
       });
     } else {
       // User canceled the picker

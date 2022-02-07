@@ -249,7 +249,7 @@ class RealtimeMngState extends State<RealtimeMng>
                       ),
                     ),
                     onTap: () {
-                      print('ini titlenyaaa : $title');
+                      //print('ini titlenyaaa : $title');
                       Navigator.push(
                           context,
                           MaterialPageRoute(

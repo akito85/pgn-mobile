@@ -360,7 +360,7 @@ class RegisterBusinesTabState extends State<RegisterBusinesTab>
         villageCtrl.text = _prov.villageName ?? '';
         buildingConditionCtrl.text = _prov.buildingTypeNameBisnis ?? '';
         ownerCtrl.text = _prov.ownershipName ?? '';
-        print("");
+        //print("");
       },
     );
     return Container(
@@ -408,7 +408,7 @@ class RegisterBusinesTabState extends State<RegisterBusinesTab>
                       icon: Icon(Icons.arrow_drop_down_circle,
                           color: Color(0XFF427CEF)),
                       onPressed: () {
-                        print('ini data dari regis: $getProvinces');
+                        //print('ini data dari regis: $getProvinces');
                         _nextScreen(context);
                       },
                     ),
@@ -573,7 +573,7 @@ class RegisterBusinesTabState extends State<RegisterBusinesTab>
                     activeColor: Color(0xFF427CEF),
                     value: isSwitchedLokasiKantor,
                     onChanged: (value) {
-                      print("VALUE : $value");
+                      //print("VALUE : $value");
                       setState(() {
                         isSwitchedLokasiKantor = value;
                         if (isSwitchedLokasiKantor == true) {
@@ -1219,7 +1219,7 @@ class RegisterBusinesTabState extends State<RegisterBusinesTab>
                     activeColor: Color(0xFF427CEF),
                     value: isSwitched,
                     onChanged: (value) {
-                      print("VALUE : $value");
+                      //print("VALUE : $value");
                       setState(() {
                         if (isSwitched = true) {
                           switchGasTools = "1";
@@ -1368,7 +1368,7 @@ class RegisterBusinesTabState extends State<RegisterBusinesTab>
 
   Widget _reviewResi(BuildContext context) {
     final _prov = Provider.of<RegistResidential>(context);
-    print('ini hasil backnya: ${_prov.province_name ?? _province} ');
+    //print('ini hasil backnya: ${_prov.province_name ?? _province} ');
     return Container(
       padding: EdgeInsets.only(left: 5, right: 5, top: 10),
       child: Form(
@@ -2596,7 +2596,7 @@ class RegisterBusinesTabState extends State<RegisterBusinesTab>
   }
 
   void _nextScreenBuildingType(BuildContext context) async {
-    print('RESULt');
+    //print('RESULt');
     final result = await Navigator.push(
         context,
         MaterialPageRoute(
@@ -2680,7 +2680,7 @@ class RegisterBusinesTabState extends State<RegisterBusinesTab>
       'client_secret': '0DTuUFYRPtWUFN2UbzSvzqZMzNsW4kAl4t4PTrtC',
       'grant_type': 'client_credentials'
     });
-    print('LOKASI $switchIsSameOficeAddress');
+    //print('LOKASI $switchIsSameOficeAddress');
     AuthSalesRegit _auth =
         AuthSalesRegit.fromJson(json.decode(responseTokenBarrer.body));
     var body = json.encode({
@@ -2728,9 +2728,9 @@ class RegisterBusinesTabState extends State<RegisterBusinesTab>
       "fuel_usages": fuelUsageIndustrial,
       "custom_gas_tool_usages": gasToolUsageIndustrial,
     });
-    print("BODY REGISTER Industrial: $body");
-    print("BODY GAS TOOLS Industrial: $gasToolUsageIndustrial");
-    print("BODY FUEL USAGE Industrial: $fuelUsageIndustrial");
+    //print("BODY REGISTER Industrial: $body");
+    //print("BODY GAS TOOLS Industrial: $gasToolUsageIndustrial");
+    //print("BODY FUEL USAGE Industrial: $fuelUsageIndustrial");
     var responseRegisIndustrial = await http.post(
         'https://relyon-api.pgn.co.id/v1/industry-registration-forms',
         headers: {
@@ -2738,7 +2738,7 @@ class RegisterBusinesTabState extends State<RegisterBusinesTab>
           'Authorization': 'Bearer ${_auth.accessToken}'
         },
         body: body);
-    print("Hasil REGISTER Industrial: ${responseRegisIndustrial.body}");
+    //print("Hasil REGISTER Industrial: ${responseRegisIndustrial.body}");
     if (responseRegisIndustrial.statusCode == 200) {
       PostRegisterResidential postRegisterResidential =
           PostRegisterResidential.fromJson(
@@ -2904,7 +2904,7 @@ Future<GetProvinces> getSectorIndustry(BuildContext context) async {
     'client_secret': '0DTuUFYRPtWUFN2UbzSvzqZMzNsW4kAl4t4PTrtC',
     'grant_type': 'client_credentials'
   });
-  print('Response _auth sales ${responseTokenBarrer.body}');
+  //print('Response _auth sales ${responseTokenBarrer.body}');
   AuthSalesRegit _auth =
       AuthSalesRegit.fromJson(json.decode(responseTokenBarrer.body));
 
@@ -2924,7 +2924,7 @@ Future<GetProvinces> getProvinces(BuildContext context) async {
     'client_secret': '0DTuUFYRPtWUFN2UbzSvzqZMzNsW4kAl4t4PTrtC',
     'grant_type': 'client_credentials'
   });
-  print('Response _auth sales ${responseTokenBarrer.body}');
+  //print('Response _auth sales ${responseTokenBarrer.body}');
   AuthSalesRegit _auth =
       AuthSalesRegit.fromJson(json.decode(responseTokenBarrer.body));
 

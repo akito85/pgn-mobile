@@ -62,7 +62,7 @@ class _RedeemGasPointState extends State<RedeemGasPoint> {
         FutureBuilder<RedeemHistoryModel>(
           future: getFutureRedeemHistory(context),
           builder: (context, snapshot) {
-            print('HASIL SNAPSHOTNYA : ${snapshot.data}');
+            //print('HASIL SNAPSHOTNYA : ${snapshot.data}');
             if (!snapshot.hasData)
               return Padding(
                 padding: const EdgeInsets.only(left: 18, right: 18, top: 10),
@@ -212,7 +212,7 @@ class _RedeemGasPointState extends State<RedeemGasPoint> {
       'Accept-Language': lang,
     });
 
-    print('HASILNYA GAS POINT Scroll : ${responseGetRedeemGasPoint.body}');
+    //print('HASILNYA GAS POINT Scroll : ${responseGetRedeemGasPoint.body}');
 
     // if (responseGetRedeemGasPoint.statusCode == 200) {
     RedeemHistoryModel returnGetRedeemHistory = RedeemHistoryModel.fromJson(
@@ -246,13 +246,13 @@ Future<RedeemHistoryModel> getFutureRedeemHistory(BuildContext context) async {
     'Accept-Language': lang,
   });
 
-  print('HASILNYA GAS POINT : ${responseGetRedeemGasPoint.body}');
+  //print('HASILNYA GAS POINT : ${responseGetRedeemGasPoint.body}');
   // if (responseGetRedeemGasPoint.statusCode == 200) {
-  print('MASUK SINI REDEEM');
+  //print('MASUK SINI REDEEM');
   return RedeemHistoryModel.fromJson(
       json.decode(responseGetRedeemGasPoint.body));
   // } else {
-  //   print('MASUK SINI REDEEMs');
+  //   //print('MASUK SINI REDEEMs');
   //   throw Exception('Could not get any response');
   // }
 }

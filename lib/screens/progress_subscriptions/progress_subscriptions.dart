@@ -455,7 +455,7 @@ class _ProgressSubscriptionsState extends State<ProgressSubscriptions> {
           'Authorization': 'Bearer $accessToken'
         },
         body: body);
-    print('STATUS BERLANGGANAN : ${responseDeleteCustId.body}');
+    //print('STATUS BERLANGGANAN : ${responseDeleteCustId.body}');
     DeleteFormId switchCustomerId =
         DeleteFormId.fromJson(json.decode(responseDeleteCustId.body));
     if (responseDeleteCustId.statusCode == 200) {

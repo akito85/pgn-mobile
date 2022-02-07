@@ -30,6 +30,7 @@ class DataCustInvoiceResidential {
   String custVolUsage;
   String tBillIdr;
   String tBillUsd;
+  String billTypeDesc;
   dynamic availableGuarantee;
   dynamic paymentGuatantee;
   String billDate;
@@ -47,6 +48,7 @@ class DataCustInvoiceResidential {
   Vat vat;
   List<CMM> cmm;
   List<Others> others;
+  List<Piutang> piutang;
 
   DataCustInvoiceResidential(
       {this.custInvoiceId,
@@ -71,7 +73,9 @@ class DataCustInvoiceResidential {
       this.billDate,
       this.taxBase,
       this.totalOther,
-      this.vat});
+      this.vat,
+      this.piutang,
+      this.billTypeDesc});
 
   factory DataCustInvoiceResidential.fromJson(Map<String, dynamic> json) {
     return DataCustInvoiceResidential(
@@ -90,6 +94,7 @@ class DataCustInvoiceResidential {
       volumeNormal: json['volume_normal'],
       volumeOverUsage: json['volume_over_usage'],
       volumeUsage: json['volume_usage'],
+      billTypeDesc: json['bill_type_desc'],
       others: parseDataOthers(json['other']),
       availableGuarantee: json['available_guarantee'],
       paymentGuatantee: json['payment_guarantee'],
@@ -98,6 +103,7 @@ class DataCustInvoiceResidential {
       taxBase: TaxBase.fromJson(json['tax_base']),
       vat: Vat.fromJson(json['vat']),
       cmm: parseDataCMM(json['cmm']),
+      piutang: parseDataPiutang(json['piutang']),
     );
   }
   static List<Others> parseDataOthers(datasJson) {
@@ -111,6 +117,24 @@ class DataCustInvoiceResidential {
     var list = datasJson as List;
     List<CMM> datasCmm = list.map((data) => CMM.fromJson(data)).toList();
     return datasCmm;
+  }
+
+  static List<Piutang> parseDataPiutang(datasJson) {
+    var list = datasJson as List;
+    List<Piutang> datasPiutang =
+        list.map((data) => Piutang.fromJson(data)).toList();
+    return datasPiutang;
+  }
+}
+
+class Piutang {
+  String idr;
+  String period;
+
+  Piutang({this.idr, this.period});
+
+  factory Piutang.fromJson(Map<String, dynamic> json) {
+    return Piutang(idr: json['IDR'], period: json['period']);
   }
 }
 

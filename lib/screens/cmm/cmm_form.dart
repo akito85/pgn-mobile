@@ -44,7 +44,7 @@ class CMMFormState extends State<CMMForm> {
       if (pickedFile != null) {
         _image = File(pickedFile.path);
       } else {
-        print('No image selected.');
+        //print('No image selected.');
       }
     });
   }
@@ -403,7 +403,7 @@ class CMMFormState extends State<CMMForm> {
       'photo[]': foto,
       'stand': stand,
     });
-    print('Hasil POST FORM : ${responsePostCMMForm.body}');
+    //print('Hasil POST FORM : ${responsePostCMMForm.body}');
     CMMFormModel cmmFormModel =
         CMMFormModel.fromJson(json.decode(responsePostCMMForm.body));
 

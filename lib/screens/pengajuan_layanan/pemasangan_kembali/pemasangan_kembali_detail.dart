@@ -824,7 +824,7 @@ class _PemasanganKembaliDetailState extends State<PemasanganKembaliDetail> {
           'Authorization': 'Bearer $accessToken',
           'Accept-Language': lang,
         });
-    print('GET DETAIL PEMASANGAN KEMBALI ${response.body}');
+    //print('GET DETAIL PEMASANGAN KEMBALI ${response.body}');
     return DetailData.fromJson(json.decode(response.body));
   }
 

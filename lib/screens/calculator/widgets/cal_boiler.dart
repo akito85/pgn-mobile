@@ -181,7 +181,7 @@ class CalBoilerState extends State<CalBoiler> {
             onChanged: (value) {
               setState(() {
                 // masaUap = double.parse(_fourCtlr.text);
-                // print('MASA UAP: $titleIndex');
+                // //print('MASA UAP: $titleIndex');
               });
             },
             keyboardType: TextInputType.number,
@@ -222,7 +222,7 @@ class CalBoilerState extends State<CalBoiler> {
                 // efisiensi = double.parse(_fiveCtlr.text);
                 // else if(_oneCtlr.text == 'Efisiensi')
                 // efisiensi = double.parse(_fiveCtlr.text);
-                // print('MASA UAP: $titleIndex');
+                // //print('MASA UAP: $titleIndex');
               });
             },
             keyboardType: TextInputType.number,
@@ -297,7 +297,7 @@ class CalBoilerState extends State<CalBoiler> {
             onChanged: (value) {
               setState(() {
                 suhuAir = _sevenCtlr.text;
-                print('SUHU AIR: $suhuAir');
+                //print('SUHU AIR: $suhuAir');
               });
             },
             decoration: InputDecoration(
@@ -335,7 +335,7 @@ class CalBoilerState extends State<CalBoiler> {
             onChanged: (value) {
               setState(() {
                 // pDefault = double.parse(_eightCtlr.text);
-                // print('P DEFAULT: $pDefault');
+                // //print('P DEFAULT: $pDefault');
               });
             },
             keyboardType: TextInputType.numberWithOptions(decimal: true),
@@ -390,7 +390,7 @@ class CalBoilerState extends State<CalBoiler> {
                     ),
                   ),
                   onPressed: () {
-                    print('A: ${_fiveCtlr.text}');
+                    //print('A: ${_fiveCtlr.text}');
                     _oneCtlr.text.isEmpty
                         ? _validate = true
                         : _validate = false;
@@ -399,23 +399,23 @@ class CalBoilerState extends State<CalBoiler> {
                         _twoCtlr.text != '' ||
                         _triCtlr.text != '' ||
                         _fourCtlr.text != '')
-                      print('INI UNITNAY : ${_prov.triBoiUnit}');
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ResultsBoiler(
-                          _twoCtlr.text,
-                          _oneCtlr.text,
-                          _sixCtlr.text,
-                          _sevenCtlr.text,
-                          double.parse(_triCtlr.text),
-                          double.parse(_fourCtlr.text),
-                          double.parse(_fiveCtlr.text),
-                          double.parse(_eightCtlr.text ?? 860),
-                          volumeElpiji,
+                      //print('INI UNITNAY : ${_prov.triBoiUnit}');
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ResultsBoiler(
+                            _twoCtlr.text,
+                            _oneCtlr.text,
+                            _sixCtlr.text,
+                            _sevenCtlr.text,
+                            double.parse(_triCtlr.text),
+                            double.parse(_fourCtlr.text),
+                            double.parse(_fiveCtlr.text),
+                            double.parse(_eightCtlr.text ?? 860),
+                            volumeElpiji,
+                          ),
                         ),
-                      ),
-                    );
+                      );
                   },
                 ),
               ),

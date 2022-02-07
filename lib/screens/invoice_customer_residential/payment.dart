@@ -335,8 +335,8 @@ class _PaymentState extends State<Payment> with SingleTickerProviderStateMixin {
     final storageCache = FlutterSecureStorage();
     String customerIDs = await storageCache.read(key: 'customer_id');
     String accessToken = await storageCache.read(key: 'access_token');
-    print('StartDate' + startDate);
-    print('EndDate' + endDate);
+    //print('StartDate' + startDate);
+    //print('EndDate' + endDate);
     var body = json.encode({
       "P_PAY_DATE_FROM": startDate,
       "P_PAY_DATE_TO": endDate,

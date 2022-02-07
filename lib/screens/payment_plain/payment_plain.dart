@@ -123,7 +123,7 @@ class PaymentPlainState extends State<PaymentPlain> {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $accessToken'
         });
-    print('HASIL GET PAYMENT PLANS: ${responseGetSpbg.body}');
+    //print('HASIL GET PAYMENT PLANS: ${responseGetSpbg.body}');
     PaymentPlan paymentPlan =
         PaymentPlan.fromJson(json.decode(responseGetSpbg.body));
 
@@ -146,7 +146,7 @@ class PaymentPlainState extends State<PaymentPlain> {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer $accessToken'
     });
-    print('HASIL GET PAYMENT PLANS: ${responseGetSpbg.body}');
+    //print('HASIL GET PAYMENT PLANS: ${responseGetSpbg.body}');
     PaymentPlan paymentPlan =
         PaymentPlan.fromJson(json.decode(responseGetSpbg.body));
 

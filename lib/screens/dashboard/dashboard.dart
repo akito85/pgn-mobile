@@ -256,10 +256,10 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
       _firebaseMessaging.configure(
         onBackgroundMessage: myBackgroundMessageHandler,
         onMessage: (Map<String, dynamic> message) async {
-          print("=====>on message $message");
-          print("ON MESSGAE");
-          print("INI RETURN ${message['data']['type']}");
-          // print("ON");
+          //print("=====>on message $message");
+          //print("ON MESSGAE");
+          //print("INI RETURN ${message['data']['type']}");
+          // //print("ON");
           if (message['data']['type'] == "promosi") {
             showDialog(
                 context: context,
@@ -273,8 +273,8 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
           }
         },
         onResume: (Map<String, dynamic> message) async {
-          print("ON RESUME");
-          print("INI RETURN ${message['data']['type']}");
+          //print("ON RESUME");
+          //print("INI RETURN ${message['data']['type']}");
           if (message['data']['type'] == "promosi") {
             showDialog(
                 context: context,
@@ -288,8 +288,8 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
           }
         },
         onLaunch: (Map<String, dynamic> message) async {
-          print("ON LAUNCH");
-          print("INI RETURN ${message['data']['type']}");
+          //print("ON LAUNCH");
+          //print("INI RETURN ${message['data']['type']}");
           if (message['data']['type'] == "promosi") {
             showDialog(
                 context: context,
@@ -309,12 +309,12 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
   Future<dynamic> myBackgroundMessageHandler(
       Map<String, dynamic> message) async {
     if (message.containsKey('data')) {
-      print('INI RETURN ON BACKGROUND ${message['data']}');
+      //print('INI RETURN ON BACKGROUND ${message['data']}');
       final dynamic data = message['data'];
     }
 
     if (message.containsKey('notification')) {
-      print('INI RETURN ON BACKGROUND ${message['notification']}');
+      //print('INI RETURN ON BACKGROUND ${message['notification']}');
       final dynamic notification = message['notification'];
     }
     return Future<void>.value();
@@ -338,7 +338,7 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
         await storageCache.read(key: 'customer_groupId') ?? "";
     String listMenusString = await storageCache.read(key: 'list_menu') ?? "";
 
-    print('USRER TYPE GET AUTH : ${await storageCache.read(key: 'user_type')}');
+    //print('USRER TYPE GET AUTH : ${await storageCache.read(key: 'user_type')}');
     setState(() {
       titleMng = titleMngs;
       titleCust = titleCusts;
@@ -360,7 +360,7 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     // getTitleCust();
-    print('USRER TYPE : $userType');
+    //print('USRER TYPE : $userType');
     String currentTime = DateFormat('kkmm').format(currentDate);
     if (int.parse(currentTime) >= 0500 && int.parse(currentTime) <= 1200) {
       greetings =
@@ -517,7 +517,7 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
         ),
       );
     } else if (userType == "2" && groupID == "11") {
-      print('ID CUST $customerGroupID');
+      //print('ID CUST $customerGroupID');
       return DefaultTabController(
         length: 4,
         child: Scaffold(
@@ -2261,9 +2261,9 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
     } else {
       statusMax = Colors.red;
     }
-    print('INI B MAXNYA : $contractMax');
-    print('INI c MAXNYA : ${data.estimationUsage.valueStart}');
-    print('INI d MAXNYA : ${data.totalMaxUsage.valueStart}');
+    //print('INI B MAXNYA : $contractMax');
+    //print('INI c MAXNYA : ${data.estimationUsage.valueStart}');
+    //print('INI d MAXNYA : ${data.totalMaxUsage.valueStart}');
     painting.Color status;
     // if (data.statusSum.valueStart == '1') {
     //   status = Colors.orange[400];
@@ -2704,7 +2704,7 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
 
     SwitchCustomerId activeCustomer =
         SwitchCustomerId.fromJson(json.decode(responseActiveCustomer.body));
-    print('HASIL GET CUSTOMER ${responseActiveCustomer.body}');
+    //print('HASIL GET CUSTOMER ${responseActiveCustomer.body}');
     if (responseActiveCustomer.statusCode == 200) {
       await storageCache.write(
           key: 'customer_id',
@@ -2725,7 +2725,7 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
           _listMenus.add(i.id.toString());
         });
         String listMenuString = _listMenus.join(',');
-        print('HASIL MENU LIST TO STRING $listMenuString');
+        //print('HASIL MENU LIST TO STRING $listMenuString');
         await storageCache.write(key: 'list_menu', value: listMenuString);
       } else {
         await storageCache.write(key: 'list_menu', value: '-');
@@ -2764,8 +2764,8 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
         'Accept-Language': lang
       },
     );
-    print('KLICK');
-    print('HASIL SWITCH CUST ID ${responseSwitchCustId.body}');
+    //print('KLICK');
+    //print('HASIL SWITCH CUST ID ${responseSwitchCustId.body}');
     SwitchCustomerId switchCustomerId =
         SwitchCustomerId.fromJson(json.decode(responseSwitchCustId.body));
     if (responseSwitchCustId.statusCode == 200) {
@@ -2788,7 +2788,7 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
           _listMenus.add(i.id.toString());
         });
         String listMenuString = _listMenus.join(',');
-        print('HASIL MENU LIST TO STRING $listMenuString');
+        //print('HASIL MENU LIST TO STRING $listMenuString');
         await storageCache.write(key: 'list_menu', value: listMenuString);
       } else {
         await storageCache.write(key: 'list_menu', value: '-');
@@ -2816,11 +2816,11 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
       'Authorization': 'Bearer $accessToken',
     });
     modelGP.VirtualCardGasPoint virtualCardGasPoint;
-    print('HASILNYA POIN: ${responseGetVCGasPoint.body}');
+    //print('HASILNYA POIN: ${responseGetVCGasPoint.body}');
     virtualCardGasPoint = modelGP.VirtualCardGasPoint.fromJson(
         json.decode(responseGetVCGasPoint.body));
 
-    print('UPDATE $pointGasPoint');
+    //print('UPDATE $pointGasPoint');
 
     return virtualCardGasPoint;
   }
@@ -3059,7 +3059,7 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
       'Authorization': 'Bearer $accessToken',
       'Accept-Language': lang
     });
-    print('HASIL GET CHART IDR : ${responseGetDataChartIdr.body}');
+    //print('HASIL GET CHART IDR : ${responseGetDataChartIdr.body}');
     ChartIdr _chartIDR =
         ChartIdr.fromJson(json.decode(responseGetDataChartIdr.body));
     if (_chartIDR.message ==
@@ -3083,7 +3083,7 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
       'Authorization': 'Bearer $accessToken',
       'Accept-Language': lang
     });
-    print('HASIL GET CHART USD : ${responseGetDataChartIdr.body}');
+    //print('HASIL GET CHART USD : ${responseGetDataChartIdr.body}');
     ChartUsd _chartIDR =
         ChartUsd.fromJson(json.decode(responseGetDataChartIdr.body));
     if (_chartIDR.message ==
@@ -3222,7 +3222,7 @@ Future<DashboardCustomerModel> getListCustId(BuildContext context) async {
     'Authorization': 'Bearer $accessToken',
     'Accept-Language': lang,
   });
-  print('DATA GET LIST CUST ID : ${responseGetListCustomerId.body}');
+  //print('DATA GET LIST CUST ID : ${responseGetListCustomerId.body}');
   return DashboardCustomerModel.fromJson(
       json.decode(responseGetListCustomerId.body));
 }
@@ -3281,7 +3281,7 @@ class SimpleBarCharts extends State<SimpleBarChart> {
                           '${model.selectedSeries[0].domainFn(model.selectedDatum[0].index)}';
                     });
                   })
-              //   print('SELECTED DATUm ${model.selectedDatum[0].index}');
+              //   //print('SELECTED DATUm ${model.selectedDatum[0].index}');
               //   if (model.hasDatumSelection)
               //     pointerValue = formatCurrency
               //         .format(model.selectedSeries[0]
@@ -3474,7 +3474,7 @@ Future<CustomerInvoiceResidential> getCustomerInvoiceResidential(
   CustomerInvoiceResidential _customerInvoice =
       CustomerInvoiceResidential.fromJson(
           json.decode(responseCustomerInvoice.body));
-  print('Data Invoice RES: ${responseCustomerInvoice.body}');
+  //print('Data Invoice RES: ${responseCustomerInvoice.body}');
   if (_customerInvoice.message ==
       "Session expired or account changed to other device, please Login again.") {
     accessTokenAlert(context,
@@ -3514,7 +3514,7 @@ Future<Customer> getCustomerProfile(BuildContext context) async {
   Customer _customer = Customer.fromJson(json.decode(responseCustomer.body));
   Customer _customerInvoice =
       Customer.fromJson(json.decode(responseCustomer.body));
-  print('HASIL GET PROFILE :${responseCustomer.body}');
+  //print('HASIL GET PROFILE :${responseCustomer.body}');
   if (_customerInvoice.message ==
       "Session expired or account changed to other device, please Login again.") {
     accessTokenAlert(context,

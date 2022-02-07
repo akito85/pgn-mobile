@@ -221,7 +221,7 @@ class BillDetailState extends State<InvoiceCust>
   }
 
   Widget _buildRow(DataCustInvoice data) {
-    print('ID STATUSNYA : ${data.paymentStatus.id}');
+    //print('ID STATUSNYA : ${data.paymentStatus.id}');
     if (userid == "17" && data.paymentStatus.display == 'Unpaid' ||
         data.paymentStatus.display == 'Belum Bayar')
       return Container(

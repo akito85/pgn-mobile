@@ -340,8 +340,8 @@ class _BerhentiBerlanggananListState extends State<BerhentiBerlanggananList> {
           'Authorization': 'Bearer $accessToken',
           'Accept-Language': lang,
         });
-    print(
-        'GET LIST BERHENTI BERLANGGANAN ${responseGetBerhentiBerlangganan.body}');
+    //print(
+    // 'GET LIST BERHENTI BERLANGGANAN ${responseGetBerhentiBerlangganan.body}');
     return BerhentiBerlanggananModel.fromJson(
         json.decode(responseGetBerhentiBerlangganan.body));
   }

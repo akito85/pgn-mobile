@@ -351,7 +351,7 @@ class _PengajuanAsuransiListState extends State<PengajuanAsuransiList> {
           'Authorization': 'Bearer $accessToken',
           'Accept-Language': lang,
         });
-    print('GET LIST PENGAJUAN ASURANSI ${response.body}');
+    //print('GET LIST PENGAJUAN ASURANSI ${response.body}');
     return PengajuanAsuransiModel.fromJson(json.decode(response.body));
   }
 }

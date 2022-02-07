@@ -163,10 +163,8 @@ class _MyFirstState extends State<FirstScreen> {
       _firebaseMessaging.configure(
         onBackgroundMessage: myBackgroundMessageHandler,
         onMessage: (Map<String, dynamic> message) async {
-          print("=====>on message $message");
-          print("ON MESSGAE");
-          print("INI RETURN ${message['data']['type']}");
-          // print("ON");
+          // //print("=====>on message ${message['data']['type']}");
+
           if (message['data']['type'] == "promosi") {
             showDialog(
                 context: context,
@@ -180,8 +178,7 @@ class _MyFirstState extends State<FirstScreen> {
           }
         },
         onResume: (Map<String, dynamic> message) async {
-          print("ON RESUME");
-          print("INI RETURN ${message['data']['type']}");
+          // //print("ON RESUME ${message['data']['type']}");
           if (message['data']['type'] == "promosi") {
             showDialog(
                 context: context,
@@ -195,8 +192,8 @@ class _MyFirstState extends State<FirstScreen> {
           }
         },
         onLaunch: (Map<String, dynamic> message) async {
-          print("ON LAUNCH");
-          print("INI RETURN ${message['data']['type']}");
+          //print("ON LAUNCH");
+          //print("INI RETURN ${message['data']['type']}");
           if (message['data']['type'] == "promosi") {
             showDialog(
                 context: context,
@@ -240,7 +237,7 @@ class _MyFirstState extends State<FirstScreen> {
 
     SwitchCustomerId activeCustomer =
         SwitchCustomerId.fromJson(json.decode(responseActiveCustomer.body));
-    print('HASIL GET CUSTOMER ${responseActiveCustomer.body}');
+    // //print('HASIL GET CUSTOMER ${responseActiveCustomer.body}');
     if (responseActiveCustomer.statusCode == 200) {
       await storageCache.write(
           key: 'customer_id',
@@ -261,7 +258,7 @@ class _MyFirstState extends State<FirstScreen> {
           _listMenus.add(i.id.toString());
         });
         String listMenuString = _listMenus.join(',');
-        print('HASIL MENU LIST TO STRING $listMenuString');
+        // //print('HASIL MENU LIST TO STRING $listMenuString');
         await storageCache.write(key: 'list_menu', value: listMenuString);
       } else {
         await storageCache.write(key: 'list_menu', value: '-');

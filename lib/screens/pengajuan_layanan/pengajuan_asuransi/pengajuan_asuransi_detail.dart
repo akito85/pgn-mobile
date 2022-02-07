@@ -871,7 +871,7 @@ class _PengajuanKembaliDetailState extends State<PengajuanKembaliDetail> {
           'Authorization': 'Bearer $accessToken',
           'Accept-Language': lang,
         });
-    print('GET DETAIL PENGALIRAN KEMBALI ${response.body}');
+    //print('GET DETAIL PENGALIRAN KEMBALI ${response.body}');
     return DetailData.fromJson(json.decode(response.body));
   }
 

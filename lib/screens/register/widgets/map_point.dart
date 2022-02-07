@@ -50,7 +50,7 @@ class MapPointState extends State<MapPoint> {
         lang = position.longitude;
       });
     }).catchError((e) {
-      print(e);
+      //print(e);
     });
   }
 

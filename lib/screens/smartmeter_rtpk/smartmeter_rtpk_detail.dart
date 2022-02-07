@@ -27,7 +27,7 @@ class HarianDetailRTPKChartState extends State<HarianDetailRTPKChart> {
 
   @override
   Widget build(BuildContext context) {
-    print('INI PERIODNYA : $period');
+    //print('INI PERIODNYA : $period');
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -187,7 +187,7 @@ Future<HarianDetailCustDashboard> fetchPost(
   final storageCache = FlutterSecureStorage();
   String accessToken = await storageCache.read(key: 'access_token');
   String lang = await storageCache.read(key: 'lang');
-  print('INI PERIOD DETAIL $title');
+  //print('INI PERIOD DETAIL $title');
   var responseDailyUsage = await http.get(
     '${UrlCons.mainProdUrl}customers/me/gas-usages/smart-meter-list/$title',
     headers: {
@@ -196,7 +196,7 @@ Future<HarianDetailCustDashboard> fetchPost(
       'Accept-Language': lang
     },
   );
-  print('INI PERIOD DETAIL ${responseDailyUsage.body}');
+  //print('INI PERIOD DETAIL ${responseDailyUsage.body}');
   HarianDetailCustDashboard detailCustDashboard =
       HarianDetailCustDashboard.fromJson(json.decode(responseDailyUsage.body));
 

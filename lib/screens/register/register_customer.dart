@@ -263,10 +263,10 @@ class RegistCustState extends State<RegisterCustomer> {
                     });
                     final encrypted = encrypter.encrypt(password.text, iv: iv);
                     if (emailCust.text.isNotEmpty) {
-                      print('MASUK EMAIL');
+                      //print('MASUK EMAIL');
                       postRegisterNewCustEmail(context, encrypted.base64);
                     } else {
-                      print('MASUK NUMB');
+                      //print('MASUK NUMB');
                       postRegisterNewCustNumber(context, encrypted.base64);
                     }
                   }
@@ -337,7 +337,7 @@ class RegistCustState extends State<RegisterCustomer> {
       'client_secret': '0DTuUFYRPtWUFN2UbzSvzqZMzNsW4kAl4t4PTrtC',
       'grant_type': 'client_credentials'
     });
-    print('AccessTokens ${responseTokenBarrer.body}');
+    //print('AccessTokens ${responseTokenBarrer.body}');
 
     AuthSalesRegit _auth =
         AuthSalesRegit.fromJson(json.decode(responseTokenBarrer.body));
@@ -366,8 +366,8 @@ class RegistCustState extends State<RegisterCustomer> {
               'X-Pgn-Device-Id': devicesId,
             },
             body: bodySentTrans5);
-    print(responseSentOTPRegisResidential.body);
-    print('HASIL OTP NUMB : ${responseSentOTPRegisResidential.body}');
+    //print(responseSentOTPRegisResidential.body);
+    //print('HASIL OTP NUMB : ${responseSentOTPRegisResidential.body}');
     RegisteraUserPGN postOTPRegisterResidential = RegisteraUserPGN.fromJson(
         json.decode(responseSentOTPRegisResidential.body));
 

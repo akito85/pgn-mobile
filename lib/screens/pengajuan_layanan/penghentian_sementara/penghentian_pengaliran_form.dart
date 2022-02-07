@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
+import 'package:pgn_mobile/models/form_customer_cred_model.dart';
 import 'package:pgn_mobile/models/penghentian_sementara_model.dart';
 import 'package:pgn_mobile/models/url_cons.dart';
 import 'package:http/http.dart' as http;
@@ -1343,7 +1344,7 @@ class _PenghentianPengaliranFormState extends State<PenghentianPengaliranForm> {
                           Expanded(
                             child: ElevatedButton(
                               onPressed: () {
-                                print('STATUS LOKASI $statusLokasi');
+                                //print('STATUS LOKASI $statusLokasi');
                                 if (_formKeyAlamat.currentState.validate() &&
                                     statusLokasi != null) {
                                   setState(() {
@@ -1964,18 +1965,64 @@ class _PenghentianPengaliranFormState extends State<PenghentianPengaliranForm> {
     String custIDString = await storageCache.read(key: 'user_name_cust');
     String emailString = await storageCache.read(key: 'user_email');
     String userPhoneString = await storageCache.read(key: 'user_mobile_otp');
+
+    var body = json.encode({"P_CUST_NUMBER": custNameString});
+
+    var responseDataCust =
+        await http.post('https://api.pgn.co.id/customers/profile',
+            headers: {
+              'Content-Type': 'application/json',
+              'PGN-Key': '743c3a53b47744789cb564702170c294',
+              'Ocp-Apim-Trace': 'true'
+            },
+            body: body);
+    //print('BODY GET CUSTOMER CRED $body');
+    //print('HASIL GET CUSTOMER CRED ${responseDataCust.body}');
+
+    FormCustomerCredModel formCustomerCredModel =
+        FormCustomerCredModel.fromJson(json.decode(responseDataCust.body));
+
     setState(() {
       custID = custNameString;
       custName = custIDString;
       email = emailString;
       phoneNumb = userPhoneString;
+
+      if (formCustomerCredModel.custProfileDataOutput != null) {
+        nikCtrl.value = new TextEditingController.fromValue(
+                new TextEditingValue(
+                    text: formCustomerCredModel.custProfileDataOutput[0].nik))
+            .value;
+        ktpAddressCtrl.value = new TextEditingController.fromValue(
+                new TextEditingValue(
+                    text: formCustomerCredModel
+                        .custProfileDataOutput[0].addressNpwpKtp))
+            .value;
+        alamatCtrl.value = new TextEditingController.fromValue(
+                new TextEditingValue(
+                    text: formCustomerCredModel
+                        .custProfileDataOutput[0].addressMeter))
+            .value;
+        kecamatanCtrl
+            .value = new TextEditingController.fromValue(new TextEditingValue(
+                text: formCustomerCredModel.custProfileDataOutput[0].kecamatan))
+            .value;
+        kelurahanCtrl
+            .value = new TextEditingController.fromValue(new TextEditingValue(
+                text: formCustomerCredModel.custProfileDataOutput[0].kelurahan))
+            .value;
+        kabupatenCtrl.value = new TextEditingController.fromValue(
+                new TextEditingValue(
+                    text: formCustomerCredModel.custProfileDataOutput[0].kota))
+            .value;
+      }
     });
   }
 
   void _nextLokasiPesangan(BuildContext context) async {
     final result = await Navigator.push(
         context, MaterialPageRoute(builder: (context) => MapPoint()));
-    print('INI RESULT LAT LANG $result');
+    //print('INI RESULT LAT LANG $result');
     setState(() {
       locationCtrl.text = result;
     });
@@ -2077,9 +2124,9 @@ class _PenghentianPengaliranFormState extends State<PenghentianPengaliranForm> {
     var location = locationCtrl.text.split(',');
     var lat = location[0].trim();
     var long = location[1].trim();
-    print('INI LAT $lat');
-    print('INI LONG $long');
-    print('GAMBARNYA  data:image/png;base64,$encoded} ');
+    //print('INI LAT $lat');
+    //print('INI LONG $long');
+    //print('GAMBARNYA  data:image/png;base64,$encoded} ');
     String accessToken = await storageCache.read(key: 'access_token');
     var body = json.encode({
       "customer_id": custID,
@@ -2125,8 +2172,8 @@ class _PenghentianPengaliranFormState extends State<PenghentianPengaliranForm> {
           'Authorization': 'Bearer $accessToken'
         },
         body: body);
-    print(
-        'INI HASIL POST CREATE PENGHASILAN SEMENTARA ${responseCreatePenghentianSementara.body}');
+    //print(
+    // 'INI HASIL POST CREATE PENGHASILAN SEMENTARA ${responseCreatePenghentianSementara.body}');
     CreatePenghentianSementara createPenghentianSementara =
         CreatePenghentianSementara.fromJson(
             json.decode(responseCreatePenghentianSementara.body));
@@ -2151,13 +2198,13 @@ class _PenghentianPengaliranFormState extends State<PenghentianPengaliranForm> {
         setState(() {
           _fileName = result.names.single;
           imgNPWP = file;
-          print('NAMA FILE : $_fileName');
+          //print('NAMA FILE : $_fileName');
         });
       } else {
         setState(() {
           _fileNameKtp = result.names.single;
           imgKTP = file;
-          print('NAMA FILE KTP : $_fileNameKtp');
+          //print('NAMA FILE KTP : $_fileNameKtp');
         });
       }
     } else {

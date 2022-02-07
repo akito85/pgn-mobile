@@ -39,10 +39,10 @@ class ResultsConversion extends StatelessWidget {
     final formatCurrency = new NumberFormat.currency(
         locale: "en_US", symbol: " ", decimalDigits: 0);
 
-    print('INI Kalori Gas Bumi: ${biaya.toInt()}');
-    print('INI harga Gas Bumi: $totalGasPrice');
-    print('INI Kalori Gas Bumi: $kaloriGasBumi');
-    print('INI harga Gas Bumi: $gasVolume');
+    //print('INI Kalori Gas Bumi: ${biaya.toInt()}');
+    //print('INI harga Gas Bumi: $totalGasPrice');
+    //print('INI Kalori Gas Bumi: $kaloriGasBumi');
+    //print('INI harga Gas Bumi: $gasVolume');
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -675,7 +675,7 @@ class ResultsListrik extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("XXXX");
+    //print("XXXX");
     double a,
         b,
         c,

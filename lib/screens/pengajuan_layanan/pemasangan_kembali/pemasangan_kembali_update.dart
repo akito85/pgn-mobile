@@ -1345,7 +1345,7 @@ class _PemasanganKembaliUpdateState extends State<PemasanganKembaliUpdate> {
                           Expanded(
                             child: ElevatedButton(
                               onPressed: () {
-                                print('STATUS LOKASI $statusLokasi');
+                                //print('STATUS LOKASI $statusLokasi');
                                 if (_formKeyAlamat.currentState.validate() &&
                                     statusLokasi != null) {
                                   setState(() {
@@ -2087,7 +2087,7 @@ class _PemasanganKembaliUpdateState extends State<PemasanganKembaliUpdate> {
   }
 
   void getData() async {
-    print('ID Nya ${widget.id}');
+    //print('ID Nya ${widget.id}');
     String accessToken = await storageCache.read(key: 'access_token');
     String lang = await storageCache.read(key: 'lang');
     var response = await http.get(
@@ -2097,7 +2097,7 @@ class _PemasanganKembaliUpdateState extends State<PemasanganKembaliUpdate> {
           'Authorization': 'Bearer $accessToken',
           'Accept-Language': lang,
         });
-    print('GET DETAIL PEMASANGAN KEMBALI ${response.body}');
+    //print('GET DETAIL PEMASANGAN KEMBALI ${response.body}');
     DetailData detailData = DetailData.fromJson(json.decode(response.body));
     if (detailData.npwpFile != "") {
       splitString = detailData.npwpFile.split(',');
@@ -2169,7 +2169,7 @@ class _PemasanganKembaliUpdateState extends State<PemasanganKembaliUpdate> {
   void _nextLokasiPesangan(BuildContext context) async {
     final result = await Navigator.push(
         context, MaterialPageRoute(builder: (context) => MapPoint()));
-    print('INI RESULT LAT LANG $result');
+    //print('INI RESULT LAT LANG $result');
     setState(() {
       locationCtrl.text = result;
     });
@@ -2207,8 +2207,8 @@ class _PemasanganKembaliUpdateState extends State<PemasanganKembaliUpdate> {
     var location = locationCtrl.text.split(',');
     var lat = location[0].trim();
     var long = location[1].trim();
-    print('INI LAT $lat');
-    print('INI LONG $long');
+    //print('INI LAT $lat');
+    //print('INI LONG $long');
     String accessToken = await storageCache.read(key: 'access_token');
     var body = json.encode({
       "customer_id": detailDatas.custId,
@@ -2251,7 +2251,7 @@ class _PemasanganKembaliUpdateState extends State<PemasanganKembaliUpdate> {
           'Authorization': 'Bearer $accessToken'
         },
         body: body);
-    print('INI HASIL POST CREATE PEMASANGAN KEMBALI ${response.body}');
+    //print('INI HASIL POST CREATE PEMASANGAN KEMBALI ${response.body}');
     Create create = Create.fromJson(json.decode(response.body));
 
     if (response.statusCode == 200) {
@@ -2273,13 +2273,13 @@ class _PemasanganKembaliUpdateState extends State<PemasanganKembaliUpdate> {
         setState(() {
           _fileName = result.names.single;
           imgNPWP = file;
-          print('NAMA FILE : $_fileName');
+          //print('NAMA FILE : $_fileName');
         });
       } else {
         setState(() {
           _fileNameKtp = result.names.single;
           imgKTP = file;
-          print('NAMA FILE KTP : $_fileNameKtp');
+          //print('NAMA FILE KTP : $_fileNameKtp');
         });
       }
     } else {

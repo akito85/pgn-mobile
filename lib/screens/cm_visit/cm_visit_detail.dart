@@ -502,7 +502,7 @@ class _CMVisitDetailState extends State<CMVisitDetail> {
       'Authorization': 'Bearer $accessToken',
       'Accept-Language': lang,
     });
-    print('Accsess_token' + accessToken);
+    //print('Accsess_token' + accessToken);
     return CmVisitDetailModel.fromJson(json.decode(responseCmVisitDetail.body));
   }
 

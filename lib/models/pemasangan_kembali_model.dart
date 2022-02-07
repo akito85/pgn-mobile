@@ -249,7 +249,7 @@ class Area1 {
       this.dataPenutupanG4,
       this.dataPenutupanG6});
   factory Area1.fromJson(Map<String, dynamic> json) {
-    print('INI JSON NYA ${json["Pemasangan Kembali Pelanggan Meter G.1.6 "]}');
+    //print('INI JSON NYA ${json["Pemasangan Kembali Pelanggan Meter G.1.6 "]}');
     return Area1(
       name: json['name'],
       dataPenutupanG10: DataPenutupanG10.fromJson(
