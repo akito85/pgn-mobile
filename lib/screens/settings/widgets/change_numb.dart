@@ -11,6 +11,9 @@ import 'package:pgn_mobile/services/app_localizations.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 
+import 'package:pgn_mobile/services/language.dart';
+import 'package:provider/provider.dart';
+
 class ChangeNumb extends StatefulWidget {
   final String desc;
   final String btn;
@@ -152,6 +155,10 @@ class ChangeNumbState extends State<ChangeNumb> {
       json.decode(responseChangeNumb.body),
     );
     if (responseChangeNumb.statusCode == 200) {
+      setState(() {
+        btnChange = true;
+        visible = false;
+      });
       Navigator.push(
           context,
           MaterialPageRoute(

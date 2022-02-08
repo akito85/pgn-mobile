@@ -112,7 +112,7 @@ class OTPChangeNumbState extends State<OTPChangeNumb> {
           Container(
             margin: EdgeInsets.fromLTRB(15, 25, 15, 20),
             child: Text(
-              '${_lang.descVer} (+$newNumber)',
+              '${Translations.of(context).text('ff_otp_tv_instruction_desc')} (+$newNumber)',
               style: TextStyle(fontSize: 18),
             ),
           ),
