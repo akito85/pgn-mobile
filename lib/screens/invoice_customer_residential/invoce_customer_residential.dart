@@ -1421,9 +1421,10 @@ class BillDetailState extends State<InvoiceCustResidential>
                         child: Text(
                           Translations.of(context).text('payment_desc'),
                           style: TextStyle(
-                              fontSize: 15.0,
-                              fontWeight: FontWeight.w400,
-                              color: Colors.black),
+                            fontSize: 15.0,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.black54,
+                          ),
                         ),
                       ),
                     ],
@@ -1497,7 +1498,7 @@ class BillDetailState extends State<InvoiceCustResidential>
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10.0),
               ),
-              color: Colors.grey[300],
+              color: Colors.grey[500],
               margin: EdgeInsets.only(top: 20, bottom: 10),
               elevation: 5,
               child: Row(
@@ -1534,6 +1535,7 @@ class BillDetailState extends State<InvoiceCustResidential>
       'Authorization': 'Bearer $accessToken',
       'Accept-Language': lang
     });
+    print('RETURN ${responseCustomerInvoice.body}');
     CustomerInvoiceResidential _customerInvoice =
         CustomerInvoiceResidential.fromJson(
             json.decode(responseCustomerInvoice.body));

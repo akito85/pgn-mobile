@@ -1401,14 +1401,72 @@ class BillDetailState extends State<InvoiceRTPK>
                   ],
                 ),
                 Container(
+                  height: 90,
+                  color: Colors.grey[200],
+                  padding: EdgeInsets.only(right: 10),
                   margin: EdgeInsets.only(
-                      top: 20.0, left: 20.0, right: 20, bottom: 20),
-                  child: Text(
-                    Translations.of(context).text('payment_desc'),
-                    style: TextStyle(
-                        fontSize: 15.0,
-                        fontWeight: FontWeight.w400,
-                        color: Colors.black),
+                      top: 20.0, left: 20.0, right: 20, bottom: 10),
+                  child: Row(
+                    children: [
+                      Container(
+                        width: 8,
+                        padding: EdgeInsets.all(0.1),
+                        margin: EdgeInsets.only(right: 10),
+                        color: Colors.grey[400],
+                      ),
+                      Expanded(
+                        child: Text(
+                          Translations.of(context).text('payment_desc'),
+                          style: TextStyle(
+                            fontSize: 15.0,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.black54,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  height: 90,
+                  color: Colors.grey[200],
+                  padding: EdgeInsets.only(right: 10),
+                  margin: EdgeInsets.only(left: 20.0, right: 20, bottom: 20),
+                  child: Row(
+                    children: [
+                      Container(
+                        width: 8,
+                        padding: EdgeInsets.all(0.1),
+                        margin: EdgeInsets.only(right: 10),
+                        color: Colors.grey[400],
+                      ),
+                      Expanded(
+                        child: RichText(
+                          text: TextSpan(
+                            style: TextStyle(
+                              fontSize: 15.0,
+                              color: Colors.black54,
+                            ),
+                            children: <TextSpan>[
+                              TextSpan(
+                                  text:
+                                      'Sesuai ketentuan UU No.7/2021 Harmonisasi Peraturan Perpajakan, per '),
+                              TextSpan(
+                                  text: '1 April 2022 ',
+                                  style:
+                                      TextStyle(fontWeight: FontWeight.bold)),
+                              TextSpan(
+                                  text:
+                                      'tagihan atas pemakaian Gas bulan Maret dan seterusnya dikenakan '),
+                              TextSpan(
+                                  text: 'PPN 11%',
+                                  style:
+                                      TextStyle(fontWeight: FontWeight.bold)),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ],
