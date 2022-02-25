@@ -593,6 +593,26 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
                   },
                 )
               : SizedBox(),
+          ListTile(
+            contentPadding: EdgeInsets.only(left: 20.0),
+            leading: Image.asset(
+              'assets/product-information.png',
+              height: 29,
+              color: Colors.grey,
+            ),
+            title: Text(
+              'Product Information',
+              style: TextStyle(
+                color: Colors.grey[600],
+                fontSize: 17.0,
+                fontWeight: FontWeight.w400,
+              ),
+            ),
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.pushNamed(context, '/pgnServices');
+            },
+          ),
           // customerGroupId == '3'
           //     ?
           ListTile(

@@ -25,6 +25,8 @@ class DashboardCustAddState extends State<DashboardCustAdd> {
   String statusStepImg = 'ktp';
   String status = '';
   final picker = ImagePicker();
+  bool visCircleProgress = false;
+  bool visBtnSubmit = true;
 
   @override
   initState() {
@@ -500,39 +502,57 @@ class DashboardCustAddState extends State<DashboardCustAdd> {
                         ),
                       ),
                     ),
-                    Expanded(
-                      child: Container(
-                        height: 45.0,
-                        margin: EdgeInsets.only(
-                            top: 20, bottom: 30, left: 5, right: 18),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10.0),
-                          // color: Color(0xFFD3D3D3),untuk yang belum cmm
-                          color: Color(0xFF427CEF),
-                        ),
-                        child: MaterialButton(
-                          minWidth: MediaQuery.of(context).size.width,
-                          child: Text(
-                            'Submit Request',
-                            style: TextStyle(
-                              color: Colors.white,
-                            ),
+                    Visibility(
+                        visible: visCircleProgress,
+                        child: Container(
+                          height: 45.0,
+                          width: 150,
+                          margin: EdgeInsets.only(
+                              top: 20, bottom: 30, left: 5, right: 18),
+                          padding: EdgeInsets.only(
+                              top: 5, bottom: 5, left: 10, right: 10),
+                          child: Center(child: CircularProgressIndicator()),
+                        )),
+                    Visibility(
+                      visible: visBtnSubmit,
+                      child: Expanded(
+                        child: Container(
+                          height: 45.0,
+                          margin: EdgeInsets.only(
+                              top: 20, bottom: 30, left: 5, right: 18),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10.0),
+                            // color: Color(0xFFD3D3D3),untuk yang belum cmm
+                            color: Color(0xFF427CEF),
                           ),
-                          onPressed: () {
-                            Uint8List imageUnit8Ktp;
-                            imageUnit8Ktp = _image.readAsBytesSync();
-                            String fileExt = _image.path.split('.').last;
-                            String encodedImage =
-                                'data:image/$fileExt;base64,${base64Encode(imageUnit8Ktp)}';
-                            Uint8List imageUnit8Selfie;
-                            imageUnit8Selfie = _imageSelfie.readAsBytesSync();
-                            String fileExtSelfie =
-                                _imageSelfie.path.split('.').last;
-                            String encodedImageSelfie =
-                                'data:image/$fileExtSelfie;base64,${base64Encode(imageUnit8Selfie)}';
-                            createCustId(encodedImage, encodedImageSelfie);
-                            // dialogAlertCMMForm(context);
-                          },
+                          child: MaterialButton(
+                            minWidth: MediaQuery.of(context).size.width,
+                            child: Text(
+                              'Submit Request',
+                              style: TextStyle(
+                                color: Colors.white,
+                              ),
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                visCircleProgress = true;
+                                visBtnSubmit = false;
+                              });
+                              Uint8List imageUnit8Ktp;
+                              imageUnit8Ktp = _image.readAsBytesSync();
+                              String fileExt = _image.path.split('.').last;
+                              String encodedImage =
+                                  'data:image/$fileExt;base64,${base64Encode(imageUnit8Ktp)}';
+                              Uint8List imageUnit8Selfie;
+                              imageUnit8Selfie = _imageSelfie.readAsBytesSync();
+                              String fileExtSelfie =
+                                  _imageSelfie.path.split('.').last;
+                              String encodedImageSelfie =
+                                  'data:image/$fileExtSelfie;base64,${base64Encode(imageUnit8Selfie)}';
+                              createCustId(encodedImage, encodedImageSelfie);
+                              // dialogAlertCMMForm(context);
+                            },
+                          ),
                         ),
                       ),
                     ),
@@ -1052,12 +1072,20 @@ class DashboardCustAddState extends State<DashboardCustAdd> {
     AddNewCustomerID addNewCustomerID =
         AddNewCustomerID.fromJson(json.decode(responseAddCustId.body));
     if (responseAddCustId.statusCode == 200) {
+      setState(() {
+        visCircleProgress = false;
+        visBtnSubmit = true;
+      });
       allertAddCustomerId(
           context,
           addNewCustomerID.dataAddCustomerId.message,
           addNewCustomerID.dataAddCustomerId.custID,
           addNewCustomerID.dataAddCustomerId.custName);
     } else {
+      setState(() {
+        visCircleProgress = false;
+        visBtnSubmit = true;
+      });
       showToast(addNewCustomerID.message);
     }
   }
