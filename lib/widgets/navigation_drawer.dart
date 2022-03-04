@@ -56,7 +56,7 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
             contentPadding: EdgeInsets.only(left: 20.0, top: 30),
             leading: Icon(Icons.dashboard),
             title: Text(
-              'Dashboard',
+              Translations.of(context).text('title_dashboard') ?? "-",
               style: TextStyle(
                 color: Colors.grey[600],
                 fontSize: 17.0,
@@ -320,7 +320,7 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
                   contentPadding: EdgeInsets.only(left: 20.0, top: 30),
                   leading: Icon(Icons.dashboard),
                   title: Text(
-                    'Dashboard',
+                    Translations.of(context).text('title_dashboard') ?? "-",
                     style: TextStyle(
                       color: Colors.grey[600],
                       fontSize: 17.0,
@@ -601,7 +601,7 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
               color: Colors.grey,
             ),
             title: Text(
-              'Product Information',
+              Translations.of(context).text('title_prod_info'),
               style: TextStyle(
                 color: Colors.grey[600],
                 fontSize: 17.0,
@@ -615,26 +615,26 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
           ),
           // customerGroupId == '3'
           //     ?
-          ListTile(
-            contentPadding: EdgeInsets.only(left: 20.0),
-            leading: Image.asset(
-              'assets/meter.png',
-              height: 29,
-              color: Colors.grey,
-            ),
-            title: Text(
-              'Smartmeter',
-              style: TextStyle(
-                color: Colors.grey[600],
-                fontSize: 17.0,
-                fontWeight: FontWeight.w400,
-              ),
-            ),
-            onTap: () {
-              Navigator.pop(context);
-              Navigator.pushNamed(context, '/smartmeterRTPK');
-            },
-          ),
+          // ListTile(
+          //   contentPadding: EdgeInsets.only(left: 20.0),
+          //   leading: Image.asset(
+          //     'assets/meter.png',
+          //     height: 29,
+          //     color: Colors.grey,
+          //   ),
+          //   title: Text(
+          //     'Smartmeter',
+          //     style: TextStyle(
+          //       color: Colors.grey[600],
+          //       fontSize: 17.0,
+          //       fontWeight: FontWeight.w400,
+          //     ),
+          //   ),
+          //   onTap: () {
+          //     Navigator.pop(context);
+          //     Navigator.pushNamed(context, '/smartmeterRTPK');
+          //   },
+          // ),
           // : SizedBox(),
           ListTile(
             contentPadding: EdgeInsets.only(left: 20.0),
@@ -644,7 +644,7 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
               color: Colors.grey,
             ),
             title: Text(
-              'Pengajuan Layanan',
+              Translations.of(context).text('title_pl'),
               style: TextStyle(
                 color: Colors.grey[600],
                 fontSize: 17.0,
@@ -660,7 +660,7 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
             contentPadding: EdgeInsets.only(left: 20.0),
             leading: Icon(Icons.notifications),
             title: Text(
-              'Inbox',
+              Translations.of(context).text('title_inbox_cust'),
               style: TextStyle(
                 color: Colors.grey[600],
                 fontSize: 17.0,

@@ -36,7 +36,7 @@ class _KlaimAsuransiDetailState extends State<KlaimAsuransiDetail> {
         elevation: 0,
         iconTheme: IconThemeData(color: Colors.white),
         title: Text(
-          'Klaim Asuransi Detail',
+          'Klaim Asuransi Kebakaran Detail',
           style: TextStyle(color: Colors.white, fontSize: 16),
         ),
       ),
@@ -504,97 +504,97 @@ class _KlaimAsuransiDetailState extends State<KlaimAsuransiDetail> {
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold)),
                       ),
-                      Padding(
-                        padding:
-                            const EdgeInsets.only(left: 5, right: 5, top: 10),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                              width: 150,
-                              child: Text('Alamat Sesuai KTP'),
-                            ),
-                            Container(
-                              margin: const EdgeInsets.only(left: 10),
-                              width: 10,
-                              child: Text(':'),
-                            ),
-                            Expanded(
-                              child: Padding(
-                                padding: const EdgeInsets.only(left: 2),
-                                child: Text('${snapshot.data.ktpAddress}'),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding:
-                            const EdgeInsets.only(left: 5, right: 5, top: 10),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                              width: 150,
-                              child: Text('Nomor NPWP'),
-                            ),
-                            Container(
-                              margin: const EdgeInsets.only(left: 10),
-                              width: 10,
-                              child: Text(':'),
-                            ),
-                            Expanded(
-                              child: Padding(
-                                padding: const EdgeInsets.only(left: 2),
-                                child: Text('${snapshot.data.npwpNumb}'),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding:
-                            const EdgeInsets.only(left: 5, right: 5, top: 10),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                              width: 150,
-                              child: Text('Foto NPWP'),
-                            ),
-                            Container(
-                              margin: const EdgeInsets.only(left: 10),
-                              width: 10,
-                              child: Text(':'),
-                            ),
-                            snapshot.data.npwpFile != ""
-                                ? Expanded(
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(left: 2),
-                                      child: GestureDetector(
-                                        onTap: () {
-                                          _showDialog(context, image);
-                                        },
-                                        child: Container(
-                                            width: 100,
-                                            height: 100,
-                                            margin: EdgeInsets.only(
-                                                right: 15, left: 0),
-                                            decoration: BoxDecoration(
-                                                color: Colors.black,
-                                                borderRadius:
-                                                    BorderRadius.circular(5),
-                                                image: DecorationImage(
-                                                    fit: BoxFit.fill,
-                                                    image:
-                                                        MemoryImage(image)))),
-                                      ),
-                                    ),
-                                  )
-                                : Text('-'),
-                          ],
-                        ),
-                      ),
+                      // Padding(
+                      //   padding:
+                      //       const EdgeInsets.only(left: 5, right: 5, top: 10),
+                      //   child: Row(
+                      //     crossAxisAlignment: CrossAxisAlignment.start,
+                      //     children: [
+                      //       Container(
+                      //         width: 150,
+                      //         child: Text('Alamat Sesuai KTP'),
+                      //       ),
+                      //       Container(
+                      //         margin: const EdgeInsets.only(left: 10),
+                      //         width: 10,
+                      //         child: Text(':'),
+                      //       ),
+                      //       Expanded(
+                      //         child: Padding(
+                      //           padding: const EdgeInsets.only(left: 2),
+                      //           child: Text('${snapshot.data.ktpAddress}'),
+                      //         ),
+                      //       ),
+                      //     ],
+                      //   ),
+                      // ),
+                      // Padding(
+                      //   padding:
+                      //       const EdgeInsets.only(left: 5, right: 5, top: 10),
+                      //   child: Row(
+                      //     crossAxisAlignment: CrossAxisAlignment.start,
+                      //     children: [
+                      //       Container(
+                      //         width: 150,
+                      //         child: Text('Nomor NPWP'),
+                      //       ),
+                      //       Container(
+                      //         margin: const EdgeInsets.only(left: 10),
+                      //         width: 10,
+                      //         child: Text(':'),
+                      //       ),
+                      //       Expanded(
+                      //         child: Padding(
+                      //           padding: const EdgeInsets.only(left: 2),
+                      //           child: Text('${snapshot.data.npwpNumb}'),
+                      //         ),
+                      //       ),
+                      //     ],
+                      //   ),
+                      // ),
+                      // Padding(
+                      //   padding:
+                      //       const EdgeInsets.only(left: 5, right: 5, top: 10),
+                      //   child: Row(
+                      //     crossAxisAlignment: CrossAxisAlignment.start,
+                      //     children: [
+                      //       Container(
+                      //         width: 150,
+                      //         child: Text('Foto NPWP'),
+                      //       ),
+                      //       Container(
+                      //         margin: const EdgeInsets.only(left: 10),
+                      //         width: 10,
+                      //         child: Text(':'),
+                      //       ),
+                      //       snapshot.data.npwpFile != ""
+                      //           ? Expanded(
+                      //               child: Padding(
+                      //                 padding: const EdgeInsets.only(left: 2),
+                      //                 child: GestureDetector(
+                      //                   onTap: () {
+                      //                     _showDialog(context, image);
+                      //                   },
+                      //                   child: Container(
+                      //                       width: 100,
+                      //                       height: 100,
+                      //                       margin: EdgeInsets.only(
+                      //                           right: 15, left: 0),
+                      //                       decoration: BoxDecoration(
+                      //                           color: Colors.black,
+                      //                           borderRadius:
+                      //                               BorderRadius.circular(5),
+                      //                           image: DecorationImage(
+                      //                               fit: BoxFit.fill,
+                      //                               image:
+                      //                                   MemoryImage(image)))),
+                      //                 ),
+                      //               ),
+                      //             )
+                      //           : Text('-'),
+                      //     ],
+                      //   ),
+                      // ),
                       Padding(
                         padding:
                             const EdgeInsets.only(left: 5, right: 5, top: 10),

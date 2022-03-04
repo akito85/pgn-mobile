@@ -46,7 +46,7 @@ class _PengajuanAsuransiUpdateState extends State<PengajuanAsuransiUpdate> {
   List listMediaType = [
     "Email",
     "WhatsApp",
-    "SMS",
+    "SMS (Dikenakan biaya)",
   ];
   List listStatusKepemilikan = [
     "Pemilik",
@@ -78,6 +78,7 @@ class _PengajuanAsuransiUpdateState extends State<PengajuanAsuransiUpdate> {
 
   TextEditingController tempatLahirCtrl = new TextEditingController();
   TextEditingController nikCtrl = new TextEditingController();
+  TextEditingController phoneNumbCtrl = new TextEditingController();
   TextEditingController alamatCtrl = new TextEditingController();
   TextEditingController perumahanCtrl = new TextEditingController();
   TextEditingController rtCtrl = new TextEditingController();
@@ -608,13 +609,20 @@ class _PengajuanAsuransiUpdateState extends State<PengajuanAsuransiUpdate> {
                           borderRadius: BorderRadius.circular(5.0),
                           border: Border.all(color: Color(0xFFD3D3D3))),
                       child: TextFormField(
-                        enabled: false,
-                        keyboardType: TextInputType.text,
+                        enabled: true,
+                        keyboardType: TextInputType.phone,
+                        controller: phoneNumbCtrl,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Data tidak boleh kosong!';
+                          }
+                          return null;
+                        },
                         decoration: InputDecoration(
                           prefixStyle: TextStyle(color: Color(0xFF828388)),
                           contentPadding: new EdgeInsets.symmetric(
                               vertical: 12.0, horizontal: 15.0),
-                          hintText: '+${detailDatas.phoneNumb}',
+                          hintText: '${detailDatas.phoneNumb}',
                           hintStyle: TextStyle(color: Colors.black),
                           disabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(5),
@@ -1719,18 +1727,9 @@ class _PengajuanAsuransiUpdateState extends State<PengajuanAsuransiUpdate> {
                                       image: MemoryImage(image)))),
                     ),
                   ),
+
                   Padding(
-                    padding: EdgeInsets.only(top: 10, left: 16, right: 16),
-                    child: Center(
-                        child: Text(
-                      'NPWP dan foto NPWP (tidak mandatory)',
-                      style: TextStyle(
-                          color: Color(0xFF455055),
-                          fontWeight: FontWeight.bold),
-                    )),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 30, left: 16, right: 16),
+                    padding: EdgeInsets.only(top: 20, left: 16, right: 16),
                     child: Text(
                       'Pilihan Media Informasi',
                       style: TextStyle(
@@ -1869,7 +1868,7 @@ class _PengajuanAsuransiUpdateState extends State<PengajuanAsuransiUpdate> {
                           Padding(
                             padding: EdgeInsets.only(left: 10),
                             child: Text(
-                              'Referensi Biaya Premi Asuransi',
+                              'Lihat Referensi Biaya',
                               style: TextStyle(
                                   color: Color(0xFF427CEF),
                                   fontWeight: FontWeight.bold),
@@ -2151,6 +2150,9 @@ class _PengajuanAsuransiUpdateState extends State<PengajuanAsuransiUpdate> {
       custName = custIDString;
       email = emailString;
       phoneNumb = userPhoneString;
+      phoneNumbCtrl.value = new TextEditingController.fromValue(
+              new TextEditingValue(text: userPhoneString))
+          .value;
     });
   }
 
@@ -2223,7 +2225,9 @@ class _PengajuanAsuransiUpdateState extends State<PengajuanAsuransiUpdate> {
         .value;
     statusLokasi = detailData.locStat;
     selectedPengajuan = DateTime.parse(detailData.subDate).toLocal();
-    valueMediaType = detailData.infoMedia;
+    valueMediaType = detailData.infoMedia == 'SMS (Dikenakan biaya)'
+        ? 'SMS'
+        : detailData.infoMedia;
 
     ktpAddressCtrl.value = new TextEditingController.fromValue(
             new TextEditingValue(text: detailData.ktpAddress))
@@ -2291,7 +2295,7 @@ class _PengajuanAsuransiUpdateState extends State<PengajuanAsuransiUpdate> {
           : detailDatas.bDate,
       "id_card_number": nikCtrl.text,
       "email": detailDatas.email,
-      "phone_number": detailDatas.phoneNumb,
+      "phone_number": phoneNumbCtrl.text,
       "address": alamatCtrl.text,
       "street": perumahanCtrl.text,
       "rt": rwCtrl.text,
@@ -2304,7 +2308,8 @@ class _PengajuanAsuransiUpdateState extends State<PengajuanAsuransiUpdate> {
       "longitude": long,
       "latitude": lat,
       "person_in_location_status": statusLokasi,
-      "info_media": valueMediaType,
+      "info_media":
+          valueMediaType == 'SMS (Dikenakan biaya)' ? 'SMS' : valueMediaType,
       "submission_date": selectedPengajuan != null
           ? DateFormat('yyy-MM-dd').format(selectedPengajuan)
           : detailDatas.subDate,

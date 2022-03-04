@@ -6,6 +6,7 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
 import 'package:pgn_mobile/models/penghentian_sementara_model.dart';
@@ -48,7 +49,7 @@ class _PenghentianPengaliranUpdateState
     "Penyewa",
     "Lain-lain",
   ];
-
+  bool isSwitched = false;
   DateTime selected = DateTime.now();
   DateTime selectedPenghentian = DateTime.now();
   DateTime selectedPengaliran = DateTime.now();
@@ -72,6 +73,7 @@ class _PenghentianPengaliranUpdateState
   String _fileNameKtp;
   TextEditingController tempatLahirCtrl = new TextEditingController();
   TextEditingController nikCtrl = new TextEditingController();
+  TextEditingController phoneNumbCtrl = new TextEditingController();
   TextEditingController alamatCtrl = new TextEditingController();
   TextEditingController perumahanCtrl = new TextEditingController();
   TextEditingController rtCtrl = new TextEditingController();
@@ -527,6 +529,10 @@ class _PenghentianPengaliranUpdateState
                       child: TextFormField(
                         keyboardType: TextInputType.number,
                         controller: nikCtrl,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly,
+                          LengthLimitingTextInputFormatter(16),
+                        ],
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Data tidak boleh kosong!';
@@ -534,7 +540,7 @@ class _PenghentianPengaliranUpdateState
                           return null;
                         },
                         decoration: InputDecoration(
-                          hintText: '1285-1258835-20004',
+                          hintText: '1285125883520004',
                           hintStyle: TextStyle(color: Colors.grey),
                           contentPadding: new EdgeInsets.symmetric(
                               vertical: 12.0, horizontal: 15.0),
@@ -614,13 +620,20 @@ class _PenghentianPengaliranUpdateState
                           borderRadius: BorderRadius.circular(5.0),
                           border: Border.all(color: Color(0xFFD3D3D3))),
                       child: TextFormField(
-                        enabled: false,
-                        keyboardType: TextInputType.text,
+                        enabled: true,
+                        keyboardType: TextInputType.phone,
+                        controller: phoneNumbCtrl,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Data tidak boleh kosong!';
+                          }
+                          return null;
+                        },
                         decoration: InputDecoration(
                           prefixStyle: TextStyle(color: Color(0xFF828388)),
                           contentPadding: new EdgeInsets.symmetric(
                               vertical: 12.0, horizontal: 15.0),
-                          hintText: '+${detailDatas.phoneNumb}',
+                          hintText: '${detailDatas.phoneNumb}',
                           hintStyle: TextStyle(color: Colors.black),
                           disabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(5),
@@ -1727,18 +1740,9 @@ class _PenghentianPengaliranUpdateState
                                         image: MemoryImage(image)))),
                       ),
                     ),
+
                     Padding(
-                      padding: EdgeInsets.only(top: 10, left: 16, right: 16),
-                      child: Center(
-                          child: Text(
-                        'NPWP dan foto NPWP (tidak mandatory)',
-                        style: TextStyle(
-                            color: Color(0xFF455055),
-                            fontWeight: FontWeight.bold),
-                      )),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(top: 30, left: 16, right: 16),
+                      padding: EdgeInsets.only(top: 20, left: 16, right: 16),
                       child: Text(
                         'Tanggal Penghentian',
                         style: TextStyle(
@@ -1811,6 +1815,51 @@ class _PenghentianPengaliranUpdateState
                         ],
                       ),
                     ),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Expanded(
+                          child: Padding(
+                            padding:
+                                EdgeInsets.only(top: 20, left: 16, right: 16),
+                            child: Text(
+                              'Apakah Anda membutuhkan pencabutan Meter gas yang terpasang di lokasi Anda?',
+                              style: TextStyle(
+                                  color: Color(0xFF455055),
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 10),
+                          child: Text(isSwitched == true ? 'Ya' : 'Tidak'),
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(right: 16),
+                          width: 30,
+                          height: 60,
+                          child: CheckboxListTile(
+                            activeColor: Color(0xFF427CEF),
+                            value: isSwitched,
+                            onChanged: (value) {
+                              //print("VALUE : $value");
+                              setState(() {
+                                isSwitched = value;
+                                // if (isSwitched == true) {
+                                //   valueSwitch = "1";
+                                //   //print("SWITCH kepemilikan pemerintah: $valueSwitch");
+                                // } else {
+                                //   valueSwitch = "0";
+                                //   //print("SWITCH kepemilikan pemerintah: $valueSwitch");
+                                // }
+                              });
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+
                     Padding(
                       padding: EdgeInsets.only(top: 20, left: 16, right: 16),
                       child: Text(
@@ -1949,38 +1998,38 @@ class _PenghentianPengaliranUpdateState
                     //     ],
                     //   ),
                     // ),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => WidgetBiayaAdmin(),
-                          ),
-                        );
-                      },
-                      child: Padding(
-                        padding:
-                            EdgeInsets.only(left: 16, right: 16, bottom: 20),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.info_outline_rounded,
-                              color: Color(0xFF427CEF),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.only(left: 10),
-                              child: Text(
-                                'Lihat Referensi Biaya Administrasi',
-                                style: TextStyle(
-                                    color: Color(0xFF427CEF),
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
+                    // GestureDetector(
+                    //   onTap: () {
+                    //     Navigator.push(
+                    //       context,
+                    //       MaterialPageRoute(
+                    //         builder: (context) => WidgetBiayaAdmin(),
+                    //       ),
+                    //     );
+                    //   },
+                    //   child: Padding(
+                    //     padding:
+                    //         EdgeInsets.only(left: 16, right: 16, bottom: 20),
+                    //     child: Row(
+                    //       mainAxisAlignment: MainAxisAlignment.center,
+                    //       children: [
+                    //         Icon(
+                    //           Icons.info_outline_rounded,
+                    //           color: Color(0xFF427CEF),
+                    //         ),
+                    //         Padding(
+                    //           padding: EdgeInsets.only(left: 10),
+                    //           child: Text(
+                    //             'Lihat Referensi Biaya',
+                    //             style: TextStyle(
+                    //                 color: Color(0xFF427CEF),
+                    //                 fontWeight: FontWeight.bold),
+                    //           ),
+                    //         )
+                    //       ],
+                    //     ),
+                    //   ),
+                    // ),
                     Padding(
                       padding: EdgeInsets.only(left: 16, right: 16, bottom: 20),
                       child: Divider(
@@ -2070,6 +2119,9 @@ class _PenghentianPengaliranUpdateState
       custName = custIDString;
       email = emailString;
       phoneNumb = userPhoneString;
+      phoneNumbCtrl.value = new TextEditingController.fromValue(
+              new TextEditingValue(text: userPhoneString))
+          .value;
     });
   }
 
@@ -2098,6 +2150,7 @@ class _PenghentianPengaliranUpdateState
     setState(() {
       detailDatas = detailData;
       nik = detailData.nik;
+      isSwitched = detailDatas.needPlugin == 0 ? false : true;
       // _byteImage = base64.decode(splitString[1]);
     });
     nikCtrl.value = new TextEditingController.fromValue(
@@ -2275,7 +2328,7 @@ class _PenghentianPengaliranUpdateState
           : detailDatas.bDate,
       "id_card_number": nikCtrl.text,
       "email": detailDatas.email,
-      "phone_number": detailDatas.phoneNumb,
+      "phone_number": phoneNumbCtrl.text,
       "address": alamatCtrl.text,
       "street": perumahanCtrl.text,
       "rt": rwCtrl.text,
@@ -2301,6 +2354,7 @@ class _PenghentianPengaliranUpdateState
       "npwp_file": encodedImageNPWP,
       "ktp_file": encodedImageKTP,
       "customer_signature": 'data:image/png;base64,$encoded',
+      "need_unplug_meter": isSwitched == true ? "1" : "0",
     });
     var responseCreatePenghentianSementara = await http.put(
         '${UrlCons.mainProdUrl}customer-service/temporary-suspend/$id',

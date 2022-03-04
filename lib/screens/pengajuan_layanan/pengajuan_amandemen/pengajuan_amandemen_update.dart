@@ -3,12 +3,16 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:dotted_border/dotted_border.dart';
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
+import 'package:pgn_mobile/models/auth_model.dart';
 import 'package:pgn_mobile/models/pengajuan_amandemen_model.dart';
+import 'package:pgn_mobile/models/provinces_model.dart';
 import 'package:pgn_mobile/models/url_cons.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_signature_pad/flutter_signature_pad.dart';
@@ -42,10 +46,12 @@ class _PengajuanAmandemenUpdateState extends State<PengajuanAmandemenUpdate> {
     "Laki-Laki",
     "Perempuan",
   ];
+  String dataListrikWat;
+  DataProvinces dataListrikSelected;
   List listMediaType = [
     "Email",
     "WhatsApp",
-    "SMS",
+    "SMS (Dikenakan biaya)",
   ];
   List listStatusKepemilikan = [
     "Pemilik",
@@ -83,6 +89,7 @@ class _PengajuanAmandemenUpdateState extends State<PengajuanAmandemenUpdate> {
 
   TextEditingController tempatLahirCtrl = new TextEditingController();
   TextEditingController nikCtrl = new TextEditingController();
+  TextEditingController phoneNumbCtrl = new TextEditingController();
   TextEditingController alamatCtrl = new TextEditingController();
   TextEditingController perumahanCtrl = new TextEditingController();
   TextEditingController rtCtrl = new TextEditingController();
@@ -633,6 +640,10 @@ class _PengajuanAmandemenUpdateState extends State<PengajuanAmandemenUpdate> {
                       child: TextFormField(
                         keyboardType: TextInputType.number,
                         controller: nikCtrl,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly,
+                          LengthLimitingTextInputFormatter(16),
+                        ],
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Data tidak boleh kosong!';
@@ -640,7 +651,7 @@ class _PengajuanAmandemenUpdateState extends State<PengajuanAmandemenUpdate> {
                           return null;
                         },
                         decoration: InputDecoration(
-                          hintText: '1285-1258835-20004',
+                          hintText: '1285125883520004',
                           hintStyle: TextStyle(color: Colors.grey),
                           contentPadding: new EdgeInsets.symmetric(
                               vertical: 12.0, horizontal: 15.0),
@@ -720,13 +731,20 @@ class _PengajuanAmandemenUpdateState extends State<PengajuanAmandemenUpdate> {
                           borderRadius: BorderRadius.circular(5.0),
                           border: Border.all(color: Color(0xFFD3D3D3))),
                       child: TextFormField(
-                        enabled: false,
-                        keyboardType: TextInputType.text,
+                        enabled: true,
+                        keyboardType: TextInputType.phone,
+                        controller: phoneNumbCtrl,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Data tidak boleh kosong!';
+                          }
+                          return null;
+                        },
                         decoration: InputDecoration(
                           prefixStyle: TextStyle(color: Color(0xFF828388)),
                           contentPadding: new EdgeInsets.symmetric(
                               vertical: 12.0, horizontal: 15.0),
-                          hintText: '+${detailDatas.phoneNumb}',
+                          hintText: '${detailDatas.phoneNumb}',
                           hintStyle: TextStyle(color: Colors.black),
                           disabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(5),
@@ -1607,48 +1625,81 @@ class _PengajuanAmandemenUpdateState extends State<PengajuanAmandemenUpdate> {
                             fontWeight: FontWeight.bold),
                       ),
                     ),
-                    Container(
-                      margin: EdgeInsets.only(top: 10, left: 16, right: 16),
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(5.0),
-                          border: Border.all(color: Color(0xFFD3D3D3))),
-                      child: TextFormField(
-                        controller: dayaCtrl,
-                        keyboardType: TextInputType.text,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Data tidak boleh kosong!';
-                          }
-                          return null;
+                    Padding(
+                      padding: EdgeInsets.only(
+                          top: 10, left: 16, right: 16, bottom: 20),
+                      child: DropdownSearch<DataProvinces>(
+                        mode: Mode.MENU,
+                        onFind: (String filter) =>
+                            getPenggunaanListrik(context),
+                        itemAsString: (DataProvinces u) => u.value.toString(),
+                        onChanged: (DataProvinces data) {
+                          // setState(() {
+                          dataListrikWat = data.value.toString();
+                          dataListrikSelected = data;
+                          // });
+
+                          //print(data);
                         },
-                        decoration: InputDecoration(
-                          suffixIcon: Text("\Watt    "),
-                          suffixIconConstraints:
-                              BoxConstraints(minWidth: 5, minHeight: 5),
-                          isDense: true,
-                          hintText: '00',
-                          hintStyle: TextStyle(color: Colors.grey),
-                          contentPadding: new EdgeInsets.symmetric(
-                              vertical: 12.0, horizontal: 15.0),
-                          disabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(5),
-                            borderSide:
-                                BorderSide(color: Colors.white, width: 2.0),
+                        label: '',
+                        hint: dataListrikWat,
+                        dropdownSearchDecoration: InputDecoration(
+                          contentPadding: new EdgeInsets.only(
+                              left: 15, right: 15, top: 2, bottom: 2),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Color(0xFFC3C3C3)),
                           ),
                           focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(5),
-                            borderSide:
-                                BorderSide(color: Colors.white, width: 2.0),
+                            borderSide: BorderSide(color: Color(0xFFC3C3C3)),
                           ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(5),
-                            borderSide:
-                                BorderSide(color: Colors.white, width: 2.0),
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide(color: Color(0xFFC3C3C3)),
                           ),
                         ),
                       ),
                     ),
+                    // Container(
+                    //   margin: EdgeInsets.only(top: 10, left: 16, right: 16),
+                    //   decoration: BoxDecoration(
+                    //       color: Colors.white,
+                    //       borderRadius: BorderRadius.circular(5.0),
+                    //       border: Border.all(color: Color(0xFFD3D3D3))),
+                    //   child: TextFormField(
+                    //     controller: dayaCtrl,
+                    //     keyboardType: TextInputType.text,
+                    //     validator: (value) {
+                    //       if (value == null || value.isEmpty) {
+                    //         return 'Data tidak boleh kosong!';
+                    //       }
+                    //       return null;
+                    //     },
+                    //     decoration: InputDecoration(
+                    //       suffixIcon: Text("\Watt    "),
+                    //       suffixIconConstraints:
+                    //           BoxConstraints(minWidth: 5, minHeight: 5),
+                    //       isDense: true,
+                    //       hintText: '00',
+                    //       hintStyle: TextStyle(color: Colors.grey),
+                    //       contentPadding: new EdgeInsets.symmetric(
+                    //           vertical: 12.0, horizontal: 15.0),
+                    //       disabledBorder: OutlineInputBorder(
+                    //         borderRadius: BorderRadius.circular(5),
+                    //         borderSide:
+                    //             BorderSide(color: Colors.white, width: 2.0),
+                    //       ),
+                    //       focusedBorder: OutlineInputBorder(
+                    //         borderRadius: BorderRadius.circular(5),
+                    //         borderSide:
+                    //             BorderSide(color: Colors.white, width: 2.0),
+                    //       ),
+                    //       enabledBorder: OutlineInputBorder(
+                    //         borderRadius: BorderRadius.circular(5),
+                    //         borderSide:
+                    //             BorderSide(color: Colors.white, width: 2.0),
+                    //       ),
+                    //     ),
+                    //   ),
+                    // ),
                     Padding(
                       padding: EdgeInsets.only(top: 20, left: 16, right: 16),
                       child: Row(
@@ -2376,6 +2427,9 @@ class _PengajuanAmandemenUpdateState extends State<PengajuanAmandemenUpdate> {
       email = emailString;
       phoneNumb = userPhoneString;
       custGroup = custGroupString;
+      phoneNumbCtrl.value = new TextEditingController.fromValue(
+              new TextEditingValue(text: userPhoneString))
+          .value;
       // if (custGroupString == '3') {
       //   custGroup = 'RT';
       // } else if (custGroupString == '1') {
@@ -2422,7 +2476,9 @@ class _PengajuanAmandemenUpdateState extends State<PengajuanAmandemenUpdate> {
     }
     setState(() {
       detailDatas = detailData;
-      valueMediaType = detailData.mediaInfo;
+      valueMediaType = detailData.mediaInfo == 'SMS'
+          ? 'SMS (Dikenakan biaya)'
+          : detailData.mediaInfo;
       custGroup = detailDatas.custGroup;
       // _byteImage = base64.decode(splitString[1]);
     });
@@ -2539,7 +2595,7 @@ class _PengajuanAmandemenUpdateState extends State<PengajuanAmandemenUpdate> {
           : DateFormat('yyy-MM-dd').format(DateTime.now()),
       "id_card_number": nikCtrl.text,
       "email": detailDatas.email,
-      "phone_number": detailDatas.phoneNumb,
+      "phone_number": phoneNumbCtrl.text,
       "address": alamatCtrl.text,
       "street": perumahanCtrl.text,
       "rt": rwCtrl.text,
@@ -2552,7 +2608,8 @@ class _PengajuanAmandemenUpdateState extends State<PengajuanAmandemenUpdate> {
       "longitude": long,
       "latitude": lat,
       "person_in_location_status": statusLokasi,
-      "info_media": valueMediaType,
+      "info_media":
+          valueMediaType == 'SMS (Dikenakan biaya)' ? 'SMS' : valueMediaType,
       "submission_date": selectedPengajuan != null
           ? DateFormat('yyy-MM-dd').format(selectedPengajuan)
           : detailDatas.subDate,
@@ -2677,4 +2734,25 @@ class _PengajuanAmandemenUpdateState extends State<PengajuanAmandemenUpdate> {
       ],
     ).show();
   }
+}
+
+Future<List<DataProvinces>> getPenggunaanListrik(BuildContext context) async {
+  var responseTokenBarrer =
+      await http.post('${UrlCons.prodRelyonUrl}oauth/access_token', body: {
+    'client_id': '0dUIDb81bBUsGDfDsYYHQ9wBujfjL9XWfH0ZoAzi',
+    'client_secret': '0DTuUFYRPtWUFN2UbzSvzqZMzNsW4kAl4t4PTrtC',
+    'grant_type': 'client_credentials'
+  });
+  AuthSalesRegit _auth =
+      AuthSalesRegit.fromJson(json.decode(responseTokenBarrer.body));
+
+  var responseProvinces =
+      await http.get('${UrlCons.prodRelyonUrl}v1/electrical-powers', headers: {
+    'Content-Type': 'application/json',
+    'Authorization': 'Bearer ${_auth.accessToken}'
+  });
+  GetProvinces getDayaListrik;
+  getDayaListrik = GetProvinces.fromJson(json.decode(responseProvinces.body));
+  var datasDayaListrik = getDayaListrik.data;
+  return datasDayaListrik;
 }

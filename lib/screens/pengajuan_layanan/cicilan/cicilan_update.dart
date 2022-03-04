@@ -6,6 +6,7 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
 import 'package:pgn_mobile/models/cicilan_model.dart';
@@ -42,7 +43,7 @@ class _CicilanUpdateState extends State<CicilanUpdate> {
   List listMediaType = [
     "Email",
     "WhatsApp",
-    "SMS",
+    "SMS (Dikenakan biaya)",
   ];
   List listCicilanType = [
     "Piutang Tagihan Gas",
@@ -77,6 +78,7 @@ class _CicilanUpdateState extends State<CicilanUpdate> {
 
   TextEditingController tempatLahirCtrl = new TextEditingController();
   TextEditingController nikCtrl = new TextEditingController();
+  TextEditingController phoneNumbCtrl = new TextEditingController();
   TextEditingController alamatCtrl = new TextEditingController();
   TextEditingController perumahanCtrl = new TextEditingController();
   TextEditingController rtCtrl = new TextEditingController();
@@ -139,7 +141,7 @@ class _CicilanUpdateState extends State<CicilanUpdate> {
         elevation: 0,
         iconTheme: IconThemeData(color: Colors.white),
         title: Text(
-          'Pengajuan Layanan Cicilan JP/Piutang',
+          'Pengajuan Cicilan Jaminan Berlangganan/Piutang',
           style: TextStyle(color: Colors.white, fontSize: 16),
         ),
       ),
@@ -523,6 +525,10 @@ class _CicilanUpdateState extends State<CicilanUpdate> {
                       child: TextFormField(
                         keyboardType: TextInputType.number,
                         controller: nikCtrl,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly,
+                          LengthLimitingTextInputFormatter(16),
+                        ],
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Data tidak boleh kosong!';
@@ -530,7 +536,7 @@ class _CicilanUpdateState extends State<CicilanUpdate> {
                           return null;
                         },
                         decoration: InputDecoration(
-                          hintText: '1285-1258835-20004',
+                          hintText: '1285125883520004',
                           hintStyle: TextStyle(color: Colors.grey),
                           contentPadding: new EdgeInsets.symmetric(
                               vertical: 12.0, horizontal: 15.0),
@@ -610,8 +616,15 @@ class _CicilanUpdateState extends State<CicilanUpdate> {
                           borderRadius: BorderRadius.circular(5.0),
                           border: Border.all(color: Color(0xFFD3D3D3))),
                       child: TextFormField(
-                        enabled: false,
-                        keyboardType: TextInputType.text,
+                        enabled: true,
+                        keyboardType: TextInputType.phone,
+                        controller: phoneNumbCtrl,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Data tidak boleh kosong!';
+                          }
+                          return null;
+                        },
                         decoration: InputDecoration(
                           prefixStyle: TextStyle(color: Color(0xFF828388)),
                           contentPadding: new EdgeInsets.symmetric(
@@ -1764,18 +1777,9 @@ class _CicilanUpdateState extends State<CicilanUpdate> {
                                         image: MemoryImage(image)))),
                       ),
                     ),
+
                     Padding(
-                      padding: EdgeInsets.only(top: 10, left: 16, right: 16),
-                      child: Center(
-                          child: Text(
-                        'NPWP dan foto NPWP (tidak mandatory)',
-                        style: TextStyle(
-                            color: Color(0xFF455055),
-                            fontWeight: FontWeight.bold),
-                      )),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(top: 30, left: 16, right: 16),
+                      padding: EdgeInsets.only(top: 20, left: 16, right: 16),
                       child: Text(
                         'Jenis Cicilan',
                         style: TextStyle(
@@ -2276,7 +2280,7 @@ class _CicilanUpdateState extends State<CicilanUpdate> {
         children: <Widget>[
           SizedBox(height: 5),
           Text(
-            "Anda yakin ingin perbarui pengajuan layanan cicilan jp/piautang ? ",
+            "Anda yakin ingin perbarui pengajuan cicilan ? ",
             style: TextStyle(
                 // color: painting.Color.fromRGBO(255, 255, 255, 0),
                 fontSize: 17,
@@ -2326,6 +2330,9 @@ class _CicilanUpdateState extends State<CicilanUpdate> {
       custName = custIDString;
       email = emailString;
       phoneNumb = userPhoneString;
+      phoneNumbCtrl.value = new TextEditingController.fromValue(
+              new TextEditingValue(text: userPhoneString))
+          .value;
       custGroup = custGroupString;
       if (custGroupString == '3') {
         custGroup = 'RT';
@@ -2390,7 +2397,9 @@ class _CicilanUpdateState extends State<CicilanUpdate> {
     kecamatanCtrl.value = new TextEditingController.fromValue(
             new TextEditingValue(text: detailData.kecamatan))
         .value;
-    valueMediaType = detailData.mediaType;
+    valueMediaType = detailData.mediaType == 'SMS'
+        ? 'SMS (Dikenakan biaya)'
+        : detailData.mediaType;
     valueCicilanType = detailData.loanType;
 
     provinsiCtrl.value = new TextEditingController.fromValue(
@@ -2483,7 +2492,7 @@ class _CicilanUpdateState extends State<CicilanUpdate> {
           : detailDatas.bDate,
       "id_card_number": nikCtrl.text,
       "email": detailDatas.email,
-      "phone_number": detailDatas.phoneNumb,
+      "phone_number": phoneNumbCtrl.text,
       "address": alamatCtrl.text,
       "street": perumahanCtrl.text,
       "rt": rwCtrl.text,
@@ -2496,9 +2505,10 @@ class _CicilanUpdateState extends State<CicilanUpdate> {
       "longitude": long,
       "latitude": lat,
       "person_in_location_status": statusLokasi,
-      "info_media": valueMediaType,
+      "info_media":
+          valueMediaType == 'SMS (Dikenakan biaya)' ? 'SMS' : valueMediaType,
       "loan_installment_month": selectedPemasangan != null
-          ? DateFormat('yyy- MM').format(selectedPemasangan)
+          ? DateFormat('yyy-MM').format(selectedPemasangan)
           : detailDatas.loanInstallDate,
       "reason": alasanCtrl.text,
       "npwp_number": numberNpwpCtrl.text,

@@ -123,6 +123,7 @@ class DetailPenghentianSementara {
   String npwpNumb;
   String ktpAddress;
   String ktpFile;
+  dynamic needPlugin;
   DetailPenghentianSementara(
       {this.address,
       this.bDate,
@@ -154,7 +155,8 @@ class DetailPenghentianSementara {
       this.ktpAddress,
       this.npwpFile,
       this.npwpNumb,
-      this.ktpFile});
+      this.ktpFile,
+      this.needPlugin});
   factory DetailPenghentianSementara.fromJson(Map<String, dynamic> json) {
     return DetailPenghentianSementara(
         id: json['id'],
@@ -187,7 +189,8 @@ class DetailPenghentianSementara {
         npwpFile: json['npwp_file'],
         npwpNumb: json['npwp_number'],
         ktpAddress: json['ktp_address'],
-        ktpFile: json['ktp_file']);
+        ktpFile: json['ktp_file'],
+        needPlugin: json['need_unplug_meter']);
   }
 }
 

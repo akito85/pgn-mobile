@@ -5,6 +5,7 @@ import 'dart:typed_data';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
 import 'package:pgn_mobile/models/pengajuan_teknis_model.dart';
@@ -72,6 +73,7 @@ class _PengajuanTeknisUpdateState extends State<PengajuanTeknisUpdate> {
 
   TextEditingController tempatLahirCtrl = new TextEditingController();
   TextEditingController nikCtrl = new TextEditingController();
+  TextEditingController phoneNumbCtrl = new TextEditingController();
   TextEditingController alamatCtrl = new TextEditingController();
   TextEditingController perumahanCtrl = new TextEditingController();
   TextEditingController rtCtrl = new TextEditingController();
@@ -516,6 +518,10 @@ class _PengajuanTeknisUpdateState extends State<PengajuanTeknisUpdate> {
                       child: TextFormField(
                         keyboardType: TextInputType.number,
                         controller: nikCtrl,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly,
+                          LengthLimitingTextInputFormatter(16),
+                        ],
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Data tidak boleh kosong!';
@@ -523,7 +529,7 @@ class _PengajuanTeknisUpdateState extends State<PengajuanTeknisUpdate> {
                           return null;
                         },
                         decoration: InputDecoration(
-                          hintText: '1285-1258835-20004',
+                          hintText: '1285125883520004',
                           hintStyle: TextStyle(color: Colors.grey),
                           contentPadding: new EdgeInsets.symmetric(
                               vertical: 12.0, horizontal: 15.0),
@@ -603,13 +609,20 @@ class _PengajuanTeknisUpdateState extends State<PengajuanTeknisUpdate> {
                           borderRadius: BorderRadius.circular(5.0),
                           border: Border.all(color: Color(0xFFD3D3D3))),
                       child: TextFormField(
-                        enabled: false,
-                        keyboardType: TextInputType.text,
+                        enabled: true,
+                        keyboardType: TextInputType.phone,
+                        controller: phoneNumbCtrl,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Data tidak boleh kosong!';
+                          }
+                          return null;
+                        },
                         decoration: InputDecoration(
                           prefixStyle: TextStyle(color: Color(0xFF828388)),
                           contentPadding: new EdgeInsets.symmetric(
                               vertical: 12.0, horizontal: 15.0),
-                          hintText: '+${detailDatas.phoneNumb}',
+                          hintText: '${detailDatas.phoneNumb}',
                           hintStyle: TextStyle(color: Colors.black),
                           disabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(5),
@@ -1716,18 +1729,9 @@ class _PengajuanTeknisUpdateState extends State<PengajuanTeknisUpdate> {
                                         image: MemoryImage(image)))),
                       ),
                     ),
+
                     Padding(
-                      padding: EdgeInsets.only(top: 10, left: 16, right: 16),
-                      child: Center(
-                          child: Text(
-                        'NPWP dan foto NPWP (tidak mandatory)',
-                        style: TextStyle(
-                            color: Color(0xFF455055),
-                            fontWeight: FontWeight.bold),
-                      )),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(top: 30, left: 16, right: 16),
+                      padding: EdgeInsets.only(top: 20, left: 16, right: 16),
                       child: Text(
                         'Layanan Teknis',
                         style: TextStyle(
@@ -1828,7 +1832,7 @@ class _PengajuanTeknisUpdateState extends State<PengajuanTeknisUpdate> {
                             Padding(
                               padding: EdgeInsets.only(left: 10),
                               child: Text(
-                                'Referensi Biaya',
+                                'Lihat Referensi Biaya',
                                 style: TextStyle(
                                     color: Color(0xFF427CEF),
                                     fontWeight: FontWeight.bold),
@@ -2099,6 +2103,9 @@ class _PengajuanTeknisUpdateState extends State<PengajuanTeknisUpdate> {
       custName = custIDString;
       email = emailString;
       phoneNumb = userPhoneString;
+      phoneNumbCtrl.value = new TextEditingController.fromValue(
+              new TextEditingValue(text: userPhoneString))
+          .value;
     });
   }
 
@@ -2237,7 +2244,7 @@ class _PengajuanTeknisUpdateState extends State<PengajuanTeknisUpdate> {
           : DateFormat('yyy-MM-dd').format(DateTime.now()),
       "id_card_number": nikCtrl.text,
       "email": detailDatas.email,
-      "phone_number": detailDatas.phoneNumb,
+      "phone_number": phoneNumbCtrl.text,
       "address": alamatCtrl.text,
       "street": perumahanCtrl.text,
       "rt": rwCtrl.text,

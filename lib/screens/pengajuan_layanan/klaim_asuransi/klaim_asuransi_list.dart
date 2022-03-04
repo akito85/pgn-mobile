@@ -61,7 +61,7 @@ class _KlaimAsuransiListState extends State<KlaimAsuransiList> {
         elevation: 0,
         backgroundColor: Colors.white,
         title: Text(
-          'Klaim Asuransi',
+          'Klaim Asuransi Kebakaran',
           style: TextStyle(color: Colors.black),
         ),
       ),
@@ -308,8 +308,9 @@ class _KlaimAsuransiListState extends State<KlaimAsuransiList> {
   Future<KlaimAsuransiModel> getFutureKlaimAsuransiList() async {
     String accessToken = await storageCache.read(key: 'access_token');
     String lang = await storageCache.read(key: 'lang');
+    String customerID = await storageCache.read(key: 'customer_id');
     var response = await http.get(
-        '${UrlCons.mainDevUrl}customer-service/insurance-claim?per_page=1000',
+        '${UrlCons.mainDevUrl}customer-service/insurance-claim/customer/$customerID?per_page=10000000',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $accessToken',

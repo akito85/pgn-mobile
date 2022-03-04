@@ -6,6 +6,7 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
 import 'package:pgn_mobile/models/pemasangan_kembali_model.dart';
@@ -70,6 +71,7 @@ class _PemasanganKembaliUpdateState extends State<PemasanganKembaliUpdate> {
 
   TextEditingController tempatLahirCtrl = new TextEditingController();
   TextEditingController nikCtrl = new TextEditingController();
+  TextEditingController phoneNumbCtrl = new TextEditingController();
   TextEditingController alamatCtrl = new TextEditingController();
   TextEditingController perumahanCtrl = new TextEditingController();
   TextEditingController rtCtrl = new TextEditingController();
@@ -513,6 +515,10 @@ class _PemasanganKembaliUpdateState extends State<PemasanganKembaliUpdate> {
                       child: TextFormField(
                         keyboardType: TextInputType.number,
                         controller: nikCtrl,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly,
+                          LengthLimitingTextInputFormatter(16),
+                        ],
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Data tidak boleh kosong!';
@@ -600,13 +606,20 @@ class _PemasanganKembaliUpdateState extends State<PemasanganKembaliUpdate> {
                           borderRadius: BorderRadius.circular(5.0),
                           border: Border.all(color: Color(0xFFD3D3D3))),
                       child: TextFormField(
-                        enabled: false,
-                        keyboardType: TextInputType.text,
+                        enabled: true,
+                        keyboardType: TextInputType.phone,
+                        controller: phoneNumbCtrl,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Data tidak boleh kosong!';
+                          }
+                          return null;
+                        },
                         decoration: InputDecoration(
                           prefixStyle: TextStyle(color: Color(0xFF828388)),
                           contentPadding: new EdgeInsets.symmetric(
                               vertical: 12.0, horizontal: 15.0),
-                          hintText: '+${detailDatas.phoneNumb}',
+                          hintText: '${detailDatas.phoneNumb}',
                           hintStyle: TextStyle(color: Colors.black),
                           disabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(5),
@@ -1713,18 +1726,9 @@ class _PemasanganKembaliUpdateState extends State<PemasanganKembaliUpdate> {
                                         image: MemoryImage(image)))),
                       ),
                     ),
+
                     Padding(
-                      padding: EdgeInsets.only(top: 10, left: 16, right: 16),
-                      child: Center(
-                          child: Text(
-                        'NPWP dan foto NPWP (tidak mandatory)',
-                        style: TextStyle(
-                            color: Color(0xFF455055),
-                            fontWeight: FontWeight.bold),
-                      )),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(top: 30, left: 16, right: 16),
+                      padding: EdgeInsets.only(top: 20, left: 16, right: 16),
                       child: Text(
                         'Tanggal Pemasangan',
                         style: TextStyle(
@@ -1898,38 +1902,38 @@ class _PemasanganKembaliUpdateState extends State<PemasanganKembaliUpdate> {
                     //     ],
                     //   ),
                     // ),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => WidgetReferensiBiayaTeknis(),
-                          ),
-                        );
-                      },
-                      child: Padding(
-                        padding:
-                            EdgeInsets.only(left: 16, right: 16, bottom: 20),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.info_outline_rounded,
-                              color: Color(0xFF427CEF),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.only(left: 10),
-                              child: Text(
-                                'Lihat Referensi Biaya Administrasi',
-                                style: TextStyle(
-                                    color: Color(0xFF427CEF),
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
+                    // GestureDetector(
+                    //   onTap: () {
+                    //     Navigator.push(
+                    //       context,
+                    //       MaterialPageRoute(
+                    //         builder: (context) => WidgetReferensiBiayaTeknis(),
+                    //       ),
+                    //     );
+                    //   },
+                    //   child: Padding(
+                    //     padding:
+                    //         EdgeInsets.only(left: 16, right: 16, bottom: 20),
+                    //     child: Row(
+                    //       mainAxisAlignment: MainAxisAlignment.center,
+                    //       children: [
+                    //         Icon(
+                    //           Icons.info_outline_rounded,
+                    //           color: Color(0xFF427CEF),
+                    //         ),
+                    //         Padding(
+                    //           padding: EdgeInsets.only(left: 10),
+                    //           child: Text(
+                    //             'Lihat Referensi Biaya',
+                    //             style: TextStyle(
+                    //                 color: Color(0xFF427CEF),
+                    //                 fontWeight: FontWeight.bold),
+                    //           ),
+                    //         )
+                    //       ],
+                    //     ),
+                    //   ),
+                    // ),
                     Padding(
                       padding: EdgeInsets.only(left: 16, right: 16, bottom: 20),
                       child: Divider(
@@ -2083,6 +2087,9 @@ class _PemasanganKembaliUpdateState extends State<PemasanganKembaliUpdate> {
       custName = custIDString;
       email = emailString;
       phoneNumb = userPhoneString;
+      phoneNumbCtrl.value = new TextEditingController.fromValue(
+              new TextEditingValue(text: userPhoneString))
+          .value;
     });
   }
 
@@ -2220,7 +2227,7 @@ class _PemasanganKembaliUpdateState extends State<PemasanganKembaliUpdate> {
           : detailDatas.bDate,
       "id_card_number": nikCtrl.text,
       "email": detailDatas.email,
-      "phone_number": detailDatas.phoneNumb,
+      "phone_number": phoneNumbCtrl.text,
       "address": alamatCtrl.text,
       "street": perumahanCtrl.text,
       "rt": rwCtrl.text,

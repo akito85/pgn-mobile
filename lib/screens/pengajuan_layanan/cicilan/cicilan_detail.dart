@@ -37,7 +37,7 @@ class _CicilanDetailState extends State<CicilanDetail> {
         elevation: 0,
         iconTheme: IconThemeData(color: Colors.white),
         title: Text(
-          'Pengajuan Layanan Cicilan JP/Piutang',
+          'Pengajuan Cicilan Jaminan Berlangganan/Piutang',
           style: TextStyle(color: Colors.white, fontSize: 16),
         ),
       ),
@@ -895,7 +895,7 @@ class _CicilanDetailState extends State<CicilanDetail> {
         children: <Widget>[
           SizedBox(height: 5),
           Text(
-            "Anda yakin ingin menghapus pengajuan layanan cicilan jp/piautang ini ? ",
+            "Anda yakin ingin menghapus pengajuan cicilan ini ? ",
             style: TextStyle(
                 // color: painting.Color.fromRGBO(255, 255, 255, 0),
                 fontSize: 17,

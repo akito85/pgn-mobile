@@ -3,9 +3,11 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:dotted_border/dotted_border.dart';
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
 import 'package:pgn_mobile/models/auth_model.dart';
@@ -31,6 +33,8 @@ class _PengajuanAmandemenFormState extends State<PengajuanAmandemenForm> {
   Uint8List imageNpwp;
   Uint8List imageRek;
   Uint8List imageKTP;
+  String dataListrikWat;
+  DataProvinces dataListrikSelected;
   List listGenderType = [
     "Laki-Laki",
     "Perempuan",
@@ -38,7 +42,7 @@ class _PengajuanAmandemenFormState extends State<PengajuanAmandemenForm> {
   List listMediaType = [
     "Email",
     "WhatsApp",
-    "SMS",
+    "SMS (Dikenakan biaya)",
   ];
   List listStatusKepemilikan = [
     "Pemilik",
@@ -47,9 +51,10 @@ class _PengajuanAmandemenFormState extends State<PengajuanAmandemenForm> {
   ];
 
   List listKelompokPelanggan = [
-    "KI",
-    "RT",
-    "Bulk",
+    "Rumah Tangga",
+    "Pelanggan Kecil",
+    "Industri dan Komersial",
+    "Power Plant"
   ];
 
   List listJenisPemakaianGas = [
@@ -60,9 +65,15 @@ class _PengajuanAmandemenFormState extends State<PengajuanAmandemenForm> {
 
   DateTime selected = DateTime.now();
   DateTime selectedPengajuan = DateTime.now();
+  DateTime selectedPenerimaTglLahir = DateTime.now();
   String valueChoose;
   String valueMediaType;
   String valueKelompokPelanggan;
+  String valuePenerimaGender;
+  String valuePenerimaMediaType;
+  DateTime selectedPenerimaPengajuan = DateTime.now();
+  String penerimaDataListrik;
+
   bool visibleDataDiri = true;
   bool visibleAlamat = false;
   bool visibleDataPelengkap = false;
@@ -80,6 +91,8 @@ class _PengajuanAmandemenFormState extends State<PengajuanAmandemenForm> {
   File imgNPWP;
   File imgRek;
   File imgKTP;
+  File penerimaImgRek;
+  File penerimaImgKTP;
 
   List<Map<String, dynamic>> gasEquip = [
     {"Name": "Kompor 1 Tungku", "Value": 0},
@@ -92,6 +105,7 @@ class _PengajuanAmandemenFormState extends State<PengajuanAmandemenForm> {
   ];
   TextEditingController tempatLahirCtrl = new TextEditingController();
   TextEditingController nikCtrl = new TextEditingController();
+  TextEditingController phoneNumbCtrl = new TextEditingController();
   TextEditingController alamatCtrl = new TextEditingController();
   TextEditingController perumahanCtrl = new TextEditingController();
   TextEditingController rtCtrl = new TextEditingController();
@@ -114,9 +128,20 @@ class _PengajuanAmandemenFormState extends State<PengajuanAmandemenForm> {
   TextEditingController alasanCtrl = new TextEditingController();
   TextEditingController ktpAddressCtrl = new TextEditingController();
 
+  //penerima
+  TextEditingController penerimaTempatLahirCtrl = new TextEditingController();
+  TextEditingController penerimaNamaCtrl = new TextEditingController();
+  TextEditingController penerimaTglLahirCtrl = new TextEditingController();
+  TextEditingController penerimaNikCtrl = new TextEditingController();
+  TextEditingController penerimaHpCtrl = new TextEditingController();
+  TextEditingController penerimaEmailCtrl = new TextEditingController();
+  TextEditingController peneriamaAlasanCtrl = new TextEditingController();
+  TextEditingController penerimaAlamatCtrl = new TextEditingController();
+
   final storageCache = FlutterSecureStorage();
   ByteData _img = ByteData(0);
   final _sign = GlobalKey<SignatureState>();
+  final _penerimaSign = GlobalKey<SignatureState>();
   final _formKeyDataDiri = GlobalKey<FormState>();
   final _formKeyAlamat = GlobalKey<FormState>();
   final _formKeyPelengkapBBG = GlobalKey<FormState>();
@@ -125,6 +150,8 @@ class _PengajuanAmandemenFormState extends State<PengajuanAmandemenForm> {
   String _fileName;
   String _fileNameRekListrik;
   String _fileNameKtp;
+  String _penerimaFileNameRekListrik;
+  String _penerimaFileNameKtp;
   Future _showDatePicker() async {
     dynamic selectedPicker = await showDatePicker(
       context: context,
@@ -146,6 +173,30 @@ class _PengajuanAmandemenFormState extends State<PengajuanAmandemenForm> {
     );
     setState(() {
       selectedPengajuan = selectedPicker;
+    });
+  }
+
+  Future _showDatePickerPenerimaTglLahir() async {
+    dynamic selectedPicker = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(1960),
+      lastDate: DateTime(2050),
+    );
+    setState(() {
+      selectedPenerimaTglLahir = selectedPicker;
+    });
+  }
+
+  Future _showDatePickerPenerima() async {
+    dynamic selectedPicker = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(1960),
+      lastDate: DateTime(2050),
+    );
+    setState(() {
+      selectedPenerimaPengajuan = selectedPicker;
     });
   }
 
@@ -641,6 +692,10 @@ class _PengajuanAmandemenFormState extends State<PengajuanAmandemenForm> {
                       child: TextFormField(
                         keyboardType: TextInputType.number,
                         controller: nikCtrl,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly,
+                          LengthLimitingTextInputFormatter(16),
+                        ],
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Data tidak boleh kosong!';
@@ -648,7 +703,7 @@ class _PengajuanAmandemenFormState extends State<PengajuanAmandemenForm> {
                           return null;
                         },
                         decoration: InputDecoration(
-                          hintText: '1285-1258835-20004',
+                          hintText: '1285125883520004',
                           hintStyle: TextStyle(color: Colors.grey),
                           contentPadding: new EdgeInsets.symmetric(
                               vertical: 12.0, horizontal: 15.0),
@@ -728,13 +783,20 @@ class _PengajuanAmandemenFormState extends State<PengajuanAmandemenForm> {
                           borderRadius: BorderRadius.circular(5.0),
                           border: Border.all(color: Color(0xFFD3D3D3))),
                       child: TextFormField(
-                        enabled: false,
-                        keyboardType: TextInputType.text,
+                        enabled: true,
+                        keyboardType: TextInputType.phone,
+                        controller: phoneNumbCtrl,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Data tidak boleh kosong!';
+                          }
+                          return null;
+                        },
                         decoration: InputDecoration(
                           prefixStyle: TextStyle(color: Color(0xFF828388)),
                           contentPadding: new EdgeInsets.symmetric(
                               vertical: 12.0, horizontal: 15.0),
-                          hintText: '+$phoneNumb',
+                          hintText: '$phoneNumb',
                           hintStyle: TextStyle(color: Colors.black),
                           disabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(5),
@@ -1567,49 +1629,49 @@ class _PengajuanAmandemenFormState extends State<PengajuanAmandemenForm> {
                             ),
                           ),
 
-                          Padding(
-                            padding:
-                                EdgeInsets.only(top: 20, left: 16, right: 16),
-                            child: Text(
-                              'Kelompok Pelanggan',
-                              style: TextStyle(
-                                  color: Color(0xFF455055),
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                          Container(
-                            margin:
-                                EdgeInsets.only(top: 10, left: 16, right: 16),
-                            decoration: BoxDecoration(
-                                color: Color(0xFFF4F4F4),
-                                borderRadius: BorderRadius.circular(5.0),
-                                border: Border.all(color: Color(0xFFD3D3D3))),
-                            child: TextFormField(
-                              enabled: false,
-                              keyboardType: TextInputType.text,
-                              decoration: InputDecoration(
-                                hintText: custGroup,
-                                hintStyle: TextStyle(color: Colors.black),
-                                contentPadding: new EdgeInsets.symmetric(
-                                    vertical: 12.0, horizontal: 15.0),
-                                disabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(5),
-                                  borderSide: BorderSide(
-                                      color: Color(0xFFF4F4F4), width: 2.0),
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(5),
-                                  borderSide: BorderSide(
-                                      color: Colors.blue, width: 2.0),
-                                ),
-                                enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(5),
-                                  borderSide: BorderSide(
-                                      color: Color(0xFFF4F4F4), width: 2.0),
-                                ),
-                              ),
-                            ),
-                          ),
+                          // Padding(
+                          //   padding:
+                          //       EdgeInsets.only(top: 20, left: 16, right: 16),
+                          //   child: Text(
+                          //     'Segmen/Kelompok Pelanggan',
+                          //     style: TextStyle(
+                          //         color: Color(0xFF455055),
+                          //         fontWeight: FontWeight.bold),
+                          //   ),
+                          // ),
+                          // Container(
+                          //   margin:
+                          //       EdgeInsets.only(top: 10, left: 16, right: 16),
+                          //   decoration: BoxDecoration(
+                          //       color: Color(0xFFF4F4F4),
+                          //       borderRadius: BorderRadius.circular(5.0),
+                          //       border: Border.all(color: Color(0xFFD3D3D3))),
+                          //   child: TextFormField(
+                          //     enabled: false,
+                          //     keyboardType: TextInputType.text,
+                          //     decoration: InputDecoration(
+                          //       hintText: custGroup,
+                          //       hintStyle: TextStyle(color: Colors.black),
+                          //       contentPadding: new EdgeInsets.symmetric(
+                          //           vertical: 12.0, horizontal: 15.0),
+                          //       disabledBorder: OutlineInputBorder(
+                          //         borderRadius: BorderRadius.circular(5),
+                          //         borderSide: BorderSide(
+                          //             color: Color(0xFFF4F4F4), width: 2.0),
+                          //       ),
+                          //       focusedBorder: OutlineInputBorder(
+                          //         borderRadius: BorderRadius.circular(5),
+                          //         borderSide: BorderSide(
+                          //             color: Colors.blue, width: 2.0),
+                          //       ),
+                          //       enabledBorder: OutlineInputBorder(
+                          //         borderRadius: BorderRadius.circular(5),
+                          //         borderSide: BorderSide(
+                          //             color: Color(0xFFF4F4F4), width: 2.0),
+                          //       ),
+                          //     ),
+                          //   ),
+                          // ),
 
                           Padding(
                             padding:
@@ -1621,49 +1683,44 @@ class _PengajuanAmandemenFormState extends State<PengajuanAmandemenForm> {
                                   fontWeight: FontWeight.bold),
                             ),
                           ),
-                          Container(
-                            margin:
-                                EdgeInsets.only(top: 10, left: 16, right: 16),
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(5.0),
-                                border: Border.all(color: Color(0xFFD3D3D3))),
-                            child: TextFormField(
-                              controller: dayaCtrl,
-                              keyboardType: TextInputType.text,
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Data tidak boleh kosong!';
-                                }
-                                return null;
+                          Padding(
+                            padding: EdgeInsets.only(
+                                top: 10, left: 16, right: 16, bottom: 20),
+                            child: DropdownSearch<DataProvinces>(
+                              mode: Mode.MENU,
+                              onFind: (String filter) =>
+                                  getPenggunaanListrik(context),
+                              itemAsString: (DataProvinces u) =>
+                                  u.value.toString(),
+                              onChanged: (DataProvinces data) {
+                                // setState(() {
+                                dataListrikWat = data.value.toString();
+                                dataListrikSelected = data;
+                                // });
+
+                                //print(data);
                               },
-                              decoration: InputDecoration(
-                                suffixIcon: Text("\Watt    "),
-                                suffixIconConstraints:
-                                    BoxConstraints(minWidth: 5, minHeight: 5),
-                                isDense: true,
-                                hintText: '00',
-                                hintStyle: TextStyle(color: Colors.grey),
-                                contentPadding: new EdgeInsets.symmetric(
-                                    vertical: 12.0, horizontal: 15.0),
-                                disabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(5),
-                                  borderSide: BorderSide(
-                                      color: Colors.white, width: 2.0),
+                              label: '',
+                              hint: 'Pilih Daya Listrik',
+                              dropdownSearchDecoration: InputDecoration(
+                                contentPadding: new EdgeInsets.only(
+                                    left: 15, right: 15, top: 2, bottom: 2),
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide:
+                                      BorderSide(color: Color(0xFFC3C3C3)),
                                 ),
                                 focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(5),
-                                  borderSide: BorderSide(
-                                      color: Colors.white, width: 2.0),
+                                  borderSide:
+                                      BorderSide(color: Color(0xFFC3C3C3)),
                                 ),
-                                enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(5),
-                                  borderSide: BorderSide(
-                                      color: Colors.white, width: 2.0),
+                                border: OutlineInputBorder(
+                                  borderSide:
+                                      BorderSide(color: Color(0xFFC3C3C3)),
                                 ),
                               ),
                             ),
                           ),
+
                           Padding(
                             padding:
                                 EdgeInsets.only(top: 20, left: 16, right: 16),
@@ -2093,7 +2150,702 @@ class _PengajuanAmandemenFormState extends State<PengajuanAmandemenForm> {
                             padding:
                                 EdgeInsets.only(top: 20, left: 16, right: 16),
                             child: Text(
-                              'Tanda Tangan Anda',
+                              'Identitas Penerima Pengalihan BBG',
+                              style: TextStyle(
+                                  color: Color(0xFF455055),
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          Padding(
+                            padding:
+                                EdgeInsets.only(top: 20, left: 16, right: 16),
+                            child: Text(
+                              'Nama Lengkap',
+                              style: TextStyle(
+                                  color: Color(0xFF455055),
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          Container(
+                            margin:
+                                EdgeInsets.only(top: 10, left: 16, right: 16),
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(5.0),
+                                border: Border.all(color: Color(0xFFD3D3D3))),
+                            child: TextFormField(
+                              keyboardType: TextInputType.text,
+                              controller: penerimaNamaCtrl,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Data tidak boleh kosong!';
+                                }
+                                return null;
+                              },
+                              decoration: InputDecoration(
+                                hintText: 'Nama Lengkap Penerima',
+                                hintStyle: TextStyle(color: Colors.grey),
+                                contentPadding: new EdgeInsets.symmetric(
+                                    vertical: 12.0, horizontal: 15.0),
+                                disabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(5),
+                                  borderSide: BorderSide(
+                                      color: Colors.white, width: 2.0),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(5),
+                                  borderSide: BorderSide(
+                                      color: Colors.white, width: 2.0),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(5),
+                                  borderSide: BorderSide(
+                                      color: Colors.white, width: 2.0),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding:
+                                EdgeInsets.only(top: 20, left: 16, right: 16),
+                            child: Text(
+                              'Jenis Kelamin',
+                              style: TextStyle(
+                                  color: Color(0xFF455055),
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          Container(
+                            margin:
+                                EdgeInsets.only(top: 10, right: 16, left: 16),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5),
+                                border: Border.all(
+                                    color: Color(0xFFD3D3D3), width: 1)),
+                            child: Padding(
+                              padding: EdgeInsets.only(left: 10, right: 8),
+                              child: DropdownButton(
+                                hint: Text('Jenis Kelamin',
+                                    style: TextStyle(
+                                        color: Color(0xFF455055),
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.normal)),
+                                dropdownColor: Colors.white,
+                                icon: Icon(Icons.arrow_drop_down,
+                                    color: Color(0xFF455055)),
+                                isExpanded: true,
+                                underline: SizedBox(),
+                                style: TextStyle(
+                                    color: Color(0xFF455055),
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.normal),
+                                value: valuePenerimaGender,
+                                onChanged: (newValue) {
+                                  setState(() {
+                                    valuePenerimaGender = newValue;
+                                  });
+                                },
+                                items: listGenderType.map((valueItem) {
+                                  return DropdownMenuItem(
+                                      value: valueItem, child: Text(valueItem));
+                                }).toList(),
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding:
+                                EdgeInsets.only(top: 20, left: 16, right: 16),
+                            child: Text(
+                              'NIK (KTP/SIM)',
+                              style: TextStyle(
+                                  color: Color(0xFF455055),
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          Container(
+                            margin:
+                                EdgeInsets.only(top: 10, left: 16, right: 16),
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(5.0),
+                                border: Border.all(color: Color(0xFFD3D3D3))),
+                            child: TextFormField(
+                              keyboardType: TextInputType.number,
+                              controller: penerimaNikCtrl,
+                              inputFormatters: [
+                                FilteringTextInputFormatter.digitsOnly,
+                                LengthLimitingTextInputFormatter(16),
+                              ],
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Data tidak boleh kosong!';
+                                }
+                                return null;
+                              },
+                              decoration: InputDecoration(
+                                hintText: '1285125883520004',
+                                hintStyle: TextStyle(color: Colors.grey),
+                                contentPadding: new EdgeInsets.symmetric(
+                                    vertical: 12.0, horizontal: 15.0),
+                                disabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(5),
+                                  borderSide: BorderSide(
+                                      color: Colors.white, width: 2.0),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(5),
+                                  borderSide: BorderSide(
+                                      color: Colors.white, width: 2.0),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(5),
+                                  borderSide: BorderSide(
+                                      color: Colors.white, width: 2.0),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding:
+                                EdgeInsets.only(top: 20, left: 16, right: 16),
+                            child: Text(
+                              'Alamat Sesuai KTP',
+                              style: TextStyle(
+                                  color: Color(0xFF455055),
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          Container(
+                            margin:
+                                EdgeInsets.only(top: 10, left: 16, right: 16),
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(5.0),
+                                border: Border.all(color: Color(0xFFD3D3D3))),
+                            child: TextFormField(
+                              keyboardType: TextInputType.text,
+                              controller: penerimaAlamatCtrl,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Data tidak boleh kosong!';
+                                }
+                                return null;
+                              },
+                              decoration: InputDecoration(
+                                hintText: 'Jakarta',
+                                hintStyle: TextStyle(color: Colors.grey),
+                                contentPadding: new EdgeInsets.symmetric(
+                                    vertical: 12.0, horizontal: 15.0),
+                                disabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(5),
+                                  borderSide: BorderSide(
+                                      color: Colors.white, width: 2.0),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(5),
+                                  borderSide: BorderSide(
+                                      color: Colors.white, width: 2.0),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(5),
+                                  borderSide: BorderSide(
+                                      color: Colors.white, width: 2.0),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding:
+                                EdgeInsets.only(top: 20, left: 16, right: 16),
+                            child: Text(
+                              'Tempat Lahir',
+                              style: TextStyle(
+                                  color: Color(0xFF455055),
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          Container(
+                            margin:
+                                EdgeInsets.only(top: 10, left: 16, right: 16),
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(5.0),
+                                border: Border.all(color: Color(0xFFD3D3D3))),
+                            child: TextFormField(
+                              keyboardType: TextInputType.text,
+                              controller: penerimaTempatLahirCtrl,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Data tidak boleh kosong!';
+                                }
+                                return null;
+                              },
+                              decoration: InputDecoration(
+                                hintText: 'Jakarta',
+                                hintStyle: TextStyle(color: Colors.grey),
+                                contentPadding: new EdgeInsets.symmetric(
+                                    vertical: 12.0, horizontal: 15.0),
+                                disabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(5),
+                                  borderSide: BorderSide(
+                                      color: Colors.white, width: 2.0),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(5),
+                                  borderSide: BorderSide(
+                                      color: Colors.white, width: 2.0),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(5),
+                                  borderSide: BorderSide(
+                                      color: Colors.white, width: 2.0),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding:
+                                EdgeInsets.only(top: 20, left: 16, right: 16),
+                            child: Text(
+                              'Tanggal Lahir',
+                              style: TextStyle(
+                                  color: Color(0xFF455055),
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          Container(
+                            height: 55,
+                            margin:
+                                EdgeInsets.only(top: 10, left: 16, right: 16),
+                            padding: EdgeInsets.only(left: 16, right: 5),
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(5.0),
+                                border: Border.all(color: Color(0xFFC3C3C3))),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Text(DateFormat('d MMM yyy').format(
+                                    selectedPenerimaTglLahir != null
+                                        ? selectedPenerimaTglLahir
+                                        : DateTime.now())),
+                                Expanded(
+                                  child: Container(
+                                    alignment: Alignment.centerRight,
+                                    child: IconButton(
+                                        icon:
+                                            Icon(Icons.calendar_today_outlined),
+                                        onPressed: () {
+                                          _showDatePickerPenerimaTglLahir();
+                                        }),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding:
+                                EdgeInsets.only(top: 20, left: 16, right: 16),
+                            child: Text(
+                              'No HP/WA',
+                              style: TextStyle(
+                                  color: Color(0xFF455055),
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          Container(
+                            margin:
+                                EdgeInsets.only(top: 10, left: 16, right: 16),
+                            decoration: BoxDecoration(
+                                color: Color(0xFFF4F4F4),
+                                borderRadius: BorderRadius.circular(5.0),
+                                border: Border.all(color: Color(0xFFD3D3D3))),
+                            child: TextFormField(
+                              enabled: true,
+                              keyboardType: TextInputType.phone,
+                              controller: penerimaHpCtrl,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Data tidak boleh kosong!';
+                                }
+                                return null;
+                              },
+                              decoration: InputDecoration(
+                                prefixStyle: TextStyle(color: Colors.white),
+                                contentPadding: new EdgeInsets.symmetric(
+                                    vertical: 12.0, horizontal: 15.0),
+                                hintText: '$phoneNumb',
+                                hintStyle: TextStyle(color: Colors.black),
+                                disabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(5),
+                                  borderSide: BorderSide(
+                                      color: Color(0xFFF4F4F4), width: 2.0),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(5),
+                                  borderSide: BorderSide(
+                                      color: Colors.blue, width: 2.0),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(5),
+                                  borderSide: BorderSide(
+                                      color: Color(0xFFF4F4F4), width: 2.0),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding:
+                                EdgeInsets.only(top: 20, left: 16, right: 16),
+                            child: Text(
+                              'Email',
+                              style: TextStyle(
+                                  color: Color(0xFF455055),
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          Container(
+                            margin:
+                                EdgeInsets.only(top: 10, left: 16, right: 16),
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(5.0),
+                                border: Border.all(color: Color(0xFFD3D3D3))),
+                            child: TextFormField(
+                              controller: penerimaEmailCtrl,
+                              keyboardType: TextInputType.text,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Data tidak boleh kosong!';
+                                }
+                                return null;
+                              },
+                              decoration: InputDecoration(
+                                hintText: 'Email',
+                                hintStyle: TextStyle(color: Colors.grey),
+                                contentPadding: new EdgeInsets.symmetric(
+                                    vertical: 12.0, horizontal: 15.0),
+                                disabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(5),
+                                  borderSide: BorderSide(
+                                      color: Colors.white, width: 2.0),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(5),
+                                  borderSide: BorderSide(
+                                      color: Colors.white, width: 2.0),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(5),
+                                  borderSide: BorderSide(
+                                      color: Colors.white, width: 2.0),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding:
+                                EdgeInsets.only(top: 20, left: 16, right: 16),
+                            child: Text(
+                              'Daya Listrik',
+                              style: TextStyle(
+                                  color: Color(0xFF455055),
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(
+                                top: 10, left: 16, right: 16, bottom: 20),
+                            child: DropdownSearch<DataProvinces>(
+                              mode: Mode.MENU,
+                              onFind: (String filter) =>
+                                  getPenggunaanListrik(context),
+                              itemAsString: (DataProvinces u) =>
+                                  u.value.toString(),
+                              onChanged: (DataProvinces data) {
+                                // setState(() {
+                                penerimaDataListrik = data.value.toString();
+                                dataListrikSelected = data;
+                                // });
+
+                                //print(data);
+                              },
+                              label: '',
+                              hint: 'Pilih Daya Listrik',
+                              dropdownSearchDecoration: InputDecoration(
+                                contentPadding: new EdgeInsets.only(
+                                    left: 15, right: 15, top: 2, bottom: 2),
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide:
+                                      BorderSide(color: Color(0xFFC3C3C3)),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide:
+                                      BorderSide(color: Color(0xFFC3C3C3)),
+                                ),
+                                border: OutlineInputBorder(
+                                  borderSide:
+                                      BorderSide(color: Color(0xFFC3C3C3)),
+                                ),
+                              ),
+                            ),
+                          ),
+
+                          Padding(
+                            padding:
+                                EdgeInsets.only(top: 20, left: 16, right: 16),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    'Bukti Rekening Listrik',
+                                    style: TextStyle(
+                                        color: Color(0xFF455055),
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      _penerimaFileNameRekListrik = null;
+                                    });
+                                  },
+                                  child: Text(
+                                    'Hapus',
+                                    textAlign: TextAlign.right,
+                                    style: TextStyle(
+                                        color: Color(0xFF427CEF),
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(
+                                left: 16, right: 16, top: 20, bottom: 10),
+                            child: DottedBorder(
+                              dashPattern: [3.1],
+                              color: Color(0xFFD3D3D3),
+                              strokeWidth: 1,
+                              child: Container(
+                                height: 60,
+                                child: Center(
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      _pickPenerimaFiles('rekListrik');
+                                    },
+                                    child: _penerimaFileNameRekListrik != null
+                                        ? Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 10, right: 10),
+                                            child: Text(
+                                              _penerimaFileNameRekListrik,
+                                              style: TextStyle(
+                                                  color: Color(0xFF427CEF),
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                          )
+                                        : Text(
+                                            'Unggah Bukti Rekening Listrik',
+                                            style: TextStyle(
+                                                color: Color(0xFF427CEF),
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding:
+                                EdgeInsets.only(top: 20, left: 16, right: 16),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    'Foto KTP',
+                                    style: TextStyle(
+                                        color: Color(0xFF455055),
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      _penerimaFileNameKtp = null;
+                                    });
+                                  },
+                                  child: Text(
+                                    'Hapus',
+                                    textAlign: TextAlign.right,
+                                    style: TextStyle(
+                                        color: Color(0xFF427CEF),
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(
+                                left: 16, right: 16, top: 20, bottom: 10),
+                            child: DottedBorder(
+                              dashPattern: [3.1],
+                              color: Color(0xFFD3D3D3),
+                              strokeWidth: 1,
+                              child: Container(
+                                height: 60,
+                                child: Center(
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      _pickPenerimaFiles('KTP');
+                                    },
+                                    child: _penerimaFileNameKtp != null
+                                        ? Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 10, right: 10),
+                                            child: Text(
+                                              _penerimaFileNameKtp,
+                                              style: TextStyle(
+                                                  color: Color(0xFF427CEF),
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                          )
+                                        : Text(
+                                            'Unggah Foto KTP',
+                                            style: TextStyle(
+                                                color: Color(0xFF427CEF),
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Container(
+                            margin:
+                                EdgeInsets.only(top: 20, right: 16, left: 16),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5),
+                                border: Border.all(
+                                    color: Color(0xFFD3D3D3), width: 1)),
+                            child: Padding(
+                              padding: EdgeInsets.only(left: 10, right: 8),
+                              child: DropdownButton(
+                                hint: Text('Media Informasi',
+                                    style: TextStyle(
+                                        color: Color(0xFF455055),
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.normal)),
+                                dropdownColor: Colors.white,
+                                icon: Icon(Icons.arrow_drop_down,
+                                    color: Color(0xFF455055)),
+                                isExpanded: true,
+                                underline: SizedBox(),
+                                style: TextStyle(
+                                    color: Color(0xFF455055),
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.normal),
+                                value: valuePenerimaMediaType,
+                                onChanged: (newValue) {
+                                  setState(() {
+                                    valuePenerimaMediaType = newValue;
+                                  });
+                                  //print('INI MEDIA TYPE NYA $valueMediaType');
+                                },
+                                items: listMediaType.map((valueItem) {
+                                  return DropdownMenuItem(
+                                      value: valueItem, child: Text(valueItem));
+                                }).toList(),
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding:
+                                EdgeInsets.only(top: 20, left: 16, right: 16),
+                            child: Text(
+                              'Bulan Berlaku yang Diajukan',
+                              style: TextStyle(
+                                  color: Color(0xFF455055),
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          Container(
+                            height: 55,
+                            margin:
+                                EdgeInsets.only(top: 10, left: 16, right: 16),
+                            padding: EdgeInsets.only(left: 16, right: 5),
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(5.0),
+                                border: Border.all(color: Color(0xFFC3C3C3))),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Text(selectedPenerimaPengajuan != null
+                                    ? DateFormat('d MMM yyy')
+                                        .format(selectedPenerimaPengajuan)
+                                    : DateFormat('d MMM yyy')
+                                        .format(DateTime.now())),
+                                Expanded(
+                                  child: Container(
+                                    alignment: Alignment.centerRight,
+                                    child: IconButton(
+                                        icon:
+                                            Icon(Icons.calendar_today_outlined),
+                                        onPressed: () {
+                                          _showDatePickerPenerima();
+                                        }),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding:
+                                EdgeInsets.only(top: 20, left: 16, right: 16),
+                            child: Text(
+                              'Alasan',
+                              style: TextStyle(
+                                  color: Color(0xFF455055),
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          Padding(
+                            padding:
+                                EdgeInsets.only(top: 10, left: 16, right: 16),
+                            child: TextFormField(
+                              controller: penerimaAlamatCtrl,
+                              keyboardType: TextInputType.text,
+                              minLines: 5,
+                              maxLines: 5,
+                              maxLength: 2000,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Data tidak boleh kosong!';
+                                }
+                                return null;
+                              },
+                              decoration: const InputDecoration(
+                                  border: OutlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Color(0xFFC3C3C3)),
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(5))),
+                                  hintText: ' '),
+                            ),
+                          ),
+                          Padding(
+                            padding:
+                                EdgeInsets.only(top: 20, left: 16, right: 16),
+                            child: Text(
+                              'TTD Pelanggan Lama',
                               style: TextStyle(
                                   color: Color(0xFF455055),
                                   fontWeight: FontWeight.bold),
@@ -2118,12 +2870,7 @@ class _PengajuanAmandemenFormState extends State<PengajuanAmandemenForm> {
                             ),
                             color: Colors.black12,
                           ),
-                          // _img.buffer.lengthInBytes == 0
-                          //     ? Container()
-                          //     : LimitedBox(
-                          //         maxHeight: 200.0,
-                          //         child:
-                          //             Image.memory(_img.buffer.asUint8List())),
+
                           Padding(
                             padding: EdgeInsets.only(
                                 top: 10, left: 16, right: 16, bottom: 20),
@@ -2136,32 +2883,65 @@ class _PengajuanAmandemenFormState extends State<PengajuanAmandemenForm> {
                                       final sign = _sign.currentState;
                                       sign.clear();
                                       setState(() {
+                                        dataListrikWat = dataListrikWat;
                                         _img = ByteData(0);
                                       });
                                       debugPrint("cleared");
                                     },
                                     child: Text("Hapus")),
                                 SizedBox(width: 10),
-                                // _img.buffer.lengthInBytes == 0
-                                //     ? MaterialButton(
-                                //         color: Colors.green,
-                                //         textColor: Colors.white,
-                                //         onPressed: () async {
-                                //           final sign = _sign.currentState;
-                                //           //retrieve image data, do whatever you want with it (send to server, save locally...)
-                                //           final image = await sign.getData();
-                                //           var data = await image.toByteData(
-                                //               format: ui.ImageByteFormat.png);
-                                //           sign.clear();
-                                //           final encoded = base64.encode(
-                                //               data.buffer.asUint8List());
-                                //           setState(() {
-                                //             _img = data;
-                                //           });
-                                //           debugPrint("onPressed " + encoded);
-                                //         },
-                                //         child: Text("Konfirmasi"))
-                                //     : Container(),
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding:
+                                EdgeInsets.only(top: 20, left: 16, right: 16),
+                            child: Text(
+                              'TTD Penerima Pengalihan BBG',
+                              style: TextStyle(
+                                  color: Color(0xFF455055),
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          Container(
+                            height: 200,
+                            margin: EdgeInsets.only(
+                                top: 20, left: 16, right: 16, bottom: 5),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Signature(
+                                color: Colors.black,
+                                key: _penerimaSign,
+                                onSign: () {
+                                  final sign = _penerimaSign.currentState;
+                                  debugPrint(
+                                      '${sign.points.length} points in the signature');
+                                },
+                                strokeWidth: 3.0,
+                              ),
+                            ),
+                            color: Colors.black12,
+                          ),
+
+                          Padding(
+                            padding: EdgeInsets.only(
+                                top: 10, left: 16, right: 16, bottom: 20),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                MaterialButton(
+                                    color: Color(0xFFC3C3C3),
+                                    onPressed: () {
+                                      final sign = _penerimaSign.currentState;
+                                      sign.clear();
+                                      setState(() {
+                                        dataListrikWat = dataListrikWat;
+                                        _img = ByteData(0);
+                                      });
+                                      debugPrint("cleared");
+                                    },
+                                    child: Text("Hapus")),
+                                SizedBox(width: 10),
                               ],
                             ),
                           ),
@@ -2229,13 +3009,18 @@ class _PengajuanAmandemenFormState extends State<PengajuanAmandemenForm> {
                                       if (_formKeyPelengkapBBG.currentState
                                               .validate() &&
                                           sign.hasPoints &&
-                                          valueMediaType != null) {
+                                          valuePenerimaMediaType != null &&
+                                          dataListrikWat != null) {
                                         addFormAlert('BBG');
                                       } else if (!sign.hasPoints) {
                                         showToast('Tanda Tangan harus ada !');
-                                      } else if (valueMediaType == null) {
+                                      } else if (valuePenerimaMediaType ==
+                                          null) {
                                         showToast(
                                             'Media Informasi harus ada !');
+                                      } else if (dataListrikWat == null) {
+                                        showToast(
+                                            'Daya Listrik harus di isi !');
                                       }
                                     },
                                     style: ElevatedButton.styleFrom(
@@ -2551,20 +3336,10 @@ class _PengajuanAmandemenFormState extends State<PengajuanAmandemenForm> {
                               ),
                             ),
                           ),
+
                           Padding(
                             padding:
-                                EdgeInsets.only(top: 10, left: 16, right: 16),
-                            child: Center(
-                                child: Text(
-                              'NPWP dan foto NPWP (tidak mandatory)',
-                              style: TextStyle(
-                                  color: Color(0xFF455055),
-                                  fontWeight: FontWeight.bold),
-                            )),
-                          ),
-                          Padding(
-                            padding:
-                                EdgeInsets.only(top: 30, left: 16, right: 16),
+                                EdgeInsets.only(top: 20, left: 16, right: 16),
                             child: Text(
                               'Bulan Berlaku yang Diajukan',
                               style: TextStyle(
@@ -2878,16 +3653,20 @@ class _PengajuanAmandemenFormState extends State<PengajuanAmandemenForm> {
                                             keyboardType: TextInputType.number,
                                           ),
                                         ),
-                                        IconButton(
-                                            icon: Icon(Icons.delete_outline,
-                                                color: Color(0xFFFF0000)),
-                                            onPressed: () {
-                                              setState(() {
-                                                gasEquip.removeWhere((item) =>
-                                                    item['Name'] ==
-                                                    gasEquip[i]['Name']);
-                                              });
-                                            }),
+                                        i >= 7
+                                            ? IconButton(
+                                                icon: Icon(Icons.delete_outline,
+                                                    color: Color(0xFFFF0000)),
+                                                onPressed: () {
+                                                  setState(() {
+                                                    gasEquip.removeWhere(
+                                                        (item) =>
+                                                            item['Name'] ==
+                                                            gasEquip[i]
+                                                                ['Name']);
+                                                  });
+                                                })
+                                            : SizedBox(width: 50),
                                       ],
                                     ),
                                     SizedBox(height: 10),
@@ -3084,7 +3863,7 @@ class _PengajuanAmandemenFormState extends State<PengajuanAmandemenForm> {
                             padding:
                                 EdgeInsets.only(top: 20, left: 16, right: 16),
                             child: Text(
-                              'Kelompok Pelanggan',
+                              'Segmen/Kelompok Pelanggan',
                               style: TextStyle(
                                   color: Color(0xFF455055),
                                   fontWeight: FontWeight.bold),
@@ -3100,7 +3879,7 @@ class _PengajuanAmandemenFormState extends State<PengajuanAmandemenForm> {
                             child: Padding(
                               padding: EdgeInsets.only(left: 10, right: 8),
                               child: DropdownButton(
-                                hint: Text('Kelompok Pelangaan',
+                                hint: Text('Segmen/Kelompok Pelangaan',
                                     style: TextStyle(
                                         color: Color(0xFF455055),
                                         fontSize: 14,
@@ -3335,6 +4114,27 @@ class _PengajuanAmandemenFormState extends State<PengajuanAmandemenForm> {
     );
   }
 
+  Future<List<DataProvinces>> getPenggunaanListrik(BuildContext context) async {
+    var responseTokenBarrer =
+        await http.post('${UrlCons.prodRelyonUrl}oauth/access_token', body: {
+      'client_id': '0dUIDb81bBUsGDfDsYYHQ9wBujfjL9XWfH0ZoAzi',
+      'client_secret': '0DTuUFYRPtWUFN2UbzSvzqZMzNsW4kAl4t4PTrtC',
+      'grant_type': 'client_credentials'
+    });
+    AuthSalesRegit _auth =
+        AuthSalesRegit.fromJson(json.decode(responseTokenBarrer.body));
+
+    var responseProvinces = await http
+        .get('${UrlCons.prodRelyonUrl}v1/electrical-powers', headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ${_auth.accessToken}'
+    });
+    GetProvinces getDayaListrik;
+    getDayaListrik = GetProvinces.fromJson(json.decode(responseProvinces.body));
+    var datasDayaListrik = getDayaListrik.data;
+    return datasDayaListrik;
+  }
+
   Future<bool> addGasUsage() {
     Map<String, dynamic> addNewEquip;
     var alertStyle = AlertStyle(
@@ -3520,6 +4320,9 @@ class _PengajuanAmandemenFormState extends State<PengajuanAmandemenForm> {
       custName = custIDString;
       email = emailString;
       phoneNumb = userPhoneString;
+      phoneNumbCtrl.value = new TextEditingController.fromValue(
+              new TextEditingValue(text: userPhoneString))
+          .value;
       custGroup = custGroupString;
       if (custGroupString == '3') {
         custGroup = 'RT';
@@ -3625,7 +4428,7 @@ class _PengajuanAmandemenFormState extends State<PengajuanAmandemenForm> {
           : DateFormat('yyy-MM-dd').format(DateTime.now()),
       "id_card_number": nikCtrl.text,
       "email": email,
-      "phone_number": phoneNumb,
+      "phone_number": phoneNumbCtrl.text,
       "address": alamatCtrl.text,
       "street": perumahanCtrl.text,
       "rt": rwCtrl.text,
@@ -3638,13 +4441,14 @@ class _PengajuanAmandemenFormState extends State<PengajuanAmandemenForm> {
       "longitude": long,
       "latitude": lat,
       "person_in_location_status": statusLokasi,
-      "info_media": valueMediaType,
+      "info_media":
+          valueMediaType == 'SMS (Dikenakan biaya)' ? 'SMS' : valueMediaType,
       "submission_date": selectedPengajuan != null
           ? DateFormat('yyy-MM-dd').format(selectedPengajuan)
           : DateFormat('yyy-MM-dd').format(DateTime.now()),
       "reason": alasanCtrl.text,
       "customer_group": custGroup,
-      "electrical_power": dayaCtrl.text,
+      "electrical_power": dataListrikWat,
       "electricity_bill_proof": encodedImageRek,
       "npwp_file": encodedImageNPWP,
       "npwp_number": nomorNpwpCtrl.text,
@@ -3716,7 +4520,7 @@ class _PengajuanAmandemenFormState extends State<PengajuanAmandemenForm> {
           : DateFormat('yyy-MM-dd').format(DateTime.now()),
       "id_card_number": nikCtrl.text,
       "email": email,
-      "phone_number": phoneNumb,
+      "phone_number": phoneNumbCtrl.text,
       "address": alamatCtrl.text,
       "street": perumahanCtrl.text,
       "rt": rwCtrl.text,
@@ -3729,7 +4533,8 @@ class _PengajuanAmandemenFormState extends State<PengajuanAmandemenForm> {
       "longitude": long,
       "latitude": lat,
       "person_in_location_status": statusLokasi,
-      "info_media": valueMediaType,
+      "info_media":
+          valueMediaType == 'SMS (Dikenakan biaya)' ? 'SMS' : valueMediaType,
       "customer_group": custGroup,
       "submission_date": selectedPengajuan != null
           ? DateFormat('yyy-MM-dd').format(selectedPengajuan)
@@ -3806,6 +4611,37 @@ class _PengajuanAmandemenFormState extends State<PengajuanAmandemenForm> {
       } else if (status == 'KTP') {
         setState(() {
           _fileNameKtp = result.names.single;
+          imgKTP = file;
+          //print('NAMA FILE KTP : $_fileNameKtp');
+        });
+      } else {
+        setState(() {
+          _fileName = result.names.single;
+          imgNPWP = file;
+          //print('NAMA FILE : $_fileName');
+        });
+      }
+    } else {
+      // User canceled the picker
+    }
+  }
+
+  void _pickPenerimaFiles(String status) async {
+    _resetState();
+    FilePickerResult result = await FilePicker.platform.pickFiles(
+        type: FileType.custom, allowedExtensions: ['jpg', 'png', 'jpeg']);
+
+    if (result != null) {
+      File file = File(result.files.single.path.toString());
+      if (status == 'rekListrik') {
+        setState(() {
+          _penerimaFileNameRekListrik = result.names.single;
+          imgRek = file;
+          //print('NAMA FILE : $_fileName');
+        });
+      } else if (status == 'KTP') {
+        setState(() {
+          _penerimaFileNameKtp = result.names.single;
           imgKTP = file;
           //print('NAMA FILE KTP : $_fileNameKtp');
         });

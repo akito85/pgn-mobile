@@ -63,7 +63,7 @@ class _CicilanListState extends State<CicilanList> {
         elevation: 0,
         backgroundColor: Colors.white,
         title: Text(
-          'Pengajuan Layanan Cicilan JP/Piutang',
+          'Pengajuan Cicilan Jaminan Berlangganan/Piutang',
           style: TextStyle(color: Colors.black),
         ),
       ),

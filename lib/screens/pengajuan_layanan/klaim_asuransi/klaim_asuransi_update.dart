@@ -5,6 +5,7 @@ import 'dart:typed_data';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
 import 'package:pgn_mobile/models/klaim_asuransi_model.dart';
@@ -69,6 +70,7 @@ class _KlaimAsuransiUpdateState extends State<KlaimAsuransiUpdate> {
   final _formKeyPelengkap = GlobalKey<FormState>();
   TextEditingController tempatLahirCtrl = new TextEditingController();
   TextEditingController nikCtrl = new TextEditingController();
+  TextEditingController phoneNumbCtrl = new TextEditingController();
   TextEditingController alamatCtrl = new TextEditingController();
   TextEditingController perumahanCtrl = new TextEditingController();
   TextEditingController rtCtrl = new TextEditingController();
@@ -110,7 +112,7 @@ class _KlaimAsuransiUpdateState extends State<KlaimAsuransiUpdate> {
         elevation: 0,
         iconTheme: IconThemeData(color: Colors.white),
         title: Text(
-          'Update Klaim Asuransi Update',
+          'Update Klaim Asuransi Kebakaran',
           style: TextStyle(color: Colors.white, fontSize: 16),
         ),
       ),
@@ -494,6 +496,10 @@ class _KlaimAsuransiUpdateState extends State<KlaimAsuransiUpdate> {
                       child: TextFormField(
                         keyboardType: TextInputType.number,
                         controller: nikCtrl,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly,
+                          LengthLimitingTextInputFormatter(16),
+                        ],
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Data tidak boleh kosong!';
@@ -501,7 +507,7 @@ class _KlaimAsuransiUpdateState extends State<KlaimAsuransiUpdate> {
                           return null;
                         },
                         decoration: InputDecoration(
-                          hintText: '1285-1258835-20004',
+                          hintText: '1285125883520004',
                           hintStyle: TextStyle(color: Colors.grey),
                           contentPadding: new EdgeInsets.symmetric(
                               vertical: 12.0, horizontal: 15.0),
@@ -581,13 +587,20 @@ class _KlaimAsuransiUpdateState extends State<KlaimAsuransiUpdate> {
                           borderRadius: BorderRadius.circular(5.0),
                           border: Border.all(color: Color(0xFFD3D3D3))),
                       child: TextFormField(
-                        enabled: false,
-                        keyboardType: TextInputType.text,
+                        enabled: true,
+                        keyboardType: TextInputType.phone,
+                        controller: phoneNumbCtrl,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Data tidak boleh kosong!';
+                          }
+                          return null;
+                        },
                         decoration: InputDecoration(
                           prefixStyle: TextStyle(color: Color(0xFF828388)),
                           contentPadding: new EdgeInsets.symmetric(
                               vertical: 12.0, horizontal: 15.0),
-                          hintText: '+${detailDatas.phoneNumb}',
+                          hintText: '${detailDatas.phoneNumb}',
                           hintStyle: TextStyle(color: Colors.black),
                           disabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(5),
@@ -1414,205 +1427,196 @@ class _KlaimAsuransiUpdateState extends State<KlaimAsuransiUpdate> {
                       ),
                     ),
                   ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 20, left: 16, right: 16),
-                    child: Text(
-                      'Alamat Sesuai KTP',
-                      style: TextStyle(
-                          color: Color(0xFF455055),
-                          fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(top: 10, left: 16, right: 16),
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(5.0),
-                        border: Border.all(color: Color(0xFFD3D3D3))),
-                    child: TextFormField(
-                      keyboardType: TextInputType.text,
-                      controller: ktpAddressCtrl,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Data tidak boleh kosong!';
-                        }
-                        return null;
-                      },
-                      decoration: InputDecoration(
-                        hintText: 'Jakarta',
-                        hintStyle: TextStyle(color: Colors.grey),
-                        contentPadding: new EdgeInsets.symmetric(
-                            vertical: 12.0, horizontal: 15.0),
-                        disabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(5),
-                          borderSide:
-                              BorderSide(color: Colors.white, width: 2.0),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(5),
-                          borderSide:
-                              BorderSide(color: Colors.white, width: 2.0),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(5),
-                          borderSide:
-                              BorderSide(color: Colors.white, width: 2.0),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 20, left: 16, right: 16),
-                    child: Text(
-                      'Nomor NPWP',
-                      style: TextStyle(
-                          color: Color(0xFF455055),
-                          fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(top: 10, left: 16, right: 16),
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(5.0),
-                        border: Border.all(color: Color(0xFFD3D3D3))),
-                    child: TextFormField(
-                      keyboardType: TextInputType.number,
-                      controller: numberNpwpCtrl,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Data tidak boleh kosong!';
-                        }
-                        return null;
-                      },
-                      decoration: InputDecoration(
-                        hintText: '000000000',
-                        hintStyle: TextStyle(color: Colors.grey),
-                        contentPadding: new EdgeInsets.symmetric(
-                            vertical: 12.0, horizontal: 15.0),
-                        disabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(5),
-                          borderSide:
-                              BorderSide(color: Colors.white, width: 2.0),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(5),
-                          borderSide:
-                              BorderSide(color: Colors.white, width: 2.0),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(5),
-                          borderSide:
-                              BorderSide(color: Colors.white, width: 2.0),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 20, left: 16, right: 16),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Text(
-                            'Foto NPWP',
-                            style: TextStyle(
-                                color: Color(0xFF455055),
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                        detailDatas.npwpFile == ""
-                            ? GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    _fileName = null;
-                                  });
-                                },
-                                child: Text(
-                                  'Hapus',
-                                  textAlign: TextAlign.right,
-                                  style: TextStyle(
-                                      color: Color(0xFF427CEF),
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              )
-                            : GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    detailDatas.npwpFile = "";
-                                  });
-                                  _pickFiles('NPWP');
-                                },
-                                child: Text(
-                                  'Ubah',
-                                  textAlign: TextAlign.right,
-                                  style: TextStyle(
-                                      color: Color(0xFF427CEF),
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(
-                        left: 16, right: 16, top: 20, bottom: 10),
-                    child: DottedBorder(
-                      dashPattern: [3.1],
-                      color: Color(0xFFD3D3D3),
-                      strokeWidth: 1,
-                      child: detailDatas.npwpFile == ""
-                          ? Container(
-                              height: 60,
-                              child: Center(
-                                child: GestureDetector(
-                                  onTap: () {
-                                    _pickFiles('NPWP');
-                                  },
-                                  child: _fileNameNPWP != null
-                                      ? Padding(
-                                          padding: const EdgeInsets.only(
-                                              left: 10, right: 10),
-                                          child: Text(
-                                            _fileNameNPWP,
-                                            style: TextStyle(
-                                                color: Color(0xFF427CEF),
-                                                fontSize: 12,
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                        )
-                                      : Text(
-                                          'Unggah Foto NPWP',
-                                          style: TextStyle(
-                                              color: Color(0xFF427CEF),
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                ),
-                              ),
-                            )
-                          : Container(
-                              height: 150,
-                              decoration: BoxDecoration(
-                                  color: Colors.black,
-                                  borderRadius: BorderRadius.circular(5),
-                                  image: DecorationImage(
-                                      fit: BoxFit.contain,
-                                      image: MemoryImage(image)))),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 10, left: 16, right: 16),
-                    child: Center(
-                        child: Text(
-                      'NPWP dan foto NPWP (tidak mandatory)',
-                      style: TextStyle(
-                          color: Color(0xFF455055),
-                          fontWeight: FontWeight.bold),
-                    )),
-                  ),
+                  // Padding(
+                  //   padding: EdgeInsets.only(top: 20, left: 16, right: 16),
+                  //   child: Text(
+                  //     'Alamat Sesuai KTP',
+                  //     style: TextStyle(
+                  //         color: Color(0xFF455055),
+                  //         fontWeight: FontWeight.bold),
+                  //   ),
+                  // ),
+                  // Container(
+                  //   margin: EdgeInsets.only(top: 10, left: 16, right: 16),
+                  //   decoration: BoxDecoration(
+                  //       color: Colors.white,
+                  //       borderRadius: BorderRadius.circular(5.0),
+                  //       border: Border.all(color: Color(0xFFD3D3D3))),
+                  //   child: TextFormField(
+                  //     keyboardType: TextInputType.text,
+                  //     controller: ktpAddressCtrl,
+                  //     validator: (value) {
+                  //       if (value == null || value.isEmpty) {
+                  //         return 'Data tidak boleh kosong!';
+                  //       }
+                  //       return null;
+                  //     },
+                  //     decoration: InputDecoration(
+                  //       hintText: 'Jakarta',
+                  //       hintStyle: TextStyle(color: Colors.grey),
+                  //       contentPadding: new EdgeInsets.symmetric(
+                  //           vertical: 12.0, horizontal: 15.0),
+                  //       disabledBorder: OutlineInputBorder(
+                  //         borderRadius: BorderRadius.circular(5),
+                  //         borderSide:
+                  //             BorderSide(color: Colors.white, width: 2.0),
+                  //       ),
+                  //       focusedBorder: OutlineInputBorder(
+                  //         borderRadius: BorderRadius.circular(5),
+                  //         borderSide:
+                  //             BorderSide(color: Colors.white, width: 2.0),
+                  //       ),
+                  //       enabledBorder: OutlineInputBorder(
+                  //         borderRadius: BorderRadius.circular(5),
+                  //         borderSide:
+                  //             BorderSide(color: Colors.white, width: 2.0),
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
+                  // Padding(
+                  //   padding: EdgeInsets.only(top: 20, left: 16, right: 16),
+                  //   child: Text(
+                  //     'Nomor NPWP',
+                  //     style: TextStyle(
+                  //         color: Color(0xFF455055),
+                  //         fontWeight: FontWeight.bold),
+                  //   ),
+                  // ),
+                  // Container(
+                  //   margin: EdgeInsets.only(top: 10, left: 16, right: 16),
+                  //   decoration: BoxDecoration(
+                  //       color: Colors.white,
+                  //       borderRadius: BorderRadius.circular(5.0),
+                  //       border: Border.all(color: Color(0xFFD3D3D3))),
+                  //   child: TextFormField(
+                  //     keyboardType: TextInputType.number,
+                  //     controller: numberNpwpCtrl,
+                  //     validator: (value) {
+                  //       if (value == null || value.isEmpty) {
+                  //         return 'Data tidak boleh kosong!';
+                  //       }
+                  //       return null;
+                  //     },
+                  //     decoration: InputDecoration(
+                  //       hintText: '000000000',
+                  //       hintStyle: TextStyle(color: Colors.grey),
+                  //       contentPadding: new EdgeInsets.symmetric(
+                  //           vertical: 12.0, horizontal: 15.0),
+                  //       disabledBorder: OutlineInputBorder(
+                  //         borderRadius: BorderRadius.circular(5),
+                  //         borderSide:
+                  //             BorderSide(color: Colors.white, width: 2.0),
+                  //       ),
+                  //       focusedBorder: OutlineInputBorder(
+                  //         borderRadius: BorderRadius.circular(5),
+                  //         borderSide:
+                  //             BorderSide(color: Colors.white, width: 2.0),
+                  //       ),
+                  //       enabledBorder: OutlineInputBorder(
+                  //         borderRadius: BorderRadius.circular(5),
+                  //         borderSide:
+                  //             BorderSide(color: Colors.white, width: 2.0),
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
+                  // Padding(
+                  //   padding: EdgeInsets.only(top: 20, left: 16, right: 16),
+                  //   child: Row(
+                  //     children: [
+                  //       Expanded(
+                  //         child: Text(
+                  //           'Foto NPWP',
+                  //           style: TextStyle(
+                  //               color: Color(0xFF455055),
+                  //               fontWeight: FontWeight.bold),
+                  //         ),
+                  //       ),
+                  //       detailDatas.npwpFile == ""
+                  //           ? GestureDetector(
+                  //               onTap: () {
+                  //                 setState(() {
+                  //                   _fileName = null;
+                  //                 });
+                  //               },
+                  //               child: Text(
+                  //                 'Hapus',
+                  //                 textAlign: TextAlign.right,
+                  //                 style: TextStyle(
+                  //                     color: Color(0xFF427CEF),
+                  //                     fontWeight: FontWeight.bold),
+                  //               ),
+                  //             )
+                  //           : GestureDetector(
+                  //               onTap: () {
+                  //                 setState(() {
+                  //                   detailDatas.npwpFile = "";
+                  //                 });
+                  //                 _pickFiles('NPWP');
+                  //               },
+                  //               child: Text(
+                  //                 'Ubah',
+                  //                 textAlign: TextAlign.right,
+                  //                 style: TextStyle(
+                  //                     color: Color(0xFF427CEF),
+                  //                     fontWeight: FontWeight.bold),
+                  //               ),
+                  //             ),
+                  //     ],
+                  //   ),
+                  // ),
+                  // Padding(
+                  //   padding: EdgeInsets.only(
+                  //       left: 16, right: 16, top: 20, bottom: 10),
+                  //   child: DottedBorder(
+                  //     dashPattern: [3.1],
+                  //     color: Color(0xFFD3D3D3),
+                  //     strokeWidth: 1,
+                  //     child: detailDatas.npwpFile == ""
+                  //         ? Container(
+                  //             height: 60,
+                  //             child: Center(
+                  //               child: GestureDetector(
+                  //                 onTap: () {
+                  //                   _pickFiles('NPWP');
+                  //                 },
+                  //                 child: _fileNameNPWP != null
+                  //                     ? Padding(
+                  //                         padding: const EdgeInsets.only(
+                  //                             left: 10, right: 10),
+                  //                         child: Text(
+                  //                           _fileNameNPWP,
+                  //                           style: TextStyle(
+                  //                               color: Color(0xFF427CEF),
+                  //                               fontSize: 12,
+                  //                               fontWeight: FontWeight.bold),
+                  //                         ),
+                  //                       )
+                  //                     : Text(
+                  //                         'Unggah Foto NPWP',
+                  //                         style: TextStyle(
+                  //                             color: Color(0xFF427CEF),
+                  //                             fontSize: 12,
+                  //                             fontWeight: FontWeight.bold),
+                  //                       ),
+                  //               ),
+                  //             ),
+                  //           )
+                  //         : Container(
+                  //             height: 150,
+                  //             decoration: BoxDecoration(
+                  //                 color: Colors.black,
+                  //                 borderRadius: BorderRadius.circular(5),
+                  //                 image: DecorationImage(
+                  //                     fit: BoxFit.contain,
+                  //                     image: MemoryImage(image)))),
+                  //   ),
+                  // ),
+
                   Padding(
                     padding:
-                        const EdgeInsets.only(top: 30, left: 16, right: 16),
+                        const EdgeInsets.only(top: 20, left: 16, right: 16),
                     child: GestureDetector(
                       onTap: () {
                         setState(() {
@@ -1698,25 +1702,25 @@ class _KlaimAsuransiUpdateState extends State<KlaimAsuransiUpdate> {
                     ),
                   ),
 
-                  Padding(
-                    padding: EdgeInsets.only(left: 16, right: 16, bottom: 20),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.download_rounded,
-                          color: Color(0xFF427CEF),
-                        ),
-                        Text(
-                          '  Unduh Template Surat Klaim Asuransi',
-                          style: TextStyle(
-                              color: Color(0xFF427CEF),
-                              fontSize: 12,
-                              fontWeight: FontWeight.bold),
-                        ),
-                      ],
-                    ),
-                  ),
+                  // Padding(
+                  //   padding: EdgeInsets.only(left: 16, right: 16, bottom: 20),
+                  //   child: Row(
+                  //     mainAxisAlignment: MainAxisAlignment.center,
+                  //     children: [
+                  //       Icon(
+                  //         Icons.download_rounded,
+                  //         color: Color(0xFF427CEF),
+                  //       ),
+                  //       Text(
+                  //         '  Unduh Template Surat Klaim Asuransi',
+                  //         style: TextStyle(
+                  //             color: Color(0xFF427CEF),
+                  //             fontSize: 12,
+                  //             fontWeight: FontWeight.bold),
+                  //       ),
+                  //     ],
+                  //   ),
+                  // ),
 
                   Padding(
                     padding: EdgeInsets.only(top: 20, left: 16, right: 16),
@@ -1943,6 +1947,9 @@ class _KlaimAsuransiUpdateState extends State<KlaimAsuransiUpdate> {
       custName = custIDString;
       email = emailString;
       phoneNumb = userPhoneString;
+      phoneNumbCtrl.value = new TextEditingController.fromValue(
+              new TextEditingValue(text: userPhoneString))
+          .value;
     });
   }
 
@@ -2075,7 +2082,7 @@ class _KlaimAsuransiUpdateState extends State<KlaimAsuransiUpdate> {
         : DateFormat('yyy-MM-dd').format(DateTime.now());
     responses.fields['id_card_number'] = nikCtrl.text;
     responses.fields['email'] = detailDatas.email;
-    responses.fields['phone_number'] = detailDatas.phoneNumb;
+    responses.fields['phone_number'] = phoneNumbCtrl.text;
     responses.fields['address'] = alamatCtrl.text;
     responses.fields['street'] = perumahanCtrl.text;
     responses.fields['rt'] = rwCtrl.text;
@@ -2089,11 +2096,12 @@ class _KlaimAsuransiUpdateState extends State<KlaimAsuransiUpdate> {
     responses.fields['latitude'] = lat;
     responses.fields['person_in_location_status'] = statusLokasi;
     responses.fields['info_media'] = '';
-    responses.fields['npwp_number'] = numberNpwpCtrl.text;
-    responses.fields['ktp_address'] = ktpAddressCtrl.text;
-    detailDatas.npwpFile == ""
-        ? responses.fields['npwp_file'] = encodedImageNPWP
-        : responses.fields['npwp_file'] = detailDatas.npwpFile;
+    responses.fields['npwp_number'] = '';
+    responses.fields['ktp_address'] = '';
+    // detailDatas.npwpFile = ""
+    // ?
+    responses.fields['npwp_file'] = "";
+    // : responses.fields['npwp_file'] = detailDatas.npwpFile;
     responses.fields['customer_signature'] = 'data:image/png;base64,$encoded';
     http.StreamedResponse response = await responses.send();
     final res = await http.Response.fromStream(response);

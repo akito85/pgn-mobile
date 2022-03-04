@@ -90,7 +90,7 @@
     "a_home_tv_menu_notification_detail": "Detil Notification",
     "a_home_tv_menu_customer_issue": "Notifikasi",
     "a_home_tv_menu_settings": "Pengaturan",
-    "a_home_tv_menu_spbg": "Lokasi SPBG",
+    "a_home_tv_menu_spbg": "Stasiun Gas",
     "a_home_tv_menu_cmm": "Catat Meter Mandiri",
     "a_home_tv_menu_call_center": "Call Center",
     "a_home_dialog_call_center_title": "Call Center",
@@ -182,8 +182,9 @@
     "ff_register_number_et_hint_country_code": "INA",
     "ff_register_number_et_hint_phone_number": "Nomor Ponsel",
     "ff_customer_profile_et_name": "Nama",
-    "ff_customer_profile_et_id": "Nomor Pelanggan",
+    "ff_customer_profile_et_id": "ID Pelanggan",
     "ff_customer_profile_et_address": "Alamat",
+    "ff_customer_profile_et_product": "Produk",
     "ff_customer_profile_et_country_code": "INA",
     "ff_customer_profile_et_phone_number": "Nomor Telepon",
     "ff_change_password_et_old_password": "Password Lama",
@@ -810,5 +811,9 @@
     "total_other": "Total Tagihan Lain-Lain",
     "vat": "PPN",
     "total_tax": "Dasar Pengenaan Pajak",
-    "piutang": "Utang"
+    "piutang": "Utang",
+    "title_dashboard": "Dasbor",
+    "title_pl":"Pengajuan Layanan",
+    "title_inbox_cust":"Kotak Masuk",
+    "title_prod_info": "Informasi Produk"
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:pgn_mobile/models/customer_profile_residential.dart';
+import 'package:pgn_mobile/services/app_localizations.dart';
 
 class MyProfileCustResidential extends StatefulWidget {
   final CustomerProfileResidentialModel data;
@@ -47,7 +48,8 @@ class _MyProfileCustResidentialState extends State<MyProfileCustResidential> {
                         padding:
                             EdgeInsets.only(top: 25.0, left: 20, right: 20),
                         child: Text(
-                          "Name",
+                          Translations.of(context)
+                              .text('ff_customer_profile_et_name'),
                           style:
                               TextStyle(fontSize: 12, color: Color(0x61000000)),
                         )),
@@ -65,7 +67,8 @@ class _MyProfileCustResidentialState extends State<MyProfileCustResidential> {
                         padding:
                             EdgeInsets.only(top: 10.0, left: 20, right: 20),
                         child: Text(
-                          "Customer ID",
+                          Translations.of(context)
+                              .text('ff_customer_profile_et_id'),
                           style:
                               TextStyle(fontSize: 12, color: Color(0x61000000)),
                         )),
@@ -83,7 +86,8 @@ class _MyProfileCustResidentialState extends State<MyProfileCustResidential> {
                         padding:
                             EdgeInsets.only(top: 10.0, left: 20, right: 20),
                         child: Text(
-                          "Address",
+                          Translations.of(context)
+                              .text('ff_customer_profile_et_address'),
                           style:
                               TextStyle(fontSize: 12, color: Color(0x61000000)),
                         )),
@@ -101,7 +105,8 @@ class _MyProfileCustResidentialState extends State<MyProfileCustResidential> {
                         padding:
                             EdgeInsets.only(top: 10.0, left: 20, right: 20),
                         child: Text(
-                          "Product",
+                          Translations.of(context)
+                              .text('ff_customer_profile_et_product'),
                           style:
                               TextStyle(fontSize: 12, color: Color(0x61000000)),
                         )),

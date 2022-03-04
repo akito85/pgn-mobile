@@ -399,44 +399,44 @@ class _PengajuanLayananState extends State<PengajuanLayanan> {
               ),
             ),
           ),
-          // GestureDetector(
-          //   onTap: () {
-          //     Navigator.push(
-          //       context,
-          //       MaterialPageRoute(
-          //         builder: (context) => PengembalianPembayaranList(),
-          //       ),
-          //     );
-          //   },
-          //   child: Padding(
-          //     padding: EdgeInsets.only(left: 34, right: 18, top: 20),
-          //     child: Row(
-          //       children: [
-          //         Center(
-          //           child: Padding(
-          //             padding: EdgeInsets.only(right: 12.0),
-          //             child: CircleAvatar(
-          //               backgroundColor: Color(0xFF427CEF),
-          //               radius: 15,
-          //               child: Padding(
-          //                 padding: const EdgeInsets.all(2.0),
-          //                 child: Image.asset(
-          //                   'assets/doc-return.png',
-          //                   color: Colors.white,
-          //                 ),
-          //               ),
-          //             ),
-          //           ),
-          //         ),
-          //         Expanded(
-          //           child: Padding(
-          //               padding: const EdgeInsets.only(left: 5),
-          //               child: Text('Pengembalian Sisa Jaminan')),
-          //         ),
-          //       ],
-          //     ),
-          //   ),
-          // ),
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => PengembalianPembayaranList(),
+                ),
+              );
+            },
+            child: Padding(
+              padding: EdgeInsets.only(left: 34, right: 18, top: 20),
+              child: Row(
+                children: [
+                  Center(
+                    child: Padding(
+                      padding: EdgeInsets.only(right: 12.0),
+                      child: CircleAvatar(
+                        backgroundColor: Color(0xFF427CEF),
+                        radius: 15,
+                        child: Padding(
+                          padding: const EdgeInsets.all(2.0),
+                          child: Image.asset(
+                            'assets/doc-return.png',
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: Padding(
+                        padding: const EdgeInsets.only(left: 5),
+                        child: Text('Pengembalian Sisa Jaminan')),
+                  ),
+                ],
+              ),
+            ),
+          ),
           GestureDetector(
             onTap: () {
               Navigator.push(
@@ -469,7 +469,8 @@ class _PengajuanLayananState extends State<PengajuanLayanan> {
                   Expanded(
                     child: Padding(
                         padding: const EdgeInsets.only(left: 5),
-                        child: Text('Pengajuan Layanan Cicilan JP/Piutang')),
+                        child: Text(
+                            'Pengajuan Cicilan Jaminan Berlangganan/Piutang')),
                   ),
                 ],
               ),
@@ -554,7 +555,7 @@ class _PengajuanLayananState extends State<PengajuanLayanan> {
                   Expanded(
                     child: Padding(
                         padding: const EdgeInsets.only(left: 5),
-                        child: Text('Klaim Asuransi')),
+                        child: Text('Klaim Asuransi Kebakaran')),
                   ),
                 ],
               ),

@@ -169,7 +169,7 @@
     "a_home_tv_menu_customer_issue": "Notification",
     "a_home_tv_menu_settings": "Setting",
     "a_home_tv_menu_spbg": "Gas Station",
-    "a_home_tv_menu_cmm": "Catat Meter Mandiri",
+    "a_home_tv_menu_cmm": "Self Record Meter",
     "a_home_tv_menu_call_center": "Call Center",
     "a_home_dialog_call_center_title": "Contact",
     "a_home_dialog_call_center_message": "Do you want to contact us?",
@@ -278,6 +278,7 @@
     "ff_customer_profile_et_name": "Name",
     "ff_customer_profile_et_id": "Customer ID",
     "ff_customer_profile_et_address": "Address",
+    "ff_customer_profile_et_product": "Product",
     "ff_customer_profile_et_country_code": "INA",
     "ff_customer_profile_et_phone_number": "Phone Number",
     "ff_calculator_conversion_bt_submit": "Calculate",
@@ -830,5 +831,9 @@
     "total_other": "Total Others Invoice",
     "vat": "VAT",
     "total_tax": "*)Tax Base",
-    "piutang": "Debt"
+    "piutang": "Debt",
+    "title_dashboard": "Dashboard",
+    "title_pl":"Service Request",
+    "title_inbox_cust":"Inbox",
+    "title_prod_info": "Product Information"
 }

@@ -6,6 +6,7 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
 import 'package:pgn_mobile/models/berhenti_berlangganan_model.dart';
@@ -69,6 +70,7 @@ class _BerhentiBerlanggananUpdateState
 
   TextEditingController tempatLahirCtrl = new TextEditingController();
   TextEditingController nikCtrl = new TextEditingController();
+  TextEditingController phoneNumbCtrl = new TextEditingController();
   TextEditingController alamatCtrl = new TextEditingController();
   TextEditingController perumahanCtrl = new TextEditingController();
   TextEditingController rtCtrl = new TextEditingController();
@@ -515,6 +517,10 @@ class _BerhentiBerlanggananUpdateState
                       child: TextFormField(
                         keyboardType: TextInputType.number,
                         controller: nikCtrl,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly,
+                          LengthLimitingTextInputFormatter(16),
+                        ],
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Data tidak boleh kosong!';
@@ -522,7 +528,7 @@ class _BerhentiBerlanggananUpdateState
                           return null;
                         },
                         decoration: InputDecoration(
-                          hintText: '1285-1258835-20004',
+                          hintText: '1285125883520004',
                           hintStyle: TextStyle(color: Colors.grey),
                           contentPadding: new EdgeInsets.symmetric(
                               vertical: 12.0, horizontal: 15.0),
@@ -602,13 +608,21 @@ class _BerhentiBerlanggananUpdateState
                           borderRadius: BorderRadius.circular(5.0),
                           border: Border.all(color: Color(0xFFD3D3D3))),
                       child: TextFormField(
-                        enabled: false,
-                        keyboardType: TextInputType.text,
+                        enabled: true,
+                        keyboardType: TextInputType.phone,
+                        controller: phoneNumbCtrl,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Data tidak boleh kosong!';
+                          }
+                          return null;
+                        },
                         decoration: InputDecoration(
                           prefixStyle: TextStyle(color: Color(0xFF828388)),
                           contentPadding: new EdgeInsets.symmetric(
                               vertical: 12.0, horizontal: 15.0),
-                          hintText: '+${detailBerhetiBerlanggananData.custId}',
+                          hintText:
+                              '${detailBerhetiBerlanggananData.phoneNumb}',
                           hintStyle: TextStyle(color: Colors.black),
                           disabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(5),
@@ -1624,18 +1638,9 @@ class _BerhentiBerlanggananUpdateState
                                         image: MemoryImage(image)))),
                       ),
                     ),
+
                     Padding(
-                      padding: EdgeInsets.only(top: 10, left: 16, right: 16),
-                      child: Center(
-                          child: Text(
-                        'NPWP dan foto NPWP (tidak mandatory)',
-                        style: TextStyle(
-                            color: Color(0xFF455055),
-                            fontWeight: FontWeight.bold),
-                      )),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(top: 30, left: 16, right: 16),
+                      padding: EdgeInsets.only(top: 20, left: 16, right: 16),
                       child: Text(
                         'Bulan Berlaku yang Diajukan',
                         style: TextStyle(
@@ -1984,6 +1989,9 @@ class _BerhentiBerlanggananUpdateState
       nik = detailBerhetiBerlangganan.nik;
       // _byteImage = base64.decode(splitString[1]);
     });
+    phoneNumbCtrl.value = new TextEditingController.fromValue(
+            new TextEditingValue(text: detailBerhetiBerlangganan.phoneNumb))
+        .value;
     nikCtrl.value =
         new TextEditingController.fromValue(new TextEditingValue(text: nik))
             .value;
@@ -2116,7 +2124,7 @@ class _BerhentiBerlanggananUpdateState
           : detailBerhetiBerlanggananData.bDate,
       "id_card_number": nikCtrl.text,
       "email": detailBerhetiBerlanggananData.email,
-      "phone_number": detailBerhetiBerlanggananData.phoneNumb,
+      "phone_number": phoneNumbCtrl.text,
       "address": alamatCtrl.text,
       "street": perumahanCtrl.text,
       "rt": rwCtrl.text,
