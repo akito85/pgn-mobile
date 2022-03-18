@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
 import 'package:pgn_mobile/models/auth_model.dart';
 import 'package:pgn_mobile/models/pengajuan_amendemen_segmen_model.dart';
@@ -2774,23 +2773,9 @@ class _PengajuanAmandemenSegmenUpdateState
   }
 
   void _nextLokasiPesangan(BuildContext context) async {
-    double latCurrent = 0;
-    double longCurrent = 0;
-    var position = await GeolocatorPlatform.instance
-        .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-
-    setState(() {
-      latCurrent = position.latitude;
-      longCurrent = position.longitude;
-    });
-
     final result = await Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => MapPoint(
-                  currentLat: latCurrent,
-                  currentLong: longCurrent,
-                )));
+        context, MaterialPageRoute(builder: (context) => MapPoint()));
+    //print('INI RESULT LAT LANG $result');
     setState(() {
       locationCtrl.text = result;
     });

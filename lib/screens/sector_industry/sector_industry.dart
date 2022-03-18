@@ -254,10 +254,11 @@ class SectorIndustry extends StatelessWidget {
 }
 
 Future<GetSectorIndustry> fetchPost(BuildContext context) async {
+
   final storageCache = FlutterSecureStorage();
   String accessToken = await storageCache.read(key: 'access_token');
   var responseGetSectorIndustry = await http
-      .get('${UrlCons.mainProdUrl}summary/allcustomer', headers: {
+      .get('${UrlCons.prodRelyonUrl}summary/allcustomer', headers: {
     'Content-Type': 'application/json',
     'Authorization': 'Bearer $accessToken'
   });

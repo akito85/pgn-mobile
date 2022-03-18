@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:intl/intl.dart';
 import 'package:pgn_mobile/models/penghentian_sementara_model.dart';
 import 'package:pgn_mobile/models/url_cons.dart';
 import 'package:http/http.dart' as http;
@@ -69,12 +68,12 @@ class WidgetBiayaAdmin extends StatelessWidget {
                         width: 100,
                         margin: EdgeInsets.only(left: 16, right: 16),
                         child: Text(
-                            'Rp ${NumberFormat.currency(locale: 'ID').format(snapshot.data.area1.dataPenutupanG16.cost)}')),
+                            'Rp ${snapshot.data.area1.dataPenutupanG16.cost}')),
                     Expanded(
                         child: Padding(
                             padding: EdgeInsets.only(right: 5),
                             child: Text(
-                                'Rp ${NumberFormat.currency(locale: 'ID', symbol: '').format(double.parse(snapshot.data.area1.dataPengaliaranG16.cost))}')))
+                                'Rp ${snapshot.data.area1.dataPengaliaranG16.cost}')))
                   ],
                 ),
               ),
@@ -96,12 +95,12 @@ class WidgetBiayaAdmin extends StatelessWidget {
                         width: 100,
                         margin: EdgeInsets.only(left: 16, right: 16),
                         child: Text(
-                            'Rp ${NumberFormat.currency(locale: 'ID', symbol: '').format(double.parse(snapshot.data.area1.dataPenutupanG25.cost))}')),
+                            'Rp ${snapshot.data.area1.dataPenutupanG25.cost}')),
                     Expanded(
                         child: Padding(
                             padding: EdgeInsets.only(right: 5),
                             child: Text(
-                                'Rp ${NumberFormat.currency(locale: 'ID', symbol: '').format(double.parse(snapshot.data.area1.dataPengaliaranG25.cost))}')))
+                                'Rp ${snapshot.data.area1.dataPengaliaranG25.cost}')))
                   ],
                 ),
               ),
@@ -123,12 +122,12 @@ class WidgetBiayaAdmin extends StatelessWidget {
                         width: 100,
                         margin: EdgeInsets.only(left: 16, right: 16),
                         child: Text(
-                            'Rp ${NumberFormat.currency(locale: 'ID', symbol: '').format(double.parse(snapshot.data.area1.dataPenutupanG4.cost))}')),
+                            'Rp ${snapshot.data.area1.dataPenutupanG4.cost}')),
                     Expanded(
                         child: Padding(
                             padding: EdgeInsets.only(right: 5),
                             child: Text(
-                                'Rp ${NumberFormat.currency(locale: 'ID', symbol: '').format(double.parse(snapshot.data.area1.dataPengaliaranG4.cost))}')))
+                                'Rp ${snapshot.data.area1.dataPengaliaranG4.cost}')))
                   ],
                 ),
               ),

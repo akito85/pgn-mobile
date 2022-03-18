@@ -6,9 +6,6 @@ import 'package:geolocator/geolocator.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class MapPoint extends StatefulWidget {
-  final double currentLat;
-  final double currentLong;
-  MapPoint({this.currentLat, this.currentLong});
   @override
   MapPointState createState() => MapPointState();
 }
@@ -23,7 +20,6 @@ class MapPointState extends State<MapPoint> {
 
   void _onMapCreated(GoogleMapController controller) {
     _getCurrentLocation();
-
     _controller.complete(controller);
   }
 
@@ -33,6 +29,15 @@ class MapPointState extends State<MapPoint> {
       lat = _position.target.latitude;
       lang = _position.target.longitude;
     });
+    // Position newMarkerPosition = Position(
+    //     latitude: _position.target.latitude,
+    //     longitude: _position.target.longitude);
+    // Marker marker = markers["1"];
+
+    // setState(() {
+    //   markers["1"] = marker.copyWith(
+    //       positionParam: LatLng(newMarkerPosition.latitude, newMarkerPosition.longitude));
+    // });
   }
 
   _getCurrentLocation() {
@@ -50,18 +55,7 @@ class MapPointState extends State<MapPoint> {
   }
 
   @override
-  void initState() {
-    super.initState();
-    lat = widget.currentLat;
-    lang = widget.currentLong;
-    position = '${widget.currentLat},${widget.currentLong}';
-  }
-
-  @override
   Widget build(BuildContext context) {
-    // lat = widget.currentLat;
-    // lang = widget.currentLong;
-    // position = '${widget.currentLat},${widget.currentLong}';
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
