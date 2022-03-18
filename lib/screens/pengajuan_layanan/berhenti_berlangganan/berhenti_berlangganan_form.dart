@@ -8,6 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:pgn_mobile/models/berhenti_berlangganan_model.dart';
 import 'package:pgn_mobile/models/form_customer_cred_model.dart';
@@ -1224,6 +1226,7 @@ class _BerhentiBerlanggananFormState extends State<BerhentiBerlanggananForm> {
                           border: Border.all(color: Color(0xFFD3D3D3))),
                       child: TextFormField(
                         controller: locationCtrl,
+                        enabled: true,
                         keyboardType: TextInputType.number,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
@@ -1960,9 +1963,23 @@ class _BerhentiBerlanggananFormState extends State<BerhentiBerlanggananForm> {
   }
 
   void _nextLokasiPesangan(BuildContext context) async {
+    double latCurrent = 0;
+    double longCurrent = 0;
+    var position = await GeolocatorPlatform.instance
+        .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+
+    setState(() {
+      latCurrent = position.latitude;
+      longCurrent = position.longitude;
+    });
+
     final result = await Navigator.push(
-        context, MaterialPageRoute(builder: (context) => MapPoint()));
-    print('INI RESULT LAT LANG $result');
+        context,
+        MaterialPageRoute(
+            builder: (context) => MapPoint(
+                  currentLat: latCurrent,
+                  currentLong: longCurrent,
+                )));
     setState(() {
       locationCtrl.text = result;
     });

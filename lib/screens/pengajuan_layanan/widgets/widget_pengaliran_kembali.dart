@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:intl/intl.dart';
 import 'package:pgn_mobile/models/pengaliran_kembali_model.dart';
 import 'package:pgn_mobile/models/url_cons.dart';
 import 'package:http/http.dart' as http;
@@ -55,7 +56,7 @@ class WidgetReferensiBiayaTeknis extends StatelessWidget {
                         margin: EdgeInsets.only(left: 16, right: 16),
                         child: Text('${snapshot.data.area1.dataRT.type}')),
                     Text(
-                        '${snapshot.data.area1.dataRT.currency} ${snapshot.data.area1.dataRT.totalCost}')
+                        '${snapshot.data.area1.dataRT.currency} ${NumberFormat.currency(locale: 'ID', symbol: '').format(double.parse(snapshot.data.area1.dataRT.totalCost))}')
                   ],
                 ),
               ),
@@ -74,7 +75,7 @@ class WidgetReferensiBiayaTeknis extends StatelessWidget {
                         margin: EdgeInsets.only(left: 16, right: 16),
                         child: Text('${snapshot.data.area1.dataPK.type}')),
                     Text(
-                        '${snapshot.data.area1.dataPK.currency} ${snapshot.data.area1.dataPK.totalCost}')
+                        '${snapshot.data.area1.dataPK.currency} ${NumberFormat.currency(locale: 'ID', symbol: '').format(double.parse(snapshot.data.area1.dataPK.totalCost))}')
                   ],
                 ),
               ),
@@ -115,7 +116,7 @@ class WidgetReferensiBiayaTeknis extends StatelessWidget {
                         margin: EdgeInsets.only(left: 16, right: 16),
                         child: Text('${snapshot.data.area2.dataRT.type}')),
                     Text(
-                        '${snapshot.data.area2.dataRT.currency} ${snapshot.data.area2.dataRT.totalCost}')
+                        '${snapshot.data.area2.dataRT.currency} ${NumberFormat.currency(locale: 'ID', symbol: '').format(double.parse(snapshot.data.area2.dataRT.totalCost))}')
                   ],
                 ),
               ),
@@ -134,7 +135,7 @@ class WidgetReferensiBiayaTeknis extends StatelessWidget {
                         margin: EdgeInsets.only(left: 16, right: 16),
                         child: Text('${snapshot.data.area2.dataPK.type}')),
                     Text(
-                        '${snapshot.data.area2.dataPK.currency} ${snapshot.data.area2.dataPK.totalCost}')
+                        '${snapshot.data.area2.dataPK.currency} ${NumberFormat.currency(locale: 'ID', symbol: '').format(double.parse(snapshot.data.area2.dataPK.totalCost))}')
                   ],
                 ),
               ),
@@ -175,7 +176,7 @@ class WidgetReferensiBiayaTeknis extends StatelessWidget {
                         margin: EdgeInsets.only(left: 16, right: 16),
                         child: Text('${snapshot.data.area3.dataRT.type}')),
                     Text(
-                        '${snapshot.data.area3.dataRT.currency} ${snapshot.data.area3.dataRT.totalCost}')
+                        '${snapshot.data.area3.dataRT.currency} ${NumberFormat.currency(locale: 'ID', symbol: '').format(double.parse(snapshot.data.area3.dataRT.totalCost))}')
                   ],
                 ),
               ),
@@ -194,7 +195,7 @@ class WidgetReferensiBiayaTeknis extends StatelessWidget {
                         margin: EdgeInsets.only(left: 16, right: 16),
                         child: Text('${snapshot.data.area3.dataPK.type}')),
                     Text(
-                        '${snapshot.data.area3.dataPK.currency} ${snapshot.data.area3.dataPK.totalCost}')
+                        '${snapshot.data.area3.dataPK.currency} ${NumberFormat.currency(locale: 'ID', symbol: '').format(double.parse(snapshot.data.area3.dataPK.totalCost))}')
                   ],
                 ),
               ),
@@ -235,7 +236,7 @@ class WidgetReferensiBiayaTeknis extends StatelessWidget {
                         margin: EdgeInsets.only(left: 16, right: 16),
                         child: Text('${snapshot.data.area4.dataRT.type}')),
                     Text(
-                        '${snapshot.data.area4.dataRT.currency} ${snapshot.data.area4.dataRT.totalCost}')
+                        '${snapshot.data.area4.dataRT.currency} ${NumberFormat.currency(locale: 'ID', symbol: '').format(double.parse(snapshot.data.area4.dataRT.totalCost))}')
                   ],
                 ),
               ),
@@ -254,7 +255,7 @@ class WidgetReferensiBiayaTeknis extends StatelessWidget {
                         margin: EdgeInsets.only(left: 16, right: 16),
                         child: Text('${snapshot.data.area4.dataPK.type}')),
                     Text(
-                        '${snapshot.data.area4.dataPK.currency} ${snapshot.data.area4.dataPK.totalCost}')
+                        '${snapshot.data.area4.dataPK.currency} ${NumberFormat.currency(locale: 'ID', symbol: '').format(double.parse(snapshot.data.area4.dataPK.totalCost))}')
                   ],
                 ),
               ),

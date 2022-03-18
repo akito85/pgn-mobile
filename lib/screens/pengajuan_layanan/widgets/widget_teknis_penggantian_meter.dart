@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:intl/intl.dart';
 import 'package:pgn_mobile/models/penggantian_meter_model.dart';
 import 'package:pgn_mobile/models/url_cons.dart';
 import 'package:http/http.dart' as http;
@@ -55,7 +56,8 @@ class WidgetReferensiBiayaTeknisPenggantianMeter extends StatelessWidget {
                           margin: EdgeInsets.only(left: 16, right: 16),
                           child: Text(
                               '${snapshot.data.area1.dataPenutupanG16.type}')),
-                      Text('Rp ${snapshot.data.area1.dataPenutupanG16.cost}')
+                      Text(
+                          'Rp ${NumberFormat.currency(locale: 'ID', symbol: '').format(double.parse(snapshot.data.area1.dataPenutupanG16.cost))}')
                     ],
                   ),
                 ),
@@ -74,7 +76,8 @@ class WidgetReferensiBiayaTeknisPenggantianMeter extends StatelessWidget {
                           margin: EdgeInsets.only(left: 16, right: 16),
                           child: Text(
                               '${snapshot.data.area1.dataPenutupanG25.type}')),
-                      Text('Rp ${snapshot.data.area1.dataPenutupanG25.cost}')
+                      Text(
+                          'Rp ${NumberFormat.currency(locale: 'ID', symbol: '').format(double.parse(snapshot.data.area1.dataPenutupanG25.cost))}')
                     ],
                   ),
                 ),
@@ -93,7 +96,8 @@ class WidgetReferensiBiayaTeknisPenggantianMeter extends StatelessWidget {
                           margin: EdgeInsets.only(left: 16, right: 16),
                           child: Text(
                               '${snapshot.data.area1.dataPenutupanG4.type}')),
-                      Text('Rp ${snapshot.data.area1.dataPenutupanG4.cost}')
+                      Text(
+                          'Rp ${NumberFormat.currency(locale: 'ID', symbol: '').format(double.parse(snapshot.data.area1.dataPenutupanG4.cost))}')
                     ],
                   ),
                 ),
@@ -112,7 +116,8 @@ class WidgetReferensiBiayaTeknisPenggantianMeter extends StatelessWidget {
                           margin: EdgeInsets.only(left: 16, right: 16),
                           child: Text(
                               '${snapshot.data.area1.dataPenutupanG6.type}')),
-                      Text('Rp ${snapshot.data.area1.dataPenutupanG6.cost}')
+                      Text(
+                          'Rp ${NumberFormat.currency(locale: 'ID', symbol: '').format(double.parse(snapshot.data.area1.dataPenutupanG6.cost))}')
                     ],
                   ),
                 ),
@@ -131,7 +136,8 @@ class WidgetReferensiBiayaTeknisPenggantianMeter extends StatelessWidget {
                           margin: EdgeInsets.only(left: 16, right: 16),
                           child: Text(
                               '${snapshot.data.area1.dataPenutupanG10.type}')),
-                      Text('Rp ${snapshot.data.area1.dataPenutupanG10.cost}')
+                      Text(
+                          'Rp ${NumberFormat.currency(locale: 'ID', symbol: '').format(double.parse(snapshot.data.area1.dataPenutupanG10.cost))}')
                     ],
                   ),
                 ),
@@ -150,7 +156,8 @@ class WidgetReferensiBiayaTeknisPenggantianMeter extends StatelessWidget {
                           margin: EdgeInsets.only(left: 16, right: 16),
                           child: Text(
                               '${snapshot.data.area1.dataPenutupanG162.type}')),
-                      Text('Rp ${snapshot.data.area1.dataPenutupanG162.cost}')
+                      Text(
+                          'Rp ${NumberFormat.currency(locale: 'ID', symbol: '').format(double.parse(snapshot.data.area1.dataPenutupanG162.cost))}')
                     ],
                   ),
                 ),
@@ -169,7 +176,8 @@ class WidgetReferensiBiayaTeknisPenggantianMeter extends StatelessWidget {
                           margin: EdgeInsets.only(left: 16, right: 16),
                           child: Text(
                               '${snapshot.data.area1.dataPenutupanG252.type}')),
-                      Text('Rp ${snapshot.data.area1.dataPenutupanG252.cost}')
+                      Text(
+                          'Rp ${NumberFormat.currency(locale: 'ID', symbol: '').format(double.parse(snapshot.data.area1.dataPenutupanG252.cost))}')
                     ],
                   ),
                 ),
@@ -210,7 +218,8 @@ class WidgetReferensiBiayaTeknisPenggantianMeter extends StatelessWidget {
                           margin: EdgeInsets.only(left: 16, right: 16),
                           child: Text(
                               '${snapshot.data.area2.dataPenutupanG16.type}')),
-                      Text('Rp ${snapshot.data.area2.dataPenutupanG16.cost}')
+                      Text(
+                          'Rp ${NumberFormat.currency(locale: 'ID', symbol: '').format(double.parse(snapshot.data.area2.dataPenutupanG16.cost))}')
                     ],
                   ),
                 ),
@@ -229,7 +238,8 @@ class WidgetReferensiBiayaTeknisPenggantianMeter extends StatelessWidget {
                           margin: EdgeInsets.only(left: 16, right: 16),
                           child: Text(
                               '${snapshot.data.area2.dataPenutupanG25.type}')),
-                      Text('Rp ${snapshot.data.area2.dataPenutupanG25.cost}')
+                      Text(
+                          'Rp ${NumberFormat.currency(locale: 'ID', symbol: '').format(double.parse(snapshot.data.area2.dataPenutupanG25.cost))}')
                     ],
                   ),
                 ),
@@ -248,7 +258,8 @@ class WidgetReferensiBiayaTeknisPenggantianMeter extends StatelessWidget {
                           margin: EdgeInsets.only(left: 16, right: 16),
                           child: Text(
                               '${snapshot.data.area2.dataPenutupanG4.type}')),
-                      Text('Rp ${snapshot.data.area2.dataPenutupanG4.cost}')
+                      Text(
+                          'Rp ${NumberFormat.currency(locale: 'ID', symbol: '').format(double.parse(snapshot.data.area2.dataPenutupanG4.cost))}')
                     ],
                   ),
                 ),
@@ -267,7 +278,8 @@ class WidgetReferensiBiayaTeknisPenggantianMeter extends StatelessWidget {
                           margin: EdgeInsets.only(left: 16, right: 16),
                           child: Text(
                               '${snapshot.data.area2.dataPenutupanG6.type}')),
-                      Text('Rp ${snapshot.data.area2.dataPenutupanG6.cost}')
+                      Text(
+                          'Rp ${NumberFormat.currency(locale: 'ID', symbol: '').format(double.parse(snapshot.data.area2.dataPenutupanG6.cost))}')
                     ],
                   ),
                 ),
@@ -286,7 +298,8 @@ class WidgetReferensiBiayaTeknisPenggantianMeter extends StatelessWidget {
                           margin: EdgeInsets.only(left: 16, right: 16),
                           child: Text(
                               '${snapshot.data.area2.dataPenutupanG10.type}')),
-                      Text('Rp ${snapshot.data.area2.dataPenutupanG10.cost}')
+                      Text(
+                          'Rp ${NumberFormat.currency(locale: 'ID', symbol: '').format(double.parse(snapshot.data.area2.dataPenutupanG10.cost))}')
                     ],
                   ),
                 ),
@@ -305,7 +318,8 @@ class WidgetReferensiBiayaTeknisPenggantianMeter extends StatelessWidget {
                           margin: EdgeInsets.only(left: 16, right: 16),
                           child: Text(
                               '${snapshot.data.area2.dataPenutupanG162.type}')),
-                      Text('Rp ${snapshot.data.area2.dataPenutupanG162.cost}')
+                      Text(
+                          'Rp ${NumberFormat.currency(locale: 'ID', symbol: '').format(double.parse(snapshot.data.area2.dataPenutupanG162.cost))}')
                     ],
                   ),
                 ),
@@ -324,7 +338,8 @@ class WidgetReferensiBiayaTeknisPenggantianMeter extends StatelessWidget {
                           margin: EdgeInsets.only(left: 16, right: 16),
                           child: Text(
                               '${snapshot.data.area2.dataPenutupanG252.type}')),
-                      Text('Rp ${snapshot.data.area2.dataPenutupanG252.cost}')
+                      Text(
+                          'Rp ${NumberFormat.currency(locale: 'ID', symbol: '').format(double.parse(snapshot.data.area2.dataPenutupanG252.cost))}')
                     ],
                   ),
                 ),
@@ -366,7 +381,8 @@ class WidgetReferensiBiayaTeknisPenggantianMeter extends StatelessWidget {
                           margin: EdgeInsets.only(left: 16, right: 16),
                           child: Text(
                               '${snapshot.data.area3.dataPenutupanG16.type}')),
-                      Text('Rp ${snapshot.data.area3.dataPenutupanG16.cost}')
+                      Text(
+                          'Rp ${NumberFormat.currency(locale: 'ID', symbol: '').format(double.parse(snapshot.data.area3.dataPenutupanG16.cost))}')
                     ],
                   ),
                 ),
@@ -385,7 +401,8 @@ class WidgetReferensiBiayaTeknisPenggantianMeter extends StatelessWidget {
                           margin: EdgeInsets.only(left: 16, right: 16),
                           child: Text(
                               '${snapshot.data.area3.dataPenutupanG25.type}')),
-                      Text('Rp ${snapshot.data.area3.dataPenutupanG25.cost}')
+                      Text(
+                          'Rp ${NumberFormat.currency(locale: 'ID', symbol: '').format(double.parse(snapshot.data.area3.dataPenutupanG25.cost))}')
                     ],
                   ),
                 ),
@@ -404,7 +421,8 @@ class WidgetReferensiBiayaTeknisPenggantianMeter extends StatelessWidget {
                           margin: EdgeInsets.only(left: 16, right: 16),
                           child: Text(
                               '${snapshot.data.area3.dataPenutupanG4.type}')),
-                      Text('Rp ${snapshot.data.area3.dataPenutupanG4.cost}')
+                      Text(
+                          'Rp ${NumberFormat.currency(locale: 'ID', symbol: '').format(double.parse(snapshot.data.area3.dataPenutupanG4.cost))}')
                     ],
                   ),
                 ),
@@ -423,7 +441,8 @@ class WidgetReferensiBiayaTeknisPenggantianMeter extends StatelessWidget {
                           margin: EdgeInsets.only(left: 16, right: 16),
                           child: Text(
                               '${snapshot.data.area3.dataPenutupanG6.type}')),
-                      Text('Rp ${snapshot.data.area3.dataPenutupanG6.cost}')
+                      Text(
+                          'Rp ${NumberFormat.currency(locale: 'ID', symbol: '').format(double.parse(snapshot.data.area3.dataPenutupanG6.cost))}')
                     ],
                   ),
                 ),
@@ -442,7 +461,8 @@ class WidgetReferensiBiayaTeknisPenggantianMeter extends StatelessWidget {
                           margin: EdgeInsets.only(left: 16, right: 16),
                           child: Text(
                               '${snapshot.data.area3.dataPenutupanG10.type}')),
-                      Text('Rp ${snapshot.data.area3.dataPenutupanG10.cost}')
+                      Text(
+                          'Rp ${NumberFormat.currency(locale: 'ID', symbol: '').format(double.parse(snapshot.data.area3.dataPenutupanG10.cost))}')
                     ],
                   ),
                 ),
@@ -461,7 +481,8 @@ class WidgetReferensiBiayaTeknisPenggantianMeter extends StatelessWidget {
                           margin: EdgeInsets.only(left: 16, right: 16),
                           child: Text(
                               '${snapshot.data.area3.dataPenutupanG162.type}')),
-                      Text('Rp ${snapshot.data.area3.dataPenutupanG162.cost}')
+                      Text(
+                          'Rp ${NumberFormat.currency(locale: 'ID', symbol: '').format(double.parse(snapshot.data.area3.dataPenutupanG162.cost))}')
                     ],
                   ),
                 ),
@@ -480,7 +501,8 @@ class WidgetReferensiBiayaTeknisPenggantianMeter extends StatelessWidget {
                           margin: EdgeInsets.only(left: 16, right: 16),
                           child: Text(
                               '${snapshot.data.area3.dataPenutupanG252.type}')),
-                      Text('Rp ${snapshot.data.area3.dataPenutupanG252.cost}')
+                      Text(
+                          'Rp ${NumberFormat.currency(locale: 'ID', symbol: '').format(double.parse(snapshot.data.area3.dataPenutupanG252.cost))}')
                     ],
                   ),
                 ),
