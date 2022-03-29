@@ -51,6 +51,7 @@ class HarianDetailChartState extends State<HarianDetailChart> {
 
   @override
   Widget build(BuildContext context) {
+    print('INI Period $period');
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -100,7 +101,7 @@ class HarianDetailChartState extends State<HarianDetailChart> {
                 SizedBox(height: 20),
                 Container(
                   child: Text(
-                    snapshot.data.message,
+                    'Terjadi kesalahan sistem, silahkan coba beberapa saat lagi',
                     textAlign: TextAlign.center,
                     style: TextStyle(fontSize: 18),
                   ),
@@ -849,6 +850,5 @@ Future<DailyUsageDetailChart> fetchPost(
         'Authorization': 'Bearer $accessToken',
         'Accept-Language': lang,
       });
-
   return DailyUsageDetailChart.fromJson(json.decode(responseHourlyUsage.body));
 }

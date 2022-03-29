@@ -77,18 +77,14 @@ class TunggakanState extends State<Tunggakan> {
       itemCount: returnGetNotifInvoice.length + 1,
       controller: _scrollController,
       itemBuilder: (context, i) {
-        if (i == returnGetNotifInvoice.length) {
-          return _buildProgressIndicator();
-        } else {
-          return i < returnGetNotifInvoice.length
-              ? _buildRow(returnGetNotifInvoice[i])
-              : Center(
-                  child: Padding(
-                    padding: EdgeInsets.only(bottom: 20.0),
-                    child: CircularProgressIndicator(),
-                  ),
-                );
-        }
+        return i < returnGetNotifInvoice.length
+            ? _buildRow(returnGetNotifInvoice[i])
+            : Center(
+                child: Padding(
+                  padding: EdgeInsets.only(bottom: 20.0),
+                  child: CircularProgressIndicator(),
+                ),
+              );
       },
     );
   }
@@ -179,11 +175,10 @@ class TunggakanState extends State<Tunggakan> {
   }
 
   void fetchPostNextPage(BuildContext context) async {
-
     final storageCache = FlutterSecureStorage();
     String accessToken = await storageCache.read(key: 'access_token');
     var responseGetSpbg = await http.get(
-        'https://api-mobile.pgn.co.id/v2/customers?issue=invoice&cursor=$nextPage',
+        '${UrlCons.mainProdUrl}customers?issue=invoice&cursor=$nextPage',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $accessToken'
@@ -207,8 +202,7 @@ class TunggakanState extends State<Tunggakan> {
 
 Future<CustomerInvoice> fetchPostBillDetail(
     BuildContext context, String id) async {
-
-    final storageCache = FlutterSecureStorage();
+  final storageCache = FlutterSecureStorage();
   String accessToken = await storageCache.read(key: 'access_token');
   var responseCustInvoice = await http.get('${UrlCons.mainProdUrl}invoice/$id',
       headers: {

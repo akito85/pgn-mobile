@@ -329,8 +329,8 @@ class LoginScreenState extends State<LoginScreen> {
     }
     var responseTokenBarrer =
         await http.post('${UrlCons.mainProdUrl}authentication', headers: {
-      'X-Pgn-Device-Id': deviceId
-      // 'X-Pgn-Device-Id': "jnskdoandsoando"
+      // 'X-Pgn-Device-Id': deviceId
+      'X-Pgn-Device-Id': "adfff4272a79c28e"
     }, body: {
       'client_id': '0dUIDb81bBUsGDfDsYYHQ9wBujfjL9XWfH0ZoAzi',
       'client_secret': '0DTuUFYRPtWUFN2UbzSvzqZMzNsW4kAl4t4PTrtC',

@@ -1,15 +1,16 @@
 class DailyUsageDetailChart {
   List<DataDailyUsageChart> data;
-  PagingDailyDetailChart paging;
+  // PagingDailyDetailChart paging;
   String message;
   int code;
-  DailyUsageDetailChart({this.data, this.paging, this.message, this.code});
+  DailyUsageDetailChart({this.data, this.message, this.code});
 
   factory DailyUsageDetailChart.fromJson(Map<String, dynamic> json) {
     if (json['data'] != null)
       return DailyUsageDetailChart(
-          data: parseDataHourlyUsage(json['data']),
-          paging: PagingDailyDetailChart.fromJson(json['paging']));
+        data: parseDataHourlyUsage(json['data']),
+        // paging: PagingDailyDetailChart.fromJson(json['paging']),
+      );
     else
       return DailyUsageDetailChart(
           message: json['message'], code: json['code']);

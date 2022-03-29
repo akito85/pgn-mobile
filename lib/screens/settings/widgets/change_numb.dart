@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:pgn_mobile/models/auth_model.dart';
@@ -79,6 +80,10 @@ class ChangeNumbState extends State<ChangeNumb> {
                       // width: 295,
                       child: TextFormField(
                         controller: phoneNumbCtrl,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly,
+                          LengthLimitingTextInputFormatter(12),
+                        ],
                         keyboardType: TextInputType.number,
                         decoration: InputDecoration(
                           labelText: 'Phone Number',

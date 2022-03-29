@@ -1016,7 +1016,7 @@ class _CMVisitFormState extends State<CMVisitForm> {
                               _image != null
                                   ? Container(
                                       width: 110.0,
-                                      child: Text(_image.path,
+                                      child: Text("",
                                           maxLines: 1,
                                           style: TextStyle(
                                               color: Color(0xFF427CEF),
@@ -1087,7 +1087,7 @@ class _CMVisitFormState extends State<CMVisitForm> {
                               _image2 != null
                                   ? Container(
                                       width: 110.0,
-                                      child: Text(_image2.path,
+                                      child: Text("",
                                           maxLines: 1,
                                           style: TextStyle(
                                               color: Color(0xFF427CEF),
@@ -1158,7 +1158,7 @@ class _CMVisitFormState extends State<CMVisitForm> {
                               _image3 != null
                                   ? Container(
                                       width: 110.0,
-                                      child: Text(_image3.path,
+                                      child: Text("",
                                           maxLines: 1,
                                           style: TextStyle(
                                               color: Color(0xFF427CEF),

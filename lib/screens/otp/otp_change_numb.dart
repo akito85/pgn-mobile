@@ -347,6 +347,9 @@ class OTPChangeNumbState extends State<OTPChangeNumb> {
         btnVisible = true;
       });
       showToast(postOTPRegisterResidential.message);
+      Timer(Duration(seconds: 1), () {
+        Navigator.pop(context);
+      });
     }
   }
 }
