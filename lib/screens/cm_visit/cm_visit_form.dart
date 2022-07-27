@@ -137,6 +137,7 @@ class _CMVisitFormState extends State<CMVisitForm> {
   bool isVisiblePhoneNumber = false;
   bool isVisibleCustomerEmail = false;
   bool isVisibleReports = false;
+  bool isVisibleNumberOfParticipants = false;
 
   TextEditingController dateSelected = new TextEditingController();
   TextEditingController visitType = new TextEditingController();
@@ -149,6 +150,7 @@ class _CMVisitFormState extends State<CMVisitForm> {
   TextEditingController phoneNumber = new TextEditingController();
   TextEditingController emailAddress = new TextEditingController();
   TextEditingController reports = new TextEditingController();
+  TextEditingController numbParticipats = new TextEditingController();
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -315,6 +317,7 @@ class _CMVisitFormState extends State<CMVisitForm> {
         isVisiblePhoneNumber = false;
         isVisibleCustomerEmail = false;
         isVisibleReports = false;
+        isVisibleNumberOfParticipants = false;
       });
       //print('MASUK SCREEN 1');
     } else if (valueChoose.isEmpty) {
@@ -426,6 +429,10 @@ class _CMVisitFormState extends State<CMVisitForm> {
         // isVisibleCustomerEmail = false;
         isVisibleReports = true;
       });
+    } else if (numbParticipats.text.isEmpty) {
+      setState(() {
+        isVisibleNumberOfParticipants = true;
+      });
     } else {
       isVisibleVisitType = false;
       isVisibleDate = false;
@@ -437,6 +444,7 @@ class _CMVisitFormState extends State<CMVisitForm> {
       isVisiblePhoneNumber = false;
       isVisibleCustomerEmail = false;
       isVisibleReports = false;
+      isVisibleNumberOfParticipants = false;
       //print('MASUK SCREEN');
       _showAlertDialog(context);
     }
@@ -898,10 +906,6 @@ class _CMVisitFormState extends State<CMVisitForm> {
                     ),
 
                     Container(
-                      margin: EdgeInsets.only(top: 16, right: 18, left: 18),
-                      child: Divider(color: Color(0xFFF4F4F4)),
-                    ),
-                    Container(
                       margin: EdgeInsets.only(bottom: 4, top: 20),
                       child: Text('Reports',
                           style: TextStyle(
@@ -945,7 +949,48 @@ class _CMVisitFormState extends State<CMVisitForm> {
                       ),
                     ),
                     Container(
-                      margin: EdgeInsets.only(bottom: 8, top: 20),
+                      margin: EdgeInsets.only(bottom: 4, top: 20),
+                      child: Text('Number of Participants',
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600)),
+                    ),
+                    Container(
+                        width: MediaQuery.of(context).size.width,
+                        child: TextFormField(
+                          minLines: 1,
+                          maxLines: 10,
+                          controller: numbParticipats,
+                          style: TextStyle(height: 1, fontSize: 14),
+                          decoration: InputDecoration(
+                            hintText: 'Number of Participants',
+                            fillColor: Colors.white70,
+                            enabledBorder: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(5)),
+                                borderSide: BorderSide(
+                                    color: Color(0xFFD3D3D3), width: 2)),
+                            focusedBorder: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(5)),
+                                borderSide: BorderSide(
+                                    color: Colors.black38, width: 2)),
+                          ),
+                        )),
+                    Visibility(
+                      visible: isVisibleNumberOfParticipants,
+                      child: Container(
+                        margin: EdgeInsets.only(top: 2, left: 8),
+                        child: Text('Number of Participants cannot be empty',
+                            style: TextStyle(
+                                color: Color(0xFFDD1818),
+                                fontSize: 10,
+                                fontWeight: FontWeight.normal)),
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(bottom: 8, top: 25),
                       child: Text('Documentation',
                           style: TextStyle(
                               color: Colors.black,
@@ -1679,6 +1724,7 @@ class _CMVisitFormState extends State<CMVisitForm> {
       'cp_phone': cpPhone,
       'cp_email': cpEmail,
       'report': report,
+      'jumlah_peserta': int.parse(numbParticipats.text),
       'images': listImages,
     });
 
@@ -1751,6 +1797,7 @@ class _CMVisitFormState extends State<CMVisitForm> {
       'cp_phone': cpPhone,
       'cp_email': cpEmail,
       'report': report,
+      'jumlah_peserta': int.parse(numbParticipats.text),
       'images': listImages,
     });
     var responsePostCmVisitForm =

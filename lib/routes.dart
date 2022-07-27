@@ -49,7 +49,7 @@ import 'package:pgn_mobile/screens/otp/otp.dart';
 import 'package:pgn_mobile/services/user_credientials.dart';
 import 'package:pgn_mobile/services/language.dart';
 import 'package:pgn_mobile/services/usage_detail.dart';
-import 'package:google_fonts/google_fonts.dart';
+// import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 
 import 'models/url_cons.dart';
@@ -136,7 +136,7 @@ class _MyFirstState extends State<FirstScreen> {
     return MaterialApp(
       title: 'PGN Mobile',
       theme: ThemeData(
-        textTheme: GoogleFonts.robotoTextTheme(Theme.of(context).textTheme),
+        // textTheme: GoogleFonts.robotoTextTheme(Theme.of(context).textTheme),
         primaryColor: Color(0xFF427CEF),
         primaryColorDark: Colors.blue[800],
         accentColor: Colors.blue[600],

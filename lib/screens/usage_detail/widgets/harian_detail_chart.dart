@@ -51,7 +51,7 @@ class HarianDetailChartState extends State<HarianDetailChart> {
 
   @override
   Widget build(BuildContext context) {
-    print('INI Period $period');
+    // print('INI Period $period');
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(

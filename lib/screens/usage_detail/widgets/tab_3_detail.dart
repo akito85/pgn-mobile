@@ -323,13 +323,12 @@ Future<DownUsageDetail> fetchPost(BuildContext context) async {
   final storageCache = FlutterSecureStorage();
   String accessToken = await storageCache.read(key: 'access_token');
   String lang = await storageCache.read(key: 'lang');
-  var responseDownUsage = await http.get(
-      '${UrlCons.mainProdUrl}https://api-mobile.pgn.co.id/v2/report/top-down-usage',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer $accessToken',
-        'Accept-Language': lang,
-      });
+  var responseDownUsage =
+      await http.get('${UrlCons.mainProdUrl}report/top-down-usage', headers: {
+    'Content-Type': 'application/json',
+    'Authorization': 'Bearer $accessToken',
+    'Accept-Language': lang,
+  });
 
   return DownUsageDetail.fromJson(json.decode(responseDownUsage.body));
 }

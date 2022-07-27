@@ -341,7 +341,7 @@ class _KlaimAsuransiFormState extends State<KlaimAsuransiForm> {
                   GestureDetector(
                     onTap: () {
                       _launchURL(
-                          'https://dev-api-mobile.pgn.co.id/storage/public/documents/Prosedur_dan_Form_Klaim_ASPAN_Versi_Word.docx');
+                          'https://devapi-mobile.pgn.co.id/storage/public/documents/Prosedur_dan_Form_Klaim_ASPAN_Versi_Word.docx');
                     },
                     child: Container(
                       height: 45,

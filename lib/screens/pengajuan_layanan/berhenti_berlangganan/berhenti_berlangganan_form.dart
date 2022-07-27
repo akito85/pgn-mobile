@@ -1902,7 +1902,7 @@ class _BerhentiBerlanggananFormState extends State<BerhentiBerlanggananForm> {
     String emailString = await storageCache.read(key: 'user_email');
     String userPhoneString = await storageCache.read(key: 'user_mobile_otp');
 
-    var body = json.encode({"P_CUST_NUMBER": custNameString});
+    var body = json.encode({"P_CUST_NUMBER": custNameString.toString()});
 
     var responseDataCust =
         await http.post('https://api.pgn.co.id/customers/profile',
@@ -1912,8 +1912,8 @@ class _BerhentiBerlanggananFormState extends State<BerhentiBerlanggananForm> {
               'Ocp-Apim-Trace': 'true'
             },
             body: body);
-    // print('BODY GET CUSTOMER CRED $body');
-    // print('HASIL GET CUSTOMER CRED ${responseDataCust.body}');
+    print('BODY GET CUSTOMER CRED $custNameString');
+    print('HASIL GET CUSTOMER CRED ${responseDataCust.body}');
 
     FormCustomerCredModel formCustomerCredModel =
         FormCustomerCredModel.fromJson(json.decode(responseDataCust.body));

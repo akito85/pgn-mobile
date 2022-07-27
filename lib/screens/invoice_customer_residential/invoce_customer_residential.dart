@@ -1535,7 +1535,7 @@ class BillDetailState extends State<InvoiceCustResidential>
       'Authorization': 'Bearer $accessToken',
       'Accept-Language': lang
     });
-    print('RETURN ${responseCustomerInvoice.body}');
+    // print('RETURN ${responseCustomerInvoice.body}');
     CustomerInvoiceResidential _customerInvoice =
         CustomerInvoiceResidential.fromJson(
             json.decode(responseCustomerInvoice.body));

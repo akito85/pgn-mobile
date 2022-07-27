@@ -3194,10 +3194,10 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
   Future<UsageSumChart> getChartSumUsageMng(BuildContext context) async {
     String accessToken = await storageCache.read(key: 'access_token');
     String lang = await storageCache.read(key: 'lang');
-    var responseGetDataChartSum =
-        // await http.get('${UrlCons.mainProdUrl}summary/current-usage', headers: {
-        await http.get('https://api-mobile.pgn.co.id/v2/summary/current-usage',
-            headers: {
+    var responseGetDataChartSum = await http.get(
+        '${UrlCons.mainProdUrl}summary/current-usage',
+        // await http.get('https://api-mobile.pgn.co.id/v2/summary/current-usage',
+        headers: {
           'Content-Type': 'application/json',
           // 'Authorization': 'Bearer $accessToken',
 
