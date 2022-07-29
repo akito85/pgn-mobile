@@ -3059,7 +3059,7 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
       'Authorization': 'Bearer $accessToken',
       'Accept-Language': lang
     });
-    //print('HASIL GET CHART IDR : ${responseGetDataChartIdr.body}');
+    // print('HASIL GET CHART IDR : ${responseGetDataChartIdr.body}');
     ChartIdr _chartIDR =
         ChartIdr.fromJson(json.decode(responseGetDataChartIdr.body));
     if (_chartIDR.message ==
@@ -3083,7 +3083,7 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
       'Authorization': 'Bearer $accessToken',
       'Accept-Language': lang
     });
-    //print('HASIL GET CHART USD : ${responseGetDataChartIdr.body}');
+    // print('HASIL GET CHART USD : ${responseGetDataChartIdr.body}');
     ChartUsd _chartIDR =
         ChartUsd.fromJson(json.decode(responseGetDataChartIdr.body));
     if (_chartIDR.message ==
@@ -3107,6 +3107,7 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
       'Authorization': 'Bearer $accessToken',
       'Accept-Language': lang
     });
+    // print('HASIL GET DAILY CHART ${responseGetDataChartDaily.body}');
     ChartDaily _chartIDR =
         ChartDaily.fromJson(json.decode(responseGetDataChartDaily.body));
     if (_chartIDR.message ==
@@ -3131,7 +3132,7 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
       'Authorization': 'Bearer $accessToken',
       'Accept-Language': lang
     });
-
+    // print('HASIL GET INVOICE RESIDEN ${responseGetChartResidential.body}');
     ChartInvoiceResidential _chartIDR = ChartInvoiceResidential.fromJson(
         json.decode(responseGetChartResidential.body));
     if (_chartIDR.message ==
@@ -3156,6 +3157,7 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
       'Authorization': 'Bearer $accessToken',
       'Accept-Language': lang
     });
+    // print('HASIL GET MONTH CHART ${responseGetDataChartMonthly.body}');
     ChartMonthly _chartIDR =
         ChartMonthly.fromJson(json.decode(responseGetDataChartMonthly.body));
     if (_chartIDR.message ==
@@ -3180,6 +3182,7 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
       'Authorization': 'Bearer $accessToken',
       'Accept-Language': lang
     });
+    // print('HASIL GET SUM CHART ${responseGetDataChartSum.body}');
     UsageSumChart _chartIDR =
         UsageSumChart.fromJson(json.decode(responseGetDataChartSum.body));
     if (_chartIDR.message ==
@@ -3199,11 +3202,12 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
         // await http.get('https://api-mobile.pgn.co.id/v2/summary/current-usage',
         headers: {
           'Content-Type': 'application/json',
-          // 'Authorization': 'Bearer $accessToken',
+          'Authorization': 'Bearer $accessToken',
 
-          'Authorization': 'Bearer QfbJwSncucdpAh1sW6T7a1qwjw0LsyQAOeLQ8heO',
+          // 'Authorization': 'Bearer QfbJwSncucdpAh1sW6T7a1qwjw0LsyQAOeLQ8heO',
           'Accept-Language': lang
         });
+    // print('HASIL GET CHART SUM MNG ${responseGetDataChartSum.body}');
     UsageSumChart _chartIDR =
         UsageSumChart.fromJson(json.decode(responseGetDataChartSum.body));
     if (_chartIDR.message ==
@@ -3452,6 +3456,7 @@ Future<CustomerInvoice> getCustomerInvoice(BuildContext context) async {
     'Authorization': 'Bearer $accessToken',
     'Accept-Language': lang
   });
+  // print('HASIL GET CUSTOMER INVOICE ${responseCustomerInvoice.body}');
   CustomerInvoice _customerInvoice =
       CustomerInvoice.fromJson(json.decode(responseCustomerInvoice.body));
   if (_customerInvoice.message ==
@@ -3478,7 +3483,7 @@ Future<CustomerInvoiceResidential> getCustomerInvoiceResidential(
   CustomerInvoiceResidential _customerInvoice =
       CustomerInvoiceResidential.fromJson(
           json.decode(responseCustomerInvoice.body));
-  //print('Data Invoice RES: ${responseCustomerInvoice.body}');
+  // print('HASIL GET RES: ${responseCustomerInvoice.body}');
   if (_customerInvoice.message ==
       "Session expired or account changed to other device, please Login again.") {
     accessTokenAlert(context,
@@ -3518,7 +3523,7 @@ Future<Customer> getCustomerProfile(BuildContext context) async {
   Customer _customer = Customer.fromJson(json.decode(responseCustomer.body));
   Customer _customerInvoice =
       Customer.fromJson(json.decode(responseCustomer.body));
-  //print('HASIL GET PROFILE :${responseCustomer.body}');
+  // print('HASIL GET PROFILE :${responseCustomer.body}');
   if (_customerInvoice.message ==
       "Session expired or account changed to other device, please Login again.") {
     accessTokenAlert(context,
