@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:pgn_mobile/screens/register/register_businessTab.dart';
 
 import 'package:pgn_mobile/screens/register/register_residentials.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class RegistNewCustomer extends StatelessWidget {
   @override
@@ -31,12 +33,13 @@ class RegistNewCustomer extends StatelessWidget {
           ),
           InkWell(
             onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => RegisterResidentials(),
-                ),
-              );
+              registerDialog(context);
+              // Navigator.push(
+              //   context,
+              //   MaterialPageRoute(
+              //     builder: (context) => RegisterResidentials(),
+              //   ),
+              // );
             },
             child: Container(
               margin: EdgeInsets.only(right: 25.0, left: 25.0, top: 20.0),
@@ -80,12 +83,13 @@ class RegistNewCustomer extends StatelessWidget {
           ),
           InkWell(
             onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => RegisterBusinesTab(),
-                ),
-              );
+              registerDialog(context);
+              // Navigator.push(
+              //   context,
+              //   MaterialPageRoute(
+              //     builder: (context) => RegisterBusinesTab(),
+              //   ),
+              // );
             },
             child: Container(
               margin: EdgeInsets.only(right: 25.0, left: 25.0, top: 20.0),
@@ -130,5 +134,78 @@ class RegistNewCustomer extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Future<bool> registerDialog(BuildContext context) {
+    var alertStyle = AlertStyle(
+      animationType: AnimationType.fromTop,
+      isCloseButton: false,
+      isOverlayTapDismiss: false,
+      descStyle: TextStyle(fontWeight: FontWeight.bold),
+      animationDuration: Duration(milliseconds: 400),
+      alertBorder: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(0.0),
+        side: BorderSide(
+          color: Colors.grey,
+        ),
+      ),
+      titleStyle: TextStyle(
+        color: Colors.black,
+      ),
+    );
+    return Alert(
+      context: context,
+      style: alertStyle,
+      title: "Information !",
+      content: Column(
+        children: <Widget>[
+          SizedBox(height: 5),
+          Text(
+            'Registrasi berlangganan gas saat ini hanya bisa melalui website PGN Online di alamat : https://online.pgn.co.id/register/',
+            style: TextStyle(
+                color: Color(0xFF707070),
+                fontSize: 17,
+                fontWeight: FontWeight.w400),
+            textAlign: TextAlign.center,
+          ),
+          SizedBox(height: 10)
+        ],
+      ),
+      buttons: [
+        DialogButton(
+          width: 130,
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          color: Colors.grey,
+          child: Text(
+            "Close",
+            style: TextStyle(
+                color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
+          ),
+        ),
+        DialogButton(
+          width: 130,
+          onPressed: () {
+            Navigator.pop(context);
+            _launchURL();
+          },
+          color: Colors.green,
+          child: Text(
+            "Continue",
+            style: TextStyle(
+                color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
+          ),
+        )
+      ],
+    ).show();
+  }
+}
+
+_launchURL() async {
+  if (await canLaunch('https://online.pgn.co.id/register/')) {
+    await launch('https://online.pgn.co.id/register/');
+  } else {
+    throw 'Could not launch https://online.pgn.co.id/register/';
   }
 }
